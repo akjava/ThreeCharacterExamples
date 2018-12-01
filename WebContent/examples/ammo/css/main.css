@@ -1,0 +1,47 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	margin: 0;
+	overflow: hidden;
+}
+
+.Panel {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+
+	/* No support for these yet */
+	-o-user-select: none;
+	user-select: none;
+}
+
+
+.appname{
+	font-weight: 450;
+	color: #aaa; 
+	padding:4px;
+}
+#viewport {
+	position: absolute;
+	top: 0px;
+	left: 0;
+	right: 300px;
+	bottom: 0;
+}
+
+#sidebar {
+	position: absolute;
+	right: 0;
+	top: 0px;
+	bottom: 0;
+	width: 300px;
+	background: #eee;
+	overflow: auto;
+}
+
+	
+	#sidebar .Panel {
+		color: #888;
+		padding: 10px;
+		border-top: 1px solid #ccc;
+	}

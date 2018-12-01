@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Simple Point2Point</title>
+	</head>
+	<body ontouchstart="">
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="../../libs/three.js"></script>
+	<script src="../../libs/ui.js"></script>
+	<script src="../../libs/ui.custom.js"></script>
+	<script src="../../libs/signals.min.js"></script>
+		<script src="../../libs/OrbitControls.js"></script>
+	<script src="../../libs/ammo.js"></script>
+	
+	<script src="../js/AmmoUtils.js"></script>
+	<script src="../js/AmmoControler.js"></script>
+	<script src="../js/AmmoBodyAndMesh.js"></script>
+	<script src="../js/AmmoBoxBodyAndMesh.js"></script>
+	<script src="../js/AmmoSphereBodyAndMesh.js"></script>
+	<script src="../js/AmmoConstraintAndLine.js"></script>
+	
+	
+	<script src="js/Application.js"></script>
+	<script src="js/Viewport.js"></script>
+	<script src="js/Viewport.Info.js"></script>
+	<script src="js/Sidebar.js"></script>
+	<script src="js/Example.js"></script>
+	
+	
+	<script>
+	window.URL = window.URL || window.webkitURL;
+	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	Number.prototype.format = function (){
+		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	};
+	
+	var application = new Application();
+	
+	var viewport = new Viewport( application );
+	document.body.appendChild( viewport.dom );
+	
+	var info=new Viewport.Info(application);
+	document.body.appendChild( info.dom );
+	
+	var sidebar = new Sidebar( application );
+	document.body.appendChild( sidebar.dom );
+	
+	
+	function onWindowResize( event ) {
+
+		application.signals.windowResize.dispatch();
+
+	}
+
+	window.addEventListener( 'resize', onWindowResize, false );
+
+	onWindowResize();
+	
+	application.example=new Example(application);
+
+	
+	</script>
+	</body>
+</html>

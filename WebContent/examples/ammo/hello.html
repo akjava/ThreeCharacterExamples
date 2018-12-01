@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Hello Ammo.js</title>
+
+	</head>
+	<body ontouchstart="">
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="../libs/three.js"></script>
+	<script src="../libs/ui.js"></script>
+	<script src="../libs/OrbitControls.js"></script>
+	<script src="../libs/ammo.js"></script>
+	
+	<script src="js/AmmoControler.js"></script>
+	<script src="js/AmmoUtils.js"></script>
+	<script src="js/AmmoBodyAndMesh.js"></script>
+	<script src="js/AmmoBoxBodyAndMesh.js"></script>
+	<script src="js/AmmoSphereBodyAndMesh.js"></script>
+	<script>
+	window.URL = window.URL || window.webkitURL;
+	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	Number.prototype.format = function (){
+		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	};
+	
+	var container = new UI.Panel();
+	container.setId( 'viewport' );
+	document.body.appendChild( container.dom );
+	
+	var sidebar = new UI.Panel();
+	sidebar.setId( 'sidebar' );
+	document.body.appendChild( sidebar.dom );
+	
+	var div=new UI.Div();
+	div.setClass("appname");
+	sidebar.add(div);
+	var title=new UI.Span();
+	title.dom.textContent="Hello Ammo.js";
+	div.add(title);
+	
+	
+	this.scene = new THREE.Scene();
+
+	this.scene.background = new THREE.Color( 0x333333 );
+	
+	this.camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
+
+	this.camera.position.set( 0, 5, 50 );
+	this.camera.lookAt( new THREE.Vector3() );
+	
+	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize(0,0 );//windowResize call from html
+	container.dom.appendChild( renderer.domElement );
+	
+	//light
+	var light = new THREE.DirectionalLight(0xcccccc);
+		light.position.set(100, 100, 100);
+	this.scene.add(light);
+
+	this.scene.add(new THREE.AmbientLight(0x666666));
+	
+	//control
+	var controls = new THREE.OrbitControls( this.camera ,renderer.domElement);
+	controls.screenSpacePanning=true;
+	
+	
+	controls.update();
+	
+	//set up
+	var world=AmmoUtils.initWorld();
+	var ammoControler=new AmmoControler(scene,world);
+	
+	var groundMass=0.0;
+	
+	var ground=ammoControler.createBox(new THREE.Vector3(2, 2, 2), groundMass, 0, 0, 0, 
+			new THREE.MeshPhongMaterial({color:0x888888})
+			);
+	
+	var sphere=ammoControler.createSphere(1, 1, 0, 10, 0, 
+			new THREE.MeshPhongMaterial({color:0x880000})
+					);
+	
+	sphere.syncWorldMatrix=true;
+	
+	
+	//etc
+	function onWindowResize( event ) {
+		camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
+
+	}
+	
+	function animate() {
+		requestAnimationFrame( animate );
+		render();
+	}
+	
+	function render() {
+		ammoControler.update();
+		renderer.render( scene, camera );
+	}
+	
+	
+	
+	
+	
+	
+	window.addEventListener( 'resize', onWindowResize, false );
+	onWindowResize();
+	animate();
+	</script>
+	</body>
+</html>
