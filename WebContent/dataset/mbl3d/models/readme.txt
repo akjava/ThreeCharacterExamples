@@ -1,0 +1,1 @@
+3D Character is created by <a href="http://www.manuelbastioni.com/">Manuel Bastioni</a>

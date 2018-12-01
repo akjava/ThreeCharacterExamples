@@ -628,12 +628,24 @@ UI.ButtonRow=function(label,onclick){
 }
 
 //TODO
-UI.Anchor = function () {
+UI.Anchor = function (href,text) {
 
 	UI.Element.call( this );
 
 	this.dom = document.createElement( 'a' );
-
+	if(href!==undefined){
+		this.dom.href=href;
+	}
+	if(text!==undefined){
+		this.dom.textContent=text;
+	}else{
+		if(href!==undefined){
+			this.textContent.src=src;
+		}
+	}
+	
 	return this;
 
-};
+}
+UI.Anchor.prototype = Object.create( UI.Element.prototype );
+UI.Anchor.prototype.constructor = UI.Anchor;
