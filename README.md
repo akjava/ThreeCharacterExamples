@@ -6,7 +6,7 @@ Recently I'm porting from my GWT(Google Web Toolkit) Projects to Three.js style 
 ## Code Style
 As possible as can,Use similar three.js grammer,not using ES6 style.and UI is using Three.js Editor style
 ## Examples
-[Ammo](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/ammo/)
+[Ammo](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/ammo/) - Basic Simple Ammo Example for understand Character Animation
 ## Usefull Links
 
 https://threejs.org/examples/
