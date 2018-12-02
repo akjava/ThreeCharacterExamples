@@ -258,7 +258,33 @@ var AnimeUtils={
 			json.values=values;
 			var jsonObject={name:"dummy",duration:-1,tracks:[json]};
 			return THREE.AnimationClip.parse(jsonObject).tracks[0];
+		},
+		/*
+		 * cant merge difference name track
+		 */
+		mergeTracks:function(tracks){
+	
+			var times=[];
+			var values=[];
+			
+			
+			var stime=0;
+			for(var i=0;i<tracks.length;i++){
+				var json=THREE.KeyframeTrack.toJSON(tracks[i]);
+				for(var j=0;j<json.values.length;j++){
+					values.push(json.values[j]);
+				}
+				for(var j=0;j<json.times.length;j++){
+					times.push(json.times[j]+stime);
+				}
+				stime+=tracks[i].times[json.times.length-1];
+			}
+			json.times=times;
+			json.values=values;
+			var jsonObject={name:"dummy",duration:-1,tracks:[json]};
+			return THREE.AnimationClip.parse(jsonObject).tracks[0];
 		}
+		
 		
 		
 }

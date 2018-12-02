@@ -223,10 +223,12 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			
 			var indices=[scope.boneAnimationIndex];
 			var startRot=null;
+			startRot=[BoneUtils.makeQuaternionFromXYZDegree(0,0,0,rotate)];
+			
 			if(scope.animationOppositeDirection){
-				startRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,rotate)]
+				
 			}else{
-				startRot=[BoneUtils.makeQuaternionFromXYZDegree(0,0,0,rotate)];
+				
 			}
 			
 			
@@ -236,7 +238,15 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			var endtime=scope.duration/2;
 			
 			var clip=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
-
+			
+			if(scope.animationOppositeDirection){
+				endRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,rotate)]
+				var clip2=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
+				var merged=AnimeUtils.mergeTracks([clip.tracks[0],clip2.tracks[0]]);
+				clip=new THREE.AnimationClip("makeRotateBoneAnimation", -1, [merged]);
+			}
+			
+			
 			
 			
 			mixer.stopAllAction();
