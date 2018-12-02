@@ -1,6 +1,11 @@
 var AppUtils={
+		decoderPath:'js/libs/draco/gltf/',
 		loadGltfMesh:function(url,callback,loader){
 			loader=loader!==undefined?loader: new THREE.GLTFLoader();
+			if(THREE.DRACOLoader){
+			THREE.DRACOLoader.setDecoderPath( AppUtils.decoderPath );
+			loader.setDRACOLoader(new THREE.DRACOLoader());
+			}
 			loader.load( url, function ( gltf ) {
 				var mesh=null;
 				var bone=null;
@@ -29,6 +34,42 @@ var AppUtils={
 					callback(mesh);
 				}else{
 					console.log("loadGltfMesh:No Mesh Containe."+url);
+				}
+		});
+		},
+		loadFbxMesh:function(url,callback,loader){
+			loader=loader!==undefined?loader: new THREE.FBXLoader();
+			
+			loader.load( url, function ( object ) {
+				var mesh=null;
+				var bone=null;
+				
+				object.traverse( function ( child ) {
+					
+					if ( child.isMesh ) {
+						mesh=child;
+						
+					}
+					if ( child.isBone ) {
+						if(bone==null){
+							bone=child;
+						}
+					}
+					
+				});
+				
+				//add object inside traverse() change index and make error
+				if(mesh!=null){
+					if(bone!=null){
+						mesh.add(bone);
+					}else{
+						console.log("loadFbxMesh:No Bone Containe."+url);
+					}
+					
+					
+					callback(mesh);
+				}else{
+					console.log("loadFbxMesh:No Mesh Containe."+url);
 				}
 		});
 		},

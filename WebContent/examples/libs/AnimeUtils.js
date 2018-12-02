@@ -1,11 +1,20 @@
 var AnimeUtils={
 		resetPose:function(mesh){
+			if(mesh.skeleton!==undefined){
 			mesh.skeleton.pose();
+		}else{
+			console.log("Mesh has no skeleton");
+		}
 		},
 		resetMorph:function(mesh){
-			for(var i=0;i<mesh.morphTargetInfluences.length;i++){
-				mesh.morphTargetInfluences[i]=0;
+			if(mesh.morphTargetInfluences!==undefined){
+				for(var i=0;i<mesh.morphTargetInfluences.length;i++){
+					mesh.morphTargetInfluences[i]=0;
+				}
+			}else{
+				console.log("Mesh has no morphtargets");
 			}
+			
 		},
 		/*
 		 * 

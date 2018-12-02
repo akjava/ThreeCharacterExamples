@@ -106,7 +106,7 @@ var BoneUtils={
 		},
 		
 		//copy from SkeletonHelper.js
-		getBoneList:function ( object ) {
+		getChildBoneList:function ( object ) {
 
 			var boneList = [];
 
@@ -124,6 +124,12 @@ var BoneUtils={
 
 			return boneList;
 
+		},
+		/*
+		 * like FBX format has add _end bones
+		 */
+		getBoneList:function(skinnedMesh){
+			return skinnedMesh.skeleton.bones;
 		},
 		getBoneIdOptions:function ( object ) {
 
@@ -215,6 +221,9 @@ var BoneUtils={
 
 			return index;
 		},
+		/*
+		 * not test scale yet.
+		 */
 		convertToZeroRotatedBoneMesh:function(mesh){
 			var originBoneList=BoneUtils.getBoneList(mesh);
 			mesh.updateMatrixWorld(true);
