@@ -1,11 +1,13 @@
 Example=function(application){
 	var ap=application;
+	var scale=100;
 	
-	ap.camera.position.set( 0, 10, 30 );
-	ap.controls.target.set(0,10,0);
+	ap.camera.position.set( 0, 1*scale, 2.5*scale );
+	ap.controls.target.set(0,1*scale,0);
 	ap.controls.update();
 	
 	var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";
+	//var url="../../../dataset/mbl3d/models/anime2_female.fbx";
 	
 	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,transparent:true,opacity:0.5});
 	
@@ -15,7 +17,8 @@ Example=function(application){
 	var boxList=[];
 	var originBoneList;
 	var originBoxList=[];
-	AppUtils.loadGltfMesh(url,function(mesh){
+	AppUtils.loadMesh(url,function(mesh){
+	//AppUtils.loadGltfMesh(url,function(mesh){
 		
 		
 		var container=new THREE.Group();
@@ -29,56 +32,45 @@ Example=function(application){
 			bonePosition.push(pos);
 		});
 		
+		var boxSize=0.05*scale;
+		
 		//debug green bone is ok!
 		for(var i=0;i<bonePosition.length;i++){
-			var cube=new THREE.Mesh( new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( {color: 0x008800,wireframe:true} ) );
+			var cube=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshBasicMaterial( {color: 0x008800,wireframe:true} ) );
 			container.add(cube);
 			originBoxList.push(cube);
 		};
+		//TODO support origin
 		
-		//TODO method
-		var rawbones=[];
-		for(var i=0;i<originBoneList.length;i++){
-			var bone=originBoneList[i];
-			var parent=originBoneList.indexOf(bone.parent);
-			//console.log(bone.name,parent,bonePosition[i]);
-			var parentPos=parent==-1?new THREE.Vector3():bonePosition[parent].clone();
-			var newPos=bonePosition[i].clone().sub(parentPos);
-			//console.log(bone.name,"parent",parent,"parentPos",parentPos,"pos",bonePosition[i],"newPos",newPos);
-			//bone.quaternion.copy(new THREE.Quaternion());
-			//bone.position.copy(newPos);
-			
-			//bone.updateMatrixWorld(true);
-			var rawbone=BoneUtils.createBone();
-			rawbone.pos=newPos.toArray();
-			rawbone.parent=parent;
-			rawbone.name=bone.name;
-	
-			rawbones.push(rawbone);
-		}
-		mesh.scale.set(10,10,10);
 		container.add(mesh);
 		
 		mesh.material.visible=false;
 		var originMesh=mesh;
 		
-		
-		var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
-		BoneUtils.copyIndicesAndWeights(mesh.geometry,geo);
-		
-		//geo=new THREE.BoxGeometry(1,1,1);,geometry has no problem
-		geo.bones=rawbones;
-		mesh=new THREE.SkinnedMesh(geo);
+		var isGltf=mesh.isGltf;
+	
+		mesh=BoneUtils.convertToZeroRotatedBoneMesh(originMesh);
+		if(isGltf){
+			
+			mesh.scale.set(scale,scale,scale);
+			originMesh.scale.set(scale,scale,scale);
+			
+		}
 		boneList=BoneUtils.getBoneList(mesh);
 		
+		//
 		
 		var helper=new THREE.SkeletonHelper(mesh);
-		//ap.scene.add(helper);
+		helper.material.visible=ap.visibleSkeletonHelper;
+		ap.skeletonHelper=helper;
+		ap.scene.add(helper);
+		
 		
 		
 		boneList.forEach(function(bone){
-			var cube=new THREE.Mesh( new THREE.BoxGeometry(.5,.5,.5), new THREE.MeshBasicMaterial( {color: 0x000088,wireframe:true,visible:true} ) );
+			var cube=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshBasicMaterial( {color: 0x000088,wireframe:true,visible:true} ) );
 			boxList.push(cube);
+			cube.material.visible=false;
 			container.add(cube);
 		});
 		
@@ -88,7 +80,7 @@ Example=function(application){
 		//container.position.set(5,5,5);
 		
 		console.log("loadGltfMesh:",url);
-		mesh.scale.set(10,10,10);
+		//mesh.scale.set(.10,.10,.10);
 		mesh.material=material;
 		container.add(mesh);
 		ap.skinnedMesh=mesh;
@@ -125,8 +117,8 @@ Example=function(application){
 		});
 		
 		
-		this.boneAttachControler=new BoneAttachControler(mesh);
-		this.boneAttachControler.setVisible(false);
+		this.boneAttachControler=new BoneAttachControler(mesh,{color: 0x880000,boxSize:0.05*scale});
+		this.boneAttachControler.setVisible(true);
 		this.boneAttachControler.updateAll=true;
 		this.container.add(this.boneAttachControler.object3d);
 

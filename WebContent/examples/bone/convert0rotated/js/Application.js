@@ -10,6 +10,7 @@ var Application = function () {
 	
 	this.visibleOriginBone=true;
 	this.visibleBone=true;
+	this.visibleSkeletonHelper=false;
 	
 	var Signal = signals.Signal;
 

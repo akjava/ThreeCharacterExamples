@@ -225,8 +225,11 @@ var BoneUtils={
 		 * not test scale yet.
 		 */
 		convertToZeroRotatedBoneMesh:function(mesh){
+			
 			var originBoneList=BoneUtils.getBoneList(mesh);
 			mesh.updateMatrixWorld(true);
+			
+			
 			
 			var bonePosition=[];
 			originBoneList.forEach(function(bone){
@@ -245,6 +248,7 @@ var BoneUtils={
 				rawbone.name=bone.name;
 				rawbones.push(rawbone);
 			}
+			
 			var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
 			BoneUtils.copyIndicesAndWeights(mesh.geometry,geo);
 			geo.bones=rawbones;

@@ -1,4 +1,18 @@
 var AppUtils={
+		loadMesh:function(url,callback){
+			if(url.toLowerCase().endsWith(".fbx")){
+				AppUtils.loadFbxMesh(url,function(mesh){
+					mesh.isFbx=true;
+					callback(mesh);
+				});
+				
+			}else{
+				AppUtils.loadGltfMesh(url,function(mesh){
+					mesh.isGltf=true;
+					callback(mesh);
+				});
+			}
+		},
 		decoderPath:'js/libs/draco/gltf/',
 		loadGltfMesh:function(url,callback,loader){
 			loader=loader!==undefined?loader: new THREE.GLTFLoader();
@@ -25,7 +39,7 @@ var AppUtils={
 				//add object inside traverse() change index and make error
 				if(mesh!=null){
 					if(bone!=null){
-						mesh.add(bone);
+						mesh.add(bone);//I'm not sure why add bone.
 					}else{
 						console.log("loadGltfMesh:No Bone Containe."+url);
 					}

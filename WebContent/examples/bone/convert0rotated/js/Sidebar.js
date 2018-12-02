@@ -17,6 +17,12 @@ var Sidebar = function ( application ) {
 	});
 	visiblePanel.add(visibleBone);
 	
+	var visibleSkeletonHelper=new UI.CheckboxRow("Bone Helper",ap.visibleSkeletonHelper,function(v){
+		ap.visibleSkeletonHelper=v;
+		ap.skeletonHelper.material.visible=v;
+	});
+	visiblePanel.add(visibleSkeletonHelper);
+	
 	var titleRow=new UI.TitleRow("Container Rotation");
 	container.add(titleRow);
 	
