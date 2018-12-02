@@ -184,7 +184,7 @@ var BoneUtils={
 				
 				euler.setFromRotationMatrix(m);
 				
-				obj.rotate=euler.clone();
+				obj.rotation=euler.clone();
 				});
 		return defaultBoneMatrix;
 		},

@@ -73,7 +73,7 @@ var Sidebar = function ( application ) {
 		ap.currentBoneMatrix.euler[name].x=THREE.Math.degToRad(rx);
 		ap.currentBoneMatrix.euler[name].y=THREE.Math.degToRad(ry);
 		ap.currentBoneMatrix.euler[name].z=THREE.Math.degToRad(rz);
-		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix.euler[name]);
+		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix.rotation[name]);
 		ap.selectedBone.quaternion.copy(q);
 
 		ap.selectedBone.updateMatrixWorld(true);

@@ -29,11 +29,11 @@ Example=function(application){
 		
 		ap.defaultBoneMatrix={
 				translation:{},
-				euler:{}
+				rotation:{}
 		}
 		ap.currentBoneMatrix={
 				translation:{},
-				euler:{}
+				rotation:{}
 		}
 		var translation=new THREE.Vector3();
 		var euler=new THREE.Euler();
@@ -47,8 +47,8 @@ Example=function(application){
 		
 		euler.setFromRotationMatrix(m);
 		
-		ap.defaultBoneMatrix.euler[name]=euler.clone();
-		ap.currentBoneMatrix.euler[name]=new THREE.Euler();
+		ap.defaultBoneMatrix.rotation[name]=euler.clone();
+		ap.currentBoneMatrix.rotation[name]=new THREE.Euler();
 		});
 		
 		ap.signals.loadingModelFinished.dispatch();

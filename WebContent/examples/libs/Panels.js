@@ -218,7 +218,7 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			var mixer=application.mixer;
 			
 			var defaultMatrix=application.defaultBoneMatrix[scope.boneList[scope.boneAnimationIndex].name];
-			var rotate=defaultMatrix.rotate;
+			var rotate=defaultMatrix.rotation;
 			
 			
 			var indices=[scope.boneAnimationIndex];
