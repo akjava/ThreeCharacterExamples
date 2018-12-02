@@ -65,7 +65,10 @@ var AppUtils={
 					}else{
 						console.log("loadFbxMesh:No Bone Containe."+url);
 					}
-					
+					if(mesh.skeleton!==undefined){
+						mesh.skeleton.pose();
+						console.log("Some how FBXModle Root-Bone scale is",mesh.skeleton.bones[0].scale);
+					}
 					
 					callback(mesh);
 				}else{

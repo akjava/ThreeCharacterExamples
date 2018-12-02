@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Test Simple Morph Animation App</title>
+	</head>
+	<body ontouchstart="">
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="../../libs/three.js"></script>
+	<script src="../../libs/ui.js"></script>
+	<script src="../../libs/ui.custom.js"></script>
+	<script src="../../libs/signals.min.js"></script>
+	<script src="../../libs/OrbitControls.js"></script>
+	<script src="../../libs/inflate.min.js"></script>
+	<script src="../../libs/GLTFLoader.js"></script>
+	<script src="../../libs/OutlineEffect.js"></script>
+	<script src="../../libs/AppUtils.js"></script>
+		<script src="../../libs/inflate.min.js"></script>
+	<script src="../../libs/FBXLoader.js"></script>
+	<script src="js/Application.js"></script>
+	<script src="js/Viewport.js"></script>
+	
+	<script src="js/Sidebar.js"></script>
+	<script src="js/Sidebar.Camera.js"></script>
+	<script src="js/Sidebar.Animation.js"></script>
+	<script src="js/Sidebar.Clip.js"></script>
+	
+	<script src="js/Sidebar.Morph.js"></script>
+	<script src="js/Sidebar.Texture.js"></script>
+	<script src="js/Sidebar.Model.js"></script>
+	<script src="js/Sidebar.Hair.js"></script>
+	<script src="js/Sidebar.Material.js"></script>
+	<script src="js/Sidebar.Light.js"></script>
+	
+	
+	<script>
+	window.URL = window.URL || window.webkitURL;
+	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	Number.prototype.format = function (){
+		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	};
+	
+	var application = new Application();
+	
+	var viewport = new Viewport( application );
+	document.body.appendChild( viewport.dom );
+	
+	var sidebar = new Sidebar( application );
+	document.body.appendChild( sidebar.dom );
+	
+	
+	function onWindowResize( event ) {
+
+		application.signals.windowResize.dispatch();
+
+	}
+
+	window.addEventListener( 'resize', onWindowResize, false );
+
+	onWindowResize();//set size
+	
+	application.signals.loadingModelStarted.dispatch();
+	
+	</script>
+	</body>
+</html>

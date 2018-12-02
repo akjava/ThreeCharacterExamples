@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Breathing Animation</title>
+	</head>
+	<body ontouchstart="">
+	<link href="../../css/shared.css" rel="stylesheet" />
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="../../libs/three.js"></script>
+	<script src="../../libs/ui.js"></script>
+	<script src="../../libs/ui.custom.js"></script>
+	<script src="../../libs/OrbitControls.js"></script>
+	<script src="../../libs/signals.min.js"></script>
+	<script src="../../libs/inflate.min.js"></script>
+	<script src="../../libs/FBXLoader.js"></script>
+	<script src="../../libs/BoneUtils.js"></script>
+	<script src="../../libs/AppUtils.js"></script>
+	<script src="../../libs/Panels.js"></script>
+	<script src="../../libs/Mbl3dUtils.js"></script>
+	<script src="../../libs/AnimeUtils.js"></script>
+	<script src="../../libs/AppUtils.js"></script>
+	<script src="js/Application.js"></script>
+	<script src="js/Viewport.js"></script>
+	<script src="js/Sidebar.js"></script>
+	<script src="js/Sidebar.Translate.js"></script>
+	<script src="js/Sidebar.Rotate.js"></script>
+	<script src="js/Sidebar.Morph.js"></script>
+	<script src="js/Sidebar.Morph.Editor.js"></script>
+	<script src="js/Sidebar.Export.js"></script>
+	<script src="js/Sidebar.Scale.js"></script>
+	<script src="js/Sidebar.SimpleScale.js"></script>
+	<script src="js/Sidebar.RandomScale.js"></script>
+	<script src="js/Viewport.Info.js"></script>
+	<script src="js/Example.js"></script>
+	<script>
+	window.URL = window.URL || window.webkitURL;
+	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	Number.prototype.format = function (){
+		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	};
+	
+	var application = new Application();
+	
+	var viewport = new Viewport( application );
+	document.body.appendChild( viewport.dom );
+	
+	var info=new Viewport.Info(application);
+	document.body.appendChild( info.dom );
+	
+	var sidebar = new Sidebar( application );
+	document.body.appendChild( sidebar.dom );
+	
+	
+	function onWindowResize( event ) {
+
+		application.signals.windowResize.dispatch();
+
+	}
+
+	window.addEventListener( 'resize', onWindowResize, false );
+
+	onWindowResize();
+	
+	application.example=new Example(application);
+	</script>
+	</body>
+</html>
