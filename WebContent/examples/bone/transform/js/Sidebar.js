@@ -32,7 +32,8 @@ var Sidebar = function ( application ) {
 		ap.selectedBone=bone;
 		
 		var name=Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name);
-		var euler=ap.currentBoneMatrix.euler[name];
+		var name=ap.selectedBone.name;
+		var euler=ap.currentBoneMatrix[name].rotation;
 		
 		var x=THREE.Math.radToDeg(euler.x).toFixed(2);
 		var y=THREE.Math.radToDeg(euler.y).toFixed(2);
@@ -50,8 +51,8 @@ var Sidebar = function ( application ) {
 	
 	ap.signals.loadingModelFinished.add(function(){
 		var op=BoneUtils.getBoneIdOptions(ap.skinnedMesh);
-		var options=Mbl3dUtils.convertOptionsToMbl3d(op);
-		
+		//var options=Mbl3dUtils.convertOptionsToMbl3d(op);
+		var options=(op);
 		
 		boneSelect.setOptions(options);
 		boneSelect.setValue(Object.keys(options)[0]);
@@ -63,17 +64,17 @@ var Sidebar = function ( application ) {
 	
 	function rotate(){
 		var name=Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name);
-
+		var name=(ap.selectedBone.name);
 		var rx=boneAngleX.getValue();
 		var ry=boneAngleY.getValue();
 		var rz=boneAngleZ.getValue();
 		
 		
 		
-		ap.currentBoneMatrix.euler[name].x=THREE.Math.degToRad(rx);
-		ap.currentBoneMatrix.euler[name].y=THREE.Math.degToRad(ry);
-		ap.currentBoneMatrix.euler[name].z=THREE.Math.degToRad(rz);
-		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix.rotation[name]);
+		ap.currentBoneMatrix[name].rotation.x=THREE.Math.degToRad(rx);
+		ap.currentBoneMatrix[name].rotation.y=THREE.Math.degToRad(ry);
+		ap.currentBoneMatrix[name].rotation.z=THREE.Math.degToRad(rz);
+		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix[name].rotation);
 		ap.selectedBone.quaternion.copy(q);
 
 		ap.selectedBone.updateMatrixWorld(true);
@@ -82,14 +83,14 @@ var Sidebar = function ( application ) {
 	function translate(){
 		
 		var name=Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name);
-		
+		var name=(ap.selectedBone.name);
 		var tx=boneMoveX.getValue();
 		var ty=boneMoveY.getValue();
 		var tz=boneMoveZ.getValue();
 		
-		ap.currentBoneMatrix.translation[name].set(tx,ty,tz);
-		var pos=ap.defaultBoneMatrix.translation[name].clone();
-		pos.add(ap.currentBoneMatrix.translation[name]);
+		ap.currentBoneMatrix[name].translate.set(tx,ty,tz);
+		var pos=ap.defaultBoneMatrix[name].translate.clone();
+		pos.add(ap.currentBoneMatrix[name].translate);
 		ap.selectedBone.position.copy(pos);
 
 		ap.selectedBone.updateMatrixWorld(true);
@@ -165,11 +166,11 @@ var Sidebar = function ( application ) {
 	var p1=new UI.Panel();
 	var bt=new UI.Button("Reset All Bone").onClick( function () {
 		ap.skinnedMesh.skeleton.pose();
-		Object.keys(ap.currentBoneMatrix.translation).forEach(function(key){
-			ap.currentBoneMatrix.translation[key].set(0,0,0);
+		Object.keys(ap.currentBoneMatrix.translate).forEach(function(key){
+			ap.currentBoneMatrix.translate[key].set(0,0,0);
 		});
-		Object.keys(ap.currentBoneMatrix.euler).forEach(function(key){
-			ap.currentBoneMatrix.euler[key].set(0,0,0);
+		Object.keys(ap.currentBoneMatrix.rotation).forEach(function(key){
+			ap.currentBoneMatrix[key].rotation.set(0,0,0);
 		});
 		
 		boneSelectionChanged();

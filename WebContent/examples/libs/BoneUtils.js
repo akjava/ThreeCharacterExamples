@@ -188,6 +188,23 @@ var BoneUtils={
 				});
 		return defaultBoneMatrix;
 		},
+		makeEmptyBoneMatrix:function(boneList){
+			var defaultBoneMatrix={
+					
+			};
+			var translate=new THREE.Vector3();
+			var scale=new THREE.Vector3(1,1,1);
+			var euler=new THREE.Euler();
+			boneList.forEach(function(bone){
+				var name=bone.name;
+				var obj={};
+				defaultBoneMatrix[name]=obj;
+				obj.translate=translate.clone();
+				obj.scale=scale.clone();
+				obj.rotation=euler.clone();
+				});
+		return defaultBoneMatrix;
+		},
 		findBoneIndexByEndsName:function(boneList,name){
 			var index=-1;
 			for(var i=0;i<boneList.length;i++){			

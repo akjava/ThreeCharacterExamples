@@ -63,8 +63,8 @@ Viewport.Info = function ( application ) {
 			return;
 		}
 		
-		name.setValue(Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name));
-		
+		//name.setValue(Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name));
+		name.setValue(ap.selectedBone.name);
 		translate.setFromMatrixPosition(ap.selectedBone.matrix);
 		
 		/*var x=application.ball.getMesh().position.x;

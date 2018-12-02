@@ -27,29 +27,9 @@ Example=function(application){
 		
 		
 		
-		ap.defaultBoneMatrix={
-				translation:{},
-				rotation:{}
-		}
-		ap.currentBoneMatrix={
-				translation:{},
-				rotation:{}
-		}
-		var translation=new THREE.Vector3();
-		var euler=new THREE.Euler();
-		
-		boneList.forEach(function(bone){
-		var m=bone.matrix;
-		var name=Mbl3dUtils.shortenMbl3dBoneName(bone.name);
-		translation.setFromMatrixPosition(m);
-		ap.defaultBoneMatrix.translation[name]=translation.clone();
-		ap.currentBoneMatrix.translation[name]=new THREE.Vector3();
-		
-		euler.setFromRotationMatrix(m);
-		
-		ap.defaultBoneMatrix.rotation[name]=euler.clone();
-		ap.currentBoneMatrix.rotation[name]=new THREE.Euler();
-		});
+		ap.defaultBoneMatrix=BoneUtils.storeDefaultBoneMatrix(boneList);
+		ap.currentBoneMatrix=BoneUtils.makeEmptyBoneMatrix(boneList);
+		//var name=Mbl3dUtils.shortenMbl3dBoneName(bone.name);
 		
 		ap.signals.loadingModelFinished.dispatch();
 	});
