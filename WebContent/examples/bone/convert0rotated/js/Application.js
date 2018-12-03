@@ -9,7 +9,7 @@ var Application = function () {
 	this.camera.lookAt( new THREE.Vector3() );
 	
 	this.visibleOriginBone=true;
-	this.visibleBone=true;
+	this.visibleBone=false;
 	this.visibleSkeletonHelper=false;
 	
 	var Signal = signals.Signal;

@@ -60,7 +60,7 @@ BoneAttachControler.prototype.getContainerByBoneName=function(name){
 }
 
 
-BoneAttachControler.prototype.update=function(visible){
+BoneAttachControler.prototype.update=function(){
 	
 	this._matrixWorldInv.getInverse( this.object3d.matrixWorld );
 	
