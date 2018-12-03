@@ -97,6 +97,7 @@ Viewport.Info = function ( application ) {
 		rotateYText.setValue( THREE.Math.radToDeg(euler.y).toFixed(2) );
 		rotateZText.setValue( THREE.Math.radToDeg(euler.z).toFixed(2) );
 		
+		
 		euler.setFromRotationMatrix(ap.selectedBone.matrixWorld);
 		
 		wrotateXText.setValue( THREE.Math.radToDeg(euler.x).toFixed(2) );
