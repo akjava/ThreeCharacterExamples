@@ -47,6 +47,7 @@ Viewport.Info = function ( application ) {
 	container.add( new UI.Text( 'Rotate-Y' ), rotateYText, new UI.Break() );
 	container.add( new UI.Text( 'Rotate-Z' ), rotateZText, new UI.Break() );
 	
+	container.add(new UI.Break(),new UI.Break());
 	container.add( new UI.Text( 'World' ) );
 	container.add(new UI.Break(),new UI.Break());
 	container.add(new UI.Text("Degree Angle"),new UI.Break());

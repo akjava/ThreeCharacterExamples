@@ -135,6 +135,10 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 		boneList.onChange(function(){
 			scope.boneAnimationIndex=boneList.getValue();
 			
+			if(application.signals.boneAnimationIndexChanged!==undefined){
+				application.signals.boneAnimationIndexChanged.dispatch(scope.boneAnimationIndex);
+			}
+			
 			if(scope.autoPlay){
 				application.signals.boneAnimationStarted.dispatch();
 			}
@@ -281,10 +285,15 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			}
 			boneList.setOptions(values);
 			boneList.setValue(0);
+			scope.boneAnimationIndex=0;
 			
 			scope.boneList=BoneUtils.getBoneList(mesh);
 			if(!application.defaultBoneMatrix){
 				application.defaultBoneMatrix=BoneUtils.storeDefaultBoneMatrix(scope.boneList);
+			}
+			
+			if(application.signals.boneAnimationIndexChanged!==undefined){
+				application.signals.boneAnimationIndexChanged.dispatch(scope.boneAnimationIndex);
 			}
 			
 		});
