@@ -39,7 +39,6 @@ Example=function(application){
 	var boxList=[];
 	AppUtils.loadFbxMesh(url,function(mesh){
 		mesh.geometry.computeBoundingBox();
-		console.log(mesh.skeleton.bones[0].scale);
 		var x=THREE.Math.degToRad(0);
 		mesh.quaternion.copy(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), x));
 		//TODO apply matrix
@@ -53,7 +52,7 @@ Example=function(application){
 		mesh.scale.set(.10,.10,.10);
 		mesh.material=material;
 		container.add(mesh);
-		console.log(mesh.parent);
+
 		ap.skinnedMesh=mesh;
 		ap.container=container;
 		
@@ -90,7 +89,7 @@ Example=function(application){
 		if(ap.mixer){
 			var delta = ap.clock.getDelta();
 			ap.mixer.update(delta);
-			ap.skinnedMesh.updateMatrixWorld(true);
+			ap.skinnedMesh.updateMatrixWorld(true);//why?
 		}
 	})
 	ap.signals.animationStopped.add(function(){

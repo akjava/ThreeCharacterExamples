@@ -16,6 +16,15 @@ var AnimeUtils={
 			}
 			
 		},
+		startClip:function(mixer,clip){
+			mixer.uncacheClip(clip);
+			return mixer.clipAction(clip).play();
+		},
+		stopAndReset:function(mixer,skinnedMesh){
+			mixer.stopAllAction();
+			AnimeUtils.resetPose(skinnedMesh);
+			AnimeUtils.resetMorph(skinnedMesh);
+		},
 		/*
 		 * 
 		 * 
@@ -183,6 +192,22 @@ var AnimeUtils={
 		
 			
 			var clip=new THREE.AnimationClip("makeTwoMorphAnimation", -1, tracks);
+			return clip
+		},
+		makeMorphAnimation:function(index1,value1,intime,outtime){
+			var trackName1=".morphTargetInfluences["+index1+"]";
+			
+			
+			
+			var values1=[0,value1,0];
+			
+			var times1=[0,intime,intime+outtime];
+			
+			var track1=new THREE.NumberKeyframeTrack(trackName1,times1,values1);
+			var tracks=[track1];
+		
+			
+			var clip=new THREE.AnimationClip("makeMorphAnimation", -1, tracks);
 			return clip
 		},
 		//start -(intime)> end -(outtime)> start

@@ -28,9 +28,10 @@ Viewport.Info = function ( application ) {
 	container.add(new UI.Text("3D Character is created by "),new UI.Break(),new UI.Anchor("http://www.manuelbastioni.com/","Manuel Bastioni"));
 	container.add( new UI.Break() , new UI.Break() );
 	container.add(new UI.Text("Many source code based on "),new UI.Break(),new UI.Anchor("https://github.com/mrdoob/three.js/tree/dev/editor","Three.js Editor"));
+	container.add( new UI.Break() , new UI.Break() );
+	container.add(new UI.Text("TODO Fix Vertex order"));
 	
-
-	signals.rendered.add( update );
+	//signals.rendered.add( update );
 
 	//
 	var sharedVec=new THREE.Vector3();
@@ -38,10 +39,6 @@ Viewport.Info = function ( application ) {
 	function update() {
 		
 		
-		morphText.setValue( ap.morphClipDuration.toFixed(2) );
-		scaleText.setValue( ap.scaleClipDuration.toFixed(2) );
-		translateText.setValue( ap.translateClipDuration.toFixed(2) );
-		rotateText.setValue( ap.rotateClipDuration.toFixed(2) );
 		
 	}
 
