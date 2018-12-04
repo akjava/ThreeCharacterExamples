@@ -166,12 +166,11 @@ var Sidebar = function ( application ) {
 	var p1=new UI.Panel();
 	var bt=new UI.Button("Reset All Bone").onClick( function () {
 		ap.skinnedMesh.skeleton.pose();
-		Object.keys(ap.currentBoneMatrix.translate).forEach(function(key){
-			ap.currentBoneMatrix.translate[key].set(0,0,0);
-		});
-		Object.keys(ap.currentBoneMatrix.rotation).forEach(function(key){
+		Object.keys(ap.currentBoneMatrix).forEach(function(key){
+			ap.currentBoneMatrix[key].translate.set(0,0,0);
 			ap.currentBoneMatrix[key].rotation.set(0,0,0);
 		});
+		
 		
 		boneSelectionChanged();
 	});
