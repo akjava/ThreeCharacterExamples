@@ -170,6 +170,7 @@ var Sidebar = function ( application ) {
 			ap.currentBoneMatrix[key].translate.set(0,0,0);
 			ap.currentBoneMatrix[key].rotation.set(0,0,0);
 		});
+
 		
 		
 		boneSelectionChanged();
