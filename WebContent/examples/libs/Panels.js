@@ -96,6 +96,7 @@ var RotationPanel1=function(ap){
  scope.mixer
  scope.skinnedMesh
 
+application.defaultBoneMatrix
  
 skinnedMeshChanged:new Signal(),//arg skinnedMesh
 boneAnimationFinished:new Signal(),
@@ -148,7 +149,7 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 		
 		var row3=new UI.Row();
 		container.add(row3);
-		var row3text=new UI.Text("Do Opposite Angle").setWidth( '160px' );
+		var row3text=new UI.Text("Anime Opposite Angle").setWidth( '160px' );
 		row3.add(row3text);
 		
 		var directionCheck=new UI.Checkbox();
@@ -164,12 +165,28 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 		row3.add(directionCheck);
 		
 		
+		
+		
+		
 		var boneAngleX=new UI.NumberButtons("AngleX",-180,180,10,scope.boneAngleX,function(v){
 			scope.boneAngleX=v;
 			if(scope.autoPlay){
 				application.signals.boneAnimationStarted.dispatch();
 				}
 		},[0,45,90,180]);
+		boneAngleX.text.setWidth("60px");
+		
+		
+		var minus=new UI.Button("-").onClick(function(){
+			var v=scope.boneAngleX*-1;
+			boneAngleX.setValue(v);
+			scope.boneAngleX=v;
+			if(scope.autoPlay){
+				application.signals.boneAnimationStarted.dispatch();
+				}
+		});
+		boneAngleX.add(minus);
+		
 		container.add(boneAngleX);
 		
 		var boneAngleY=new UI.NumberButtons("AngleY",-180,180,10,scope.boneAngleY,function(v){
@@ -178,6 +195,18 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 				application.signals.boneAnimationStarted.dispatch();
 				}
 		},[0,45,90,180]);
+		boneAngleY.text.setWidth("60px");
+		
+		var minus=new UI.Button("-").onClick(function(){
+			var v=scope.boneAngleY*-1;
+			boneAngleY.setValue(v);
+			scope.boneAngleY=v;
+			if(scope.autoPlay){
+				application.signals.boneAnimationStarted.dispatch();
+				}
+		});
+		boneAngleY.add(minus);
+		
 		container.add(boneAngleY);
 		
 		var boneAngleZ=new UI.NumberButtons("AngleZ",-180,180,10,scope.boneAngleZ,function(v){
@@ -186,7 +215,19 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 				application.signals.boneAnimationStarted.dispatch();
 				}
 		},[0,45,90,180]);
+		boneAngleZ.text.setWidth("60px");
 		container.add(boneAngleZ);
+		
+		var minus=new UI.Button("-").onClick(function(){
+			var v=scope.boneAngleZ*-1;
+			boneAngleZ.setValue(v);
+			scope.boneAngleZ=v;
+			if(scope.autoPlay){
+				application.signals.boneAnimationStarted.dispatch();
+				}
+		});
+		boneAngleZ.add(minus);
+		
 		
 		var duration=new UI.NumberButtons("Duration",0.1,30,1,scope.duration,function(v){
 			scope.duration=v;
@@ -220,23 +261,31 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			bt2.setDisabled(false);
 			
 			var mixer=application.mixer;
+			var boneName=scope.boneList[scope.boneAnimationIndex].name;
+			var defaultMatrix=application.defaultBoneMatrix[boneName];
 			
-			var defaultMatrix=application.defaultBoneMatrix[scope.boneList[scope.boneAnimationIndex].name];
-			var rotate=defaultMatrix.rotation;
+			var currentMatrix=null;
+			if(application.currentBoneMatrix!==undefined){
+				currentMatrix=application.currentBoneMatrix[boneName];
+				
+			}
+			
+			var defaultRotation=defaultMatrix.rotation;
 			
 			
 			var indices=[scope.boneAnimationIndex];
 			var startRot=null;
-			startRot=[BoneUtils.makeQuaternionFromXYZDegree(0,0,0,rotate)];
-			
-			if(scope.animationOppositeDirection){
-				
+			if(currentMatrix!=null){
+				var rotation=currentMatrix.rotation;
+				startRot=[BoneUtils.makeQuaternionFromXYZRadian(rotation.x,rotation.y,rotation.z,defaultRotation)];
 			}else{
-				
+				startRot=[BoneUtils.makeQuaternionFromXYZRadian(0,0,0,defaultRotation)];
 			}
 			
 			
-			var endRot=[BoneUtils.makeQuaternionFromXYZDegree(scope.boneAngleX,scope.boneAngleY,scope.boneAngleZ,rotate)]
+			//add start rot ref
+			
+			var endRot=[BoneUtils.makeQuaternionFromXYZDegree(scope.boneAngleX,scope.boneAngleY,scope.boneAngleZ,defaultRotation)]
 			
 			var intime=scope.duration/2;
 			var endtime=scope.duration/2;
@@ -244,7 +293,7 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			var clip=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
 			
 			if(scope.animationOppositeDirection){
-				endRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,rotate)]
+				endRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,defaultRotation)]
 				var clip2=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
 				var merged=AnimeUtils.mergeTracks([clip.tracks[0],clip2.tracks[0]]);
 				clip=new THREE.AnimationClip("makeRotateBoneAnimation", -1, [merged]);

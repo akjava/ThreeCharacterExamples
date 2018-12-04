@@ -317,6 +317,22 @@ var AnimeUtils={
 			json.values=values;
 			var jsonObject={name:"dummy",duration:-1,tracks:[json]};
 			return THREE.AnimationClip.parse(jsonObject).tracks[0];
+		},
+		/* key is index */
+		makeRotationPose:function(object){
+			var tracks=[];
+			Object.keys(object).forEach(function(key){
+				var boneIndex=key;
+				var q=object[key];
+				if((q==undefined) || !q.isQuaternion){
+					console.error("makeRotationPose:q is not quaternion",q);
+					return null;
+				}
+				var track=new THREE.QuaternionKeyframeTrack(".bones["+boneIndex+"].quaternion", [0], q.toArray());
+				tracks.push(track);
+			});
+			var clip=new THREE.AnimationClip("makeRotationPose", -1, tracks);
+			return clip
 		}
 		
 		

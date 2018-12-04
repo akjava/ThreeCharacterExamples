@@ -192,6 +192,20 @@ var BoneUtils={
 				
 				obj.rotation=euler.clone();
 				});
+			
+		defaultBoneMatrix.print=function(){
+			Object.keys(defaultBoneMatrix).forEach(function(key){
+				var rotation=defaultBoneMatrix[key].rotation;
+				if(rotation!=undefined){
+					var x=THREE.Math.radToDeg(rotation.x).toFixed(2);
+					var y=THREE.Math.radToDeg(rotation.y).toFixed(2);
+					var z=THREE.Math.radToDeg(rotation.z).toFixed(2);
+					
+					console.log(key,x,y,z);
+				}
+				
+			});
+		}
 		return defaultBoneMatrix;
 		},
 		makeEmptyBoneMatrix:function(boneList){

@@ -19,8 +19,11 @@ var Viewport = function ( app ) {
 	var light = new THREE.DirectionalLight(0xcccccc);
 	light.position.set(100, 100, 100);
 	scene.add(light);
+	var light = new THREE.DirectionalLight(0xcccccc);
+	light.position.set(-100, -100, -100);
+	scene.add(light);
 
-	scene.add(new THREE.AmbientLight(0x666666));
+	scene.add(new THREE.AmbientLight(0xcccccc));
 	
 	//control
 	var controls = new THREE.OrbitControls(camera ,renderer.domElement);
@@ -46,6 +49,7 @@ var Viewport = function ( app ) {
 	}
 	
 	function render() {
+		application.signals.renderStarted.dispatch();
 		renderer.render( scene, camera );
 		
 		application.signals.rendered.dispatch();

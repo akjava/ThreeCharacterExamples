@@ -1,11 +1,13 @@
 /*
- * seems only work with BoneUtils.convertToZeroRotatedBoneMesh() mesh
+ * seems somttime  work with BoneUtils.convertToZeroRotatedBoneMesh() mesh,
+ * however angle still broken.
  */
 var BoneAttachControler=function(skinnedMesh,param){
 	param=param!==undefined?param: {color: 0x880000,boxSize:0.5};
 	param.visible=false;
 	var boxSize=param.boxSize;
 	
+	this.skinnedMesh=skinnedMesh;
 	this.boneList=BoneUtils.getBoneList(skinnedMesh);
 	this.parentIndexs={};
 	this.containerList=[];
@@ -25,11 +27,13 @@ var BoneAttachControler=function(skinnedMesh,param){
 		var container=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshPhongMaterial( param) );
 		scope.containerList.push(container);
 		scope.object3d.add(container);
+		//container.matrixAutoUpdate=false;
 	});
 	
 	
 	this._boneMatrix=new THREE.Matrix4();
 	this._matrixWorldInv=new THREE.Matrix4();
+	this._quaternion=new THREE.Quaternion();
 };
 
 BoneAttachControler.prototype.getBoneIndexByBoneName=function(name){
@@ -61,8 +65,10 @@ BoneAttachControler.prototype.getContainerByBoneName=function(name){
 
 
 BoneAttachControler.prototype.update=function(){
-	
+	var scope=this;
 	this._matrixWorldInv.getInverse( this.object3d.matrixWorld );
+	this.object3d.getWorldQuaternion(this._quaternion);
+	
 	
 	
 	for(var i=0;i<this.boneList.length;i++){
@@ -71,29 +77,16 @@ BoneAttachControler.prototype.update=function(){
 		if(!this.updateAll && cube.children.length==0){
 			continue;
 		}
-		
+		bone.updateMatrixWorld(true);//without update, deley few frame position
 		
 		this._boneMatrix.multiplyMatrices( this._matrixWorldInv, bone.matrixWorld );
 		cube.position.setFromMatrixPosition(this._boneMatrix );
 		
+		//Only This one OK!
+		bone.getWorldQuaternion(cube.quaternion);
+		cube.quaternion.multiply(this._quaternion);
+		cube.updateMatrixWorld(true);//for attach
 		
-		//i have no idea why cube.rotation.setFromRotationMatrix(boneMatrix); not working
-		//cube.rotation.setFromRotationMatrix(this._boneMatrix );//not work?
-		
-		var list=this.parentIndexs[bone.name];
-		var e=new THREE.Vector3();
-		list.forEach(function(b){
-			var tmpe=b.rotation;
-			e.add(new THREE.Vector3(tmpe.x,tmpe.y,tmpe.z));
-		});
-		
-		var euler=new THREE.Euler(e.x,e.y,e.z);
-		cube.setRotationFromEuler(euler);
-		
-		
-		
-		
-		cube.updateMatrixWorld(true);
 	}
 }
 

@@ -114,6 +114,11 @@ var AppUtils={
 				} );
 			}
 			return link;
+		},
+		printDeg:function(xyz){
+			console.log(THREE.Math.radToDeg(xyz.x),THREE.Math.radToDeg(xyz.y),THREE.Math.radToDeg(xyz.z))
 		}
+		
+		
 
 };
