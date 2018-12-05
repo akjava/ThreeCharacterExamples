@@ -115,10 +115,20 @@ var AppUtils={
 			}
 			return link;
 		},
+		//for vector3 or euler
 		printDeg:function(xyz){
 			console.log(THREE.Math.radToDeg(xyz.x),THREE.Math.radToDeg(xyz.y),THREE.Math.radToDeg(xyz.z))
+		},
+		printVec:function(xyz){
+			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2))
 		}
-		
+		,clearAllChildren:function(parent){
+			for(var i=parent.children.length-1;i>=0;i--){
+				var obj=parent.children[i];
+				parent.remove(obj);
+				
+			}
+		}
 		
 
 };

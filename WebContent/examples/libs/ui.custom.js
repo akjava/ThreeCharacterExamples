@@ -3,6 +3,78 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
+//Swap Options version
+UI.Select2 = function () {
+
+	UI.Element.call( this );
+
+	var scope = this;
+
+	var dom = document.createElement( 'select' );
+	dom.className = 'Select';
+	dom.style.padding = '2px';
+
+	this.dom = dom;
+
+	return this;
+
+};
+
+UI.Select2.prototype = Object.create( UI.Element.prototype );
+UI.Select2.prototype.constructor = UI.Select2;
+
+UI.Select2.prototype.setMultiple = function ( boolean ) {
+
+	this.dom.multiple = boolean;
+
+	return this;
+
+};
+
+UI.Select2.prototype.setOptions = function ( options ) {
+
+	var selected = this.dom.value;
+
+	while ( this.dom.children.length > 0 ) {
+
+		this.dom.removeChild( this.dom.firstChild );
+
+	}
+
+	for ( var key in options ) {
+
+		var option = document.createElement( 'option' );
+		option.value = options[ key ];
+		option.innerHTML = key;
+		this.dom.appendChild( option );
+
+	}
+
+	this.dom.value = selected;
+
+	return this;
+
+};
+
+UI.Select2.prototype.getValue = function () {
+
+	return this.dom.value;
+
+};
+
+UI.Select2.prototype.setValue = function ( value ) {
+
+	value = String( value );
+
+	if ( this.dom.value !== value ) {
+
+		this.dom.value = value;
+
+	}
+
+	return this;
+
+};
 /*
  * to dispose
  * URL.revokeObjectURL(url);
@@ -400,6 +472,30 @@ UI.ListRow=function(label,values,onChange,current){
 	row.add(select);
 	return row;
 }
+//Select2
+UI.SelectRow=function(label,options,onChange,current){
+	var row=new UI.Row();
+	var text=new UI.Text(label).setWidth('90px');
+	row.add(text);
+	
+	
+	
+	var select=new UI.Select2();
+	select.setOptions(options);
+	if(current){
+		select.setValue(current);	
+	}else{
+		if(Object.keys(options).length>0){
+			select.setValue(values[0]);
+		}
+	}
+	select.onChange(function(e){
+		onChange(select.getValue());
+	});
+	row.add(select);
+	row.select=select;
+	return row;
+}
 
 UI.List=function(values,onChange,current){
 	var options={};
@@ -625,7 +721,7 @@ UI.SubtitleRow=function(label){
 
 UI.ButtonRow=function(label,onclick){
 	return new UI.Row().add(new UI.Button(label).onClick(onclick));
-}
+};
 
 //TODO
 UI.Anchor = function (href,text) {
@@ -646,6 +742,6 @@ UI.Anchor = function (href,text) {
 	
 	return this;
 
-}
+};
 UI.Anchor.prototype = Object.create( UI.Element.prototype );
 UI.Anchor.prototype.constructor = UI.Anchor;

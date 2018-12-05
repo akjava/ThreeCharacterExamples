@@ -15,10 +15,7 @@ Viewport.Info = function ( application ) {
 	container.setColor( '#fff' );
 	container.setWidth('120px');
 	
-	container.add(new UI.Text("3D Character is created by "),new UI.Break(),new UI.Anchor("http://www.manuelbastioni.com/","Manuel Bastioni"));
-	container.add( new UI.Break() , new UI.Break() );
-	container.add(new UI.Text("Many source code come from"),new UI.Break(),new UI.Anchor("https://github.com/mrdoob/three.js","Three.js"));
-	
+	container.add(new UI.Text("Many source code come from "),new UI.Break(),new UI.Anchor("https://github.com/mrdoob/three.js","Three.js"));
 	
 
 	signals.rendered.add( update );
