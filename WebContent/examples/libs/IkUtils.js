@@ -30,7 +30,7 @@ var IkUtils={
 		_axis:new THREE.Vector3(),
 		_euler:new THREE.Euler(),
 		minAngle: 1.0e-5,//avoid small change vibration
-		logging:true,
+		logging:false,
 		//Vector3(World) lastJointPos,Vector3(World) jointPos,Quaternion(Local) jointRotQ,Vector3(World) targetPos
 		/*
 		 * simple return difference,Nullable
