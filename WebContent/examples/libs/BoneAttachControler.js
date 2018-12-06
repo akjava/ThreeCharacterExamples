@@ -6,6 +6,7 @@ var BoneAttachControler=function(skinnedMesh,param){
 	param=param!==undefined?param: {color: 0x880000,boxSize:0.5};
 	param.visible=false;
 	var boxSize=param.boxSize;
+	var material={color:param.color};
 	
 	this.skinnedMesh=skinnedMesh;
 	this.boneList=BoneUtils.getBoneList(skinnedMesh);
@@ -24,7 +25,7 @@ var BoneAttachControler=function(skinnedMesh,param){
 			bone=bone.parent;
 		}
 		scope.parentIndexs[name]=list;
-		var container=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshPhongMaterial( param) );
+		var container=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshPhongMaterial( material) );
 		scope.containerList.push(container);
 		scope.object3d.add(container);
 		//container.matrixAutoUpdate=false;
