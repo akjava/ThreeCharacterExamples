@@ -39,6 +39,7 @@ Example=function(application){
 		mesh1.add(joint);
 	}
 	
+	
 	var parentPos=null;
 	var parent=group;
 	ap.signals.ikCreated.add(function(){
@@ -93,7 +94,9 @@ Example=function(application){
 		
 		
 		//make goal,TODO random
-		
+		ap.targets.forEach(function(target){
+			ap.scene.add(target);
+		});
 	});
 	
 	function unselectTarget(){
