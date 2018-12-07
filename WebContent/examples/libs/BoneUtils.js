@@ -239,9 +239,9 @@ var BoneUtils={
 		 * not test scale yet.
 		 */
 		convertToZeroRotatedBoneMesh:function(mesh){
-			
-			var originBoneList=BoneUtils.getBoneList(mesh);
 			mesh.updateMatrixWorld(true);
+			var originBoneList=BoneUtils.getBoneList(mesh);
+			
 			
 			
 			

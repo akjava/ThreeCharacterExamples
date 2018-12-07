@@ -9,6 +9,7 @@ var BoneAttachControler=function(skinnedMesh,param){
 	var material={color:param.color};
 	
 	this.skinnedMesh=skinnedMesh;
+	skinnedMesh.updateMatrixWorld(true);
 	this.boneList=BoneUtils.getBoneList(skinnedMesh);
 	this.parentIndexs={};
 	this.containerList=[];
@@ -35,6 +36,8 @@ var BoneAttachControler=function(skinnedMesh,param){
 	this._boneMatrix=new THREE.Matrix4();
 	this._matrixWorldInv=new THREE.Matrix4();
 	this._quaternion=new THREE.Quaternion();
+	
+	this.update();
 };
 
 BoneAttachControler.prototype.getBoneIndexByBoneName=function(name){

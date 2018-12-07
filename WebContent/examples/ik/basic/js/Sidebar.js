@@ -37,10 +37,10 @@ var Sidebar = function ( application ) {
 		ap.jointCount=v;
 	},[5,10,20]);
 	p1.add(jointCount);
-	var limitAngle=new UI.NumberButtons("Limit Angle",0.1,45,1,ap.limitAngle,function(v){
-		ap.limitAngle=v;
+	var maxAngle=new UI.NumberButtons("Max Angle",0.1,45,1,ap.maxAngle,function(v){
+		ap.maxAngle=v;
 	},[0.1,1,5]);
-	p1.add(limitAngle);
+	p1.add(maxAngle);
 	var iteration=new UI.IntegerButtons("Iteration",1,100,1,ap.iteration,function(v){
 		ap.iteration=v;
 	},[5,10,50]);
@@ -66,7 +66,7 @@ var Sidebar = function ( application ) {
 			var jointPos=joint.getWorldPosition(new THREE.Vector3());
 			var jointRotQ=joint.quaternion;
 			
-			var newQ=IkUtils.stepCalculate(lastJointPos,jointPos,jointRotQ,targetPos,ap.limitAngle);
+			var newQ=IkUtils.stepCalculate(lastJointPos,jointPos,jointRotQ,targetPos,ap.maxAngle);
 			joint.quaternion.copy(newQ);
 		}
 		}

@@ -116,11 +116,12 @@ var AppUtils={
 			return link;
 		},
 		//for vector3 or euler
-		printDeg:function(xyz){
-			console.log(THREE.Math.radToDeg(xyz.x),THREE.Math.radToDeg(xyz.y),THREE.Math.radToDeg(xyz.z))
+		printDeg:function(xyz,text){
+			text=text!==undefined?text:"";
+			console.log(THREE.Math.radToDeg(xyz.x),THREE.Math.radToDeg(xyz.y),THREE.Math.radToDeg(xyz.z),text)
 		},
 		printVec:function(xyz){
-			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2))
+			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2),text)
 		}
 		,clearAllChildren:function(parent){
 			for(var i=parent.children.length-1;i>=0;i--){
