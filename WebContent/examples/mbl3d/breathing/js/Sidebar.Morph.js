@@ -163,7 +163,7 @@ ap.signals.morphAnimationStarted.add(function(){
 	
 	
 	var mixedClip=new THREE.AnimationClip("MorphAnimation", -1, mixed);
-	console.log(mixedClip);
+
 	ap.morphClipDuration=mixedClip.duration;
 
 

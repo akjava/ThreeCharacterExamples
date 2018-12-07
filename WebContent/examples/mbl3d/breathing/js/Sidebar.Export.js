@@ -39,23 +39,6 @@ Sidebar.Export=function(ap){
 		
 	}
 	
-	var bt=new UI.Button("Start All").onClick( function () {
-
-		var mixedClip=mergeTrack(ap);
-		console.log(mixedClip);
-		var mixer=ap.mixer;
-		mixer.uncacheClip(mixedClip);
-		ap.animationAction=mixer.clipAction(mixedClip).play();
-		
-
-	} );
-	row.add(bt);
-	var bt=new UI.Button("Stop All").onClick( function () {
-
-		ap.signals.animationStopped.dispatch();
-
-	} );
-	row.add(bt);
 	
 	var row=new UI.Row();
 	container.add(row);
@@ -67,6 +50,7 @@ Sidebar.Export=function(ap){
 
 	} );
 	row.add(bt);
+	bt.setMarginRight("6px");
 	var span=new UI.Span();
 	row.add(span);
 
