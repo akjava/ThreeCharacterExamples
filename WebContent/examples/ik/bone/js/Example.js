@@ -32,7 +32,6 @@ Example=function(application){
 		ap.skinnedMesh=mesh;
 		
 		
-		console.log(mesh);
 		
 		if(isGltf){
 			mesh.scale.set(scale,scale,scale);
