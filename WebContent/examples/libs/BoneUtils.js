@@ -131,6 +131,8 @@ var BoneUtils={
 		getBoneList:function(skinnedMesh){
 			return skinnedMesh.skeleton.bones;
 		},
+		
+		//for Select id is key
 		getBoneIdOptions:function ( object ) {
 
 			var boneList = BoneUtils.getBoneList(object);
@@ -138,6 +140,20 @@ var BoneUtils={
 			boneList.forEach(function(bone){
 				options[bone.id]=bone.name;
 			});
+
+			return options;
+
+		},
+		getBoneNameOptions:function ( mesh ) {
+
+			var boneList = BoneUtils.getBoneList(mesh);
+			var options={};
+			
+			for(var i=0;i<boneList.length;i++){
+				var bone=boneList[i];
+				options[bone.name]=String(i);
+
+			}
 
 			return options;
 
