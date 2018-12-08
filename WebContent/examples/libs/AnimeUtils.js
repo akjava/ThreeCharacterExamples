@@ -318,7 +318,7 @@ var AnimeUtils={
 			var jsonObject={name:"dummy",duration:-1,tracks:[json]};
 			return THREE.AnimationClip.parse(jsonObject).tracks[0];
 		},
-		/* key is index */
+		/* object={key} is index */
 		makeRotationPose:function(object){
 			var tracks=[];
 			Object.keys(object).forEach(function(key){
@@ -333,6 +333,28 @@ var AnimeUtils={
 			});
 			var clip=new THREE.AnimationClip("makeRotationPose", -1, tracks);
 			return clip
+		},
+		makePoseClip:function(skinnedMesh){
+			var boneNames=[];
+			var objects={};
+			var boneList=skinnedMesh.skeleton.bones;
+			var index=0;
+			boneList.forEach(function(bone){
+				boneNames.push(bone.name);
+				objects[String(index)]=bone.quaternion;
+				index++;
+			});
+			var clip=AnimeUtils.makeRotationPose(objects);
+			clip.boneNames=boneNames;
+			return clip;
+		},
+		clipToJsonText:function(clip){
+			var json=THREE.AnimationClip.toJSON(clip);
+			if(clip.boneNames!==undefined){
+				json.boneNames=clip.boneNames;
+			}
+			var jsonText=JSON.stringify(json);
+			return jsonText;
 		}
 		
 		
