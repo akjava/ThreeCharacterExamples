@@ -14,7 +14,7 @@ var Application = function () {
 	this.minDistance=3;
 	this.maxDistance=5;
 	this.jointCount=5;
-	this.limitAngle=1;
+	this.maxAngle=1;
 	this.iteration=10;
 	
 	
