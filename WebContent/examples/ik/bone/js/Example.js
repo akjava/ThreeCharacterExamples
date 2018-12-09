@@ -155,7 +155,7 @@ Example=function(application){
 				var joint=this.boneAttachControler.containerList[ap.ikIndices[i]];
 				var jointPos=joint.position;
 				
-				//joint.lookAt(this.boneAttachControler.containerList[ap.ikIndices[i+1]].position);
+				
 				var jointRotQ=joint.quaternion;
 				
 				if(targetPos.equals(lastJointPos)){
@@ -166,65 +166,23 @@ Example=function(application){
 					return;
 				}
 				
-				//var jointRotQ=bone.getWorldQuaternion(new THREE.Quaternion());
-				//var jointRotQ=bone.quaternion;
-				
-				//stepCalculate,limitation broken?
-				//var newQ=IkUtils.stepCalculate(lastJointPos,jointPos,jointRotQ,targetPos,ap.maxAngle,false);
 				var newQ=IkUtils.calculateAngles(lastJointPos,jointPos,jointRotQ,targetPos,ap.maxAngle,false);
 				
-				//dont add parent
-				
-				// * not working yet,no idea
 				var inverseQ=bone.parent.clone().getWorldQuaternion(new THREE.Quaternion()).inverse();
 				var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,ap.maxAngle);
 				
 				
 				if(newQ==null){
-					//console.log("null q");
 					newQ=new THREE.Quaternion();
 					continue;
 				}
 				
 				
 				var euler=new THREE.Euler().setFromQuaternion(newQ);
-				//newQ.multiply(jointRotQ);
 				
 				var r=bone.rotation;
 				bone.rotation.set(r.x+euler.x,r.y+euler.y,r.z+euler.z);
-				//bone.quaternion.multiply(newQ);//not  good at complex bone angles
 				
-				
-				/*euler.setFromQuaternion(newQ);
-				
-				
-				var rad=THREE.Math.degToRad(ap.maxAngle);
-				if(euler.x>rad+0.0001 ||euler.y>rad+0.0001 ||euler.z>rad+0.0001 ){
-					AppUtils.printDeg(euler,"over limit euler");
-					//console.log(max/rad);
-					continue;
-				}
-				
-				euler.set(bone.rotation.x+euler.x,bone.rotation.y+euler.y,bone.rotation.z+euler.z);
-				//check correct
-				var limit=THREE.Math.degToRad(ap.maxAngle)*2;
-				if(Math.abs(euler.x-bone.rotation.x)<=limit &&
-				   Math.abs(euler.y-bone.rotation.y)<=limit &&
-				   Math.abs(euler.z-bone.rotation.z)<=limit
-						){
-					//console.log("ok");
-					//bone.rotation.copy(euler);	
-				}else{
-					//bone.rotation.copy(euler);	
-					var x=Math.abs(euler.x-bone.rotation.x);
-					var y=Math.abs(euler.y-bone.rotation.y);
-					var z=Math.abs(euler.z-bone.rotation.z);
-					
-					//AppUtils.printDeg(new THREE.Vector3(x,y,z),String(limit));
-				}*/
-				
-				
-				//bone.quaternion.multiply(newQ);
 				this.boneAttachControler.update();
 			}
 			}
