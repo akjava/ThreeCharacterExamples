@@ -125,7 +125,7 @@ Example=function(application){
 			jointNames.forEach(function(name){
 				var index=BoneUtils.findBoneIndexByEndsName(boneList,name);
 				if(index==-1){
-					console.errir("registIk:bone not contain,"+name);
+					console.error("registIk:bone not contain,"+name);
 				}
 				indices.push(index);
 			});

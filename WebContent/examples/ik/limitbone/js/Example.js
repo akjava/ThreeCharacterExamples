@@ -41,6 +41,7 @@ Example=function(application){
 		limitBone(boneList,"calf_R",0,0,0,170,0,0);
 		limitBone(boneList,"thigh_R",-120,0,-70,120,0,70);
 		
+		limitBone(boneList,"hand_R",-45,-45,-45,45,45,45);
 		limitBone(boneList,"lowerarm_R",0,0,0,0,170,0);
 		limitBone(boneList,"upperarm_R",-75,-75,-30,75,75,85);
 		limitBone(boneList,"clavicle_R",0,-15,-30,0,0,0);
@@ -49,6 +50,7 @@ Example=function(application){
 		limitBone(boneList,"calf_L",0,0,0,170,0,0);
 		limitBone(boneList,"thigh_L",-120,0,-70,120,0,70);
 		
+		limitBone(boneList,"hand_L",-45,-45,-45,45,45,45);
 		limitBone(boneList,"lowerarm_L",0,-170,0,0,0,0);
 		limitBone(boneList,"upperarm_L",-75,-75,-85,75,75,30);
 		limitBone(boneList,"clavicle_L",0,0,0,0,15,30);
@@ -149,8 +151,9 @@ Example=function(application){
 			ap.iks[ikName]=indices;
 			jointNames.forEach(function(name){
 				var index=BoneUtils.findBoneIndexByEndsName(boneList,name);
+				console.log(name,index);
 				if(index==-1){
-					console.errir("registIk:bone not contain,"+name);
+					console.error("registIk:bone not contain,"+name);
 				}
 				indices.push(index);
 			});
@@ -172,7 +175,7 @@ Example=function(application){
 		
 		registIk("hip",["root","spine01"]);
 		registIk("head",["spine01","spine02","spine03","neck","head"]);
-		registIk("leftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L"]);
+		registIk("leftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L",,"middle-00_L"]);
 		registIk("rightArm",["clavicle_R","upperarm_R","lowerarm_R","hand_R"]);
 		registIk("leftLeg",["thigh_L","calf_L","foot_L"]);
 		registIk("rightLeg",["thigh_R","calf_R","foot_R"]);
