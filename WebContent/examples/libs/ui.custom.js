@@ -715,6 +715,10 @@ UI.TextRow=function(label){
 	return row;
 }
 
+UI.Subtitle=function(label){
+	console.log("Use SubtitleRow");
+	return UI.SubtitleRow(label);
+}
 UI.SubtitleRow=function(label){
 	return new UI.Row().add(new UI.Text(label).setClass("subtitle"));
 }

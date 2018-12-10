@@ -43,6 +43,7 @@ Sidebar.Export=function(ap){
 	var row=new UI.Row();
 	container.add(row);
 	var bt=new UI.Button("Make Download").onClick( function () {
+		span.dom.innerHTML = ''
 		var clip=mergeTrack(ap);
 		var jsonText=JSON.stringify(THREE.AnimationClip.toJSON(clip));
 		var link=AppUtils.generateTextDownloadLink(jsonText,"animation.json","animation.json",true);

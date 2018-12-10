@@ -108,7 +108,6 @@ var AppUtils={
 			link.dataset.downloadurl="mimeType"+":"+fileName+":"+url;
 			if(autoRemove){
 				link.addEventListener( 'click', function ( event ) {
-
 					link.parentNode.removeChild(link);
 
 				} );

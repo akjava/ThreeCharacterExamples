@@ -8,6 +8,7 @@ Sidebar.Export=function(ap){
 	var exportPanel=new UI.TitlePanel("Export Pose");
 
 	var bt=new UI.Button("Make Download").onClick( function () {
+		span.dom.innerHTML = ''
 		var clip=makeClip(ap);
 		var jsonText=AnimeUtils.clipToJsonText(clip);
 		var link=AppUtils.generateTextDownloadLink(jsonText,"pose.json","pose.json",true);
