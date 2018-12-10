@@ -70,11 +70,11 @@ var Viewport = function ( application ) {
 
 				var object = intersects[ 0 ].object;
 
-				ap.signals.selectionChanged.dispatch(object);
+				ap.signals.transformSelectionChanged.dispatch(object);
 				
 			} else {
 
-				ap.signals.selectionChanged.dispatch(null);
+				ap.signals.transformSelectionChanged.dispatch(null);
 
 			}
 

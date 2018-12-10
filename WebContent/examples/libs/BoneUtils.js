@@ -251,6 +251,16 @@ var BoneUtils={
 
 			return index;
 		},
+		findBoneByEndsName:function(boneList,name){
+			
+			for(var i=0;i<boneList.length;i++){			
+				if(boneList[i].name.endsWith(name)){
+					return boneList[i];
+				}
+			}
+
+			return null;
+		},
 		/*
 		 * not test scale yet.
 		 */
@@ -283,6 +293,24 @@ var BoneUtils={
 			BoneUtils.copyIndicesAndWeights(mesh.geometry,geo);
 			geo.bones=rawbones;
 			return new THREE.SkinnedMesh(geo);
+		},
+		resetBone:function(mesh,boneSelectedIndex){
+			var boneList=BoneUtils.getBoneList(mesh);
+			var bone=boneList[boneSelectedIndex];
+			bone.matrixWorld.getInverse( mesh.skeleton.boneInverses[ boneSelectedIndex ] );
+			if ( bone.parent && bone.parent.isBone ) {
+				var parentIndex=boneList.indexOf(bone.parent);
+				var parentMatrix=mesh.skeleton.boneInverses[ parentIndex ];
+				
+				bone.matrix.copy(parentMatrix);
+				bone.matrix.multiply( bone.matrixWorld );
+
+			} else {
+				bone.matrix.copy( bone.matrixWorld );
+
+			}
+			bone.matrix.decompose( bone.position, bone.quaternion, bone.scale );
+			bone.updateMatrixWorld(true);
 		}
 
 };

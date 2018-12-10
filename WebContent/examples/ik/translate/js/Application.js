@@ -21,7 +21,7 @@ var Application = function () {
 	var Signal = signals.Signal;
 	this.signals = {
 			transformChanged:new Signal(),
-			selectionChanged:new Signal(),
+			transformSelectionChanged:new Signal(),
 			ikTargetSelected: new Signal(),
 			ikTargetCreated: new Signal(),
 			ikCreated: new Signal(),

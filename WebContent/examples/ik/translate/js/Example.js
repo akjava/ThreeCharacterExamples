@@ -119,7 +119,7 @@ Example=function(application){
 		
 	});
 	
-	ap.signals.selectionChanged.add(function(target){
+	ap.signals.transformSelectionChanged.add(function(target){
 		//TODO switch by type
 		ap.signals.ikTargetSelected.dispatch(target);
 	});

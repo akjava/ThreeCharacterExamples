@@ -104,7 +104,7 @@ Example=function(application){
 		
 		
 		
-		ap.signals.selectionChanged.add(function(target){
+		ap.signals.transformSelectionChanged.add(function(target){
 			
 			ap.ikTarget=target;
 			

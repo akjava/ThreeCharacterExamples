@@ -23,7 +23,7 @@ var Application = function () {
 			boneSelectionChanged:new Signal(),
 			boneRotationChanged:new Signal(),
 			transformChanged:new Signal(),
-			selectionChanged:new Signal(),
+			transformSelectionChanged:new Signal(),
 			poseChanged:new Signal(),
 			windowResize: new Signal(),
 			rendered:new Signal(),

@@ -21,7 +21,7 @@ var Application = function () {
 
 	this.signals = {
 			transformChanged:new Signal(),
-			selectionChanged:new Signal(),
+			transformSelectionChanged:new Signal(),
 			
 			windowResize: new Signal(),
 			rendered:new Signal(),

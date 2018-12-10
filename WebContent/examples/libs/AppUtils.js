@@ -129,6 +129,10 @@ var AppUtils={
 				parent.remove(obj);
 				
 			}
+		},clearObject:function(object){
+			Object.keys(object).forEach(function (key) {
+				  delete object[key];
+				});
 		}
 		
 
