@@ -119,15 +119,12 @@ Example=function(application){
 		});
 		
 
-		var lastPosition=new THREE.Vector3();
 		var solving=false;
 		function solveIk(){
 			if(ap.ikTarget==null){
 				return;
 			}
-			if(ap.ikTarget.position.equals(lastPosition)){
-				return;
-			}
+			
 			if(solving){
 				console.log("busy solving");
 				return;
@@ -135,11 +132,15 @@ Example=function(application){
 			
 			
 			
-			lastPosition.copy(ap.ikTarget.position);
 			var lastMesh=this.boneAttachControler.containerList[ap.ikIndices[ap.ikIndices.length-1]];
 			var targetMesh=ap.ikTarget;
 			
 			var targetPos=targetMesh.position;
+			
+			//same no need ik
+			if(ap.ikTarget.position.equals(lastMesh.position)){
+				return;
+			}
 			
 			var euler=new THREE.Euler();
 			for(var j=0;j<ap.iteration;j++){
