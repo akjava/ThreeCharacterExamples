@@ -43,8 +43,8 @@ Example=function(application){
 		
 		limitBone(boneList,"hand_R",-15,-15,-15,15,15,15);
 		limitBone(boneList,"lowerarm_R",0,0,0,0,170,0);
-		limitBone(boneList,"upperarm_R",-75,-75,-30,75,75,85);
-		limitBone(boneList,"clavicle_R",0,-15,-30,0,0,0);
+		limitBone(boneList,"upperarm_R",-45,-75,-30,45,75,85);
+		limitBone(boneList,"clavicle_R",-30,-15,-30,30,0,0);
 		
 		
 		limitBone(boneList,"calf_L",0,0,0,170,0,0);
@@ -52,8 +52,8 @@ Example=function(application){
 		
 		limitBone(boneList,"hand_L",-15,-15,-15,15,15,15);
 		limitBone(boneList,"lowerarm_L",0,-170,0,0,0,0);
-		limitBone(boneList,"upperarm_L",-75,-75,-85,75,75,30);
-		limitBone(boneList,"clavicle_L",0,0,0,0,15,30);
+		limitBone(boneList,"upperarm_L",-45,-75,-85,45,75,30);
+		limitBone(boneList,"clavicle_L",-30,0,0,30,15,30);
 		
 		limitBone(boneList,"spine01",-15,-45,-45,15,45,45);
 		limitBone(boneList,"spine02",-45,-45,-45,45,45,45);
