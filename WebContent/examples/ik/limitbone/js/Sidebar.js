@@ -24,6 +24,25 @@ var Sidebar = function ( application ) {
 		ap.signals.solveIkCalled.dispatch();
 	});
 	ikPanel.add(solveIkRow);
+
+	var resetAndSolve=new UI.Button("Reset & Solve Selected x3");
+	resetAndSolve.onClick(function(){
+		if(ap.ikTarget!=null){
+			ap.ikIndices.forEach(function(index){
+				BoneUtils.resetBone(ap.skinnedMesh,index);
+			});
+		}
+		ap.signals.solveIkCalled.dispatch();
+		ap.signals.solveIkCalled.dispatch();
+		ap.signals.solveIkCalled.dispatch();
+		ap.signals.solveIkCalled.dispatch();
+		ap.signals.solveIkCalled.dispatch();
+	});
+	
+	solveIkRow.add(resetAndSolve);
+	
+	
+	
 	
 	var lockPanel=new UI.TitlePanel("Lock Ik Rotation");
 	container.add(lockPanel);
@@ -106,6 +125,7 @@ var Sidebar = function ( application ) {
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		if(target!=null){
 			ap.ikIndices.forEach(function(index){
+				
 				var name=boneList[index].name;
 				var bt=new UI.Button(name);
 				bt.onClick(function(){
@@ -123,6 +143,8 @@ var Sidebar = function ( application ) {
 	var boneListRow=new UI.Row();
 	ikBoneList.add(boneListRow);
 	
+	var ikLimitList=new Sidebar.IkLimitList(application);
+	container.add(ikLimitList);
 	
 	return container;
 }

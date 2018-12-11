@@ -119,6 +119,9 @@ var AppUtils={
 			text=text!==undefined?text:"";
 			console.log(THREE.Math.radToDeg(xyz.x),THREE.Math.radToDeg(xyz.y),THREE.Math.radToDeg(xyz.z),text)
 		},
+		deg2rad:function(xyz){
+			return {x:THREE.Math.degToRad(xyz.x),y:THREE.Math.degToRad(xyz.y),z:THREE.Math.degToRad(xyz.z)};
+		},
 		printVec:function(xyz){
 			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2),text)
 		}

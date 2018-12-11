@@ -42,18 +42,18 @@ Example=function(application){
 		limitBone(boneList,"thigh_R",-120,0,-70,120,0,70);
 		
 		limitBone(boneList,"hand_R",-15,-15,-15,15,15,15);
-		limitBone(boneList,"lowerarm_R",0,0,0,0,170,0);
+		limitBone(boneList,"lowerarm_R",0,0,0,0,150,0);
 		limitBone(boneList,"upperarm_R",-45,-75,-30,45,75,85);
-		limitBone(boneList,"clavicle_R",-30,-15,-30,30,0,0);
+		limitBone(boneList,"clavicle_R",-25,-15,-25,25,0,0);
 		
 		
 		limitBone(boneList,"calf_L",0,0,0,170,0,0);
 		limitBone(boneList,"thigh_L",-120,0,-70,120,0,70);
 		
 		limitBone(boneList,"hand_L",-15,-15,-15,15,15,15);
-		limitBone(boneList,"lowerarm_L",0,-170,0,0,0,0);
+		limitBone(boneList,"lowerarm_L",0,-150,0,0,0,0);
 		limitBone(boneList,"upperarm_L",-45,-75,-85,45,75,30);
-		limitBone(boneList,"clavicle_L",-30,0,0,30,15,30);
+		limitBone(boneList,"clavicle_L",-25,0,0,25,15,25);
 		
 		limitBone(boneList,"spine01",-15,-45,-45,15,45,45);
 		limitBone(boneList,"spine02",-45,-45,-45,45,45,45);
@@ -203,10 +203,12 @@ Example=function(application){
 		var solving=false;
 		
 		ap.signals.solveIkCalled.add(function(){
-			solveIk();
+			solveIk(true);
 		});
 		
-		function solveIk(){
+		var lastTargetMovedPosition=new THREE.Vector3();
+		function solveIk(forceUpdate){
+			var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
 			if(ap.ikTarget==null){
 				return;
 			}
@@ -225,8 +227,15 @@ Example=function(application){
 			
 			
 			var targetPos=targetMesh.position;
+			if(lastTargetMovedPosition.equals(targetPos) && forceUpdate==false){
+				//this Ik need move or force
+				return;
+			}
+			lastTargetMovedPosition.copy(targetPos);
+			
 			
 			if(ap.ikTarget.position.equals(lastMesh.position)){
+				//no need to solve
 				return;
 			}
 			
@@ -343,7 +352,7 @@ Example=function(application){
 		}
 		
 		
-		ap.signals.transformChanged.add(function(){
+		ap.signals.transformChanged.add(function(){	
 			solveIk();
 		});
 	});
