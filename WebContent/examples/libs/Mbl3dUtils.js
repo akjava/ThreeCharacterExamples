@@ -80,5 +80,36 @@ var Mbl3dUtils={
 			}
 			
 			return false;
+		},isHasTwistBoneName:function(name){
+			if(Mbl3dUtils.hasTwistBoneNames==undefined){
+				Mbl3dUtils.hasTwistBoneNames=[];
+				var lr=["L","R"];
+				var fingerNames=["calf","thigh","lowerarm","upperarm"];
+				
+				lr.forEach(function(side){
+					fingerNames.forEach(function(name){
+							var boneName=name+"_"+side;
+							Mbl3dUtils.hasTwistBoneNames.push(boneName);
+						
+					})
+				});
+			}
+			for(var i=0;i<Mbl3dUtils.hasTwistBoneNames.length;i++){
+				var finger=Mbl3dUtils.hasTwistBoneNames[i];
+				if(name.endsWith(finger)){
+					return true;
+				}
+			}
+			
+			return false;
+		},
+		convertToUnTwistBoneName:function(name){
+			return name.replace("_twist_","_");
+		},convertToTwistBoneName:function(name){
+			if(!Mbl3dUtils.isHasTwistBoneName(name)){
+				return name;
+			}
+			var name= name.replace("_R","_twist_R");
+			return name= name.replace("_L","_twist_L");
 		}
 }

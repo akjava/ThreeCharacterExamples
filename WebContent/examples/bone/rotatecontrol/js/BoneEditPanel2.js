@@ -14,7 +14,7 @@ var BoneEditPanel2 = function ( application ) {
 	var boneSelect=new UI.Select2();
 	selectRow.add(boneSelect);
 	
-	function boneSelectionChanged(){
+	function onBoneSelectionChanged(){
 		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
 		
 		ap.selectedBone=bone;//TODO move to  local
@@ -30,12 +30,13 @@ var BoneEditPanel2 = function ( application ) {
 		boneAngleZ.setValue(z);
 	}
 	boneSelect.onChange(function(){
-		boneSelectionChanged();
+		var index=parseInt(boneSelect.getValue());
+		ap.signals.boneSelectionChanged.dispatch(index);
 	});
 	
 	ap.signals.boneSelectionChanged.add(function(index){
 		boneSelect.setValue(index);
-		boneSelectionChanged();
+		onBoneSelectionChanged();
 	});
 	
 	ap.signals.skinnedMeshChanged.add(function(mesh){
@@ -70,7 +71,7 @@ var BoneEditPanel2 = function ( application ) {
 		ap.currentBoneMatrix[name].rotation.copy(boneList[index].rotation);
 		
 		if(index==parseInt(boneSelect.getValue())){
-			boneSelectionChanged();
+			onBoneSelectionChanged();
 		}
 		
 	});
@@ -183,7 +184,7 @@ container.add(new UI.SubtitleRow("Rotation"));
 
 		
 		
-		boneSelectionChanged();
+		onBoneSelectionChanged();
 	});
 	p1.add(bt);
 	container.add(p1);

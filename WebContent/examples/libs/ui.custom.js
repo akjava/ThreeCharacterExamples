@@ -435,6 +435,31 @@ UI.CheckboxRow=function(label,value,onChange){
 	return row;
 }
 
+UI.SwitchRow=function(trueLabel,falseLabel,value,onChange){
+	var row=new UI.Row();
+	var text=new UI.Text(value?trueLabel:falseLabel).setWidth('180px');
+	row.add(text);
+	
+	var checkbox=new UI.Checkbox();
+	checkbox.setValue(value);
+
+	checkbox.onChange(function(e){
+		var v=checkbox.getValue();
+		if(v){
+			text.setValue(trueLabel);
+		}else{
+			text.setValue(falseLabel);
+		}
+		onChange(v);
+	});
+	row.add(checkbox);
+	
+	//add ref
+	row.text=text;
+	row.checkbox=checkbox;
+	return row;
+}
+
 UI.CheckboxText=function(label,value,onChange){
 	var span=new UI.Span();
 	

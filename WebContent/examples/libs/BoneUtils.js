@@ -242,6 +242,7 @@ var BoneUtils={
 		return defaultBoneMatrix;
 		},
 		findBoneIndexByEndsName:function(boneList,name){
+			
 			var index=-1;
 			for(var i=0;i<boneList.length;i++){			
 				if(boneList[i].name.endsWith(name)){
