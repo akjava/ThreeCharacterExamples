@@ -22,6 +22,7 @@ var Application = function () {
 	this.ikLockZ=false;
 	
 	this.boneSelectedIndex=0;
+	this.boneLocked={};
 	
 	var Signal = signals.Signal;
 	

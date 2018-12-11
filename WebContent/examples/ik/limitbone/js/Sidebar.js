@@ -42,6 +42,29 @@ var Sidebar = function ( application ) {
 	});
 	lockRow.add(ikLockZ);
 	
+	var lockBonePanel=new UI.TitlePanel("Lock Bone Rotation");
+	container.add(lockBonePanel);
+	
+	function getSelectedBoneName(){
+		return BoneUtils.getBoneList(ap.skinnedMesh)[ap.boneSelectedIndex].name;
+	}
+	
+	//TODO switch and color
+	var lockedCheck=new UI.CheckboxRow("",false,function(v){
+		var name=getSelectedBoneName();
+		ap.boneLocked[name]=v;
+	});
+	lockBonePanel.add(lockedCheck);
+	
+	var boneSelectionChanged=function(){
+		var name=getSelectedBoneName();
+		var value=ap.boneLocked[name]!==undefined?ap.boneLocked[name]:false;
+		lockedCheck.checkbox.setValue(value);
+		lockedCheck.text.setValue(name);
+	};
+	
+	ap.signals.boneSelectionChanged.add(boneSelectionChanged);
+	
 	var limitPanel=new BoneLimitPanel(application);
 	container.add(limitPanel);
 	

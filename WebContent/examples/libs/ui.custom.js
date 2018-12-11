@@ -428,6 +428,10 @@ UI.CheckboxRow=function(label,value,onChange){
 		onChange(checkbox.getValue());
 	});
 	row.add(checkbox);
+	
+	//add ref
+	row.text=text;
+	row.checkbox=checkbox;
 	return row;
 }
 
@@ -445,7 +449,9 @@ UI.CheckboxText=function(label,value,onChange){
 	
 	var text=new UI.Text(label).setWidth('45px');
 	span.add(text);
+	//add ref
 	span.text=text;
+	span.checkbox=checkbox;
 	return span;
 }
 

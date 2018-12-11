@@ -8,7 +8,7 @@ var BoneLimitPanel=function(application){
 	var boneSelect=new UI.Select2();
 	selectRow.add(boneSelect);
 	
-	function boneSelectionChanged(){
+	function onBoneSelectionChanged(){
 		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
 		var name=bone.name;
 		scope.selectionName=name;
@@ -33,8 +33,8 @@ var BoneLimitPanel=function(application){
 		
 	}
 	boneSelect.onChange(function(){
-		ap.boneSelectedIndex=parseInt(boneSelect.getValue());
-		boneSelectionChanged();
+		var index=parseInt(boneSelect.getValue());
+		ap.signals.boneSelectionChanged.dispatch(index);
 	});
 	
 	if(ap.signals.boneSelectionChanged==undefined){
@@ -42,23 +42,27 @@ var BoneLimitPanel=function(application){
 		return;
 	}
 
-	ap.signals.boneSelectionChanged.add(function(index){
+	
+	
+	var boneSelectionChanged=function(index){
 		ap.boneSelectedIndex=index;
 		boneSelect.setValue(index);
-		boneSelectionChanged();
-	});
+		onBoneSelectionChanged();
+	}
+	ap.signals.boneSelectionChanged.add(boneSelectionChanged,null,10);
 	
 	
 	ap.signals.boneLimitLoaded.add(function(newMinRotation,newMaxRotation){
 		scope.minRotation=newMinRotation;
 		scope.maxRotation=newMaxRotation;
-		boneSelectionChanged();
+		onBoneSelectionChanged();
 		
 	});
 	
 	
 	this.minRotation={};
 	this.maxRotation={};
+
 
 	this.selectionName=null;
 	
@@ -99,6 +103,7 @@ var BoneLimitPanel=function(application){
 		
 		
 	});
+
 	
 	var minRotation=new UI.SubtitleRow("Min Rotation");
 	container.add(minRotation);

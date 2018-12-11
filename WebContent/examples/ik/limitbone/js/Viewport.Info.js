@@ -32,6 +32,16 @@ Viewport.Info = function ( application ) {
 	var rotYText2 = new UI.Text( '' ).setMarginLeft( '6px' );
 	var rotZText2 = new UI.Text( '' ).setMarginLeft( '6px' );
 	
+	var boneText3 = new UI.Text( '' ).setMarginLeft( '6px' );
+	var rotXText3 = new UI.Text( '' ).setMarginLeft( '6px' );
+	var rotYText3 = new UI.Text( '' ).setMarginLeft( '6px' );
+	var rotZText3 = new UI.Text( '' ).setMarginLeft( '6px' );
+	
+	var boneText4 = new UI.Text( '' ).setMarginLeft( '6px' );
+	var rotXText4 = new UI.Text( '' ).setMarginLeft( '6px' );
+	var rotYText4 = new UI.Text( '' ).setMarginLeft( '6px' );
+	var rotZText4 = new UI.Text( '' ).setMarginLeft( '6px' );
+	
 	container.add( new UI.Text( 'IkName:' ), ikText, new UI.Break() );
 	container.add( new UI.Break());
 	container.add( new UI.Text( 'BoneName:' ), boneText, new UI.Break() );
@@ -45,7 +55,18 @@ Viewport.Info = function ( application ) {
 	container.add( new UI.Text( 'rot-deg-x:' ), rotXText2, new UI.Break() );
 	container.add( new UI.Text( 'rot-deg-y:' ), rotYText2, new UI.Break() );
 	container.add( new UI.Text( 'rot-deg-z:' ), rotZText2, new UI.Break() );
-
+	container.add( new UI.Break());
+	container.add( new UI.Text( 'BoneName3:' ), boneText3, new UI.Break() );
+	container.add( new UI.Break());
+	container.add( new UI.Text( 'rot-deg-x:' ), rotXText3, new UI.Break() );
+	container.add( new UI.Text( 'rot-deg-y:' ), rotYText3, new UI.Break() );
+	container.add( new UI.Text( 'rot-deg-z:' ), rotZText3, new UI.Break() );
+	container.add( new UI.Break());
+	container.add( new UI.Text( 'BoneName4:' ), boneText4, new UI.Break() );
+	container.add( new UI.Break());
+	container.add( new UI.Text( 'rot-deg-x:' ), rotXText4, new UI.Break() );
+	container.add( new UI.Text( 'rot-deg-y:' ), rotYText4, new UI.Break() );
+	container.add( new UI.Text( 'rot-deg-z:' ), rotZText4, new UI.Break() );
 	signals.rendered.add( update );
 
 	var translate=new THREE.Vector3();
@@ -88,6 +109,44 @@ Viewport.Info = function ( application ) {
 				rotYText2.setValue("");
 				rotZText2.setValue("");
 			}
+			
+			if(ap.ikIndices.length>=4){
+				var lastJoint=ap.ikIndices[ap.ikIndices.length-4];
+				var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
+				var boneName=bone.name;
+				boneText3.setValue(boneName);
+				
+				var rotX=THREE.Math.radToDeg(bone.rotation.x).toFixed(2);
+				rotXText3.setValue(rotX);
+				var rotY=THREE.Math.radToDeg(bone.rotation.y).toFixed(2);
+				rotYText3.setValue(rotY);
+				var rotZ=THREE.Math.radToDeg(bone.rotation.z).toFixed(2);
+				rotZText3.setValue(rotZ);
+				}else{
+					boneText3.setValue("");
+					rotXText3.setValue("");
+					rotYText3.setValue("");
+					rotZText3.setValue("");
+				}
+			
+			if(ap.ikIndices.length>=5){
+				var lastJoint=ap.ikIndices[ap.ikIndices.length-5];
+				var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
+				var boneName=bone.name;
+				boneText4.setValue(boneName);
+				
+				var rotX=THREE.Math.radToDeg(bone.rotation.x).toFixed(2);
+				rotXText4.setValue(rotX);
+				var rotY=THREE.Math.radToDeg(bone.rotation.y).toFixed(2);
+				rotYText4.setValue(rotY);
+				var rotZ=THREE.Math.radToDeg(bone.rotation.z).toFixed(2);
+				rotZText4.setValue(rotZ);
+				}else{
+					boneText4.setValue("");
+					rotXText4.setValue("");
+					rotYText4.setValue("");
+					rotZText4.setValue("");
+				}
 		}
 	}
 
