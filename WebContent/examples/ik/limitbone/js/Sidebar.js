@@ -11,14 +11,24 @@ var Sidebar = function ( application ) {
 	var ikPanel=new UI.TitlePanel("Ik");
 	container.add(ikPanel);
 	
+	var minAngle=new UI.NumberButtons("Min Angle",0.0001,1,0.001,IkUtils.minAngle,function(v){
+		IkUtils.minAngle=THREE.Math.degToRad(v);
+	},[0.001,0.01,0.1]);
+	ikPanel.add(minAngle);
+	minAngle.number.precision=5;
+	minAngle.number.setValue(minAngle.number.getValue());
+	minAngle.text.setWidth("70px");
+	
 	var maxAngle=new UI.NumberButtons("Max Angle",0.1,45,1,ap.maxAngle,function(v){
 		ap.maxAngle=v;
 	},[0.1,1,5]);
 	ikPanel.add(maxAngle);
+	maxAngle.text.setWidth("70px");
 	var iteration=new UI.IntegerButtons("Iteration",1,100,1,ap.iteration,function(v){
 		ap.iteration=v;
-	},[5,10,50]);
+	},[25,50,100]);
 	ikPanel.add(iteration);
+	iteration.text.setWidth("70px");
 	
 	var solveIkRow=new UI.ButtonRow("Solve Selected Ik",function(){
 		ap.signals.solveIkCalled.dispatch();
@@ -46,7 +56,7 @@ var Sidebar = function ( application ) {
 	
 	
 	
-	var lockPanel=new UI.TitlePanel("Lock Ik Rotation");
+	var lockPanel=new UI.TitlePanel("Lock Ik All Bone Rotation");
 	container.add(lockPanel);
 	var lockRow=new UI.Row();
 	lockPanel.add(lockRow);
@@ -66,14 +76,15 @@ var Sidebar = function ( application ) {
 	
 	var boneIkEnabledPanel=new UI.TitlePanel("Bone Ik Enabled Any or Selected");
 	container.add(boneIkEnabledPanel);
-	ap.ikBoneSelectedOnly=false;
-	var selectedOnlyCheck=new UI.SwitchRow("Only Selected Bone","Any Bone",false,function(v){
+
+	var selectedOnlyCheck=new UI.SwitchRow("Only Selected Bone","Any Bone",ap.ikBoneSelectedOnly,function(v){
 		ap.ikBoneSelectedOnly=v;
 	});
 	boneIkEnabledPanel.add(selectedOnlyCheck);
 	
 	
-	var lockBonePanel=new UI.TitlePanel("Lock Bone Rotation");
+	
+	var lockBonePanel=new UI.TitlePanel("Lock Individual Bone Rotation");
 	container.add(lockBonePanel);
 	
 	function getSelectedBoneName(){

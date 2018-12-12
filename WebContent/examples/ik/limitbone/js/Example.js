@@ -295,59 +295,65 @@ Example=function(application){
 				var y=r.y;
 				var z=r.z;
 				
-				function toDegree(v1,v2){
-					var tmp=THREE.Math.radToDeg(v1+v2);
-					if(tmp>180){
-						tmp-=360;
+				if(ap.ikLimitkRotationEnabled){
+					function toDegree(v1,v2){
+						var tmp=THREE.Math.radToDeg(v1+v2);
+						if(tmp>180){
+							tmp-=360;
+						}
+						if(tmp<-180){
+							tmp+=180;
+						}
+						//console.log(v1,v2,tmp);
+						return tmp;
 					}
-					if(tmp<-180){
-						tmp+=180;
+					var logging=false;
+					var tmpX=toDegree(x,euler.x);
+					if(!ap.ikLockX && tmpX >= ap.ikLimitMin[bone.name].x && tmpX<=ap.ikLimitMax[bone.name].x){
+						x=x+euler.x;
+					//console.log(bone.name,"ok",ap.ikLimitMin[bone.name].x,ap.ikLimitMax[bone.name].x,tmpX);
+					}else{
+						if(logging)
+						console.log(bone.name,"limit-x",ap.ikLimitMin[bone.name].x,ap.ikLimitMax[bone.name].x,tmpX);
 					}
-					//console.log(v1,v2,tmp);
-					return tmp;
-				}
-				var logging=false;
-				var tmpX=toDegree(x,euler.x);
-				if(!ap.ikLockX && tmpX >= ap.ikLimitMin[bone.name].x && tmpX<=ap.ikLimitMax[bone.name].x){
+					var tmpY=toDegree(y,euler.y);
+					if(!ap.ikLockY && tmpY >=ap.ikLimitMin[bone.name].y && tmpY<=ap.ikLimitMax[bone.name].y){
+						y=y+euler.y;
+					}else{
+						if(logging)
+						console.log(bone.name,"limit-y",ap.ikLimitMin[bone.name].y,ap.ikLimitMax[bone.name].y,tmpY);
+					}
+					var tmpZ=toDegree(z,euler.z);
+					if(!ap.ikLockZ && tmpZ >=ap.ikLimitMin[bone.name].z && tmpZ<=ap.ikLimitMax[bone.name].z){
+						z=z+euler.z;
+					}else{
+						if(logging)
+						console.log(bone.name,"limit-z",ap.ikLimitMin[bone.name].z,ap.ikLimitMax[bone.name].z,tmpZ);
+					}
+					
+					//fix rad
+					if(x>Math.PI){
+						x-=Math.PI*2;
+					}
+					if(y>Math.PI){
+						y-=Math.PI*2;
+					}
+					if(z>Math.PI){
+						z-=Math.PI*2;
+					}
+					if(x<-Math.PI){
+						x+=Math.PI*2;
+					}
+					if(y<-Math.PI){
+						y+=Math.PI*2;
+					}
+					if(z<-Math.PI){
+						z+=Math.PI*2;
+					}
+				}else{
 					x=x+euler.x;
-				//console.log(bone.name,"ok",ap.ikLimitMin[bone.name].x,ap.ikLimitMax[bone.name].x,tmpX);
-				}else{
-					if(logging)
-					console.log(bone.name,"limit-x",ap.ikLimitMin[bone.name].x,ap.ikLimitMax[bone.name].x,tmpX);
-				}
-				var tmpY=toDegree(y,euler.y);
-				if(!ap.ikLockY && tmpY >=ap.ikLimitMin[bone.name].y && tmpY<=ap.ikLimitMax[bone.name].y){
 					y=y+euler.y;
-				}else{
-					if(logging)
-					console.log(bone.name,"limit-y",ap.ikLimitMin[bone.name].y,ap.ikLimitMax[bone.name].y,tmpY);
-				}
-				var tmpZ=toDegree(z,euler.z);
-				if(!ap.ikLockZ && tmpZ >=ap.ikLimitMin[bone.name].z && tmpZ<=ap.ikLimitMax[bone.name].z){
 					z=z+euler.z;
-				}else{
-					if(logging)
-					console.log(bone.name,"limit-z",ap.ikLimitMin[bone.name].z,ap.ikLimitMax[bone.name].z,tmpZ);
-				}
-				
-				//fix rad
-				if(x>Math.PI){
-					x-=Math.PI*2;
-				}
-				if(y>Math.PI){
-					y-=Math.PI*2;
-				}
-				if(z>Math.PI){
-					z-=Math.PI*2;
-				}
-				if(x<-Math.PI){
-					x+=Math.PI*2;
-				}
-				if(y<-Math.PI){
-					y+=Math.PI*2;
-				}
-				if(z<-Math.PI){
-					z+=Math.PI*2;
 				}
 				
 				bone.rotation.set(x,y,z);

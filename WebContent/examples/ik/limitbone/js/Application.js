@@ -28,6 +28,9 @@ var Application = function () {
 	
 	this.ikDefaultLimitMin={};
 	this.ikDefaultLimitMax={};
+	
+	this.ikBoneSelectedOnly=false;
+	this.ikLimitkRotationEnabled=true;
 
 	this.signals = {
 			boneLimitLoaded:new Signal(),
