@@ -60,16 +60,16 @@ var Sidebar = function ( application ) {
 	container.add(lockPanel);
 	var lockRow=new UI.Row();
 	lockPanel.add(lockRow);
-	var ikLockX=new UI.CheckboxText("X",ap.ikLockX,function(v){
-		ap.ikLockX=v;
+	var ikLockX=new UI.CheckboxText("X",ap.ikControler.ikLockX,function(v){
+		ap.ikControler.ikLockX=v;
 	});
 	lockRow.add(ikLockX);
-	var ikLockY=new UI.CheckboxText("Y",ap.ikLockY,function(v){
-		ap.ikLockY=v;
+	var ikLockY=new UI.CheckboxText("Y",ap.ikControler.ikLockY,function(v){
+		ap.ikControler.ikLockY=v;
 	});
 	lockRow.add(ikLockY);
-	var ikLockZ=new UI.CheckboxText("Z",ap.ikLockZ,function(v){
-		ap.ikLockZ=v;
+	var ikLockZ=new UI.CheckboxText("Z",ap.ikControler.ikLockZ,function(v){
+		ap.ikControler.ikLockZ=v;
 	});
 	lockRow.add(ikLockZ);
 	

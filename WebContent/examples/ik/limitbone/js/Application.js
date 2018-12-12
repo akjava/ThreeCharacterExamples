@@ -17,9 +17,9 @@ var Application = function () {
 	this.maxAngle=1;
 	this.iteration=25;
 	
-	this.ikLockX=false;
-	this.ikLockY=false;
-	this.ikLockZ=false;
+
+	this.ikControler=new IkControler();//for Sidebar dummy
+	
 	
 	this.boneSelectedIndex=0;
 	this.boneLocked={};
