@@ -485,22 +485,34 @@ UI.ListRow=function(label,values,onChange,current){
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
 	
-	var options={};
-	for(var i=0;i<values.length;i++){
-		options[values[i]]=values[i];
+	row.setList=function(values){
+		var options={};
+		for(var i=0;i<values.length;i++){
+			var value=String(values[i]);
+			options[value]=value;
+		}
+		select.setOptions(options);
 	}
 	
+	
+	
 	var select=new UI.Select();
-	select.setOptions(options);
+	row.setList(values);
 	if(current){
 		select.setValue(current);	
 	}else{
-		select.setValue(values[0]);
+		if(values.length>0){
+			select.setValue(values[0]);
+		}
 	}
 	select.onChange(function(e){
 		onChange(select.getValue());
 	});
 	row.add(select);
+	
+	row.text=text;
+	row.select=select;
+	
 	return row;
 }
 //Select2
@@ -755,7 +767,10 @@ UI.SubtitleRow=function(label){
 }
 
 UI.ButtonRow=function(label,onclick){
-	return new UI.Row().add(new UI.Button(label).onClick(onclick));
+	var bt=new UI.Button(label).onClick(onclick);
+	var row= new UI.Row().add(bt);
+	row.button=bt;
+	return row;
 };
 
 //TODO

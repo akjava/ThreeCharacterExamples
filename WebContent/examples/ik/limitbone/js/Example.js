@@ -38,7 +38,7 @@ Example=function(application){
 			limitBone(boneList,bone.name,-180,-180,-180,180,180,180);
 		});*/
 		
-		limitBone(boneList,"calf_R",0,0,0,170,0,0);
+		limitBone(boneList,"calf_R",0,0,0,165,0,0);
 		limitBone(boneList,"thigh_R",-120,0,-70,120,0,70);
 		
 		limitBone(boneList,"hand_R",-15,-15,-15,15,15,15);
@@ -47,7 +47,7 @@ Example=function(application){
 		limitBone(boneList,"clavicle_R",-25,-15,-25,25,0,0);
 		
 		
-		limitBone(boneList,"calf_L",0,0,0,170,0,0);
+		limitBone(boneList,"calf_L",0,0,0,165,0,0);
 		limitBone(boneList,"thigh_L",-120,0,-70,120,0,70);
 		
 		limitBone(boneList,"hand_L",-15,-15,-15,15,15,15);
@@ -104,7 +104,7 @@ Example=function(application){
 		
 		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		
-		initlimitBone();
+		
 		
 		
 		
@@ -173,14 +173,14 @@ Example=function(application){
 		ap.ikTarget=null;
 		ap.ikIndices=null;
 		
-		registIk("hip",["root","spine01"]);
-		registIk("head",["spine01","spine02","spine03","neck","head"]);
-		registIk("leftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L","middle00_L"]);
-		registIk("rightArm",["clavicle_R","upperarm_R","lowerarm_R","hand_R","middle00_R"]);
-		registIk("leftLeg",["thigh_L","calf_L","foot_L"]);
-		registIk("rightLeg",["thigh_R","calf_R","foot_R"]);
+		registIk("Hip",["root","spine01"]);
+		registIk("Head",["spine01","spine02","spine03","neck","head"]);
+		registIk("LeftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L","middle00_L"]);
+		registIk("RightArm",["clavicle_R","upperarm_R","lowerarm_R","hand_R","middle00_R"]);
+		registIk("LeftLeg",["thigh_L","calf_L","foot_L"]);
+		registIk("RightLeg",["thigh_R","calf_R","foot_R"]);
 		
-		
+		initlimitBone();
 		
 		
 		
