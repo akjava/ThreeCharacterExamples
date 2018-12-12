@@ -8,34 +8,15 @@ var Sidebar = function ( application ) {
 	container.add(ikLimitIO);
 	
 	
-	var ikPanel=new UI.TitlePanel("Ik");
-	container.add(ikPanel);
-	
-	var minAngle=new UI.NumberButtons("Min Angle",0.0001,1,0.001,IkUtils.minAngle,function(v){
-		IkUtils.minAngle=THREE.Math.degToRad(v);
-	},[0.001,0.01,0.1]);
-	ikPanel.add(minAngle);
-	minAngle.number.precision=5;
-	minAngle.number.setValue(minAngle.number.getValue());
-	minAngle.text.setWidth("70px");
-	
-	var maxAngle=new UI.NumberButtons("Max Angle",0.1,45,1,ap.ikControler.maxAngle,function(v){
-		ap.ikControler.maxAngle=v;
-	},[0.1,1,5]);
-	ikPanel.add(maxAngle);
-	maxAngle.text.setWidth("70px");
-	var iteration=new UI.IntegerButtons("Iteration",1,100,1,ap.ikControler.iteration,function(v){
-		ap.ikControler.iteration=v;
-	},[25,50,100]);
-	ikPanel.add(iteration);
-	iteration.text.setWidth("70px");
+    var ikPanel=new Sidebar.IkLBasic(application);
+    container.add(ikPanel);
 	
 	var solveIkRow=new UI.ButtonRow("Solve Selected Ik",function(){
 		ap.signals.solveIkCalled.dispatch();
 	});
 	ikPanel.add(solveIkRow);
 
-	var resetAndSolve=new UI.Button("Reset & Solve Selected x5");
+	var resetAndSolve=new UI.Button("Reset & Solve x5");
 	resetAndSolve.onClick(function(){
 		if(ap.ikControler.ikTarget!=null){
 			ap.ikControler.ikIndices.forEach(function(index){
