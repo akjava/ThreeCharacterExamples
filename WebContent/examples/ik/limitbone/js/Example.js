@@ -247,10 +247,15 @@ Example=function(application){
 			
 			
 			for(var i=0;i<ap.ikIndices.length-1;i++){
+				var ikBoneIndex=ap.ikIndices[i];
+				if(ap.ikBoneSelectedOnly && ikBoneIndex!=ap.boneSelectedIndex){
+					continue;
+				}
+				
 				var lastJointPos=lastMesh.position;
 				
 				
-				var bone=scope.boneAttachControler.boneList[ap.ikIndices[i]];
+				var bone=scope.boneAttachControler.boneList[ikBoneIndex];
 				var name=bone.name;
 				var joint=scope.boneAttachControler.containerList[ap.ikIndices[i]];
 				var jointPos=joint.position;
