@@ -25,13 +25,15 @@ var Sidebar = function ( application ) {
 	});
 	ikPanel.add(solveIkRow);
 
-	var resetAndSolve=new UI.Button("Reset & Solve Selected x3");
+	var resetAndSolve=new UI.Button("Reset & Solve Selected x5");
 	resetAndSolve.onClick(function(){
 		if(ap.ikTarget!=null){
 			ap.ikIndices.forEach(function(index){
 				BoneUtils.resetBone(ap.skinnedMesh,index);
 			});
 		}
+		ap.boneAttachControler.update();
+		
 		ap.signals.solveIkCalled.dispatch();
 		ap.signals.solveIkCalled.dispatch();
 		ap.signals.solveIkCalled.dispatch();

@@ -125,6 +125,7 @@ Example=function(application){
 		//init attach controler
 		var boxSize=0.05*scale;
 		scope.boneAttachControler=new BoneAttachControler(mesh,{color: 0x008800,boxSize:boxSize});
+		ap.boneAttachControler=scope.boneAttachControler;
 		scope.boneAttachControler.setVisible(false);
 		
 		this.container.add(scope.boneAttachControler.object3d);
