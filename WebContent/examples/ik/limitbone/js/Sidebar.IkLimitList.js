@@ -142,6 +142,7 @@ Sidebar.IkLimitList=function(application){
 				
 				//AppUtils.printDeg(bone.rotation,bone.name);
 			}
+			ap.signals.poseChanged.dispatch();
 		};
 		
 		
