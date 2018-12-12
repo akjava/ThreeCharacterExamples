@@ -112,8 +112,8 @@ var Sidebar = function ( application ) {
 	var limitPanel=new BoneLimitPanel(application);
 	container.add(limitPanel);
 	
-	ap.ikControler.ikLimitMin=limitPanel.minRotation;
-	ap.ikControler.ikLimitMax=limitPanel.maxRotation;
+
+	
 	
 	var resetPanel=new UI.TitlePanel("Reset Pose");
 	container.add(resetPanel);
@@ -149,6 +149,11 @@ var Sidebar = function ( application ) {
 		
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		if(target!=null){
+			if(ap.ikControler.ikTarget==null){
+				console.log("invalidly call sidebar first");
+				return;
+			}
+			
 			ap.ikControler.ikIndices.forEach(function(index){
 				
 				var name=boneList[index].name;
@@ -161,7 +166,7 @@ var Sidebar = function ( application ) {
 			});
 		}
 	
-	});
+	},undefined,0);
 	var boneListButtons=[];
 	var ikBoneList=new UI.TitlePanel("Ik Bone List");
 	container.add(ikBoneList);

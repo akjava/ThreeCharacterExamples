@@ -20,6 +20,8 @@ Example=function(application){
 	
 	function limitBone(boneList,endName,minX,minY,minZ,maxX,maxY,maxZ){
 		var name=BoneUtils.findBoneByEndsName(boneList,endName).name;
+		
+		
 		ap.ikControler.ikLimitMin[name]={};
 		ap.ikControler.ikLimitMax[name]={};
 		ap.ikControler.ikLimitMin[name].x=minX;
@@ -28,6 +30,8 @@ Example=function(application){
 		ap.ikControler.ikLimitMax[name].x=maxX;
 		ap.ikControler.ikLimitMax[name].y=maxY;
 		ap.ikControler.ikLimitMax[name].z=maxZ;
+		
+
 	}
 
 	function initlimitBone(){
@@ -127,8 +131,11 @@ Example=function(application){
 		ap.boneAttachControler=scope.boneAttachControler;
 		scope.boneAttachControler.setVisible(false);
 		
-		ap.ikControler=new IkControler(scope.boneAttachControler,ap);
+		ap.ikControler.boneAttachControler=scope.boneAttachControler;
+		ap.ikControler.ap=ap;
 
+		
+		
 		
 		this.container.add(scope.boneAttachControler.object3d);//no need
 		
@@ -151,6 +158,8 @@ Example=function(application){
 		function registIk(ikName,jointNames){
 			var indices=[];
 			ap.ikControler.iks[ikName]=indices;
+			
+			
 			jointNames.forEach(function(name){
 				var index=BoneUtils.findBoneIndexByEndsName(boneList,name);
 				
@@ -186,19 +195,21 @@ Example=function(application){
 		
 		
 		ap.signals.transformSelectionChanged.add(function(target){
-			ap.ikControler.ikTarget=target;
 			
+			ap.ikControler.ikTarget=target;
 			
 			if(target==null){
 				ap.ikControler.ikIndices=null;
 				ap.transformControls.detach();
 			}else{
+				
 				ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
 				ap.transformControls.attach(target);
 			}
 		},undefined,1);//need high priority to call first
 		
 
+		
 		
 		
 		

@@ -58,6 +58,7 @@ var BoneLimitPanel=function(application){
 	
 	
 	ap.signals.boneLimitLoaded.add(function(newMinRotation,newMaxRotation){
+		//console.log("boneLimitLoaded",newMinRotation,newMaxRotation);
 		scope.minRotation=newMinRotation;
 		scope.maxRotation=newMaxRotation;
 		onBoneSelectionChanged();
@@ -65,6 +66,7 @@ var BoneLimitPanel=function(application){
 	});
 	
 	
+	//warning boneLimitLoaded replace ref
 	this.minRotation={};
 	this.maxRotation={};
 
@@ -87,7 +89,13 @@ var BoneLimitPanel=function(application){
 		boneSelect.setValue(Object.values(options)[0]);
 		var boneList=BoneUtils.getBoneList(mesh);
 		
+		//warning only work before boneLimitLoaded
+		if(scope.minRotation==null || scope.maxRotation==null){
+			//console.error("need boneLimitLoaded before skinnedMeshChanged");
+		}
+		
 		AppUtils.clearObject(scope.minRotation);
+		//console.log("skinnedMeshChanged",scope.minRotation);
 		boneList.forEach(function(bone){
 			scope.minRotation[bone.name]={};
 			scope.minRotation[bone.name].x=-180;

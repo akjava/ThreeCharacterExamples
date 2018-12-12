@@ -18,7 +18,7 @@ var Application = function () {
 	this.iteration=25;
 	
 
-	this.ikControler=new IkControler();//for Sidebar dummy
+	this.ikControler=new IkControler();
 	
 	
 	this.boneSelectedIndex=0;
