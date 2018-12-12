@@ -73,11 +73,16 @@ Example=function(application){
 		
 		ap.ikControler.boneAttachControler=scope.boneAttachControler;
 		ap.ikControler.ap=ap;
+		this.container.add(scope.boneAttachControler.object3d);
+		
 
+		ap.signals.boneSelectionChanged.add(function(index){
+			ap.ikControler.boneSelectedIndex=index;
+		});
 		
 		
 		
-		this.container.add(scope.boneAttachControler.object3d);//no need
+		
 		
 		function resetIkPosition(name){
 			var target=ikTargets[name];

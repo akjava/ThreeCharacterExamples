@@ -19,18 +19,18 @@ this.ikDefaultLimitMax={};
 this.maxAngle=1;
 this.iteration=25;
 
+this.boneSelectedIndex=0;
+
 this.boneAttachControler=boneAttachControler;
 this.lastTargetMovedPosition=new THREE.Vector3();
 this._euler=new THREE.Euler();
 this.logging=false;
 
-this.ap=ap;
 };
 
 IkControler.prototype.solveIk=function(forceUpdate){
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
 	
-	var ap=this.ap;
 	
 	if(this.ikTarget==null){
 		return;
@@ -62,7 +62,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	for(var i=0;i<this.ikIndices.length-1;i++){
 		var ikBoneIndex=this.ikIndices[i];
-		if(this.ikBoneSelectedOnly && ikBoneIndex!=ap.boneSelectedIndex){
+		if(this.ikBoneSelectedOnly && ikBoneIndex!=this.boneSelectedIndex){
 			continue;
 		}
 		
