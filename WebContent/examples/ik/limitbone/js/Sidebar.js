@@ -19,13 +19,13 @@ var Sidebar = function ( application ) {
 	minAngle.number.setValue(minAngle.number.getValue());
 	minAngle.text.setWidth("70px");
 	
-	var maxAngle=new UI.NumberButtons("Max Angle",0.1,45,1,ap.maxAngle,function(v){
-		ap.maxAngle=v;
+	var maxAngle=new UI.NumberButtons("Max Angle",0.1,45,1,ap.ikControler.maxAngle,function(v){
+		ap.ikControler.maxAngle=v;
 	},[0.1,1,5]);
 	ikPanel.add(maxAngle);
 	maxAngle.text.setWidth("70px");
-	var iteration=new UI.IntegerButtons("Iteration",1,100,1,ap.iteration,function(v){
-		ap.iteration=v;
+	var iteration=new UI.IntegerButtons("Iteration",1,100,1,ap.ikControler.iteration,function(v){
+		ap.ikControler.iteration=v;
 	},[25,50,100]);
 	ikPanel.add(iteration);
 	iteration.text.setWidth("70px");

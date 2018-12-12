@@ -16,6 +16,9 @@ this.ikLimitMax={};
 this.ikDefaultLimitMin={};
 this.ikDefaultLimitMax={};
 
+this.maxAngle=1;
+this.iteration=25;
+
 this.boneAttachControler=boneAttachControler;
 this.lastTargetMovedPosition=new THREE.Vector3();
 this._euler=new THREE.Euler();
@@ -52,7 +55,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	}
 	
 	
-	for(var j=0;j<ap.iteration;j++){
+	for(var j=0;j<this.iteration;j++){
 	
 	
 	
@@ -86,10 +89,10 @@ IkControler.prototype.solveIk=function(forceUpdate){
 			return;
 		}
 		
-		var newQ=IkUtils.calculateAngles(lastJointPos,jointPos,jointRotQ,targetPos,ap.maxAngle,false);
+		var newQ=IkUtils.calculateAngles(lastJointPos,jointPos,jointRotQ,targetPos,this.maxAngle,false);
 		
 		var inverseQ=bone.parent.clone().getWorldQuaternion(new THREE.Quaternion()).inverse();
-		var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,ap.maxAngle);
+		var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,this.maxAngle);
 		
 		
 		if(newQ==null){

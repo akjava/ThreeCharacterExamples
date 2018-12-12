@@ -14,8 +14,7 @@ var Application = function () {
 	this.visibleBone=false;
 	this.visibleSkeletonHelper=false;
 	
-	this.maxAngle=1;
-	this.iteration=25;
+
 	
 
 	this.ikControler=new IkControler();
