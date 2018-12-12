@@ -22,15 +22,15 @@ var Application = function () {
 	
 	
 	this.boneSelectedIndex=0;
-	this.boneLocked={};
+	
 	
 	var Signal = signals.Signal;
 	
 	this.ikDefaultLimitMin={};
 	this.ikDefaultLimitMax={};
 	
-	this.ikBoneSelectedOnly=false;
-	this.ikLimitkRotationEnabled=true;
+	
+
 
 	this.signals = {
 			boneLimitLoaded:new Signal(),

@@ -3,8 +3,8 @@ var BoneLimitPanel=function(application){
 	var scope=this;
 	var container=new UI.TitlePanel("Limit Ik Rotation");
 	
-	var ikLimitkRotationEnabled=new UI.SwitchRow("Enabled","Disabled",ap.ikLimitkRotationEnabled,function(v){
-		ap.ikLimitkRotationEnabled=v;
+	var ikLimitkRotationEnabled=new UI.SwitchRow("Enabled","Disabled",ap.ikControler.ikLimitkRotationEnabled,function(v){
+		ap.ikControler.ikLimitkRotationEnabled=v;
 	});
 	container.add(ikLimitkRotationEnabled);
 	

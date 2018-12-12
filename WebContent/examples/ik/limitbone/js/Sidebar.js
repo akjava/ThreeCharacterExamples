@@ -77,8 +77,8 @@ var Sidebar = function ( application ) {
 	var boneIkEnabledPanel=new UI.TitlePanel("Bone Ik Enabled Any or Selected");
 	container.add(boneIkEnabledPanel);
 
-	var selectedOnlyCheck=new UI.SwitchRow("Only Selected Bone","Any Bone",ap.ikBoneSelectedOnly,function(v){
-		ap.ikBoneSelectedOnly=v;
+	var selectedOnlyCheck=new UI.SwitchRow("Only Selected Bone","Any Bone",ap.ikControler.ikBoneSelectedOnly,function(v){
+		ap.ikControler.ikBoneSelectedOnly=v;
 	});
 	boneIkEnabledPanel.add(selectedOnlyCheck);
 	
@@ -96,13 +96,13 @@ var Sidebar = function ( application ) {
 	//TODO switch and color
 	var lockedCheck=new UI.CheckboxRow("",false,function(v){
 		var name=getSelectedBoneName();
-		ap.boneLocked[name]=v;
+		ap.ikControler.boneLocked[name]=v;
 	});
 	lockBonePanel.add(lockedCheck);
 	
 	var boneSelectionChanged=function(){
 		var name=getSelectedBoneName();
-		var value=ap.boneLocked[name]!==undefined?ap.boneLocked[name]:false;
+		var value=ap.ikControler.boneLocked[name]!==undefined?ap.ikControler.boneLocked[name]:false;
 		lockedCheck.checkbox.setValue(value);
 		lockedCheck.text.setValue(name);
 	};
