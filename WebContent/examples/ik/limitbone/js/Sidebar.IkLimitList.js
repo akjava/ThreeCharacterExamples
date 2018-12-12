@@ -8,7 +8,7 @@ Sidebar.IkLimitList=function(application){
 	
 	var createIkCandiateBt=new UI.ButtonRow("crete Ik Limit List",function(){
 		var ikName=scope.selectedIkName;
-		var indices=ap.iks[ikName];
+		var indices=ap.ikControler.iks[ikName];
 		var joints=[];
 		
 		var end=-1;
@@ -184,7 +184,7 @@ Sidebar.IkLimitList=function(application){
 	
 	//finish init Ik
 	ap.signals.boneLimitLoaded.add(function(){	
-		var list=Object.keys(ap.iks);
+		var list=Object.keys(ap.ikControler.iks);
 		ikNameSelect.setList(list);
 		ikNameSelect.select.setValue(list[0]);
 		scope.selectedIkName=list[0];

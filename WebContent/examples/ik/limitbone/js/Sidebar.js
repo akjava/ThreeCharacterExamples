@@ -37,8 +37,8 @@ var Sidebar = function ( application ) {
 
 	var resetAndSolve=new UI.Button("Reset & Solve Selected x5");
 	resetAndSolve.onClick(function(){
-		if(ap.ikTarget!=null){
-			ap.ikIndices.forEach(function(index){
+		if(ap.ikControler.ikTarget!=null){
+			ap.ikControler.ikIndices.forEach(function(index){
 				BoneUtils.resetBone(ap.skinnedMesh,index);
 			});
 		}
@@ -131,8 +131,8 @@ var Sidebar = function ( application ) {
 	
 	var resetIks=new UI.Button("Reset Iks");
 	resetIks.onClick(function(){
-		if(ap.ikTarget!=null){
-			ap.ikIndices.forEach(function(index){
+		if(ap.ikControler.ikTarget!=null){
+			ap.ikControler.ikIndices.forEach(function(index){
 				BoneUtils.resetBone(ap.skinnedMesh,index);
 			});
 		}
@@ -149,7 +149,7 @@ var Sidebar = function ( application ) {
 		
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		if(target!=null){
-			ap.ikIndices.forEach(function(index){
+			ap.ikControler.ikIndices.forEach(function(index){
 				
 				var name=boneList[index].name;
 				var bt=new UI.Button(name);

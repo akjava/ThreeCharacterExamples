@@ -74,11 +74,15 @@ Viewport.Info = function ( application ) {
 	var euler=new THREE.Euler();
 	
 	function update() {
-		var ikName=(ap.ikTarget==null) || (ap.ikTarget.ikName==undefined)?"":ap.ikTarget.ikName;
+		if(ap.ikControler==undefined){
+			return;
+		}
+		
+		var ikName=(ap.ikControler.ikTarget==null) || (ap.ikControler.ikTarget.ikName==undefined)?"":ap.ikControler.ikTarget.ikName;
 
 		ikText.setValue(ikName);
 		if(!ikName==""){
-			var lastJoint=ap.ikIndices[ap.ikIndices.length-2];
+			var lastJoint=ap.ikControler.ikIndices[ap.ikControler.ikIndices.length-2];
 			var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
 			var boneName=bone.name;
 			boneText.setValue(boneName);
@@ -91,8 +95,8 @@ Viewport.Info = function ( application ) {
 			rotZText.setValue(rotZ);
 			
 			
-			if(ap.ikIndices.length>=3){
-			var lastJoint=ap.ikIndices[ap.ikIndices.length-3];
+			if(ap.ikControler.ikIndices.length>=3){
+			var lastJoint=ap.ikControler.ikIndices[ap.ikControler.ikIndices.length-3];
 			var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
 			var boneName=bone.name;
 			boneText2.setValue(boneName);
@@ -110,8 +114,8 @@ Viewport.Info = function ( application ) {
 				rotZText2.setValue("");
 			}
 			
-			if(ap.ikIndices.length>=4){
-				var lastJoint=ap.ikIndices[ap.ikIndices.length-4];
+			if(ap.ikControler.ikIndices.length>=4){
+				var lastJoint=ap.ikControler.ikIndices[ap.ikControler.ikIndices.length-4];
 				var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
 				var boneName=bone.name;
 				boneText3.setValue(boneName);
@@ -129,8 +133,8 @@ Viewport.Info = function ( application ) {
 					rotZText3.setValue("");
 				}
 			
-			if(ap.ikIndices.length>=5){
-				var lastJoint=ap.ikIndices[ap.ikIndices.length-5];
+			if(ap.ikControler.ikIndices.length>=5){
+				var lastJoint=ap.ikControler.ikIndices[ap.ikControler.ikIndices.length-5];
 				var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
 				var boneName=bone.name;
 				boneText4.setValue(boneName);

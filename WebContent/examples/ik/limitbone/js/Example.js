@@ -129,15 +129,13 @@ Example=function(application){
 		scope.boneAttachControler.setVisible(false);
 		
 		ap.ikControler=new IkControler(scope.boneAttachControler,ap);
-		
+
 		
 		this.container.add(scope.boneAttachControler.object3d);//no need
-		console.log("hello");
-
 		
 		function resetIkPosition(name){
 			var target=ikTargets[name];
-			var indices=ap.iks[name];
+			var indices=ap.ikControler.iks[name];
 			var index=indices[indices.length-1];
 			target.position.copy(scope.boneAttachControler.containerList[index].position);
 		}
@@ -153,7 +151,7 @@ Example=function(application){
 		
 		function registIk(ikName,jointNames){
 			var indices=[];
-			ap.iks[ikName]=indices;
+			ap.ikControler.iks[ikName]=indices;
 			jointNames.forEach(function(name){
 				var index=BoneUtils.findBoneIndexByEndsName(boneList,name);
 				
@@ -174,9 +172,7 @@ Example=function(application){
 		
 		
 		//initialize ik
-		ap.iks={};
-		ap.ikTarget=null;
-		ap.ikIndices=null;
+
 		
 		registIk("Hip",["root","spine01"]);
 		registIk("Head",["spine01","spine02","spine03","neck","head"]);
@@ -191,14 +187,14 @@ Example=function(application){
 		
 		
 		ap.signals.transformSelectionChanged.add(function(target){
-			ap.ikTarget=target;
+			ap.ikControler.ikTarget=target;
 			
 			
 			if(target==null){
-				ap.ikIndices=null;
+				ap.ikControler.ikIndices=null;
 				ap.transformControls.detach();
 			}else{
-				ap.ikIndices=ap.iks[target.ikName];
+				ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
 				ap.transformControls.attach(target);
 			}
 		},undefined,1);//need high priority to call first
