@@ -16,19 +16,18 @@ Example=function(application){
 	this.container=null;//add mesh here
 	var boneList;
 	
-	ap.ikLimitMin={};
-	ap.ikLimitMax={};
+
 	
 	function limitBone(boneList,endName,minX,minY,minZ,maxX,maxY,maxZ){
 		var name=BoneUtils.findBoneByEndsName(boneList,endName).name;
-		ap.ikLimitMin[name]={};
-		ap.ikLimitMax[name]={};
-		ap.ikLimitMin[name].x=minX;
-		ap.ikLimitMin[name].y=minY;
-		ap.ikLimitMin[name].z=minZ;
-		ap.ikLimitMax[name].x=maxX;
-		ap.ikLimitMax[name].y=maxY;
-		ap.ikLimitMax[name].z=maxZ;
+		ap.ikControler.ikLimitMin[name]={};
+		ap.ikControler.ikLimitMax[name]={};
+		ap.ikControler.ikLimitMin[name].x=minX;
+		ap.ikControler.ikLimitMin[name].y=minY;
+		ap.ikControler.ikLimitMin[name].z=minZ;
+		ap.ikControler.ikLimitMax[name].x=maxX;
+		ap.ikControler.ikLimitMax[name].y=maxY;
+		ap.ikControler.ikLimitMax[name].z=maxZ;
 	}
 
 	function initlimitBone(){
@@ -62,19 +61,19 @@ Example=function(application){
 		limitBone(boneList,"root",-45,-45,-45,45,45,45);
 		
 		//copy to default
-		Object.keys(ap.ikLimitMin).forEach(function(key){
-			ap.ikDefaultLimitMin[key]={};
-			ap.ikDefaultLimitMin[key].x=ap.ikLimitMin[key].x;
-			ap.ikDefaultLimitMin[key].y=ap.ikLimitMin[key].y;
-			ap.ikDefaultLimitMin[key].z=ap.ikLimitMin[key].z;
-			ap.ikDefaultLimitMax[key]={};
-			ap.ikDefaultLimitMax[key].x=ap.ikLimitMax[key].x;
-			ap.ikDefaultLimitMax[key].y=ap.ikLimitMax[key].y;
-			ap.ikDefaultLimitMax[key].z=ap.ikLimitMax[key].z;
+		Object.keys(ap.ikControler.ikLimitMin).forEach(function(key){
+			ap.ikControler.ikDefaultLimitMin[key]={};
+			ap.ikControler.ikDefaultLimitMin[key].x=ap.ikControler.ikLimitMin[key].x;
+			ap.ikControler.ikDefaultLimitMin[key].y=ap.ikControler.ikLimitMin[key].y;
+			ap.ikControler.ikDefaultLimitMin[key].z=ap.ikControler.ikLimitMin[key].z;
+			ap.ikControler.ikDefaultLimitMax[key]={};
+			ap.ikControler.ikDefaultLimitMax[key].x=ap.ikControler.ikLimitMax[key].x;
+			ap.ikControler.ikDefaultLimitMax[key].y=ap.ikControler.ikLimitMax[key].y;
+			ap.ikControler.ikDefaultLimitMax[key].z=ap.ikControler.ikLimitMax[key].z;
 		});
 		
 		//send ref
-		ap.signals.boneLimitLoaded.dispatch(ap.ikLimitMin,ap.ikLimitMax);
+		ap.signals.boneLimitLoaded.dispatch(ap.ikControler.ikLimitMin,ap.ikControler.ikLimitMax);
 	}
 	
 	

@@ -1,5 +1,21 @@
 var IkControler=function(boneAttachControler,ap){
-console.log("IkControler");
+this.iks={};
+this.ikTarget=null;
+this.ikIndices=null;
+
+this.ikLockX=false;
+this.ikLockY=false;
+this.ikLockZ=false;
+
+this.boneLocked={};
+this.ikBoneSelectedOnly=false;
+this.ikLimitkRotationEnabled=true;
+
+this.ikLimitMin={};
+this.ikLimitMax={};
+this.ikDefaultLimitMin={};
+this.ikDefaultLimitMax={};
+
 this.boneAttachControler=boneAttachControler;
 this.lastTargetMovedPosition=new THREE.Vector3();
 this._euler=new THREE.Euler();
@@ -13,12 +29,12 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	var ap=this.ap;
 	
-	if(ap.ikTarget==null){
+	if(this.ikTarget==null){
 		return;
 	}	
 	
-	var lastMesh=this.boneAttachControler.containerList[ap.ikIndices[ap.ikIndices.length-1]];
-	var targetMesh=ap.ikTarget;
+	var lastMesh=this.boneAttachControler.containerList[this.ikIndices[this.ikIndices.length-1]];
+	var targetMesh=this.ikTarget;
 	
 	
 	
@@ -30,7 +46,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	this.lastTargetMovedPosition.copy(targetPos);
 	
 	
-	if(ap.ikTarget.position.equals(lastMesh.position)){
+	if(this.ikTarget.position.equals(lastMesh.position)){
 		//no need to solve
 		return;
 	}
@@ -41,9 +57,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	
 	
-	for(var i=0;i<ap.ikIndices.length-1;i++){
-		var ikBoneIndex=ap.ikIndices[i];
-		if(ap.ikBoneSelectedOnly && ikBoneIndex!=ap.boneSelectedIndex){
+	for(var i=0;i<this.ikIndices.length-1;i++){
+		var ikBoneIndex=this.ikIndices[i];
+		if(this.ikBoneSelectedOnly && ikBoneIndex!=ap.boneSelectedIndex){
 			continue;
 		}
 		
@@ -52,10 +68,10 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		
 		var bone=this.boneAttachControler.boneList[ikBoneIndex];
 		var name=bone.name;
-		var joint=this.boneAttachControler.containerList[ap.ikIndices[i]];
+		var joint=this.boneAttachControler.containerList[this.ikIndices[i]];
 		var jointPos=joint.position;
 		
-		if(ap.boneLocked[name]){
+		if(this.boneLocked[name]){
 			continue;
 		}
 		
@@ -90,7 +106,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		var y=r.y;
 		var z=r.z;
 		
-		if(ap.ikLimitkRotationEnabled){
+		if(this.ikLimitkRotationEnabled){
 			function toDegree(v1,v2){
 				var tmp=THREE.Math.radToDeg(v1+v2);
 				if(tmp>180){
@@ -104,26 +120,26 @@ IkControler.prototype.solveIk=function(forceUpdate){
 			}
 			
 			var tmpX=toDegree(x,euler.x);
-			if(!ap.ikLockX && tmpX >= ap.ikLimitMin[bone.name].x && tmpX<=ap.ikLimitMax[bone.name].x){
+			if(!this.ikLockX && tmpX >= this.ikLimitMin[bone.name].x && tmpX<=this.ikLimitMax[bone.name].x){
 				x=x+euler.x;
-			//console.log(bone.name,"ok",ap.ikLimitMin[bone.name].x,ap.ikLimitMax[bone.name].x,tmpX);
+			//console.log(bone.name,"ok",this.ikLimitMin[bone.name].x,this.ikLimitMax[bone.name].x,tmpX);
 			}else{
 				if(this.logging)
-				console.log(bone.name,"limit-x",ap.ikLimitMin[bone.name].x,ap.ikLimitMax[bone.name].x,tmpX);
+				console.log(bone.name,"limit-x",this.ikLimitMin[bone.name].x,this.ikLimitMax[bone.name].x,tmpX);
 			}
 			var tmpY=toDegree(y,euler.y);
-			if(!ap.ikLockY && tmpY >=ap.ikLimitMin[bone.name].y && tmpY<=ap.ikLimitMax[bone.name].y){
+			if(!this.ikLockY && tmpY >=this.ikLimitMin[bone.name].y && tmpY<=this.ikLimitMax[bone.name].y){
 				y=y+euler.y;
 			}else{
 				if(this.logging)
-				console.log(bone.name,"limit-y",ap.ikLimitMin[bone.name].y,ap.ikLimitMax[bone.name].y,tmpY);
+				console.log(bone.name,"limit-y",this.ikLimitMin[bone.name].y,this.ikLimitMax[bone.name].y,tmpY);
 			}
 			var tmpZ=toDegree(z,euler.z);
-			if(!ap.ikLockZ && tmpZ >=ap.ikLimitMin[bone.name].z && tmpZ<=ap.ikLimitMax[bone.name].z){
+			if(!this.ikLockZ && tmpZ >=this.ikLimitMin[bone.name].z && tmpZ<=this.ikLimitMax[bone.name].z){
 				z=z+euler.z;
 			}else{
 				if(this.logging)
-				console.log(bone.name,"limit-z",ap.ikLimitMin[bone.name].z,ap.ikLimitMax[bone.name].z,tmpZ);
+				console.log(bone.name,"limit-z",this.ikLimitMin[bone.name].z,this.ikLimitMax[bone.name].z,tmpZ);
 			}
 			
 			//fix rad

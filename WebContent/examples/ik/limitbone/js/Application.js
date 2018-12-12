@@ -26,8 +26,7 @@ var Application = function () {
 	
 	var Signal = signals.Signal;
 	
-	this.ikDefaultLimitMin={};
-	this.ikDefaultLimitMax={};
+
 	
 	
 

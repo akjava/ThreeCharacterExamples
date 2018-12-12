@@ -112,8 +112,8 @@ var Sidebar = function ( application ) {
 	var limitPanel=new BoneLimitPanel(application);
 	container.add(limitPanel);
 	
-	ap.ikLimitMin=limitPanel.minRotation;
-	ap.ikLimitMax=limitPanel.maxRotation;
+	ap.ikControler.ikLimitMin=limitPanel.minRotation;
+	ap.ikControler.ikLimitMax=limitPanel.maxRotation;
 	
 	var resetPanel=new UI.TitlePanel("Reset Pose");
 	container.add(resetPanel);

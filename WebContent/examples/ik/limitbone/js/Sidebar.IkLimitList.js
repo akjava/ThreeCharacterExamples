@@ -26,8 +26,8 @@ Sidebar.IkLimitList=function(application){
 		var variation={};
 		joints.forEach(function(joint){
 			var name=boneList[joint].name;
-			var min=ap.ikLimitMin[name];
-			var max=ap.ikLimitMax[name];
+			var min=ap.ikControler.ikLimitMin[name];
+			var max=ap.ikControler.ikLimitMax[name];
 			var objs=[];
 			//possible values.
 			for(var x=0;x<3;x++){

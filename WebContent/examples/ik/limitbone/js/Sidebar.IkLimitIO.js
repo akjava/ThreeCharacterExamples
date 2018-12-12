@@ -17,17 +17,17 @@ Sidebar.IkLimitIO=function(application){
 		
 		
 		if(text==null){//just Reset
-			ap.ikLimitMin={};
-			ap.ikLimitMax={};
-			Object.keys(ap.ikDefaultLimitMin).forEach(function(key){
-				ap.ikLimitMin[key]={};
-				ap.ikLimitMin[key].x=ap.ikDefaultLimitMin[key].x;
-				ap.ikLimitMin[key].y=ap.ikDefaultLimitMin[key].y;
-				ap.ikLimitMin[key].z=ap.ikDefaultLimitMin[key].z;
-				ap.ikLimitMax[key]={};
-				ap.ikLimitMax[key].x=ap.ikDefaultLimitMax[key].x;
-				ap.ikLimitMax[key].y=ap.ikDefaultLimitMax[key].y;
-				ap.ikLimitMax[key].z=ap.ikDefaultLimitMax[key].z;
+			ap.ikControler.ikLimitMin={};
+			ap.ikControler.ikLimitMax={};
+			Object.keys(ap.ikControler.ikDefaultLimitMin).forEach(function(key){
+				ap.ikControler.ikLimitMin[key]={};
+				ap.ikControler.ikLimitMin[key].x=ap.ikControler.ikDefaultLimitMin[key].x;
+				ap.ikControler.ikLimitMin[key].y=ap.ikControler.ikDefaultLimitMin[key].y;
+				ap.ikControler.ikLimitMin[key].z=ap.ikControler.ikDefaultLimitMin[key].z;
+				ap.ikControler.ikLimitMax[key]={};
+				ap.ikControler.ikLimitMax[key].x=ap.ikControler.ikDefaultLimitMax[key].x;
+				ap.ikControler.ikLimitMax[key].y=ap.ikControler.ikDefaultLimitMax[key].y;
+				ap.ikControler.ikLimitMax[key].z=ap.ikControler.ikDefaultLimitMax[key].z;
 			});
 			
 		}else{
@@ -37,13 +37,13 @@ Sidebar.IkLimitIO=function(application){
 				console.log("need ikLimitMin & ikLimitMax");
 				return null;
 			}
-			ap.ikLimitMin=json.ikLimitMin;
-			ap.ikLimitMax=json.ikLimitMax;
+			ap.ikControler.ikLimitMin=json.ikLimitMin;
+			ap.ikControler.ikLimitMax=json.ikLimitMax;
 		}
 		
 		
 		
-		ap.signals.boneLimitLoaded.dispatch(ap.ikLimitMin,ap.ikLimitMax);
+		ap.signals.boneLimitLoaded.dispatch(ap.ikControler.ikLimitMin,ap.ikControler.ikLimitMax);
 	});
 	
 	container.add(new UI.SubtitleRow("Export"));
@@ -52,7 +52,7 @@ Sidebar.IkLimitIO=function(application){
 	var linkName=fileName;
 	
 	function makeJsonText(){
-		var json={ikLimitMin:ap.ikLimitMin,ikLimitMax:ap.ikLimitMax};
+		var json={ikLimitMin:ap.ikControler.ikLimitMin,ikLimitMax:ap.ikControler.ikLimitMax};
 		var jsonText=JSON.stringify(json);
 		return jsonText;
 	}
