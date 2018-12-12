@@ -12,7 +12,7 @@ Sidebar.IkLimitList=function(application){
 		var joints=[];
 		
 		var end=-1;
-		if(ikName=="leftArm" || ikName=="rightArm" || ikName=="head"){
+		if(ikName=="LeftArm" || ikName=="RightArm" || ikName=="Head"){
 			//no need hand
 			end=-2;
 		}
