@@ -76,7 +76,7 @@ Example=function(application){
 		this.container.add(scope.boneAttachControler.object3d);
 		
 		
-		//link to bone
+		//link to bone quaternion base
 		var index=0;
 		boneList.forEach(function(bone){
 			if(!Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name)){
