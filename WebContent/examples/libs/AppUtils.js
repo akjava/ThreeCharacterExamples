@@ -135,6 +135,13 @@ var AppUtils={
 			Object.keys(object).forEach(function (key) {
 				  delete object[key];
 				});
+		},
+		/*
+		not support minus
+		max length 6+1
+		*/
+		padNumber(number,length){
+			return ('000000' + number).slice(-length);
 		}
 		
 
