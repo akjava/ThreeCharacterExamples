@@ -39,7 +39,7 @@ var Sidebar = function ( application ) {
 		ap.clip=clip;
 	}
 	
-	var loadPoseA=new LoadPosePanel(ap,"Pose A","Previe this Pose",function(clip){
+	var loadPoseA=new LoadPosePanel(ap,"Pose A","Preview this Pose",function(clip){
 		scope.poseA=clip;
 		if(clip!=null)
 			AnimeUtils.clipToPose(clip,ap.skinnedMesh);
@@ -48,7 +48,7 @@ var Sidebar = function ( application ) {
 		updateClip();
 	});
 	container.add(loadPoseA);
-	var loadPoseA=new LoadPosePanel(ap,"Pose B","Previe this Pose",function(clip){
+	var loadPoseA=new LoadPosePanel(ap,"Pose B","Preview this Pose",function(clip){
 		scope.poseB=clip;
 		if(clip!=null)
 			AnimeUtils.clipToPose(clip,ap.skinnedMesh);
