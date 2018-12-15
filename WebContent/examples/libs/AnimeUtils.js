@@ -230,7 +230,8 @@ var AnimeUtils={
 			var clip=new THREE.AnimationClip("makeTranslateBoneAnimation", -1, tracks);
 			return clip
 		},
-		makeRotateBoneAnimation:function(indices,startRotates,endRotates,intime,outtime){
+		makeRotateBoneAnimation:function(indices,startRotates,endRotates,intime,outtime,back){
+			back=back!=undefined?back:true;
 			var tracks=[];
 			for(var i=0;i<indices.length;i++){
 				var index=indices[i];
@@ -239,9 +240,14 @@ var AnimeUtils={
 				var values=[];
 				values=values.concat(start.toArray());
 				values=values.concat(end.toArray());
-				values=values.concat(start.toArray());
+				if(back)
+					values=values.concat(start.toArray());
 				
-				var times=[0,intime,intime+outtime];
+				var times=[0,intime];
+				
+				if(back)
+					times.push(intime+outtime);
+				
 				var track=new THREE.QuaternionKeyframeTrack(".bones["+index+"].quaternion", times, values);
 				tracks.push(track);
 			}
@@ -355,6 +361,53 @@ var AnimeUtils={
 			}
 			var jsonText=JSON.stringify(json);
 			return jsonText;
+		},//for copy clipToPose
+		cloneSkeletonStructure:function(skinnedMesh){
+			var list=[];
+			var boneList=skinnedMesh.skeleton.bones;
+			var index=0;
+			boneList.forEach(function(bone){
+				var obj={name:bone.name,quaternion:new THREE.Quaternion().copy(bone.quaternion),position:new THREE.Vector3().copy(bone.position),scale:new THREE.Vector3().copy(bone.scale)};
+				list.push(obj);
+			});
+			var skeleton={bones:list};
+			
+			return {skeleton:skeleton};
+		},//for makeRotateBoneAnimation
+		boneListToIndices:function(boneList){
+			var list=[];
+			for(var i=0;i<boneList.length;i++){
+				list.push(i);
+			}
+			return list;
+		},//for makeRotateBoneAnimation
+		boneListToQuaternions:function(boneList){
+			var list=[];
+			for(var i=0;i<boneList.length;i++){
+				list.push(boneList[i].quaternion);
+			}
+			return list;
+		},//use first frame
+		clipToPose:function(clip,target){
+			
+			var tracks=clip.tracks;			
+			tracks.forEach(function(track){
+				var index=AnimeUtils.trackNameToBoneIndex(track.name);
+				if(Number.isNaN(index)){
+					 console.error("clipToPose:invalid bone quaternion track name,"+track.name)
+				}
+				var values=track.values;
+				var x=values[0];
+				var y=values[1];
+				var z=values[2];
+				var w=values[3];
+				target.skeleton.bones[index].quaternion.set(x,y,z,w);
+			});
+		},
+		trackNameToBoneIndex:function(name){
+			var re = /bones\[(\d+)\]\.quaternion/;
+			var result=re.exec(name);
+			return parseInt(result[1]);
 		}
 		
 		
