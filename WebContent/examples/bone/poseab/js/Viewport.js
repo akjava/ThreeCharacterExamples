@@ -12,7 +12,7 @@ var Viewport = function ( application ) {
 
 	
 	//init renderer
-	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	var renderer = new THREE.WebGLRenderer( { antialias: true,preserveDrawingBuffer: true } );
 	ap.renderer=renderer;
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize(0,0 );//windowResize call from html
@@ -136,11 +136,14 @@ var Viewport = function ( application ) {
 		render();
 	}
 	
+
 	function render() {
-		renderer.render( scene, camera );
-		
 		application.signals.rendered.dispatch();
 	}
+	
+	application.signals.rendered.add(function(){
+		renderer.render( scene, camera );
+	},undefined,100);
 	
 	animate();
 	

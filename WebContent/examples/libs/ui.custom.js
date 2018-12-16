@@ -779,6 +779,7 @@ UI.TitleRow=function(label){
 }
 UI.TextRow=function(label){
 	var text=new UI.Text(label);
+	text.setWidth("90px");
 	var row=new UI.Row().add(text);
 	row.text=text;
 	return row;

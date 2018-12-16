@@ -12,7 +12,7 @@ var Viewport = function ( application ) {
 
 	
 	//init renderer
-	var renderer = new THREE.WebGLRenderer( { antialias: true } );
+	var renderer = new THREE.WebGLRenderer( { antialias: true} );
 	ap.renderer=renderer;
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize(0,0 );//windowResize call from html
@@ -56,7 +56,6 @@ var Viewport = function ( application ) {
 
 		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
 
-		render();
 
 	} );
 	

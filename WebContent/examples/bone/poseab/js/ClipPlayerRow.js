@@ -6,10 +6,16 @@ var ClipPlayerRow=function(ap,getClipFunction){
 	var row=new UI.Row();
 	this.action=null;
 	this.paused=false;
+	this.duration=0;
+	
+	row.setDuration=function(v){
+		scope.duration=v;
+		row.update();
+	}
 	
 	var playBt=new UI.Button("Play");
 	row.add(playBt);
-	playBt.onClick(function(){
+	var play=function(){
 		var clip=getClipFunction();
 		if(!clip){
 			console.error("ClipPlayerRow:no clip");
@@ -26,12 +32,14 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		pauseBt.setDisabled(false);
 		stopBt.setDisabled(false);
 		scope.paused=false;
-	});
+	};
+	row.play=play;
+	playBt.onClick(play);
 	var pauseBt=new UI.Button("Pause");
 	pauseBt.setDisabled(true);
 	pauseBt.setWidth("100px");
 	row.add(pauseBt);
-	pauseBt.onClick(function(){
+	var pause=function(){
 		scope.paused=!scope.paused;
 		if(scope.paused){
 			pauseBt.setTextContent("Unpause");
@@ -41,13 +49,15 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		if(scope.action!=null){
 			scope.action.paused=scope.paused;
 		}
-	});
+	};
+	row.pause=pause;
+	pauseBt.onClick(pause);
 	var stopBt=new UI.Button("Stop");
 	row.add(stopBt);
 	stopBt.setDisabled(true);
 	
 	//Support stop when pose changed.
-	stopBt.onClick(function(){
+	var stop=function(){
 		var mixer=ap.mixer;
 		if(mixer==undefined){
 			console.error("ap.mixer is undefined");
@@ -62,18 +72,22 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		
 		scope.paused=false;
 		pauseBt.setTextContent("Pause");
-	});
+	};
+	row.stop=stop;
+	stopBt.onClick(stop);
 	
 	//Support update duration when clip updated
-	var time=new UI.Text("0.00");
-	ap.signals.rendered.add(function(){
+	var timeLabel=new UI.Text("0.00/0.00");
+	var update=function(){
 		if(scope.action==null){
 			return;
 		}
-		var t=scope.action.time;
-		time.setValue(t.toFixed(2));
-	});
-	row.add(time);
+		var t=scope.action!=null?scope.action.time:0;
+		timeLabel.setValue(t.toFixed(2)+"/"+scope.duration.toFixed(2));
+	};
+	row.update=update;
+	ap.signals.rendered.add(update);
+	row.add(timeLabel);
 	
 	
 	return row;

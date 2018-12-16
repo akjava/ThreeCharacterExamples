@@ -41,6 +41,7 @@ var Sidebar = function ( application ) {
 			track.setInterpolation(scope.interpolate);
 		});
 		ap.clip=clip;
+		ap.clipPlayerRow.setDuration(clip.duration);
 	}
 	
 	var loadPoseA=new LoadPosePanel(ap,"Pose A","Preview this Pose",function(clip){
@@ -79,6 +80,10 @@ var Sidebar = function ( application ) {
 	
 	var clipPlayerRow=new ClipPlayerRow(ap);
 	container.add(clipPlayerRow);
+	ap.clipPlayerRow=clipPlayerRow;
+	
+	var animationToImagePanel=new AnimationToImagePanel(ap);
+	container.add(animationToImagePanel);
 	
 	return container;
 }

@@ -90,6 +90,40 @@ var AppUtils={
 				}
 		});
 		},
+		createBase64Blob:function(dataURI,type){
+		 var BASE64_MARKER = ';base64,';
+		  var index=dataURI.indexOf(BASE64_MARKER);
+		  var base64Index=0;
+		  if(index!=-1){
+		  	 base64Index=index  + BASE64_MARKER.length
+		  }
+		  var base64 = dataURI.substring(base64Index);
+		  var raw = atob(base64);
+		  var rawLength = raw.length;
+		  var uInt8Array = new Uint8Array(rawLength);
+
+		  for (var i = 0; i < rawLength; ++i) {
+		    uInt8Array[i] = raw.charCodeAt(i);
+		  }
+	    return new Blob([uInt8Array],{type:type});
+	  	},
+		generateBase64DownloadLink:function(urlData,mimeType,fileName,anchorText,autoRemove){
+			var link=document.createElement( 'a' );
+			link.textContent=anchorText;
+			
+			var url=window.URL.createObjectURL(AppUtils.createBase64Blob(urlData,mimeType));
+			
+			link.href=url;
+			link.download=fileName;
+			link.dataset.downloadurl="mimeType"+":"+fileName+":"+url;
+			if(autoRemove){
+				link.addEventListener( 'click', function ( event ) {
+					link.parentNode.removeChild(link);
+
+				} );
+			}
+			return link;
+		},
 		//String text,String fileName,String anchorText,boolean autoRemove
 		generateTextDownloadLink:function(text,fileName,anchorText,autoRemove){
 			var mimeType="text/plain;charset=UTF-8";
@@ -128,7 +162,7 @@ var AppUtils={
 		,clearAllChildren:function(parent){
 			for(var i=parent.children.length-1;i>=0;i--){
 				var obj=parent.children[i];
-				parent.remove(obj);
+				parent.removeChild(obj);
 				
 			}
 		},clearObject:function(object){
@@ -140,8 +174,12 @@ var AppUtils={
 		not support minus
 		max length 6+1
 		*/
-		padNumber(number,length){
+		padNumber:function(number,length){
 			return ('000000' + number).slice(-length);
+		},
+		//need renderer initialize option {preserveDrawingBuffer: true}
+		toPngDataUrl:function (renderer){
+		return renderer.domElement.toDataURL("image/png");
 		}
 		
 
