@@ -3,7 +3,7 @@ var Sidebar = function ( application ) {
 	var scope=this;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Bone Pose A-B Play"));
+	container.add(new UI.AppName("Animation to Image sequence"));
 	//TODO support A-B-A A-B check
 	this.poseA=null;
 	this.poseB=null;
@@ -82,6 +82,8 @@ var Sidebar = function ( application ) {
 	container.add(clipPlayerRow);
 	ap.clipPlayerRow=clipPlayerRow;
 	
+	var animationToImagePanel=new AnimationToImagePanel(ap);
+	container.add(animationToImagePanel);
 	
 	return container;
 }
