@@ -8,6 +8,8 @@ var AnimationToImagePanel=function(ap){
 	this.duration=1;
 	this.maxFrame=0;
 	this.resolution="720x406";
+	this.startIndex=0;
+	this.header="";
 	
 	function makeDataUrl(){
 		scope.stepTime=1.0/scope.fps;
@@ -21,7 +23,7 @@ var AnimationToImagePanel=function(ap){
 		
 		var dataUrl=AppUtils.toPngDataUrl(ap.renderer);
 		
-		var fileName=AppUtils.padNumber(scope.frameIndex,5)+".png";
+		var fileName=scope.header+AppUtils.padNumber(scope.frameIndex,5)+".png";
 		
 		var link=AppUtils.generateBase64DownloadLink(dataUrl,"image/png",fileName,fileName,true);
 		span.dom.appendChild(link);
@@ -44,7 +46,7 @@ var AnimationToImagePanel=function(ap){
 	
 	function update(){
 		var v=parseInt(scope.fps*scope.duration);
-		frameNumber.setValue(v);
+		frameRow.text2.setValue(v);
 		scope.maxFrame=v;
 	}
 	
@@ -53,10 +55,9 @@ var AnimationToImagePanel=function(ap){
 	var fps=new UI.NumberButtons("Fps",1,60,1,scope.fps,function(v){scope.fps=v;update()},[10,20,30]);
 	titlePanel.add(fps);
 	
-	var frameRow=new UI.TextRow("Frames");
+	var frameRow=new UI.TextRow("Frames","0");
 	titlePanel.add(frameRow);
-	var frameNumber=new UI.Text("0");
-	frameRow.add(frameNumber);
+
 	
 	
 	var options=[
@@ -68,6 +69,17 @@ var AnimationToImagePanel=function(ap){
 	},scope.resolution);
 	titlePanel.add(resolution);
 	
+	titlePanel.add(new UI.Subtitle("FileName Option"));
+	
+	var header=new UI.InputRow("Header","",function(v){
+		scope.header=v;
+	});
+	titlePanel.add(header);
+	
+	var startIndex=new UI.IntegerRow("StartIndex",0,10000,1,0,function(v){
+		scope.startIndex=v;
+	});
+	titlePanel.add(startIndex);
 	
 	
 	var row=new UI.Row();
@@ -83,7 +95,7 @@ var AnimationToImagePanel=function(ap){
 			skip.setDisabled(true);
 			ap.clipPlayerRow.setDisplay("");
 			ap.clipPlayerRow.stop();
-			scope.frameIndex=0;
+			scope.frameIndex=scope.startIndex;
 			ap.signals.rendered.active=true;
 			ap.signals.windowResize.active=true;
 			scope.started=false;

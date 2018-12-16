@@ -777,11 +777,38 @@ UI.TitlePanel=function(label){
 UI.TitleRow=function(label){
 	return new UI.Div().setClass("title").add(new UI.Text(label));
 }
-UI.TextRow=function(label){
+UI.TextRow=function(label,text2){
 	var text=new UI.Text(label);
 	text.setWidth("90px");
 	var row=new UI.Row().add(text);
 	row.text=text;
+	
+	if(text2!=undefined){
+		var uiText=new UI.Text();
+		row.add(uiText);
+		row.text2=uiText;
+	}
+	
+	return row;
+}
+UI.InputRow=function(label,defaultText,onChange){
+	var text=new UI.Text(label);
+	text.setWidth("90px");
+	var row=new UI.Row().add(text);
+	row.text=text;
+	
+	
+		var input=new UI.Input(defaultText);
+		row.add(input);
+		row.input=input;
+		input.onChange(function(){
+			onChange(input.getValue());
+		});
+		input.onKeyUp(function(){
+			onChange(input.getValue());
+		});
+	
+	
 	return row;
 }
 
