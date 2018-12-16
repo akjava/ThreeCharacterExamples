@@ -7,8 +7,10 @@ var Sidebar = function ( application ) {
 	//TODO support A-B-A A-B check
 	this.poseA=null;
 	this.poseB=null;
-	
+	this.interpolate=THREE.InterpolateLinear;
 	this.initMesh=null;
+	this.time=0.5;
+	this.abaAnimation=true;
 	ap.signals.skinnedMeshChanged.add(function(mesh){
 		scope.initMesh=AnimeUtils.cloneSkeletonStructure(mesh);
 	});
@@ -33,9 +35,11 @@ var Sidebar = function ( application ) {
 			AnimeUtils.clipToPose(scope.poseB,dummy);
 		}
 		var endRotates=AnimeUtils.boneListToQuaternions(boneList);
-		var time=0.5;//TODO create Number
 		
-		var clip=AnimeUtils.makeRotateBoneAnimation(indices,startRotates,endRotates,time,time);
+		var clip=AnimeUtils.makeRotateBoneAnimation(indices,startRotates,endRotates,scope.time,scope.time,scope.abaAnimation);
+		clip.tracks.forEach(function(track){
+			track.setInterpolation(scope.interpolate);
+		});
 		ap.clip=clip;
 	}
 	
@@ -57,6 +61,21 @@ var Sidebar = function ( application ) {
 		updateClip();
 	});
 	container.add(loadPoseA);
+	
+	var options={InterpolateLinear:THREE.InterpolateLinear,InterpolateSmooth:THREE.InterpolateSmooth,InterpolateDiscrete:THREE.InterpolateDiscrete};
+	
+	var animationOptions=new UI.TitlePanel("Animation Options");
+	container.add(animationOptions);
+	
+	//quaternion not supported
+	var interpolate=new UI.Select2Row("interpolate",options,function(v){scope.interpolate=v;updateClip();},THREE.InterpolateLinear);
+	//animationOptions.add(interpolate);
+	
+	var timeRow=new UI.NumberButtons("time",0.01,10,1,scope.time,function(v){scope.time=v;updateClip();},[0.1,0.5,1,5]);
+	animationOptions.add(timeRow);
+	
+	var abaCheck=new UI.CheckboxRow("A-B-A Animation",scope.abaAnimation,function(v){scope.abaAnimation=v;updateClip();});
+	animationOptions.add(abaCheck);
 	
 	var clipPlayerRow=new ClipPlayerRow(ap);
 	container.add(clipPlayerRow);
