@@ -1,3 +1,4 @@
+//TODO replace BoneEditPanel ,old one has no advantage.
 var BoneEditPanel2 = function ( application ) {
 	var ap=application;
 	var scope=this;
@@ -92,6 +93,8 @@ var BoneEditPanel2 = function ( application ) {
 		ap.selectedBone.quaternion.copy(q);
 
 		ap.selectedBone.updateMatrixWorld(true);
+		
+		ap.signals.poseChanged.dispatch();
 	};
 	
 	function translate(){

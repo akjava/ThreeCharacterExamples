@@ -70,12 +70,9 @@ Example=function(application){
 		scope.boneAttachControler=new BoneAttachControler(mesh,{color: 0x008800,boxSize:boxSize});
 		ap.boneAttachControler=scope.boneAttachControler;
 		scope.boneAttachControler.setVisible(false);
-		
-		ap.ikControler.boneAttachControler=scope.boneAttachControler;
-		
 		this.container.add(scope.boneAttachControler.object3d);
 		
-
+		ap.ikControler.boneAttachControler=scope.boneAttachControler;
 		ap.signals.boneSelectionChanged.add(function(index){
 			ap.ikControler.boneSelectedIndex=index;
 		});
@@ -87,7 +84,6 @@ Example=function(application){
 
 		
 		ap.signals.poseChanged.add(function(){
-			console.log("poseChanged");
 			ap.ikControler.resetAllIkTargets();
 		});
 		
@@ -129,8 +125,6 @@ Example=function(application){
 		ap.signals.solveIkCalled.add(function(){
 			ap.ikControler.solveIk(true);
 		});
-		
-		var lastTargetMovedPosition=new THREE.Vector3();
 		
 		
 		

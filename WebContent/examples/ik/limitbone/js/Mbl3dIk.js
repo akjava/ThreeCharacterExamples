@@ -48,6 +48,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 
 
 		 Mbl3dIk.prototype.limitBone=function(boneList,endName,minX,minY,minZ,maxX,maxY,maxZ){
+			
 			var ap=this.ap;
 
 			var name=BoneUtils.findBoneByEndsName(boneList,endName).name;
@@ -95,6 +96,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			this.limitBone(boneList,"neck",-45,-45,-45,45,45,45);
 			this.limitBone(boneList,"root",-45,-45,-45,45,45,45);
 			
+			 
 			//copy to default
 			Object.keys(ap.ikControler.ikLimitMin).forEach(function(key){
 				ap.ikControler.ikDefaultLimitMin[key]={};
@@ -108,6 +110,11 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			});
 			
 			//send ref
-			ap.signals.boneLimitLoaded.dispatch(ap.ikControler.ikLimitMin,ap.ikControler.ikLimitMax);
+			if(ap.signals.boneLimitLoaded){
+				ap.signals.boneLimitLoaded.dispatch(ap.ikControler.ikLimitMin,ap.ikControler.ikLimitMax);
+			}else{
+				console.log("No ap.signals.boneLimitLoaded,Skipped Dispatch");
+			}
+			
 		}
 		
