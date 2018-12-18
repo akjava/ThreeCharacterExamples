@@ -15,6 +15,10 @@ As possible as can,Use similar three.js grammer,not using ES6 style.UI is Use fr
 [CDDIk](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/ik/) - CDD Ik Examples
 
 [Misc](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/misc/) - Misc Examples
+## Model Format
+Using Gltf Format has 2 problem.First problem I didnt solve Morph target problem.I'm using gltf-pipeline to compress file,but this is not support morph target.Second Problem is indices weight,some how gltf exported from Blender model's skinning result is not good at some vertex.I have no time to solve problem.
+
+That Why Most of case I'm using FBX Format;perfect skinning,soso goood data compression.
 ## Usefull Links
 
 https://threejs.org/examples/
