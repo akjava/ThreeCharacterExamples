@@ -72,7 +72,7 @@ Example=function(application){
 		scope.boneAttachControler.setVisible(false);
 		
 		ap.ikControler.boneAttachControler=scope.boneAttachControler;
-		ap.ikControler.ap=ap;
+		
 		this.container.add(scope.boneAttachControler.object3d);
 		
 
@@ -84,21 +84,14 @@ Example=function(application){
 		
 		
 		
-		function resetIkPosition(name){
-			var target=ikTargets[name];
-			var indices=ap.ikControler.iks[name];
-			var index=indices[indices.length-1];
-			target.position.copy(scope.boneAttachControler.containerList[index].position);
-		}
+
 		
 		ap.signals.poseChanged.add(function(){
-			scope.boneAttachControler.update();
-			Object.keys(ikTargets).forEach(function(key){
-				resetIkPosition(key);
-			});
+			console.log("poseChanged");
+			ap.ikControler.resetAllIkTargets();
 		});
 		
-		var ikTargets={};
+		
 		
 
 		
@@ -108,7 +101,8 @@ Example=function(application){
 		
 		
 		
-		var mbl3dik=new Mbl3dIk(ap,ikTargets);
+		var mbl3dik=new Mbl3dIk(ap);
+		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
 		
 		

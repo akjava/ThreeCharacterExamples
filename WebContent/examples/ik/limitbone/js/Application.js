@@ -16,7 +16,7 @@ var Application = function () {
 	
 
 	
-
+	//should initialize first
 	this.ikControler=new IkControler();
 	
 	

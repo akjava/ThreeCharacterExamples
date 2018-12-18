@@ -1,21 +1,21 @@
-var Mbl3dIk=function(ap,ikTargets){
+var Mbl3dIk=function(ap){
 	
+	this.ikTargets={};
 	this.ap=ap;
 	
 	this.boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 	
-	this.registIk(ikTargets,"Hip",["root","spine01"]);
-	this.registIk(ikTargets,"Head",["spine01","spine02","spine03","neck","head"]);
-	this.registIk(ikTargets,"LeftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L","middle00_L"]);
-	this.registIk(ikTargets,"RightArm",["clavicle_R","upperarm_R","lowerarm_R","hand_R","middle00_R"]);
-	this.registIk(ikTargets,"LeftLeg",["thigh_L","calf_L","foot_L"]);
-	this.registIk(ikTargets,"RightLeg",["thigh_R","calf_R","foot_R"]);
+	this.registIk(this.ikTargets,"Hip",["root","spine01"]);
+	this.registIk(this.ikTargets,"Head",["spine01","spine02","spine03","neck","head"]);
+	this.registIk(this.ikTargets,"LeftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L","middle00_L"]);
+	this.registIk(this.ikTargets,"RightArm",["clavicle_R","upperarm_R","lowerarm_R","hand_R","middle00_R"]);
+	this.registIk(this.ikTargets,"LeftLeg",["thigh_L","calf_L","foot_L"]);
+	this.registIk(this.ikTargets,"RightLeg",["thigh_R","calf_R","foot_R"]);
 	
 	this.initlimitBone();
 }
 
 Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
-	
 	var ap=this.ap;
 	
 	

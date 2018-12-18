@@ -26,7 +26,27 @@ this.lastTargetMovedPosition=new THREE.Vector3();
 this._euler=new THREE.Euler();
 this.logging=false;
 
+this.ikTargets={};
+
 };
+
+
+IkControler.prototype.resetIkTargetPosition=function(name){
+	var target=this.ikTargets[name];
+	var indices=this.iks[name];
+
+	var index=indices[indices.length-1];
+	target.position.copy(this.boneAttachControler.containerList[index].position);
+}
+
+IkControler.prototype.resetAllIkTargets=function(){
+	var scope=this;
+	this.boneAttachControler.update();
+	Object.keys(this.ikTargets).forEach(function(key){
+		scope.resetIkTargetPosition(key);
+	});
+}
+
 
 IkControler.prototype.solveIk=function(forceUpdate){
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
