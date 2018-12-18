@@ -799,6 +799,7 @@ UI.InputRow=function(label,defaultText,onChange){
 	
 	
 		var input=new UI.Input(defaultText);
+		
 		row.add(input);
 		row.input=input;
 		input.onChange(function(){
