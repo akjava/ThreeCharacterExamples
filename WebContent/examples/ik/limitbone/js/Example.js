@@ -143,8 +143,6 @@ Example=function(application){
 
 	
 	
-	var boneMatrix=new THREE.Matrix4();
-	var matrixWorldInv=new THREE.Matrix4();
 	ap.signals.rendered.add(function(){
 		
 		if(scope.boneAttachControler){
@@ -154,22 +152,7 @@ Example=function(application){
 		
 	});
 	
-	ap.signals.boxVisibleChanged.add(function(){
-		boxList.forEach(function(box){
-			box.material.visible=ap.visibleBone;
-		});
-		originBoxList.forEach(function(box){
-			box.material.visible=ap.visibleOriginBone;
-		});
-	})
-	
 
-	 application.signals.boneAnimationIndexChanged.add(function(index){
-		
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-
-		ap.selectedBone=boneList[index];
-	 });
 	
 
 }
