@@ -813,7 +813,6 @@ UI.InputRow=function(label,defaultText,onChange){
 }
 
 UI.Subtitle=function(label){
-	console.log("Use SubtitleRow");
 	return UI.SubtitleRow(label);
 }
 UI.SubtitleRow=function(label){
