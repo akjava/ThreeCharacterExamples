@@ -80,7 +80,7 @@ Example=function(application){
 		
 		this.container.add(scope.boneAttachControler.object3d);
 		console.log("boneAttachControler initialized");
-		window.onerror = function(e) { console.error(e) }
+		//window.onerror = function(e) { console.error(e) }
 		
 		ap.ikControler.boneAttachControler=scope.boneAttachControler;
 		ap.signals.boneSelectionChanged.add(function(index){
@@ -150,6 +150,7 @@ Example=function(application){
 		
 		this.boneIndex=0;
 		
+		//indicate selected rotation
 		function refreshSphere(){
 			var bone=scope.boneAttachControler.boneList[scope.boneIndex];
 			lastEuler.copy(bone.rotation);
@@ -157,6 +158,7 @@ Example=function(application){
 			rotC.rotation.set(0,0,0);
 		}
 		
+		var transformSelectionType=null;
 		ap.signals.transformSelectionChanged.add(function(target){
 			if(target==null){
 				ap.transformControls.detach();
@@ -166,8 +168,10 @@ Example=function(application){
 				ap.ikControler.ikTarget=null;
 				
 				scope.wireframe.material.visible=false;
+				transformSelectionType=null;
 			}else{
 				if(target.ikName){
+					transformSelectionType="ik";
 					//ik selected
 					ap.transformControls.setMode( "translate" );
 					ap.ikControler.ikTarget=target;
@@ -177,6 +181,7 @@ Example=function(application){
 					
 					scope.wireframe.material.visible=false;//for rotate
 				}else{
+					transformSelectionType="rotation";
 					//not ik selected
 					ap.ikControler.ikIndices=null;
 					ap.ikControler.ikTarget=null;
@@ -198,13 +203,18 @@ Example=function(application){
 		});
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
-			scope.wireframe.material.color.set(0xaaaaaa);
-			refreshSphere();
+			if(transformSelectionType=="rotation"){
+				scope.wireframe.material.color.set(0xaaaaaa);
+				refreshSphere();
+			}
+			
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
+			if(transformSelectionType=="rotation"){
 			scope.wireframe.material.color.set(0xffffff);
 			refreshSphere();
+			}
 		});
 		
 

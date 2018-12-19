@@ -121,7 +121,7 @@ Example=function(application){
 
 		
 		this.boneIndex=0;
-		
+		//indicate selected rotation
 		function refreshSphere(){
 			var bone=scope.boneAttachControler.boneList[scope.boneIndex];
 			lastEuler.copy(bone.rotation);
