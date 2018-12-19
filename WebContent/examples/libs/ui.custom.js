@@ -432,6 +432,15 @@ UI.CheckboxRow=function(label,value,onChange){
 	//add ref
 	row.text=text;
 	row.checkbox=checkbox;
+	
+	row.getValue=function(){
+		return checkbox.getValue();
+	}
+	
+	row.setValue=function(v){
+		return checkbox.setValue(v);
+	}
+	
 	return row;
 }
 
@@ -457,6 +466,15 @@ UI.SwitchRow=function(trueLabel,falseLabel,value,onChange){
 	//add ref
 	row.text=text;
 	row.checkbox=checkbox;
+	
+	row.getValue=function(){
+		return checkbox.getValue();
+	}
+	
+	row.setValue=function(v){
+		return checkbox.setValue(v);
+	}
+	
 	return row;
 }
 
@@ -477,6 +495,8 @@ UI.CheckboxText=function(label,value,onChange){
 	//add ref
 	span.text=text;
 	span.checkbox=checkbox;
+	
+
 	return span;
 }
 
@@ -513,6 +533,14 @@ UI.ListRow=function(label,values,onChange,current){
 	row.text=text;
 	row.select=select;
 	
+	row.getValue=function(){
+		return select.getValue();
+	}
+	
+	row.setValue=function(v){
+		return select.setValue(v);
+	}
+	
 	return row;
 }
 
@@ -537,6 +565,15 @@ UI.SelectRow=function(label,options,onChange,current){
 	});
 	row.add(select);
 	row.select=select;
+	
+	row.getValue=function(){
+		return select.getValue();
+	}
+	
+	row.setValue=function(v){
+		return select.setValue(v);
+	}
+	
 	return row;
 }
 UI.Select2Row=function(label,options,onChange,current){
@@ -560,6 +597,15 @@ UI.Select2Row=function(label,options,onChange,current){
 	});
 	row.add(select);
 	row.select=select;
+	
+	row.getValue=function(){
+		return select.getValue();
+	}
+	
+	row.setValue=function(v){
+		return select.setValue(v);
+	}
+	
 	return row;
 }
 
@@ -581,6 +627,14 @@ UI.List=function(values,onChange,current){
 	select.onChange(function(e){
 		onChange(select.getValue());
 	});
+	
+	row.getValue=function(){
+		return select.getValue();
+	}
+	
+	row.setValue=function(v){
+		return select.setValue(v);
+	}
 	
 	return select;
 }
@@ -606,6 +660,14 @@ UI.NumberRow=function(label,min,max,step,value,onChange){
 	});
 	row.add(number);
 	
+	row.getValue=function(){
+		return number.getValue();
+	}
+	
+	row.setValue=function(v){
+		return number.setValue(v);
+	}
+	
 	return row;
 }
 
@@ -629,6 +691,14 @@ UI.IntegerRow=function(label,min,max,step,value,onChange){
 		update();
 	});
 	row.add(number);
+	
+	row.getValue=function(){
+		return number.getValue();
+	}
+	
+	row.setValue=function(v){
+		return number.setValue(v);
+	}
 	
 	return row;
 }
@@ -789,6 +859,10 @@ UI.TextRow=function(label,text2){
 		row.text2=uiText;
 	}
 	
+	row.setValue=function(v){
+		row.text2.setValue(v);
+	}
+	
 	return row;
 }
 UI.InputRow=function(label,defaultText,onChange){
@@ -796,6 +870,10 @@ UI.InputRow=function(label,defaultText,onChange){
 	text.setWidth("90px");
 	var row=new UI.Row().add(text);
 	row.text=text;
+	
+	row.setValue=function(v){
+		row.input.setValue(v);
+	}
 	
 	
 		var input=new UI.Input(defaultText);

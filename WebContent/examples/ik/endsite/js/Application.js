@@ -35,6 +35,7 @@ var Application = function () {
 			boneLimitChanged:new Signal(),
 			boneSelectionChanged:new Signal(),
 			poseChanged:new Signal(),
+			ikInitialized:new Signal(),
 			solveIkCalled:new Signal(),
 			
 			transformChanged:new Signal(),

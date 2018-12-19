@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>Limit Ik Bone</title>
+		<title>Ik EndSite</title>
 	</head>
 	<body ontouchstart="">
 	<link href="../../css/shared.css" rel="stylesheet" />
@@ -29,9 +29,9 @@
 	<script src="js/Application.js"></script>
 	<script src="js/Viewport.js"></script>
 	<script src="js/Sidebar.js"></script>
+	<script src="js/Sidebar.Iks.js"></script>
 	<script src="../limitbone/js/Sidebar.IkBasic.js"></script>
-	<script src="../limitbone/js/Sidebar.IkLimitIO.js"></script>
-	<script src="../limitbone/js/Sidebar.IkLimitList.js"></script>
+
 	<script src="../limitbone/js/Mbl3dIk.js"></script>
 	<script src="../limitbone/js/BoneLimitPanel.js"></script>
 	<script src="js/Viewport.Info.js"></script>
@@ -43,6 +43,7 @@
 		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 	};
 	
+
 	var application = new Application();
 	
 	var viewport = new Viewport( application );
@@ -66,6 +67,8 @@
 	onWindowResize();
 	
 	application.example=new Example(application);
+
+
 	</script>
 	</body>
 </html>

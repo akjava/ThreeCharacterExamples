@@ -29,11 +29,29 @@ this.logging=false;
 this.ikTargets={};
 
 this.followOtherIkTargets=true;
-this.hasEndSite=false;
+
 
 this._pos=new THREE.Vector3();
 };
 
+IkControler.prototype.getIkNames=function(){
+	return Object.keys(this.iks);
+}
+
+IkControler.prototype.isEnableEndSiteByName=function(name){
+	var target=this.ikTargets[name];
+	var indices=this.iks[name];
+
+	
+	var index=indices[indices.length-1];
+	var object=this.boneAttachControler.containerList[index];
+	
+	return object.endsite && object.endsite.material.visible;
+}
+
+IkControler.prototype.enableEndSite=function(object){
+	return object.endsite && object.endsite.material.visible;
+}
 
 IkControler.prototype.resetIkTargetPosition=function(name){
 	var target=this.ikTargets[name];
@@ -44,11 +62,39 @@ IkControler.prototype.resetIkTargetPosition=function(name){
 	var lastMesh=this.boneAttachControler.containerList[index];
 	
 	var position=lastMesh.position;
-	if(this.hasEndSite && lastMesh.endsite){
+	
+	if(this.enableEndSite(lastMesh)){
 		position=lastMesh.endsite.getWorldPosition(this._pos);
 	}
 	
 	target.position.copy(position);
+}
+
+IkControler.prototype.getLastPosition=function(name){
+	var target=this.ikTargets[name];
+	var indices=this.iks[name];
+	var index=indices[indices.length-1];
+	var lastMesh=this.boneAttachControler.containerList[index];
+	var position=lastMesh.position;
+	
+	if(this.enableEndSite(lastMesh)){
+		position=lastMesh.endsite.getWorldPosition(this._pos);
+	}
+	return position;
+}
+IkControler.prototype.setEndSiteEnabled=function(name,enabled){
+
+	var target=this.ikTargets[name];
+	if(target==undefined){
+		console.error("setEndSiteEnabled:No target found ",name);
+	}
+	var indices=this.iks[name];
+
+	var index=indices[indices.length-1];
+
+	var lastMesh=this.boneAttachControler.containerList[index];
+
+	lastMesh.endsite.material.visible=enabled;
 }
 
 IkControler.prototype.resetAllIkTargets=function(exclude){
@@ -63,12 +109,12 @@ IkControler.prototype.resetAllIkTargets=function(exclude){
 
 IkControler.prototype.solveIk=function(forceUpdate){
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
-	
+	var scope=this;
 	
 	function getEndSitePos(lastMesh){
 		var position=lastMesh.position;
-		if(this.hasEndSite && lastMesh.endsite){
-			position=lastMesh.endsite.getWorldPosition(this._pos);
+		if(scope.enableEndSite(lastMesh)){
+			position=lastMesh.endsite.getWorldPosition(scope._pos);
 		}
 		return position;
 	}
@@ -91,8 +137,8 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	this.lastTargetMovedPosition.copy(targetPos);
 	
 	
-	if(this.ikTarget.position.equals(lastMesh.position)){
-		//no need to solve
+	if(this.ikTarget.position.equals(getEndSitePos(lastMesh))){
+		//no need to solve,just reseted
 		return;
 	}
 	
@@ -101,14 +147,14 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	
 	
-	
-	for(var i=0;i<this.ikIndices.length-1;i++){
+	var ikIndicesLength=scope.enableEndSite(lastMesh)?this.ikIndices.length:this.ikIndices.length-1;
+	for(var i=0;i<ikIndicesLength;i++){
 		var ikBoneIndex=this.ikIndices[i];
 		if(this.ikBoneSelectedOnly && ikBoneIndex!=this.boneSelectedIndex){
 			continue;
 		}
 		
-		var lastJointPos=lastMesh.position;
+		var lastJointPos=getEndSitePos(lastMesh);
 		
 		
 		var bone=this.boneAttachControler.boneList[ikBoneIndex];
@@ -162,6 +208,10 @@ IkControler.prototype.solveIk=function(forceUpdate){
 				}
 				//console.log(v1,v2,tmp);
 				return tmp;
+			}
+			
+			if(!this.ikLimitMin[bone.name]){
+				console.log("no ikLimitMin",bone.name);
 			}
 			
 			var tmpX=toDegree(x,euler.x);

@@ -1,4 +1,5 @@
 Example=function(application){
+
 	var ap=application;
 	var scope=this;
 	var scale=100;
@@ -20,8 +21,8 @@ Example=function(application){
 	
 	
 	
-	
 	AppUtils.loadMesh(url,function(mesh){
+		try{
 		console.log("loadGltfMesh:",url);
 		var container=new THREE.Group();
 		this.container=container;//try to not modify Application.js
@@ -77,9 +78,7 @@ Example=function(application){
 			ap.ikControler.boneSelectedIndex=index;
 		});
 		
-		ap.ikControler.hasEndSite=true;//TODO set
-		
-		
+
 		
 		
 
@@ -101,7 +100,12 @@ Example=function(application){
 		var mbl3dik=new Mbl3dIk(ap);
 		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
+		ap.ikControler.setEndSiteEnabled("Head",true);
+		ap.ikControler.setEndSiteEnabled("LeftArm",true);
+		ap.ikControler.setEndSiteEnabled("RightArm",true);
 		
+		//reset at endsite
+		ap.ikControler.resetAllIkTargets();
 		
 		
 		ap.signals.transformSelectionChanged.add(function(target){
@@ -118,9 +122,8 @@ Example=function(application){
 			}
 		},undefined,1);//need high priority to call first
 		
+		ap.signals.ikInitialized.dispatch();
 
-		
-		
 		
 		
 		ap.signals.solveIkCalled.add(function(){
@@ -132,6 +135,11 @@ Example=function(application){
 		ap.signals.transformChanged.add(function(){	
 			ap.ikControler.solveIk();
 		});
+
+		} catch(e) {
+			  console.log("Error caught!");
+			  console.error(e);
+			}
 	});
 	
 	
@@ -148,6 +156,5 @@ Example=function(application){
 	});
 	
 
-	
 
 }
