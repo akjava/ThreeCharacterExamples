@@ -16,5 +16,8 @@ var Sidebar = function ( application ) {
 	var editPanel=new BoneEditPanel2(ap);
 	container.add(editPanel);
 	
+	var backgroundImagePanel=new BackgroundImagePanel(ap);
+	container.add(backgroundImagePanel);
+	
 	return container;
 }
