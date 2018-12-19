@@ -113,6 +113,13 @@ Example=function(application){
 		var mbl3dik=new Mbl3dIk(ap);
 		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
+		ap.ikControler.setEndSiteEnabled("Head",true);
+		ap.ikControler.setEndSiteEnabled("LeftArm",true);
+		ap.ikControler.setEndSiteEnabled("RightArm",true);
+		
+		//reset at endsite
+		ap.ikControler.resetAllIkTargets();
+		
 		//call finish ik
 		
 		//rotation control
