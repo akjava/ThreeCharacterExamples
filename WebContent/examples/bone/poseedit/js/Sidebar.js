@@ -22,5 +22,8 @@ var Sidebar = function ( application ) {
 	var transparent=new Sidebar.Transparent(ap);
 	container.add(transparent);
 	
+	var ground=new Sidebar.Ground(ap);
+	container.add(ground);
+	
 	return container;
 }

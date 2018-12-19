@@ -29,6 +29,9 @@ this.logging=false;
 this.ikTargets={};
 
 this.followOtherIkTargets=true;
+this.hasEndSite=false;
+
+this._pos=new THREE.Vector3();
 };
 
 
@@ -36,8 +39,16 @@ IkControler.prototype.resetIkTargetPosition=function(name){
 	var target=this.ikTargets[name];
 	var indices=this.iks[name];
 
+	
 	var index=indices[indices.length-1];
-	target.position.copy(this.boneAttachControler.containerList[index].position);
+	var lastMesh=this.boneAttachControler.containerList[index];
+	
+	var position=lastMesh.position;
+	if(this.hasEndSite && lastMesh.endsite){
+		position=lastMesh.endsite.getWorldPosition(this._pos);
+	}
+	
+	target.position.copy(position);
 }
 
 IkControler.prototype.resetAllIkTargets=function(exclude){
@@ -52,6 +63,15 @@ IkControler.prototype.resetAllIkTargets=function(exclude){
 
 IkControler.prototype.solveIk=function(forceUpdate){
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
+	
+	
+	function getEndSitePos(lastMesh){
+		var position=lastMesh.position;
+		if(this.hasEndSite && lastMesh.endsite){
+			position=lastMesh.endsite.getWorldPosition(this._pos);
+		}
+		return position;
+	}
 	
 	
 	if(this.ikTarget==null){

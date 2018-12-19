@@ -34,6 +34,19 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 		indices.push(index);
 	});
 	
+	//add endsite
+	var list=ap.ikControler.boneAttachControler.containerList;
+	var diff=list[indices[indices.length-1]].position.clone().sub(list[indices[indices.length-2]].position);
+	diff.setLength(10);
+	//diff.add(list[indices[indices.length-1]].position);
+	
+	var endsite=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:0x008800,depthTest:false,transparent:true,opacity:.5}));
+	endsite.renderOrder = 2;
+	list[indices[indices.length-1]].add(endsite);
+	list[indices[indices.length-1]].endsite=endsite;
+	endsite.position.copy(diff);
+	
+	
 	var ikBox=new THREE.Mesh(new THREE.BoxGeometry(5,5,5),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
 	ikBox.renderOrder = 1;
 	var index=indices.length-1;
