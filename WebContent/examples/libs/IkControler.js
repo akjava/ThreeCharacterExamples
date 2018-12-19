@@ -61,11 +61,7 @@ IkControler.prototype.resetIkTargetPosition=function(name){
 	var index=indices[indices.length-1];
 	var lastMesh=this.boneAttachControler.containerList[index];
 	
-	var position=lastMesh.position;
-	
-	if(this.enableEndSite(lastMesh)){
-		position=lastMesh.endsite.getWorldPosition(this._pos);
-	}
+	var position=this.getLastPosition(name);
 	
 	target.position.copy(position);
 }

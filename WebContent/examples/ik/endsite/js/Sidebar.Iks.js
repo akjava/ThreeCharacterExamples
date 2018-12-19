@@ -22,7 +22,7 @@ ap.signals.ikInitialized.add(function(){
 	scope.selectedIk=keys[0];
 	ikList.setList(keys);
 	ikList.setValue(keys[0]);
-	endsite.setValue(ap.ikControler.enableEndSite(keys[0]));
+	endsite.setValue(ap.ikControler.isEnableEndSiteByName(keys[0]));
 	
 })
 
