@@ -60,6 +60,8 @@ var Viewport = function ( application ) {
 
 	} );
 	
+	//trying loop selection
+	var lastHandleClick=-1;
 	function handleClick() {
 
 		if ( onDownPosition.distanceTo( onUpPosition ) === 0 ) {
@@ -67,8 +69,14 @@ var Viewport = function ( application ) {
 			var intersects = getIntersects( onUpPosition, ap.objects );
 
 			if ( intersects.length > 0 ) {
-
-				var object = intersects[ 0 ].object;
+				var index=0;
+				if(lastHandleClick+1<intersects.length){
+					index=lastHandleClick+1;
+					lastHandleClick=index;
+				}else{
+					lastHandleClick=-1;
+				}
+				var object = intersects[index ].object;
 
 				ap.signals.transformSelectionChanged.dispatch(object);
 				
