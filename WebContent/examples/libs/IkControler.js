@@ -1,5 +1,4 @@
 var IkControler=function(boneAttachControler,ap){
-console.log(boneAttachControler,ap);
 this.iks={};
 this.ikTarget=null;
 this.ikIndices=null;
@@ -31,7 +30,6 @@ this.ikTargets={};
 
 this.followOtherIkTargets=true;
 this.ap=ap;
-console.log(this.ap);
 
 this._pos=new THREE.Vector3();
 };
@@ -107,7 +105,6 @@ IkControler.prototype.resetAllIkTargets=function(exclude){
 
 IkControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;
-	console.log(ap);
 	var scope=this;
 	if(target==null){
 		this.ikIndices=null;

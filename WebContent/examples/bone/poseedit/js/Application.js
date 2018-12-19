@@ -14,7 +14,7 @@ var Application = function () {
 	this.visibleBone=false;
 	this.visibleSkeletonHelper=false;
 	
-	this.ikControler=new IkControler();
+	this.ikControler=new IkControler(undefined,this);
 	
 	var Signal = signals.Signal;
 
