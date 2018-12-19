@@ -15,22 +15,17 @@ Example=function(application){
 	
 	this.container=null;//add mesh here
 	var boneList;
-	var lastEuler=new THREE.Euler();
+	
 	ap.signals.transformChanged.add(function(){
 		//console.log(ap.transformControls.axis);//null,X,Y,Z
 	});
 
 	
-	var geo = new THREE.EdgesGeometry( new THREE.BoxGeometry(5,5,5) ); // or WireframeGeometry( geometry )
 
-	var mat = new THREE.LineBasicMaterial( { color: 0xaaaaaa, linewidth: 2,transparent:true,opacity:1.0,depthTest:false,visible:false } );
-
-	this.wireframe = new THREE.LineSegments( geo, mat );
-
-	ap.scene.add( this.wireframe );
 	
 	
 	AppUtils.loadMesh(url,function(mesh){
+		try{
 		console.log("loadGltfMesh:",url);
 		var container=new THREE.Group();
 		this.container=container;//try to not modify Application.js
@@ -80,85 +75,46 @@ Example=function(application){
 		
 		this.container.add(scope.boneAttachControler.object3d);
 		
-		var rotationControls={};
-		var index=0;
 		
-
-		var e=new THREE.Euler();
-		boneList.forEach(function(bone){
-			if(!Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name)){
-				var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
-				sphere.renderOrder=100;
-				rotationControls[bone.name]=sphere;
-				scope.boneAttachControler.containerList[index].add(sphere);
-				sphere.boneIndex=index;
-				sphere.quaternion.copy(boneList[index].quaternion);
-				var cbone=index;
-				
-				sphere.quaternion.onChange(function(){
-					var euler=e.setFromQuaternion(sphere.quaternion);
-
-					var r=lastEuler;
-					var max=Math.abs(euler.x);
-					if(euler.y>max){
-						max=Math.abs(euler.y);
-					}
-					if(euler.z>max){
-						max=Math.abs(euler.z);
-					}
-					
-					//TODO limit
-					euler.set(euler.x+r.x,euler.y+r.y,euler.z+r.z);
-					var rotation=ap.skinnedMesh.skeleton.bones[cbone].rotation;
-					rotation.copy(euler);
-					ap.signals.boneRotationChanged.dispatch(cbone);
-					
-				});
-				ap.objects.push(sphere);
-			}
-			index++;
+		var rotatationControler=new RotatationControler(ap,scope.boneAttachControler);
+		rotatationControler.initialize(function(bone){
+			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name);
 		});
 		
-
-		
-		this.boneIndex=0;
 		//indicate selected rotation
-		function refreshSphere(){
-			var bone=scope.boneAttachControler.boneList[scope.boneIndex];
-			lastEuler.copy(bone.rotation);
-			var rotC=rotationControls[bone.name];
-			rotC.rotation.set(0,0,0);
-		}
+
 		
 		ap.signals.transformSelectionChanged.add(function(target){
 			if(target==null){
 				ap.transformControls.detach();
 				
-				scope.wireframe.material.visible=false;
+				rotatationControler.wireframe.material.visible=false;
 			}else{
 				ap.transformControls.setMode( "rotate" );
 				ap.transformControls.attach(target);
 				var boneIndex=target.boneIndex;
-				scope.boneIndex=boneIndex;
+				rotatationControler.boneIndex=boneIndex;
 				ap.signals.boneSelectionChanged.dispatch(boneIndex);
 				
-				refreshSphere();
+				rotatationControler.refreshSphere();
 				
-				scope.wireframe.position.copy(scope.boneAttachControler.containerList[boneIndex].position);
-				scope.wireframe.material.visible=true;
+				rotatationControler.wireframe.position.copy(scope.boneAttachControler.containerList[boneIndex].position);
+				rotatationControler.wireframe.material.visible=true;
 			}
 		});
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
-			scope.wireframe.material.color.set(0xaaaaaa);
-			refreshSphere();
+			rotatationControler.wireframe.material.color.set(0xaaaaaa);
+			rotatationControler.refreshSphere();
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
-			scope.wireframe.material.color.set(0xffffff);
-			refreshSphere();
+			rotatationControler.wireframe.material.color.set(0xffffff);
+			rotatationControler.refreshSphere();
 		});
-		
+		}catch(e){
+			console.error(e);
+		}
 
 	});
 	
