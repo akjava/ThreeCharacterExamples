@@ -143,6 +143,7 @@ Example=function(application){
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
 			rotatationControler.onTransformFinished(scope.target);
+			ap.ikControler.onTransformFinished(scope.target);
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {

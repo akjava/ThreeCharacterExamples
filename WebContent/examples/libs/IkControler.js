@@ -119,6 +119,23 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 	}
 }
 
+IkControler.prototype.onTransformStarted=function(target){
+	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+		
+	}
+}
+IkControler.prototype.onTransformFinished=function(target){
+var scope=this;
+if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+	var name=this.ikTarget.ikName;
+	var indices=this.iks[name];
+	indices.forEach(function(index){
+		scope.ap.signals.boneRotationChanged.dispatch(index);
+	})
+	
+	}
+}
+
 
 IkControler.prototype.solveIk=function(forceUpdate){
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
