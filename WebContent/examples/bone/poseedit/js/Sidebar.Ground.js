@@ -4,6 +4,8 @@ Sidebar.Ground=function(ap){
 		mesh.material.visible=v;
 		grid.material.visible=v;
 	});
+	titlePanel.add(visibleRow);
+	
 	var scene=ap.scene;
 	var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: false } ) );
 	mesh.rotation.x = - Math.PI / 2;
@@ -15,4 +17,5 @@ Sidebar.Ground=function(ap){
 	grid.material.opacity = 0.2;
 	grid.material.transparent = true;
 	scene.add( grid );
+	return titlePanel;
 }
