@@ -21,5 +21,10 @@ Sidebar.IkLBasic=function(ap){
 	},[25,50,100]);
 	ikPanel.add(iteration);
 	iteration.text.setWidth("70px");
+	
+	var followOtherIkTargets=new UI.CheckboxRow("Follow Other IkTargets",ap.ikControler.followOtherIkTargets,function(v){
+		ap.ikControler.followOtherIkTargets=v;
+	});
+	ikPanel.add(followOtherIkTargets);
 	return ikPanel;
 }

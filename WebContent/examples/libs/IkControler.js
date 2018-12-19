@@ -28,6 +28,7 @@ this.logging=false;
 
 this.ikTargets={};
 
+this.followOtherIkTargets=true;
 };
 
 
@@ -39,11 +40,12 @@ IkControler.prototype.resetIkTargetPosition=function(name){
 	target.position.copy(this.boneAttachControler.containerList[index].position);
 }
 
-IkControler.prototype.resetAllIkTargets=function(){
+IkControler.prototype.resetAllIkTargets=function(exclude){
 	var scope=this;
 	this.boneAttachControler.update();
 	Object.keys(this.ikTargets).forEach(function(key){
-		scope.resetIkTargetPosition(key);
+		if(key!=exclude)
+			scope.resetIkTargetPosition(key);
 	});
 }
 
@@ -192,6 +194,12 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		
 		bone.rotation.set(x,y,z);
 		this.boneAttachControler.update();
+		
+		
 	}
+	}
+	
+	if(this.followOtherIkTargets){
+		this.resetAllIkTargets(this.ikTarget.ikName);
 	}
 };

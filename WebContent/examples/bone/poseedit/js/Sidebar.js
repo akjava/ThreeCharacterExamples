@@ -4,6 +4,9 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Pose Edit"));
 	
+    var ikPanel=new Sidebar.IkLBasic(application);
+    container.add(ikPanel);
+    
 	var exportPanel=new Sidebar.Export(ap);
 	container.add(exportPanel);
 	
