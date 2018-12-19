@@ -14,14 +14,6 @@ Example=function(application){
 	
 	
 	this.container=null;//add mesh here
-	var boneList;
-	
-	ap.signals.transformChanged.add(function(){
-		//console.log(ap.transformControls.axis);//null,X,Y,Z
-	});
-
-	
-
 	
 	
 	AppUtils.loadMesh(url,function(mesh){
@@ -36,18 +28,16 @@ Example=function(application){
 		
 		//mesh part,modify bone and try to same size both glb & fbx
 		mesh=BoneUtils.convertToZeroRotatedBoneMesh(mesh);
+		mesh.isGltf=isGltf;
 		mesh.normalizeSkinWeights();
 		mesh.material=material;
-		mesh.renderOrder = 0;
+
 		container.add(mesh);
 		ap.skinnedMesh=mesh;
-		
-		
 		
 		if(isGltf){
 			mesh.scale.set(scale,scale,scale);
 		}
-		boneList=BoneUtils.getBoneList(mesh);
 		
 		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		
@@ -72,46 +62,40 @@ Example=function(application){
 		var boxSize=0.05*scale;
 		scope.boneAttachControler=new BoneAttachControler(mesh,{color: 0x008800,boxSize:boxSize});
 		scope.boneAttachControler.setVisible(false);
-		
 		this.container.add(scope.boneAttachControler.object3d);
+		ap.signals.rendered.add(function(){
+			if(scope.boneAttachControler){
+				scope.boneAttachControler.update();
+			}
+		});
 		
-		
+		//rotation control
 		var rotatationControler=new RotatationControler(ap,scope.boneAttachControler);
 		rotatationControler.initialize(function(bone){
 			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name);
 		});
 		
-		//indicate selected rotation
-
 		
+		//transformSelectionChanged
+		scope.target=null;
 		ap.signals.transformSelectionChanged.add(function(target){
+			scope.target=target;
 			if(target==null){
 				ap.transformControls.detach();
-				
-				rotatationControler.wireframe.material.visible=false;
-			}else{
-				ap.transformControls.setMode( "rotate" );
-				ap.transformControls.attach(target);
-				var boneIndex=target.boneIndex;
-				rotatationControler.boneIndex=boneIndex;
-				ap.signals.boneSelectionChanged.dispatch(boneIndex);
-				
-				rotatationControler.refreshSphere();
-				
-				rotatationControler.wireframe.position.copy(scope.boneAttachControler.containerList[boneIndex].position);
-				rotatationControler.wireframe.material.visible=true;
 			}
+			
+			rotatationControler.onTransformSelectionChanged(target);
 		});
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
-			rotatationControler.wireframe.material.color.set(0xaaaaaa);
-			rotatationControler.refreshSphere();
+			rotatationControler.onTransformFinished(scope.target);
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
-			rotatationControler.wireframe.material.color.set(0xffffff);
-			rotatationControler.refreshSphere();
+			rotatationControler.onTransformStarted(scope.target);
 		});
+		
+		
 		}catch(e){
 			console.error(e);
 		}
@@ -122,16 +106,7 @@ Example=function(application){
 
 	
 	
-	var boneMatrix=new THREE.Matrix4();
-	var matrixWorldInv=new THREE.Matrix4();
-	ap.signals.rendered.add(function(){
-		
-		if(scope.boneAttachControler){
-			scope.boneAttachControler.update();
-			
-		}
-		
-	});
+
 	
 	
 
