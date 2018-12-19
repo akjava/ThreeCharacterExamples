@@ -46,11 +46,11 @@ IkControler.prototype.isEnableEndSiteByName=function(name){
 	var index=indices[indices.length-1];
 	var object=this.boneAttachControler.containerList[index];
 	
-	return object.endsite && object.endsite.material.visible;
+	return object.userData.endsite && object.userData.endsite.material.visible;
 }
 
 IkControler.prototype.enableEndSite=function(object){
-	return object.endsite && object.endsite.material.visible;
+	return object.userData.endsite && object.userData.endsite.material.visible;
 }
 
 IkControler.prototype.resetIkTargetPosition=function(name){
@@ -78,7 +78,7 @@ IkControler.prototype.getLastPosition=function(name){
 	var position=lastMesh.position;
 	
 	if(this.enableEndSite(lastMesh)){
-		position=lastMesh.endsite.getWorldPosition(this._pos);
+		position=lastMesh.userData.endsite.getWorldPosition(this._pos);
 	}
 	return position;
 }
@@ -94,7 +94,8 @@ IkControler.prototype.setEndSiteEnabled=function(name,enabled){
 
 	var lastMesh=this.boneAttachControler.containerList[index];
 
-	lastMesh.endsite.material.visible=enabled;
+	lastMesh.userData.endsite.material.visible=enabled;
+	lastMesh.userData.endsite.userData.joint.material.visible=enabled;
 }
 
 IkControler.prototype.resetAllIkTargets=function(exclude){
@@ -114,7 +115,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	function getEndSitePos(lastMesh){
 		var position=lastMesh.position;
 		if(scope.enableEndSite(lastMesh)){
-			position=lastMesh.endsite.getWorldPosition(scope._pos);
+			position=lastMesh.userData.endsite.getWorldPosition(scope._pos);
 		}
 		return position;
 	}

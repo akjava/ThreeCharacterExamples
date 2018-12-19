@@ -45,9 +45,17 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	var endsite=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:0x008800,depthTest:false,transparent:true,opacity:.5}));
 	endsite.renderOrder = 2;
 	list[indices[indices.length-1]].add(endsite);
-	list[indices[indices.length-1]].endsite=endsite;
+	list[indices[indices.length-1]].userData.endsite=endsite;
 	endsite.position.copy(diff);
 	endsite.material.visible=false;
+	
+	var joint=AppUtils.lineTo(list[indices[indices.length-1]],endsite);
+	joint.material.depthTest=false;
+	joint.material.transparent=true;
+	joint.material.opacity=0.25;
+	joint.renderOrder = 2;
+	joint.material.visible=false;
+	endsite.userData.joint=joint;
 	
 	
 	var ikBox=new THREE.Mesh(new THREE.BoxGeometry(5,5,5),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));

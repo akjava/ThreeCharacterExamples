@@ -31,7 +31,7 @@ Example=function(application){
 	
 	
 	AppUtils.loadMesh(url,function(mesh){
-		
+		try{
 		console.log("loadGltfMesh:",url);
 		var container=new THREE.Group();
 		this.container=container;//try to not modify Application.js
@@ -80,9 +80,13 @@ Example=function(application){
 		scope.boneAttachControler.setVisible(false);
 		
 		this.container.add(scope.boneAttachControler.object3d);
-		console.log("boneAttachControler initialized");
-		//window.onerror = function(e) { console.error(e) }
+		ap.signals.rendered.add(function(){
+			if(scope.boneAttachControler){
+				scope.boneAttachControler.update();	
+			}
+		});
 		
+		//init ikControler
 		ap.ikControler.boneAttachControler=scope.boneAttachControler;
 		ap.signals.boneSelectionChanged.add(function(index){
 			ap.ikControler.boneSelectedIndex=index;
@@ -109,131 +113,58 @@ Example=function(application){
 		var mbl3dik=new Mbl3dIk(ap);
 		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
-		var rotationControls={};
-		var index=0;
+		//call finish ik
 		
-
-		var e=new THREE.Euler();
-		boneList.forEach(function(bone){
-			if(!Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name)){
-				var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
-				sphere.renderOrder=100;
-				rotationControls[bone.name]=sphere;
-				scope.boneAttachControler.containerList[index].add(sphere);
-				sphere.boneIndex=index;
-				sphere.quaternion.copy(boneList[index].quaternion);
-				var cbone=index;
-				
-				sphere.quaternion.onChange(function(){
-					var euler=e.setFromQuaternion(sphere.quaternion);
-
-					var r=lastEuler;
-					var max=Math.abs(euler.x);
-					if(euler.y>max){
-						max=Math.abs(euler.y);
-					}
-					if(euler.z>max){
-						max=Math.abs(euler.z);
-					}
-					
-					//TODO limit
-					euler.set(euler.x+r.x,euler.y+r.y,euler.z+r.z);
-					var rotation=ap.skinnedMesh.skeleton.bones[cbone].rotation;
-					rotation.copy(euler);
-					ap.signals.boneRotationChanged.dispatch(cbone);
-					
-				});
-				ap.objects.push(sphere);
-			}
-			index++;
+		//rotation control
+		var rotatationControler=new RotatationControler(ap,scope.boneAttachControler);
+		rotatationControler.initialize(function(bone){
+			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name);
 		});
 		
-
 		
-		this.boneIndex=0;
-		
-		//indicate selected rotation
-		function refreshSphere(){
-			var bone=scope.boneAttachControler.boneList[scope.boneIndex];
-			lastEuler.copy(bone.rotation);
-			var rotC=rotationControls[bone.name];
-			rotC.rotation.set(0,0,0);
-		}
-		
-		var transformSelectionType=null;
+		//transformSelectionChanged
+		scope.target=null;
 		ap.signals.transformSelectionChanged.add(function(target){
+			scope.target=target;
 			if(target==null){
 				ap.transformControls.detach();
-				
 				//ik null selection
 				ap.ikControler.ikIndices=null;
 				ap.ikControler.ikTarget=null;
-				
-				scope.wireframe.material.visible=false;
-				transformSelectionType=null;
 			}else{
 				if(target.ikName){
-					transformSelectionType="ik";
 					//ik selected
 					ap.transformControls.setMode( "translate" );
 					ap.ikControler.ikTarget=target;
 					ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
 					ap.transformControls.attach(target);
-					
-					
-					scope.wireframe.material.visible=false;//for rotate
-				}else{
-					transformSelectionType="rotation";
-					//not ik selected
-					ap.ikControler.ikIndices=null;
-					ap.ikControler.ikTarget=null;
-					
-					ap.transformControls.setMode( "rotate" );
-					ap.transformControls.attach(target);
-					var boneIndex=target.boneIndex;
-					scope.boneIndex=boneIndex;
-					ap.signals.boneSelectionChanged.dispatch(boneIndex);
-					
-					refreshSphere();
-					
-					scope.wireframe.position.copy(scope.boneAttachControler.containerList[boneIndex].position);
-					scope.wireframe.material.visible=true;
 				}
 				
 				
 			}
+			
+			rotatationControler.onTransformSelectionChanged(target);
 		});
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
-			if(transformSelectionType=="rotation"){
-				scope.wireframe.material.color.set(0xaaaaaa);
-				refreshSphere();
-			}
-			
+			rotatationControler.onTransformFinished(scope.target);
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
-			if(transformSelectionType=="rotation"){
-			scope.wireframe.material.color.set(0xffffff);
-			refreshSphere();
-			}
+			rotatationControler.onTransformStarted(scope.target);
 		});
 		
-
-	});
-	
-	
-
-	
-	
-	ap.signals.rendered.add(function(){
-		
-		if(scope.boneAttachControler){
-			scope.boneAttachControler.update();
-			
+		ap.signals.ikInitialized.dispatch();
+		}catch(e){
+			console.error(e);
 		}
-		
 	});
+	
+	
+
+	
+	
+
 	
 	
 

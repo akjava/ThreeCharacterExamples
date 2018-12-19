@@ -19,6 +19,7 @@ var Application = function () {
 	var Signal = signals.Signal;
 
 	this.signals = {
+			ikInitialized:new Signal(),
 			solveIkCalled:new Signal(),
 			boneSelectionChanged:new Signal(),//bone selection changed by selector or click
 			boneRotationChanged:new Signal(),//called from tf-control for notice rotation editor

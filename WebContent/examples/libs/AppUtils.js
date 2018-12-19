@@ -180,6 +180,16 @@ var AppUtils={
 		//need renderer initialize option {preserveDrawingBuffer: true}
 		toPngDataUrl:function (renderer){
 		return renderer.domElement.toDataURL("image/png");
+		},
+		lineTo:function(mesh1,mesh2){
+			var geo = new THREE.Geometry();
+			geo.vertices.push( new THREE.Vector3(  ));
+			geo.vertices.push( mesh2.position.clone());
+			var material=new THREE.LineBasicMaterial({color:0xcccccc});
+			
+			var joint = new THREE.Line( geo,material);
+			mesh1.add(joint);
+			return joint;
 		}
 		
 
