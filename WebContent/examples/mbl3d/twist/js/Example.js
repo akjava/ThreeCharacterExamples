@@ -83,6 +83,7 @@ Example=function(application){
 				//console.log("false",bone.name);
 				//THREE.SphereGeometry(2)
 				var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
+				sphere.renderOrder=100;
 				scope.boneAttachControler.containerList[index].add(sphere);
 				sphere.boneIndex=index;
 				sphere.quaternion.copy(boneList[index].quaternion);

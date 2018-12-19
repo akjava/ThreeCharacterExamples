@@ -19,5 +19,8 @@ var Sidebar = function ( application ) {
 	var backgroundImagePanel=new BackgroundImagePanel(ap);
 	container.add(backgroundImagePanel);
 	
+	var transparent=new Sidebar.Transparent(ap);
+	container.add(transparent);
+	
 	return container;
 }

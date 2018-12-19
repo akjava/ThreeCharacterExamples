@@ -10,7 +10,7 @@ Example=function(application){
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";
 	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
 	
-	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,transparent:false,opacity:1,depthTest: true});
+	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,transparent:true,opacity:1,depthTest: true});
 	
 	
 	this.container=null;//add mesh here
@@ -23,7 +23,7 @@ Example=function(application){
 	
 	var geo = new THREE.EdgesGeometry( new THREE.BoxGeometry(5,5,5) ); // or WireframeGeometry( geometry )
 
-	var mat = new THREE.LineBasicMaterial( { color: 0xaaaaaa, linewidth: 2,transparent:true,opacity:1.0,depthTest:false,visible:false } );
+	var mat = new THREE.LineBasicMaterial( { color: 0xaaaaaa, linewidth: 2,transparent:true,opacity:1.0,depthTest:true,visible:false } );
 
 	this.wireframe = new THREE.LineSegments( geo, mat );
 
@@ -31,6 +31,7 @@ Example=function(application){
 	
 	
 	AppUtils.loadMesh(url,function(mesh){
+		
 		console.log("loadGltfMesh:",url);
 		var container=new THREE.Group();
 		this.container=container;//try to not modify Application.js
@@ -116,6 +117,7 @@ Example=function(application){
 		boneList.forEach(function(bone){
 			if(!Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name)){
 				var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
+				sphere.renderOrder=100;
 				rotationControls[bone.name]=sphere;
 				scope.boneAttachControler.containerList[index].add(sphere);
 				sphere.boneIndex=index;

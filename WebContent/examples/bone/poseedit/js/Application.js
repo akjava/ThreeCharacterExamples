@@ -5,7 +5,7 @@ var Application = function () {
 	this.scene.name = 'Scene';
 	this.scene.background = new THREE.Color( 0xaaaaaa );
 	
-	this.camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
+	this.camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 2000 );
 	this.camera.name = 'Camera';
 	this.camera.position.set( 0, 5, 10 );
 	this.camera.lookAt( new THREE.Vector3() );

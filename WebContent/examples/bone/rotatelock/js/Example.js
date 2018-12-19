@@ -88,6 +88,7 @@ Example=function(application){
 		boneList.forEach(function(bone){
 			if(!Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name)){
 				var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
+				sphere.renderOrder=100;
 				rotationControls[bone.name]=sphere;
 				scope.boneAttachControler.containerList[index].add(sphere);
 				sphere.boneIndex=index;

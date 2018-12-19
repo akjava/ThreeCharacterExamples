@@ -24,6 +24,9 @@ var Viewport = function ( application ) {
 	var light = new THREE.DirectionalLight(0xcccccc);
 	light.position.set(100, 100, 100);
 	scene.add(light);
+	var light = new THREE.DirectionalLight(0xcccccc);
+	light.position.set(-100, -100, -100);
+	scene.add(light);
 
 	scene.add(new THREE.AmbientLight(0x666666));
 	
