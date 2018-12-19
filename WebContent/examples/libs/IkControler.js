@@ -1,4 +1,5 @@
 var IkControler=function(boneAttachControler,ap){
+console.log(boneAttachControler,ap);
 this.iks={};
 this.ikTarget=null;
 this.ikIndices=null;
@@ -29,7 +30,8 @@ this.logging=false;
 this.ikTargets={};
 
 this.followOtherIkTargets=true;
-
+this.ap=ap;
+console.log(this.ap);
 
 this._pos=new THREE.Vector3();
 };
@@ -101,6 +103,23 @@ IkControler.prototype.resetAllIkTargets=function(exclude){
 		if(key!=exclude)
 			scope.resetIkTargetPosition(key);
 	});
+}
+
+IkControler.prototype.onTransformSelectionChanged=function(target){
+	var ap=this.ap;
+	console.log(ap);
+	var scope=this;
+	if(target==null){
+		this.ikIndices=null;
+		this.ikTarget=null;
+	}else if(target.userData.transformSelectionType=="BoneIk"){
+		ap.transformControls.setMode( "translate" );
+		this.ikTarget=target;
+		this.ikIndices=ap.ikControler.iks[target.ikName];
+		ap.transformControls.attach(target);
+	}else{//other
+		
+	}
 }
 
 

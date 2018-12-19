@@ -1,6 +1,6 @@
 var Application = function () {
 	this.objects=[];
-	
+
 	this.scene = new THREE.Scene();
 	this.scene.name = 'Scene';
 	this.scene.background = new THREE.Color( 0xaaaaaa );

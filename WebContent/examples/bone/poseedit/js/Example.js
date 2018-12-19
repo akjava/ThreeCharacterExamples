@@ -135,21 +135,9 @@ Example=function(application){
 			scope.target=target;
 			if(target==null){
 				ap.transformControls.detach();
-				//ik null selection
-				ap.ikControler.ikIndices=null;
-				ap.ikControler.ikTarget=null;
-			}else{
-				if(target.ikName){
-					//ik selected
-					ap.transformControls.setMode( "translate" );
-					ap.ikControler.ikTarget=target;
-					ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
-					ap.transformControls.attach(target);
-				}
-				
-				
 			}
 			
+			ap.ikControler.onTransformSelectionChanged(target);
 			rotatationControler.onTransformSelectionChanged(target);
 		});
 		

@@ -63,6 +63,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	var index=indices.length-1;
 	ikBox.position.copy(ap.ikControler.boneAttachControler.containerList[indices[indices.length-1]].position);
 	ikBox.ikName=ikName;
+	ikBox.userData.transformSelectionType="BoneIk";
 	ap.objects.push(ikBox);
 	ikTargets[ikName]=ikBox;
 	ap.scene.add(ikBox);
