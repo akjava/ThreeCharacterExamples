@@ -55,7 +55,6 @@ Example=function(application){
 		}
 		boneList=BoneUtils.getBoneList(mesh);
 		
-		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		
 		
 		
@@ -140,6 +139,7 @@ Example=function(application){
 		rotatationControler.initialize(function(bone){
 			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name) && !Mbl3dUtils.isRootBoneName(bone.name);
 		});
+		ap.rotatationControler=rotatationControler;
 		
 		//translate control
 		var root=scope.boneAttachControler.containerList[0];
@@ -231,6 +231,8 @@ Example=function(application){
 			rotatationControler.onTransformStarted(scope.target);
 		});
 		
+
+		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		ap.signals.ikInitialized.dispatch();
 		}catch(e){
 			console.error(e);

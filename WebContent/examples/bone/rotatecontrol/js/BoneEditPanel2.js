@@ -64,7 +64,7 @@ var BoneEditPanel2 = function ( application ) {
 		
 	});
 	
-	ap.signals.boneRotationChanged.add(function(index){
+	function updateRotation(index){
 		var boneList=BoneUtils.getBoneList(scope.mesh);
 		var name=boneList[index].name;
 		
@@ -73,6 +73,16 @@ var BoneEditPanel2 = function ( application ) {
 		
 		if(index==parseInt(boneSelect.getValue())){
 			onBoneSelectionChanged();
+		}
+	}
+	ap.signals.boneRotationChanged.add(function(index){
+		var boneList=BoneUtils.getBoneList(scope.mesh);
+		if(index==undefined){//update all
+			for(var i=0;i<boneList.length;i++){
+				updateRotation(i);
+			}
+		}else{
+			updateRotation(index);
 		}
 		
 	});

@@ -101,6 +101,40 @@ BoneAttachControler.prototype.setVisible=function(visible){
 	});
 	
 }
+
+BoneAttachControler.prototype.computeBoundingBox=function(){
+	if(this.containerList.length<1){
+		console.log("computeBoundingBox need at least 1 bone");
+		return;
+	}
+	var pos=this.containerList[0].position;
+	var minX=pos.x;
+	var minY=pos.y;
+	var minZ=pos.z;
+	var maxX=pos.x;
+	var maxY=pos.y;
+	var maxZ=pos.z;
+	for(var i=1;i<this.containerList.length;i++){
+		pos=this.containerList[i].position;
+		if(pos.x<minX)minX=pos.x;
+		if(pos.y<minY)minY=pos.y;
+		if(pos.z<minZ)minZ=pos.z;
+		if(pos.x>maxX)maxX=pos.x;
+		if(pos.y>maxY)maxY=pos.y;
+		if(pos.z>maxZ)maxZ=pos.z;
+	}
+	var minBox = new THREE.Vector3 (minX, minY, minZ);
+    var maxBox = new THREE.Vector3 (maxX, maxY, maxZ);
+    this.boundingBox = new THREE.Box3 (minBox, maxBox);
+
+}
+
+BoneAttachControler.prototype.setVisible=function(visible){
+	this.containerList.forEach(function(container){
+		container.material.visible=visible;
+	});
+	
+}
 BoneAttachControler.prototype.setAllScale=function(scale){
 	this.containerList.forEach(function(container){
 		container.scale.setScalar(scale);

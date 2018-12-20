@@ -8,6 +8,7 @@ Sidebar.IkReset=function(ap){
 		if(ap.signals.boneTranslateChanged){
 			ap.signals.boneTranslateChanged.dispatch();
 		}
+		ap.signals.boneRotationChanged.dispatch();
 	});
 	resetPanel.add(buttonRow);
 	var resetSelection=new UI.Button("Reset Selection");
