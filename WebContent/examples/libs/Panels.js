@@ -295,7 +295,7 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			if(scope.animationOppositeDirection){
 				endRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,defaultRotation)]
 				var clip2=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
-				var merged=AnimeUtils.mergeTracks([clip.tracks[0],clip2.tracks[0]]);
+				var merged=AnimeUtils.joinTracks([clip.tracks[0],clip2.tracks[0]]);
 				clip=new THREE.AnimationClip("makeRotateBoneAnimation", -1, [merged]);
 			}
 			

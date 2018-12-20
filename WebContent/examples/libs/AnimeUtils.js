@@ -301,8 +301,9 @@ var AnimeUtils={
 		},
 		/*
 		 * cant merge difference name track
+		 * for joint single tracks
 		 */
-		mergeTracks:function(tracks){
+		joinTracks:function(tracks){
 	
 			var times=[];
 			var values=[];
@@ -324,6 +325,21 @@ var AnimeUtils={
 			var jsonObject={name:"dummy",duration:-1,tracks:[json]};
 			return THREE.AnimationClip.parse(jsonObject).tracks[0];
 		},
+		concatClips:function(clips,newName){
+			var name=newName==undefined?clip1.name:newName;
+			var tracks=[];
+			
+			for(var i=0;i<clips.length;i++){
+				var clip=clips[i];
+				clip.tracks.forEach(function(track){
+					var json=THREE.KeyframeTrack.toJSON(track);
+					tracks.push(json);
+				});
+			}
+			
+			var jsonObject={name:name,duration:-1,tracks:tracks};
+			return THREE.AnimationClip.parse(jsonObject);
+		},
 		/* object={key} is index */
 		makeRotationPose:function(object){
 			var tracks=[];
@@ -340,6 +356,22 @@ var AnimeUtils={
 			var clip=new THREE.AnimationClip("makeRotationPose", -1, tracks);
 			return clip
 		},
+		makeTranslatePose:function(object){
+			var tracks=[];
+			Object.keys(object).forEach(function(key){
+				var boneIndex=key;
+				var v=object[key];
+				if((v==undefined) || !v.isVector3){
+					console.error("makeTranslatePose:v is not vector3",v);
+					return null;
+				}
+				var track=new THREE.VectorKeyframeTrack(".bones["+boneIndex+"].position", [0], v.toArray());
+				tracks.push(track);
+			});
+			var clip=new THREE.AnimationClip("makeTranslatePose", -1, tracks);
+			return clip
+		},
+		//rotation only so far
 		makePoseClip:function(skinnedMesh){
 			var boneNames=[];
 			var objects={};

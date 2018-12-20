@@ -2,8 +2,14 @@ Sidebar.Export=function(ap){
 	var scope=this;
 	function makeClip(){
 
-		var clip=AnimeUtils.makePoseClip(ap.skinnedMesh);
-		return clip;
+		var rotate=AnimeUtils.makePoseClip(ap.skinnedMesh);
+		var pos=ap.skinnedMesh.skeleton.bones[0].position;
+		var obj={0:pos};
+		var translate=AnimeUtils.makeTranslatePose(obj);
+		var newClip=AnimeUtils.concatClips([rotate,translate],"poseClip");
+		//console.log(newClip);
+		
+		return newClip;
 	}
 	this.fileName="";
 	var exportPanel=new UI.TitlePanel("Export");

@@ -21,7 +21,7 @@ Sidebar.Ground=function(ap){
 	scene.add( grid );
 	
 	
-	var groundMargin=new UI.NumberRow("Margin",this.margin,function(v){
+	var groundMargin=new UI.NumberRow("Margin",0,10,1,this.margin,function(v){
 		scope.margin=v;
 	});
 	titlePanel.add(groundMargin);
@@ -59,6 +59,18 @@ Sidebar.Ground=function(ap){
 		groundMargin.setValue(v);
 		scope.margin=v;
 	});
+	
+	var buttonRow=new UI.ButtonRow("Land to Ground",function(){
+		ap.ikControler.boneAttachControler.computeBoundingBox();
+		var box=ap.ikControler.boneAttachControler.boundingBox;
+		var min=box.min.y;
+		var change=min-scope.margin;
+		var pos=ap.skinnedMesh.skeleton.bones[0].position;
+		pos.y=pos.y-change;
+		ap.signals.boneTranslateChanged.dispatch();
+		
+	});
+	titlePanel.add(buttonRow);
 	
 	return titlePanel;
 }
