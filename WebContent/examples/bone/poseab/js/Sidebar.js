@@ -7,7 +7,7 @@ var Sidebar = function ( application ) {
 	//TODO support A-B-A A-B check
 	this.poseA=null;
 	this.poseB=null;
-	this.interpolate=THREE.InterpolateLinear;
+	//this.interpolate=THREE.InterpolateLinear;quaternion not support this
 	this.initMesh=null;
 	this.time=0.5;
 	this.abaAnimation=true;
@@ -27,6 +27,7 @@ var Sidebar = function ( application ) {
 			AnimeUtils.clipToPose(scope.poseA,dummy);
 		}
 		var startRotates=AnimeUtils.boneListToQuaternions(boneList);
+		var startPositions=[boneList[0].position];
 		
 		
 		dummy=AnimeUtils.cloneSkeletonStructure(scope.initMesh);
@@ -35,11 +36,16 @@ var Sidebar = function ( application ) {
 			AnimeUtils.clipToPose(scope.poseB,dummy);
 		}
 		var endRotates=AnimeUtils.boneListToQuaternions(boneList);
+		var endPositions=[boneList[0].position];
 		
-		var clip=AnimeUtils.makeRotateBoneAnimation(indices,startRotates,endRotates,scope.time,scope.time,scope.abaAnimation);
-		clip.tracks.forEach(function(track){
+		var clip1=AnimeUtils.makeRotateBoneAnimation(indices,startRotates,endRotates,scope.time,scope.time,scope.abaAnimation);
+		var clip2=AnimeUtils.makeTranslateBoneAnimation([0],startPositions,endPositions,scope.time,scope.time,scope.abaAnimation);
+		
+		var clip=AnimeUtils.concatClips([clip1,clip2],"PoseClip");
+		/*clip.tracks.forEach(function(track){
 			track.setInterpolation(scope.interpolate);
-		});
+		});*/
+		
 		ap.clip=clip;
 		ap.clipPlayerRow.setDuration(clip.duration);
 	}
