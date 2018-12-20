@@ -5,33 +5,120 @@ var Sidebar = function ( application ) {
 	container.add(new UI.AppName("Pose Edit"));
 	
     var ikPanel=new Sidebar.IkLBasic(application);
-    container.add(ikPanel);
     ikPanel.add(new Sidebar.IkSolve(ap));
     
 	var exportPanel=new Sidebar.Export(ap);
-	container.add(exportPanel);
-	
 	var importPanel=new Sidebar.Import(ap);
-	container.add(importPanel);
+	var backgroundImagePanel=new BackgroundImagePanel(ap);
 	
-	container.add(new Sidebar.RootTranslate(ap));
 	
+	var rootTranslate=new Sidebar.RootTranslate(ap);
 	var editPanel=new BoneEditPanel2(ap);
 	editPanel.buttons.setDisplay("none");
-	container.add(editPanel);
-	
-	container.add(new Sidebar.IkReset(ap));
-	
-	container.add(new Sidebar.IkBoneList(ap));
-	
-	var backgroundImagePanel=new BackgroundImagePanel(ap);
-	container.add(backgroundImagePanel);
+	var ikReset=new Sidebar.IkReset(ap);
+	var IkBoneList=new Sidebar.IkBoneList(ap);
 	
 	var transparent=new Sidebar.Transparent(ap);
-	container.add(transparent);
-	
 	var ground=new Sidebar.Ground(ap);
-	container.add(ground);
+	
+	var tabs = new UI.Div();
+	tabs.setId( 'tabs' );
+	
+	container.add( tabs );
+
+	function onClick( event ) {
+
+		select( event.target.textContent );
+
+	}
+
+var poseTab = new UI.Text( 'Pose' ).onClick( onClick );
+tabs.add( poseTab);
+var pose= new UI.Span().add(
+		rootTranslate,editPanel,ikReset,IkBoneList,ground
+	);
+container.add( pose);
+
+var settingsTab = new UI.Text( 'Settings' ).onClick( onClick );
+tabs.add( settingsTab);
+var settings= new UI.Span().add(
+		transparent
+	);
+container.add( settings);
+
+var ioTab = new UI.Text( 'IO' ).onClick( onClick );
+tabs.add( ioTab);
+var io= new UI.Span().add(
+		exportPanel,importPanel,backgroundImagePanel
+	);
+container.add( io);
+
+var ikTab = new UI.Text( 'Ik' ).onClick( onClick );
+tabs.add( ikTab);
+var ik= new UI.Span().add(
+		ikPanel
+	);
+container.add( ik);
+
+function select( section ) {
+	//move here
+	poseTab.setClass( '' );
+	pose.setDisplay( 'none' );
+	settingsTab.setClass( '' );
+	settings.setDisplay( 'none' );
+	ioTab.setClass( '' );
+	io.setDisplay( 'none' );
+	ikTab.setClass( '' );
+	ik.setDisplay( 'none' );
+	switch ( section ) {
+
+
+
+	case 'Pose':
+					poseTab.setClass( 'selected' );
+					pose.setDisplay( '' );
+					break;
+	
+
+	case 'Settings':
+					settingsTab.setClass( 'selected' );
+					settings.setDisplay( '' );
+					break;
+	
+
+	case 'IO':
+					ioTab.setClass( 'selected' );
+					io.setDisplay( '' );
+					break;
+	
+
+	case 'Ik':
+					ikTab.setClass( 'selected' );
+					ik.setDisplay( '' );
+					break;
+	}
+	//
+	}
+select('Pose');
+	
+	
+
+    
+
+
+
+	
+	
+
+	
+
+	
+	
+
+	
+
+	
+
 	
 	
 	return container;
