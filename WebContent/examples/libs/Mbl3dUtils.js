@@ -111,5 +111,7 @@ var Mbl3dUtils={
 			}
 			var name= name.replace("_R","_twist_R");
 			return name= name.replace("_L","_twist_L");
+		},isRootBoneName:function(name){
+			return name.endsWith("root");
 		}
 }

@@ -109,6 +109,7 @@ Example=function(application){
 		ap.signals.transformChanged.add(function(){
 			//check conflict
 			ap.ikControler.solveIk();
+			onTransformChanged();
 		});
 		var mbl3dik=new Mbl3dIk(ap);
 		ap.ikControler.ikTargets=mbl3dik.ikTargets;
@@ -125,9 +126,40 @@ Example=function(application){
 		//rotation control
 		var rotatationControler=new RotatationControler(ap,scope.boneAttachControler);
 		rotatationControler.initialize(function(bone){
-			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name);
+			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name) && !Mbl3dUtils.isRootBoneName(bone.name);
 		});
 		
+		//translate control
+		var root=scope.boneAttachControler.containerList[0];
+		var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x000088,depthTest:false,transparent:true,opacity:.5}));
+		sphere.renderOrder=1;
+		sphere.position.copy(root.position);
+		ap.scene.add(sphere);
+		sphere.userData.boneIndex=0;
+		sphere.userData.transformSelectionType="BoneTranslate";
+		ap.objects.push(sphere);
+		
+		var pos=new THREE.Vector3();
+		function onTransformChanged(){
+			var target=scope.target;
+			
+			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
+				var bonePos=scope.boneAttachControler.boneList[target.userData.boneIndex].position;
+				var diff=target.position.clone().sub(root.position);
+				
+				bonePos.add(diff);
+				scope.boneAttachControler.update();
+			}
+		}
+		
+		function onTransformSelectionChanged(target){
+			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
+				ap.transformControls.setMode( "translate" );
+				ap.transformControls.attach(target);
+				target.quaternion.copy(target.parent.quaternion);
+				//target.position.set(0,0,0);
+			}
+		}
 		
 		//transformSelectionChanged
 		scope.target=null;
@@ -139,6 +171,7 @@ Example=function(application){
 			
 			ap.ikControler.onTransformSelectionChanged(target);
 			rotatationControler.onTransformSelectionChanged(target);
+			onTransformSelectionChanged(target);
 		});
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
