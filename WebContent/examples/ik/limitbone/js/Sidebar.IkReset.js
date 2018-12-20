@@ -9,7 +9,7 @@ Sidebar.IkReset=function(ap){
 	resetPanel.add(buttonRow);
 	var resetSelection=new UI.Button("Reset Selection");
 	resetSelection.onClick(function(){
-		BoneUtils.resetBone(ap.skinnedMesh,ap.boneSelectedIndex);
+		BoneUtils.resetBone(ap.skinnedMesh,ap.ikControler.boneSelectedIndex);
 	});
 	buttonRow.add(resetSelection);
 	
@@ -20,7 +20,7 @@ Sidebar.IkReset=function(ap){
 				BoneUtils.resetBone(ap.skinnedMesh,index);
 			});
 		}
-		
+		ap.signals.poseChanged.dispatch();
 	});
 	buttonRow.add(resetIks);
 	return resetPanel;
