@@ -15,6 +15,10 @@ var Sidebar = function ( application ) {
 	var rootTranslate=new Sidebar.RootTranslate(ap);
 	var editPanel=new BoneEditPanel2(ap);
 	editPanel.buttons.setDisplay("none");
+	
+	var lRButtonRow=Sidebar.LRButtonRow(ap);
+	editPanel.add(lRButtonRow);
+	
 	var ikReset=new Sidebar.IkReset(ap);
 	var IkBoneList=new Sidebar.IkBoneList(ap);
 	
