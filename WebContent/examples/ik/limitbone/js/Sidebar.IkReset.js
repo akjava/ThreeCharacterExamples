@@ -9,7 +9,9 @@ Sidebar.IkReset=function(ap){
 	resetPanel.add(buttonRow);
 	var resetSelection=new UI.Button("Reset Selection");
 	resetSelection.onClick(function(){
-		BoneUtils.resetBone(ap.skinnedMesh,ap.ikControler.boneSelectedIndex);
+		var index=ap.ikControler.boneSelectedIndex;
+		BoneUtils.resetBone(ap.skinnedMesh,index);
+		ap.signals.boneRotationChanged.dispatch(index);
 	});
 	buttonRow.add(resetSelection);
 	

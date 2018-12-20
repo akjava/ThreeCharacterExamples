@@ -77,38 +77,7 @@ var Sidebar = function ( application ) {
 	
 	container.add(new Sidebar.IkReset(ap));
 	
-	ap.signals.transformSelectionChanged.add(function(target){
-	
-		boneListButtons.forEach(function(button){
-			boneListRow.remove(button);
-		});
-		boneListButtons=[];
-		
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-		if(target!=null){
-			if(ap.ikControler.ikTarget==null){
-				console.log("invalidly call sidebar first");
-				return;
-			}
-			
-			ap.ikControler.ikIndices.forEach(function(index){
-				
-				var name=boneList[index].name;
-				var bt=new UI.Button(name);
-				bt.onClick(function(){
-					ap.signals.boneSelectionChanged.dispatch(index);
-				});
-				boneListRow.add(bt);
-				boneListButtons.push(bt);
-			});
-		}
-	
-	},undefined,0);
-	var boneListButtons=[];
-	var ikBoneList=new UI.TitlePanel("Ik Bone List");
-	container.add(ikBoneList);
-	var boneListRow=new UI.Row();
-	ikBoneList.add(boneListRow);
+	container.add(new Sidebar.IkBoneList(ap));
 	
 	var ikLimitList=new Sidebar.IkLimitList(application);
 	container.add(ikLimitList);

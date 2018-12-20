@@ -20,6 +20,8 @@ var Sidebar = function ( application ) {
 	
 	container.add(new Sidebar.IkReset(ap));
 	
+	container.add(new Sidebar.IkBoneList(ap));
+	
 	var backgroundImagePanel=new BackgroundImagePanel(ap);
 	container.add(backgroundImagePanel);
 	

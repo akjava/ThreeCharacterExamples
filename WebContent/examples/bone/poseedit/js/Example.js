@@ -94,6 +94,9 @@ Example=function(application){
 		
 		ap.signals.poseChanged.add(function(){
 			ap.ikControler.resetAllIkTargets();
+			
+			//translate
+			sphere.position.copy(root.position);
 		});
 		
 		if(!ap.signals.solveIkCalled){
@@ -106,9 +109,13 @@ Example=function(application){
 		 ikControler call when onTransformFinished for editor
 		 rotationControler call when edited
 		 */
-		ap.signals.boneRotationChanged.add(function(){
+		ap.signals.boneRotationChanged.add(function(index){
 			var selection=ap.ikControler.getSelectedIkName();
 			ap.ikControler.resetAllIkTargets(selection);
+			
+			if(index==0){
+				resetPosition();
+			}
 		});
 		
 		ap.signals.transformChanged.add(function(){
@@ -157,12 +164,23 @@ Example=function(application){
 			}
 		}
 		
+		function resetPosition(){
+			scope.boneAttachControler.update();
+			sphere.position.copy(root.position);
+		}
+		
 		function onTransformSelectionChanged(target){
 			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
 				ap.transformControls.setMode( "translate" );
 				ap.transformControls.attach(target);
-				target.quaternion.copy(target.parent.quaternion);
+				//target.quaternion.copy(target.parent.quaternion);
 				//target.position.set(0,0,0);
+			}
+		}
+		
+		function onTransformFinished(target){
+			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
+				ap.ikControler.resetAllIkTargets();
 			}
 		}
 		
@@ -177,11 +195,12 @@ Example=function(application){
 			ap.ikControler.onTransformSelectionChanged(target);
 			rotatationControler.onTransformSelectionChanged(target);
 			onTransformSelectionChanged(target);
-		});
+		},undefined,1);
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
 			rotatationControler.onTransformFinished(scope.target);
 			ap.ikControler.onTransformFinished(scope.target);
+			onTransformFinished(scope.target);
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
