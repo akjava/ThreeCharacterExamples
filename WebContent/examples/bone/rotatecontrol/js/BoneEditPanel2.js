@@ -189,8 +189,11 @@ container.add(new UI.SubtitleRow("Rotation"));
 		
 		onBoneSelectionChanged();
 	});
+	p1.button1=bt;
 	p1.add(bt);
 	container.add(p1);
+	container.buttons=p1;
+	
 	
 	container.applyAllRotation=function(){
 		var boneList=BoneUtils.getBoneList(scope.mesh);

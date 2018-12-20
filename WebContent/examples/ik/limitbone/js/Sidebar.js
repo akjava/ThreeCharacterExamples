@@ -11,28 +11,7 @@ var Sidebar = function ( application ) {
     var ikPanel=new Sidebar.IkLBasic(application);
     container.add(ikPanel);
 	
-	var solveIkRow=new UI.ButtonRow("Solve Selected Ik",function(){
-		ap.signals.solveIkCalled.dispatch();
-	});
-	ikPanel.add(solveIkRow);
-
-	var resetAndSolve=new UI.Button("Reset & Solve x5");
-	resetAndSolve.onClick(function(){
-		if(ap.ikControler.ikTarget!=null){
-			ap.ikControler.ikIndices.forEach(function(index){
-				BoneUtils.resetBone(ap.skinnedMesh,index);
-			});
-		}
-		ap.boneAttachControler.update();
-		
-		ap.signals.solveIkCalled.dispatch();
-		ap.signals.solveIkCalled.dispatch();
-		ap.signals.solveIkCalled.dispatch();
-		ap.signals.solveIkCalled.dispatch();
-		ap.signals.solveIkCalled.dispatch();
-	});
-	
-	solveIkRow.add(resetAndSolve);
+    ikPanel.add(new Sidebar.IkSolve(ap));
 	
 	
 	

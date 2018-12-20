@@ -6,6 +6,7 @@ var Sidebar = function ( application ) {
 	
     var ikPanel=new Sidebar.IkLBasic(application);
     container.add(ikPanel);
+    ikPanel.add(new Sidebar.IkSolve(ap));
     
 	var exportPanel=new Sidebar.Export(ap);
 	container.add(exportPanel);
@@ -14,7 +15,10 @@ var Sidebar = function ( application ) {
 	container.add(importPanel);
 	
 	var editPanel=new BoneEditPanel2(ap);
+	editPanel.buttons.setDisplay("none");
 	container.add(editPanel);
+	
+	container.add(new Sidebar.IkReset(ap));
 	
 	var backgroundImagePanel=new BackgroundImagePanel(ap);
 	container.add(backgroundImagePanel);
