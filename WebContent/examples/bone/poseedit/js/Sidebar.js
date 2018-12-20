@@ -33,5 +33,22 @@ var Sidebar = function ( application ) {
 	var ground=new Sidebar.Ground(ap);
 	container.add(ground);
 	
+	var buttonRow=new UI.ButtonRow("test",function(){
+		ap.skinnedMesh.skeleton.bones[0].rotation.y=THREE.Math.degToRad(90);
+		ap.skinnedMesh.skeleton.bones[1].rotation.y=THREE.Math.degToRad(90);
+		ap.signals.boneRotationChanged.dispatch(0);
+		ap.skinnedMesh.skeleton.bones[0].updateMatrixWorld(true);
+		
+		var list=ap.ikControler.boneAttachControler.containerList;
+		var euler=new THREE.Euler();
+		var q=new THREE.Quaternion();
+		list.forEach(function(container){
+			var bone=container.userData.bone;
+			euler.setFromQuaternion(bone.getWorldQuaternion(q));
+			//AppUtils.printDeg(euler,bone.name);
+		});
+	});
+	container.add(buttonRow);
+	
 	return container;
 }

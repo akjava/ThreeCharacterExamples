@@ -28,6 +28,7 @@ var BoneAttachControler=function(skinnedMesh,param){
 		scope.parentIndexs[name]=list;
 		var container=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshPhongMaterial( material) );
 		scope.containerList.push(container);
+		container.userData.bone=list[0];
 		scope.object3d.add(container);
 		//container.matrixAutoUpdate=false;
 	});
