@@ -1,5 +1,6 @@
 Sidebar.LRButtonRow=function(ap){
-	
+	var scope=this;
+	this.boneSelectedIndex=0;
 	function getSelectedBone(index){
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		
@@ -8,6 +9,7 @@ Sidebar.LRButtonRow=function(ap){
 	function getOppositedBone(index){
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		var selectedBone=getSelectedBone(index);
+		console.log(index,selectedBone);
 		var oppositeName=BoneUtils.getOpositeLRName(selectedBone.name);
 		if(oppositeName==null){
 			return;
@@ -25,7 +27,6 @@ Sidebar.LRButtonRow=function(ap){
 		}
 		var index=boneList.indexOf(bone);
 		if(index!=-1){
-			console.log(index);
 			ap.signals.boneSelectionChanged.dispatch(index);
 		}
 		
@@ -34,17 +35,33 @@ Sidebar.LRButtonRow=function(ap){
 	
 	var copyFrom=new UI.Button("Copy from").onClick(function(){
 		
+		var index=scope.boneSelectedIndex;
+		var bone=getSelectedBone(index);
+		var opposite=getOppositedBone(index);
+		var rot=opposite.rotation;
+		bone.rotation.copy(BoneUtils.flipHorizontalRotation(opposite.rotation));
+		ap.signals.boneRotationChanged.dispatch(index);
 	});
 	buttonRow.add(copyFrom);
 	copyFrom.setDisabled(true);
 	
 	var swap=new UI.Button("Swap").onClick(function(){
+		var index=scope.boneSelectedIndex;
+		var bone=getSelectedBone(index);
+		var opposite=getOppositedBone(index);
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var oppositeIndex=boneList.indexOf(opposite);
 		
+		BoneUtils.swapHorizontalBone(bone,opposite);
+		
+		ap.signals.boneRotationChanged.dispatch(index);
+		ap.signals.boneRotationChanged.dispatch(oppositeIndex);
 	});
 	buttonRow.add(swap);
 	swap.setDisabled(true);
 	
 	ap.signals.boneSelectionChanged.add(function(index){
+		scope.boneSelectedIndex=index;
 		var bone=getOppositedBone(index);
 		if(bone!=null){
 			//buttonRow.button.setTextContent("Switch:"+oppositeName); //possible long

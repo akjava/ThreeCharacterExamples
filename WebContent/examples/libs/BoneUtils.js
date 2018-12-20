@@ -322,6 +322,23 @@ var BoneUtils={
 				return name.substring(0,name.length-2)+"_L";
 			}
 			return null;
+		},
+		flipHorizontalRotation:function(rotation,target){
+			if(!rotation.isEuler){
+				console.error("flipHorizontalRotation rotation must be Euler");
+			}
+			target=target==undefined?new THREE.Euler():target;
+			target.set(rotation.x,rotation.y*-1,rotation.z*-1);
+			return target;
+		},swapHorizontalBone:function(bone1,bone2){
+			if(!bone1.isBone || !bone2.isBone){
+				console.error("swapHorizontalBone bone must be Bone");
+			}
+			var rot1=BoneUtils.flipHorizontalRotation(bone1.rotation);
+			var rot2=BoneUtils.flipHorizontalRotation(bone2.rotation);
+			
+			bone1.rotation.copy(rot2);
+			bone2.rotation.copy(rot1);
 		}
 
 };
