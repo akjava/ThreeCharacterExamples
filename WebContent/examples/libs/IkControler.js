@@ -34,6 +34,10 @@ this.ap=ap;
 this._pos=new THREE.Vector3();
 };
 
+IkControler.prototype.getSelectedIkName=function(){
+	return this.ikTarget!=null?this.ikTarget.ikName:null;
+}
+
 IkControler.prototype.getIkNames=function(){
 	return Object.keys(this.iks);
 }
@@ -115,7 +119,8 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 		this.ikIndices=ap.ikControler.iks[target.ikName];
 		ap.transformControls.attach(target);
 	}else{//other
-		
+		this.ikTarget=null;
+		this.ikIndices=null;
 	}
 }
 

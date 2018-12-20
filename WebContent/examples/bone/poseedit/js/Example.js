@@ -102,8 +102,13 @@ Example=function(application){
 		ap.signals.solveIkCalled.add(function(){
 			ap.ikControler.solveIk(true);
 		});
+		/*
+		 ikControler call when onTransformFinished for editor
+		 rotationControler call when edited
+		 */
 		ap.signals.boneRotationChanged.add(function(){
-			ap.ikControler.resetAllIkTargets();
+			var selection=ap.ikControler.getSelectedIkName();
+			ap.ikControler.resetAllIkTargets(selection);
 		});
 		
 		ap.signals.transformChanged.add(function(){
