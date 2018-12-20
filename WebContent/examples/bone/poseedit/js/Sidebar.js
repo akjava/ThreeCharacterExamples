@@ -14,6 +14,8 @@ var Sidebar = function ( application ) {
 	var importPanel=new Sidebar.Import(ap);
 	container.add(importPanel);
 	
+	container.add(new Sidebar.RootTranslate(ap));
+	
 	var editPanel=new BoneEditPanel2(ap);
 	editPanel.buttons.setDisplay("none");
 	container.add(editPanel);

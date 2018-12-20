@@ -5,6 +5,9 @@ Sidebar.IkReset=function(ap){
 	var buttonRow=new UI.ButtonRow("Reset All",function(){
 		AnimeUtils.resetPose(ap.skinnedMesh);
 		ap.signals.poseChanged.dispatch();
+		if(ap.signals.boneTranslateChanged){
+			ap.signals.boneTranslateChanged.dispatch();
+		}
 	});
 	resetPanel.add(buttonRow);
 	var resetSelection=new UI.Button("Reset Selection");
@@ -12,6 +15,9 @@ Sidebar.IkReset=function(ap){
 		var index=ap.ikControler.boneSelectedIndex;
 		BoneUtils.resetBone(ap.skinnedMesh,index);
 		ap.signals.boneRotationChanged.dispatch(index);
+		if(ap.signals.boneTranslateChanged){
+			ap.signals.boneTranslateChanged.dispatch();
+		}
 	});
 	buttonRow.add(resetSelection);
 	
@@ -23,6 +29,9 @@ Sidebar.IkReset=function(ap){
 			});
 		}
 		ap.signals.poseChanged.dispatch();
+		if(ap.signals.boneTranslateChanged){
+			ap.signals.boneTranslateChanged.dispatch();
+		}
 	});
 	buttonRow.add(resetIks);
 	return resetPanel;

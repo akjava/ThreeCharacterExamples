@@ -161,8 +161,23 @@ Example=function(application){
 				
 				bonePos.add(diff);
 				scope.boneAttachControler.update();
+				
+				ap.signals.boneTranslateChanged.dispatch();
 			}
 		}
+		
+		ap.signals.boneTranslateChanged.add(function(){
+			ap.ikControler.resetAllIkTargets();
+		});
+		
+		
+		
+		function onBoneTranslateChanged(){
+			resetPosition();
+			
+		}
+		
+		ap.signals.boneTranslateChanged.add(onBoneTranslateChanged);
 		
 		function resetPosition(){
 			scope.boneAttachControler.update();
@@ -178,9 +193,17 @@ Example=function(application){
 			}
 		}
 		
+		function onTransformStarted(target){
+			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
+				ap.signals.boneTranslateChanged.remove(onBoneTranslateChanged);
+			}
+		}
+		
 		function onTransformFinished(target){
 			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
 				ap.ikControler.resetAllIkTargets();
+				
+				ap.signals.boneTranslateChanged.add(onBoneTranslateChanged);
 			}
 		}
 		
@@ -204,6 +227,7 @@ Example=function(application){
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
+			onTransformStarted(scope.target);
 			rotatationControler.onTransformStarted(scope.target);
 		});
 		

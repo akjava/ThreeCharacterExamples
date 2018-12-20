@@ -23,6 +23,7 @@ var Application = function () {
 			solveIkCalled:new Signal(),
 			boneSelectionChanged:new Signal(),//bone selection changed by selector or click
 			boneRotationChanged:new Signal(),//called from tf-control for notice rotation editor
+			boneTranslateChanged:new Signal(),
 			transformChanged:new Signal(),//tf-control
 			transformSelectionChanged:new Signal(),//tf-control selection
 			poseChanged:new Signal(),//called when pose loaded
