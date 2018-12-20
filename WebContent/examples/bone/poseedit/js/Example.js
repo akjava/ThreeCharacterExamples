@@ -120,6 +120,12 @@ Example=function(application){
 		ap.signals.transformChanged.add(function(){
 			//check conflict
 			ap.ikControler.solveIk();
+			
+			//solve others
+			if(!ap.ikControler.followOtherIkTargets){
+				ap.ikControler.solveOtherIkTargets();
+			}
+			
 			onTransformChanged();
 		});
 		var mbl3dik=new Mbl3dIk(ap);

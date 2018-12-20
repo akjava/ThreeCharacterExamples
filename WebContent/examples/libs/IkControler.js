@@ -106,21 +106,39 @@ IkControler.prototype.resetAllIkTargets=function(exclude){
 			scope.resetIkTargetPosition(key);
 	});
 }
+IkControler.prototype.setIkTarget=function(target){
+	if(target==null){
+		this.ikIndices=null;
+		this.ikTarget=null;
+	}else{
+		this.ikTarget=target;
+		this.ikIndices=this.iks[target.ikName];
+	}
+}
+IkControler.prototype.solveOtherIkTargets=function(){
+	var current=this.ikTarget;
+	var scope=this;
+	Object.values(this.ikTargets).forEach(function(target){
+		scope.setIkTarget(target);
+		if(current!=target){
+			scope.solveIk();
+		}
+	});
+	this.setIkTarget(current);
+}
+
 
 IkControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;
 	var scope=this;
 	if(target==null){
-		this.ikIndices=null;
-		this.ikTarget=null;
+		this.setIkTarget(null);
 	}else if(target.userData.transformSelectionType=="BoneIk"){
 		ap.transformControls.setMode( "translate" );
-		this.ikTarget=target;
-		this.ikIndices=ap.ikControler.iks[target.ikName];
+		this.setIkTarget(target);
 		ap.transformControls.attach(target);
 	}else{//other
-		this.ikTarget=null;
-		this.ikIndices=null;
+		this.setIkTarget(null);
 	}
 }
 
