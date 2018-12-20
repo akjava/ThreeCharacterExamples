@@ -212,7 +212,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 			return;
 		}
 		
-		var newQ=IkUtils.calculateAngles(lastJointPos,jointPos,jointRotQ,targetPos,this.maxAngle,false);
+		//var newQ=IkUtils.calculateAngles(lastJointPos,jointPos,jointRotQ,targetPos,this.maxAngle,false);
 		
 		var inverseQ=bone.parent.clone().getWorldQuaternion(new THREE.Quaternion()).inverse();
 		var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,this.maxAngle);
