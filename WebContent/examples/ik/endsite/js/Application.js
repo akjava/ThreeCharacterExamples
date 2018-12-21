@@ -31,6 +31,7 @@ var Application = function () {
 
 
 	this.signals = {
+			ikSelectionChanged:new Signal(),
 			boneLimitLoaded:new Signal(),
 			boneLimitChanged:new Signal(),
 			boneSelectionChanged:new Signal(),

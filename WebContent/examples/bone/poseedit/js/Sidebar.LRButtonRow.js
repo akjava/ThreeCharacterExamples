@@ -9,7 +9,7 @@ Sidebar.LRButtonRow=function(ap){
 	function getOppositedBone(index){
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		var selectedBone=getSelectedBone(index);
-		console.log(index,selectedBone);
+		
 		var oppositeName=BoneUtils.getOpositeLRName(selectedBone.name);
 		if(oppositeName==null){
 			return;

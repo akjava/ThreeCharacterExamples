@@ -116,7 +116,7 @@ Example=function(application){
 				ap.ikControler.ikIndices=null;
 				ap.transformControls.detach();
 			}else{
-				
+				ap.signals.ikSelectionChanged.dispatch(target.ikName);
 				ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
 				ap.transformControls.attach(target);
 			}

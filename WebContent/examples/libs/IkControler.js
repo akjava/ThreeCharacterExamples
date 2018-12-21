@@ -34,6 +34,10 @@ this.ap=ap;
 this._pos=new THREE.Vector3();
 };
 
+IkControler.prototype.getBoneList=function(){
+	return this.boneAttachControler.boneList;
+}
+
 IkControler.prototype.getSelectedIkName=function(){
 	return this.ikTarget!=null?this.ikTarget.ikName:null;
 }
