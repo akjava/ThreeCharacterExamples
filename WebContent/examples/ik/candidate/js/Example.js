@@ -140,7 +140,7 @@ Example=function(application){
 		
 		
 		//candiate
-		var datas=[new THREE.Vector3(20,0,0),new THREE.Vector3(45,-75,0),new THREE.Vector3(-15,-120,15),new THREE.Vector3(0,0,0)];
+		var datas=[new THREE.Vector3(20,0,0),new THREE.Vector3(45,-85,0),new THREE.Vector3(-15,-120,15),new THREE.Vector3(0,0,0)];
 		var name="LeftArm";
 		
 		var indices=ap.ikControler.iks[name];
