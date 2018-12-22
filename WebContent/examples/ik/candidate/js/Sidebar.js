@@ -124,6 +124,9 @@ var Sidebar = function ( application ) {
 	var boneListRow=new UI.Row();
 	ikBoneList.add(boneListRow);
 	
+	var editPanel=new BoneEditPanel2(ap);
+	editPanel.buttons.setDisplay("none");
+	container.add(editPanel);
 	
 	return container;
 }

@@ -122,6 +122,9 @@ Example=function(application){
 		},undefined,1);//need high priority to call first
 		
 
+		ap.transformControls.addEventListener( 'mouseUp', function () {
+			ap.ikControler.onTransformFinished(scope.target);
+		});
 		
 		
 		
@@ -140,7 +143,7 @@ Example=function(application){
 		
 		
 		//candiate
-		var datas=[new THREE.Vector3(20,0,0),new THREE.Vector3(45,-85,0),new THREE.Vector3(-15,-120,15),new THREE.Vector3(0,0,0)];
+		var datas=[new THREE.Vector3(20,0,0),new THREE.Vector3(45,-75,0),new THREE.Vector3(-15,-120,15),new THREE.Vector3(0,0,0)];
 		var name="LeftArm";
 		
 		var indices=ap.ikControler.iks[name];
@@ -179,6 +182,7 @@ Example=function(application){
 					
 					var rad2=AppUtils.degToRad(datas[j]);
 					bone2.rotation.set(rad2.x,rad2.y,rad2.z);
+					ap.signals.boneRotationChanged.dispatch(index2);
 				}
 				ap.ikControler.resetAllIkTargets();
 			}

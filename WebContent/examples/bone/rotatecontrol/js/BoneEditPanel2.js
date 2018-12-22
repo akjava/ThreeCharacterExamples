@@ -1,4 +1,5 @@
 //TODO replace BoneEditPanel ,old one has no advantage.
+//link to Ik ap.ikControler.onTransformFinished(scope.target);
 var BoneEditPanel2 = function ( application ) {
 	var ap=application;
 	var scope=this;

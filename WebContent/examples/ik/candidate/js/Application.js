@@ -36,6 +36,7 @@ var Application = function () {
 			boneSelectionChanged:new Signal(),
 			poseChanged:new Signal(),
 			solveIkCalled:new Signal(),
+			boneRotationChanged:new Signal(),//called from tf-control for notice rotation editor
 			
 			transformChanged:new Signal(),
 			transformSelectionChanged:new Signal(),
