@@ -105,7 +105,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			this.limitBone(boneList,"hand_R",-15,-15,-15,15,15,15);
 			this.limitBone(boneList,"lowerarm_R",0,0,0,0,150,0);
 			this.limitBone(boneList,"upperarm_R",-45,-75,-30,45,75,85);
-			this.limitBone(boneList,"clavicle_R",-20,-15,-20,25,0,0);
+			this.limitBone(boneList,"clavicle_R",-10,-15,-20,25,0,0);
 			
 			
 			this.limitBone(boneList,"calf_L",0,0,0,165,0,0);
@@ -115,7 +115,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			this.limitBone(boneList,"hand_L",-15,-15,-15,15,15,15);
 			this.limitBone(boneList,"lowerarm_L",0,-150,0,0,0,0);
 			this.limitBone(boneList,"upperarm_L",-45,-75,-85,45,75,30);
-			this.limitBone(boneList,"clavicle_L",-20,0,0,20,15,25);
+			this.limitBone(boneList,"clavicle_L",-10,0,0,20,15,25);
 			
 			this.limitBone(boneList,"head",-15,-15,-15,15,15,15);
 			this.limitBone(boneList,"spine01",-15,-45,-45,15,45,45);
