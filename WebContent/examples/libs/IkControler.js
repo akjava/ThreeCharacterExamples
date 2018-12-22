@@ -28,11 +28,20 @@ this.logging=false;
 
 this.ikTargets={};
 
+this.ikBoneRatio={};
+
 this.followOtherIkTargets=true;
 this.ap=ap;
 
 this._pos=new THREE.Vector3();
 };
+
+IkControler.prototype.setBoneRatio=function(name,ratio){
+	this.ikBoneRatio[name]=ratio;
+}
+IkControler.prototype.getBoneRatio=function(name){
+	return this.ikBoneRatio[name]==undefined?1:this.ikBoneRatio[name];
+}
 
 IkControler.prototype.getBoneList=function(){
 	return this.boneAttachControler.boneList;
@@ -241,7 +250,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 			inverseQ=new THREE.Quaternion();//no parent;
 		}
 		
-		var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,this.maxAngle);
+		var maxAngle=this.maxAngle*this.getBoneRatio(bone.name);
+		
+		var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,maxAngle);
 		
 		
 		if(newQ==null){

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>Pose Edit</title>
+		<title>Ik Ratio</title>
 	</head>
 	<body ontouchstart="">
 	<link href="../../css/shared.css" rel="stylesheet" />
@@ -22,34 +22,25 @@
 	<script src="../../libs/BoneAttachControler.js"></script>
 	<script src="../../libs/inflate.min.js"></script>
 	<script src="../../libs/FBXLoader.js"></script>
-
 	<script src="../../libs/IkUtils.js"></script>
 	<script src="../../libs/TransformControls.js"></script>
 	<script src="../../libs/IkControler.js"></script>
-	
-	
-	<script src="../../ik/limitbone/js/Mbl3dIk.js"></script>
+		
 	<script src="js/Application.js"></script>
 	<script src="js/Viewport.js"></script>
-	<script src="../rotatecontrol/js/BoneEditPanel2.js"></script>
 	<script src="js/Sidebar.js"></script>
-	<script src="js/Sidebar.RootTranslate.js"></script>
-	<script src="js/Sidebar.Transparent.js"></script>
-	<script src="js/Sidebar.Ground.js"></script>
-	<script src="js/Sidebar.LRButtonRow.js"></script>
+	<script src="js/Sidebar.Iks.js"></script>
+	<script src="js/BoneSelectionPanel.js"></script>
+	<script src="js/Sidebar.IkRatio.js"></script>
 	
-	<script src="../../ik/limitbone/js/Sidebar.IkBoneList.js"></script>
-	<script src="../../ik/limitbone/js/Sidebar.IkSolve.js"></script>
-	<script src="../../ik/limitbone/js/Sidebar.IkReset.js"></script>
-	<script src="../../ik/limitbone/js/Sidebar.IkBasic.js"></script>	
-	<script src="../posesave/js/Sidebar.Import.js"></script>
-	<script src="../posesave/js/Sidebar.Export.js"></script>
-	<script src="../rotatelock/js/RotatationControler.js"></script>
-	<script src="js/BackgroundImagePanel.js"></script>
+	<script src="../limitbone/js/Sidebar.IkBoneList.js"></script>
+	<script src="../limitbone/js/Sidebar.IkBasic.js"></script>
+	<script src="../limitbone/js/Sidebar.IkReset.js"></script>
+	<script src="../limitbone/js/Sidebar.IkSolve.js"></script>
+	<script src="../limitbone/js/Mbl3dIk.js"></script>
+	<script src="../limitbone/js/BoneLimitPanel.js"></script>
 	<script src="js/Viewport.Info.js"></script>
 	<script src="js/Example.js"></script>
-	
-	
 	<script>
 	window.URL = window.URL || window.webkitURL;
 	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
@@ -57,6 +48,7 @@
 		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 	};
 	
+
 	var application = new Application();
 	
 	var viewport = new Viewport( application );
@@ -80,6 +72,8 @@
 	onWindowResize();
 	
 	application.example=new Example(application);
+
+
 	</script>
 	</body>
 </html>

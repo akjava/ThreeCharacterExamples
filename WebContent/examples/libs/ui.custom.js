@@ -841,11 +841,16 @@ UI.IntegerButtons=function(label,min,max,step,value,onChange,buttonValues){
 
 UI.TitlePanel=function(label){
 	var panel=new UI.Panel();
-	panel.add(new UI.TitleRow(label));
+	var row=new UI.TitleRow(label);
+	panel.add(row);
+	panel.text=row.text;
 	return panel;
 }
 UI.TitleRow=function(label){
-	return new UI.Div().setClass("title").add(new UI.Text(label));
+	var text=new UI.Text(label);
+	var row= new UI.Div().setClass("title").add(text);
+	row.text=text;
+	return row;
 }
 UI.TextRow=function(label,text2){
 	var text=new UI.Text(label);
