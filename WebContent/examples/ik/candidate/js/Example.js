@@ -22,6 +22,7 @@ Example=function(application){
 	
 	
 	AppUtils.loadMesh(url,function(mesh){
+		try{
 		console.log("loadGltfMesh:",url);
 		var container=new THREE.Group();
 		this.container=container;//try to not modify Application.js
@@ -84,23 +85,10 @@ Example=function(application){
 		
 		
 		
-		function resetIkPosition(name){
-			var target=ikTargets[name];
-			var indices=ap.ikControler.iks[name];
-			var index=indices[indices.length-1];
-			target.position.copy(scope.boneAttachControler.containerList[index].position);
-		}
 		
 		ap.signals.poseChanged.add(function(){
-			scope.boneAttachControler.update();
-			Object.keys(ikTargets).forEach(function(key){
-				resetIkPosition(key);
-			});
+			ap.ikControler.resetAllIkTargets();
 		});
-		
-		var ikTargets={};
-		
-
 		
 		
 		//initialize ik
@@ -108,23 +96,29 @@ Example=function(application){
 		
 		
 		
-		var mbl3dik=new Mbl3dIk(ap,ikTargets);
+		var mbl3dik=new Mbl3dIk(ap);
+		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
-		
-		
-		
-		ap.signals.transformSelectionChanged.add(function(target){
+		function onTransformSelectionChanged(target){
 			
-			ap.ikControler.ikTarget=target;
-			
-			if(target==null){
-				ap.ikControler.ikIndices=null;
+			if(target!=null && target.userData.transformSelectionType=="IkCandiate"){
+				var index=target.userData.IkCandiateIndex;
+				target.userData.IkCandiateOnClick(index);
 				ap.transformControls.detach();
-			}else{
-				
-				ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
-				ap.transformControls.attach(target);
 			}
+			
+		}
+		
+		
+		scope.target=null;
+		ap.signals.transformSelectionChanged.add(function(target){
+			scope.target=target;
+			if(target==null){
+				ap.transformControls.detach();
+			}
+			
+			ap.ikControler.onTransformSelectionChanged(target);
+			onTransformSelectionChanged(target);
 		},undefined,1);//need high priority to call first
 		
 
@@ -143,39 +137,80 @@ Example=function(application){
 		ap.signals.transformChanged.add(function(){	
 			ap.ikControler.solveIk();
 		});
+		
+		
+		//candiate
+		var datas=[new THREE.Vector3(20,0,0),new THREE.Vector3(45,-75,0),new THREE.Vector3(-15,-120,15),new THREE.Vector3(0,0,0)];
+		var name="LeftArm";
+		
+		var indices=ap.ikControler.iks[name];
+		var boneList=ap.ikControler.boneAttachControler.boneList;
+		var parentMesh=null;
+		var box=null;
+		for(var i=0;i<indices.length;i++){
+			
+			var index=indices[i];
+			var bone=boneList[index];
+			
+			var parentIndex=boneList.indexOf(bone.parent);
+			var parent=boneList[parentIndex];
+			
+			var pos=ap.ikControler.boneAttachControler.containerList[index].position;
+			var parentPos=ap.ikControler.boneAttachControler.containerList[parentIndex].position;
+		
+			var diff=pos.clone().sub(parentPos);
+			var needLineToParent=true;
+			if(parentMesh==null){
+				parentMesh=ap.ikControler.boneAttachControler.containerList[parentIndex];
+				needLineToParent=false;
+			}
+			box=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:0x000088,depthTest:false,transparent:true,opacity:.5}));
+			box.name=String(i);
+			box.renderOrder = 1;
+			box.position.copy(diff);
+			parentMesh.add(box);
+			box.userData.transformSelectionType="IkCandiate";
+			ap.objects.push(box);
+			box.userData.IkCandiateIndex=Number(i);
+			box.userData.IkCandiateOnClick=function(loopIndex){
+				for(var j=0;j<indices.length && j<=loopIndex;j++){
+					var index2=indices[j];
+					var bone2=boneList[index2];
+					
+					var rad2=AppUtils.degToRad(datas[j]);
+					bone2.rotation.set(rad2.x,rad2.y,rad2.z);
+				}
+				ap.ikControler.resetAllIkTargets();
+			}
+			
+			
+			var rad=AppUtils.degToRad(datas[i]);
+			box.rotation.set(rad.x,rad.y,rad.z);
+			
+			if(needLineToParent){
+				var line=AppUtils.lineTo(parentMesh,box);
+				line.material.depthTest=false;	
+			}
+			
+			parentMesh=box;
+			
+		}
+		
+	} catch(e) {
+		  console.error(e);
+		}
 	});
 	
 	
-
 	
-	
-	var boneMatrix=new THREE.Matrix4();
-	var matrixWorldInv=new THREE.Matrix4();
 	ap.signals.rendered.add(function(){
 		
 		if(scope.boneAttachControler){
 			scope.boneAttachControler.update();
-			
 		}
 		
 	});
 	
-	ap.signals.boxVisibleChanged.add(function(){
-		boxList.forEach(function(box){
-			box.material.visible=ap.visibleBone;
-		});
-		originBoxList.forEach(function(box){
-			box.material.visible=ap.visibleOriginBone;
-		});
-	})
-	
-
-	 application.signals.boneAnimationIndexChanged.add(function(index){
-		
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-
-		ap.selectedBone=boneList[index];
-	 });
 	
 
 }

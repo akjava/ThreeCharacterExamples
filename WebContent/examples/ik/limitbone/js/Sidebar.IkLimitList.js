@@ -137,7 +137,7 @@ Sidebar.IkLimitList=function(application){
 			
 			for(var i=0;i<pat.length;i++){
 				var bone=boneList[joints[i]];
-				var rads=AppUtils.deg2rad(pat[i]);
+				var rads=AppUtils.degToRad(pat[i]);
 				bone.rotation.set(rads.x,rads.y,rads.z);
 				
 				//AppUtils.printDeg(bone.rotation,bone.name);

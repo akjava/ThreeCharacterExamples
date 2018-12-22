@@ -22,6 +22,7 @@ Example=function(application){
 	
 	
 	AppUtils.loadMesh(url,function(mesh){
+		try{
 		console.log("loadGltfMesh:",url);
 		var container=new THREE.Group();
 		this.container=container;//try to not modify Application.js
@@ -131,6 +132,9 @@ Example=function(application){
 		ap.signals.transformChanged.add(function(){	
 			ap.ikControler.solveIk();
 		});
+		} catch(e) {
+			  console.error(e);
+			}
 	});
 	
 	

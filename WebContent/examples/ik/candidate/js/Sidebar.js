@@ -123,7 +123,7 @@ var Sidebar = function ( application ) {
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		if(target!=null){
 			if(ap.ikControler.ikTarget==null){
-				console.log("invalidly call sidebar first");
+				//console.log("invalidly call sidebar first");
 				return;
 			}
 			

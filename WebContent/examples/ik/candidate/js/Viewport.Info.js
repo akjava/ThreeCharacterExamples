@@ -87,6 +87,8 @@ Viewport.Info = function ( application ) {
 			var boneName=bone.name;
 			boneText.setValue(boneName);
 			
+			
+			
 			var rotX=THREE.Math.radToDeg(bone.rotation.x).toFixed(2);
 			rotXText.setValue(rotX);
 			var rotY=THREE.Math.radToDeg(bone.rotation.y).toFixed(2);
@@ -151,6 +153,23 @@ Viewport.Info = function ( application ) {
 					rotYText4.setValue("");
 					rotZText4.setValue("");
 				}
+		}else{
+			boneText.setValue("");
+			rotXText.setValue("");
+			rotYText.setValue("");
+			rotZText.setValue("");
+			boneText2.setValue("");
+			rotXText2.setValue("");
+			rotYText2.setValue("");
+			rotZText2.setValue("");
+			boneText3.setValue("");
+			rotXText3.setValue("");
+			rotYText3.setValue("");
+			rotZText3.setValue("");
+			boneText4.setValue("");
+			rotXText4.setValue("");
+			rotYText4.setValue("");
+			rotZText4.setValue("");
 		}
 	}
 

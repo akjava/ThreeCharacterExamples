@@ -174,6 +174,7 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 
 
 IkControler.prototype.solveIk=function(forceUpdate){
+	
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
 	var scope=this;
 	
@@ -187,6 +188,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	
 	if(this.ikTarget==null){
+		if(this.logging){
+			console.log("ikTarget is null");
+		}
 		return;
 	}	
 	
@@ -198,6 +202,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	var targetPos=targetMesh.position;
 	if(this.lastTargetMovedPosition.equals(targetPos) && forceUpdate==false){
 		//this Ik need move or force
+		if(this.logging){
+			console.log("lastTargetMovedPosition same as targetPos forceUpdate=",forceUpdate);
+		}
 		return;
 	}
 	this.lastTargetMovedPosition.copy(targetPos);
