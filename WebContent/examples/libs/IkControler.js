@@ -36,6 +36,14 @@ this.ap=ap;
 this._pos=new THREE.Vector3();
 };
 
+IkControler.prototype.getBoneList=function(){
+	return this.boneAttachControler.boneList;
+}
+
+IkControler.prototype.getIndices=function(name){
+	return this.iks[name];
+}
+
 IkControler.prototype.setBoneRatio=function(name,ratio){
 	this.ikBoneRatio[name]=ratio;
 }
