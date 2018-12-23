@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Candidate Ik Bone"));
+	container.add(new UI.AppName("Preset Ik Angles"));
 	
 	
     var ikPanel=new Sidebar.IkLBasic(application);
