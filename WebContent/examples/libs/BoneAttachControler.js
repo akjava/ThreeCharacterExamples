@@ -18,6 +18,8 @@ var BoneAttachControler=function(skinnedMesh,param){
 	this.object3d=new THREE.Group();
 	var scope=this;
 	
+	this.defaultBoneMatrixs=[];
+	
 	this.boneList.forEach(function(bone){
 		var name=bone.name;
 		var list=[];
@@ -31,7 +33,12 @@ var BoneAttachControler=function(skinnedMesh,param){
 		container.userData.bone=list[0];
 		scope.object3d.add(container);
 		//container.matrixAutoUpdate=false;
+		
+		
 	});
+	
+	
+	
 	
 	
 	this._boneMatrix=new THREE.Matrix4();
@@ -39,8 +46,22 @@ var BoneAttachControler=function(skinnedMesh,param){
 	this._quaternion=new THREE.Quaternion();
 	
 	this.update();
+	
+	this.boneList.forEach(function(bone){
+		scope.defaultBoneMatrixs.push(bone.matrixWorld.clone());
+	});
 };
 
+BoneAttachControler.prototype.getDefaultBonePosition=function(index){
+	var matrix=this.defaultBoneMatrixs[index];
+	var position=new THREE.Vector3();
+	
+	this._matrixWorldInv.getInverse( this.object3d.matrixWorld );
+	this._boneMatrix.multiplyMatrices( this._matrixWorldInv, matrix );
+	position.setFromMatrixPosition(this._boneMatrix );
+	
+	return position;
+}
 BoneAttachControler.prototype.getBoneIndexByBoneName=function(name){
 	var index=-1;
 	for(var i=0;i<this.boneList.length;i++){

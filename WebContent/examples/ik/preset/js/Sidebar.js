@@ -128,7 +128,7 @@ var Sidebar = function ( application ) {
 	editPanel.buttons.setDisplay("none");
 	container.add(editPanel);
 	
-	var bt=new UI.ButtonRow("test",function(){
+	var bt=new UI.ButtonRow("test-clear",function(){
 		var ikPresets=ap.ikPresets;
 		
 		var json=ikPresets.toJSON();
@@ -138,6 +138,13 @@ var Sidebar = function ( application ) {
 		ap.ikPresets=IkPresets.parse(json,ap.ikControler);
 	});
 	container.add(bt);
+	
+	var bt2=new UI.ButtonRow("test-add",function(){
+		var ikPresets=ap.ikPresets;
+		ikPresets.addRotationsFromBone("test");
+		
+	});
+	container.add(bt2);
 	
 	return container;
 }

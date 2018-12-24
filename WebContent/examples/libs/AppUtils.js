@@ -169,6 +169,15 @@ var AppUtils={
 			Object.keys(object).forEach(function (key) {
 				  delete object[key];
 				});
+		},removeAllFromArray:function(array,removes){
+			removes.forEach(function(remove){
+				var index=array.indexOf(remove);
+				if(index==-1){
+					//TODO logging
+					//console.log("removeAllFromArray:not contain",remove);
+				}
+				array.slice(1,index);
+			});
 		},
 		/*
 		not support minus
