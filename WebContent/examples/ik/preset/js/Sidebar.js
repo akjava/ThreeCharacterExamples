@@ -128,5 +128,16 @@ var Sidebar = function ( application ) {
 	editPanel.buttons.setDisplay("none");
 	container.add(editPanel);
 	
+	var bt=new UI.ButtonRow("test",function(){
+		var ikPresets=ap.ikPresets;
+		
+		var json=ikPresets.toJSON();
+		
+		ikPresets.clearAll();
+		
+		ap.ikPresets=IkPresets.parse(json,ap.ikControler);
+	});
+	container.add(bt);
+	
 	return container;
 }

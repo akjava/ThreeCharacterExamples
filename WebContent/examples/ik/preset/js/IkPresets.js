@@ -2,8 +2,71 @@ var IkPresets=function(ikControler,presets){
 	presets=presets==undefined?{}:presets;
 	this.ikControler=ikControler;
 	this.presets=presets;
+}
+
+IkPresets.prototype.toJSON=function(){
+	var keys=this.ikControler.getIkNames();
+	var scope=this;
 	
-	console.log(this.ikControler);
+	var presets={};
+	var json={presets:presets};
+	
+	keys.forEach(function(key){
+		var array=scope.getIkPresetRotations(key);
+		if(array){
+			var jsonArray=[];
+			array.forEach(function(preRot){
+				jsonArray.push(preRot.toJSON());
+			});
+			presets[key]=jsonArray;
+		}
+	});
+	
+	return json;
+}
+
+IkPresets.prototype.clearAll=function(){
+	var keys=this.ikControler.getIkNames();
+	var scope=this;
+	keys.forEach(function(key){
+		var array=scope.getIkPresetRotations(key);
+		if(array){
+			array.forEach(function(preRot){
+				scope.removeIkPresetRotation(key,preRot);
+			})
+		}
+	});
+}
+
+IkPresets.prototype.updateAll=function(){
+	if(!this.ikControler){
+		console.log("updateAll:no ikControler");
+		return;
+	}
+	var keys=this.ikControler.getIkNames();
+	var scope=this;
+	keys.forEach(function(key){
+		var array=scope.getIkPresetRotations(key);
+		if(array){
+			array.forEach(function(preRot){
+				scope.updateIkPresetRotation(key,preRot);
+			})
+		}
+	});
+}
+
+IkPresets.prototype.getIkPresetRotations=function(ikName){
+	return this.presets[ikName];
+}
+IkPresets.prototype.removeIkPresetRotation=function(ikName,ikPresetRotation){
+	var object3d=ikPresetRotation.object;
+	if(object3d!=null){
+		object3d.parent.remove(object3d);
+	}
+	
+	var array=this.presets[ikName];
+	var index=array.indexOf(ikPresetRotation);
+	array.splice(1, index);
 }
 
 IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onClick){
@@ -36,7 +99,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 		
 		var name=ikPresetRotation.name;
 		var rotations=ikPresetRotation.rotations;
-		console.log(name,rotations);
+
 		var parentMesh=null;
 		var box=null;
 		for(var i=0;i<indices.length;i++){
@@ -125,18 +188,22 @@ IkPresets.prototype.addDegreeRotations=function(ikName,rotations,name){
 	this.updateIkPresetRotation(ikName,ikPresetRotation)
 }
 
-IkPresets.parse=function(json){
+//ikControler is optional
+IkPresets.parse=function(json,ikControler){
 	var presets={};
-	Object.keys(json).forEach(function(key){
+	Object.keys(json.presets).forEach(function(key){
 		var result=[];
-		var list=json.key;
-		Object.keys(list).forEach(function(value){
-		var obj=IkPresets.parseIkPresetAngles(value);
+		var list=json.presets[key];
+		list.forEach(function(value){
+		var obj=IkPresets.parseIkPresetRotations(value);
+		
 		result.push(obj);
 		});
-		presets.key=result;
+		presets[key]=result;
 	});
-	return new IkPresets(presets);
+	var ikPresets= new IkPresets(ikControler,presets);
+	ikPresets.updateAll();
+	return ikPresets;
 }
 
 IkPresets.parseIkPresetRotations=function(json){
@@ -156,4 +223,14 @@ var IkPresetRotation=function(name,rotations){
 	this.name=name==undefined?"":name;
 	this.rotations=rotations;
 	this.object=null;//ref object3d
+}
+IkPresetRotation.prototype.toJSON=function(){
+	var rots=[];
+	this.rotations.forEach(function(euler){
+		rots.push(euler.toVector3().toArray());
+	})
+	var json={name:this.name,
+			rotations:rots,
+			}
+	return json;
 }

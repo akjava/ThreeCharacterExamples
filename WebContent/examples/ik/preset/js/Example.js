@@ -146,6 +146,7 @@ Example=function(application){
 		var ikPresets=new IkPresets(ap.ikControler);
 		ikPresets.addDegreeRotations("LeftArm",datas)
 	
+		ap.ikPresets=ikPresets;
 		
 	} catch(e) {
 		  console.error(e);
