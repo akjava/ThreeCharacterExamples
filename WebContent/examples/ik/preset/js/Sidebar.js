@@ -142,7 +142,7 @@ var Sidebar = function ( application ) {
 	var bt2=new UI.ButtonRow("test-add",function(){
 		var ikPresets=ap.ikPresets;
 		ikPresets.addRotationsFromBone("test");
-		
+		console.log(ikPresets);
 	});
 	container.add(bt2);
 	

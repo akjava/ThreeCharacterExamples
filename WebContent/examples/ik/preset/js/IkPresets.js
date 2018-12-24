@@ -41,6 +41,31 @@ IkPresets.prototype.clearAll=function(){
 		}
 	});
 }
+IkPresets.prototype.setVisible=function(ikName,value){
+	var scope=this;
+		var array=scope.getIkPresetRotations(ikName);
+		if(array){
+			array.forEach(function(preRot){
+				if(preRot.object){
+					preRot.object.traverse(function(obj){
+						obj.material.visible=value;
+					});
+				}
+			})
+		}
+	
+}
+
+IkPresets.prototype.updateVisibleAll=function(){
+	var scope=this;
+	var selection=this.ikControler.getSelectedIkName();
+	var names=this.ikControler.getIkNames();
+	names.forEach(function(name){
+		
+		var visible=name==selection?true:false;
+		scope.setVisible(name,visible);
+	});
+}
 
 IkPresets.prototype.updateAll=function(){
 	if(!this.ikControler){
@@ -126,6 +151,10 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			var bone=boneList[index];
 			
 			var parentIndex=boneList.indexOf(bone.parent);
+			if(parentIndex==-1){
+				console.warn("IkPresets:not support root yet.temporary use same pos");
+				parentIndex=index;
+			}
 			var parent=boneList[parentIndex];
 			
 			var pos=ikControler.boneAttachControler.getDefaultBonePosition(index);

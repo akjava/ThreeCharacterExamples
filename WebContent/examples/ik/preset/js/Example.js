@@ -106,6 +106,8 @@ Example=function(application){
 				ap.transformControls.detach();
 			}
 			
+			ap.ikPresets.updateVisibleAll();
+			
 		}
 		
 		
