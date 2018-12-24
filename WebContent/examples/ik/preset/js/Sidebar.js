@@ -146,5 +146,8 @@ var Sidebar = function ( application ) {
 	});
 	container.add(bt2);
 	
+	var iks=new Sidebar.Iks(ap);
+	container.add(iks);
+	
 	return container;
 }

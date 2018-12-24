@@ -8,6 +8,10 @@ this.endSite=false;
 var ikList=new UI.ListRow("Iks",[],function(v){
 	scope.selectedIk=v;
 	endsite.setValue(ap.ikControler.isEnableEndSiteByName(v));
+	setSelection(v);
+	ap.signals.ikSelectionChanged.remove(onIkSelectionChanged);
+	ap.signals.ikSelectionChanged.dispatch();
+	ap.signals.ikSelectionChanged.add(onIkSelectionChanged);
 });	
 titlePanel.add(ikList);
 
@@ -38,6 +42,10 @@ function setSelection(name){
 	}
 }
 
+if(!ap.signals.ikInitialized){
+	console.error("Sidebar.Iksneed ap.signals.ikInitialized");
+}
+
 ap.signals.ikInitialized.add(function(){
 	var keys=ap.ikControler.getIkNames();
 	
@@ -45,13 +53,17 @@ ap.signals.ikInitialized.add(function(){
 	setSelection(keys[0]);
 	
 })
+if(!ap.signals.ikSelectionChanged){
+	console.error("Sidebar.Iksneed ap.signals.ikSelectionChanged");
+}
 
-ap.signals.ikSelectionChanged.add(function(name){
+var onIkSelectionChanged=function(name){
 	if(name==null){
 		return;
 	}
 	setSelection(name);
-});
+};
+ap.signals.ikSelectionChanged.add(onIkSelectionChanged);
 
 function getOppositedBone(bone){
 	var boneList=ap.ikControler.getBoneList();

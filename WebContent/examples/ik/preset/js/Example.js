@@ -150,6 +150,8 @@ Example=function(application){
 	
 		ap.ikPresets=ikPresets;
 		
+		
+		ap.signals.ikInitialized.dispatch();
 	} catch(e) {
 		  console.error(e);
 		}

@@ -158,6 +158,10 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 		ap.transformControls.setMode( "translate" );
 		this.setIkTarget(target);
 		ap.transformControls.attach(target);
+		
+		if(ap.signals.ikSelectionChanged){
+			ap.signals.ikSelectionChanged.dispatch(target.ikName);
+		}
 	}else{//other
 		this.setIkTarget(null);
 	}
