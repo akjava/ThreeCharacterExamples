@@ -10,7 +10,7 @@ var ikList=new UI.ListRow("Iks",[],function(v){
 	endsite.setValue(ap.ikControler.isEnableEndSiteByName(v));
 	setSelection(v);
 	ap.signals.ikSelectionChanged.remove(onIkSelectionChanged);
-	ap.signals.ikSelectionChanged.dispatch();
+	ap.signals.ikSelectionChanged.dispatch(v);
 	ap.signals.ikSelectionChanged.add(onIkSelectionChanged);
 });	
 titlePanel.add(ikList);

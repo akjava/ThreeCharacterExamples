@@ -33,8 +33,18 @@ this.ikBoneRatio={};
 this.followOtherIkTargets=true;
 this.ap=ap;
 
+this.ikPresets=null;
+
 this._pos=new THREE.Vector3();
 };
+
+IkControler.prototype.setPresets=function(ikPresets){
+	this.ikPresets=ikPresets;
+}
+
+IkControler.prototype.getPresets=function(){
+	return this.ikPresets;
+}
 
 IkControler.prototype.getBoneList=function(){
 	return this.boneAttachControler.boneList;

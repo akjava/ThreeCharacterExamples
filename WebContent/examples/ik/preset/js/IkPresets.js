@@ -246,6 +246,7 @@ IkPresets.prototype.addRotationsFromBone=function(name){
 	var ikName=this.ikControler.getSelectedIkName();
 	if(ikName==null){
 		console.log("addRotationsFromBone:need ik Selection");
+		return false;
 		return;
 	}
 	var rotations=[];
@@ -257,6 +258,7 @@ IkPresets.prototype.addRotationsFromBone=function(name){
 	});
 	
 	this.addRotations(ikName,rotations,name);
+	return true;
 }
 
 //ikControler is optional

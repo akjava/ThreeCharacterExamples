@@ -155,6 +155,8 @@ var AppUtils={
 		},
 		degToRad:function(xyz){
 			return {x:THREE.Math.degToRad(xyz.x),y:THREE.Math.degToRad(xyz.y),z:THREE.Math.degToRad(xyz.z)};
+		},radToDeg:function(xyz){
+			return {x:THREE.Math.radToDeg(xyz.x),y:THREE.Math.radToDeg(xyz.y),z:THREE.Math.radToDeg(xyz.z)};
 		},
 		printVec:function(xyz){
 			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2),text)

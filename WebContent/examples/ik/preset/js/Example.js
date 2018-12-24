@@ -106,7 +106,7 @@ Example=function(application){
 				ap.transformControls.detach();
 			}
 			
-			ap.ikPresets.updateVisibleAll();
+			ap.ikControler.getPresets().updateVisibleAll();
 			
 		}
 		
@@ -148,7 +148,7 @@ Example=function(application){
 		var ikPresets=new IkPresets(ap.ikControler);
 		ikPresets.addDegreeRotations("LeftArm",datas)
 	
-		ap.ikPresets=ikPresets;
+		ap.ikControler.ikPresets=ikPresets;
 		
 		
 		ap.signals.ikInitialized.dispatch();

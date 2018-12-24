@@ -129,24 +129,24 @@ var Sidebar = function ( application ) {
 	container.add(editPanel);
 	
 	var bt=new UI.ButtonRow("test-clear",function(){
-		var ikPresets=ap.ikPresets;
+		var ikPresets=ap.ikControler.getPresets();
 		
 		var json=ikPresets.toJSON();
 		
 		ikPresets.clearAll();
 		
-		ap.ikPresets=IkPresets.parse(json,ap.ikControler);
+		ap.ikControler.setPresets(IkPresets.parse(json,ap.ikControler));
 	});
 	container.add(bt);
 	
 	var bt2=new UI.ButtonRow("test-add",function(){
-		var ikPresets=ap.ikPresets;
+		var ikPresets=ap.ikControler.getPresets();
 		ikPresets.addRotationsFromBone("test");
 		console.log(ikPresets);
 	});
 	container.add(bt2);
 	
-	var iks=new Sidebar.Iks(ap);
+	var iks=new Sidebar.IkPreset(ap);
 	container.add(iks);
 	
 	return container;
