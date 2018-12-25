@@ -16,8 +16,7 @@ var Application = function () {
 	
 
 	
-	//should initialize first
-	this.ikControler=new IkControler();
+
 	
 	
 	this.boneSelectedIndex=0;
@@ -54,6 +53,7 @@ var Application = function () {
 	}
 	
 
+	this.ikControler=new IkControler(undefined,this);
 	
 };
 

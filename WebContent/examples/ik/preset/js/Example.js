@@ -103,11 +103,15 @@ Example=function(application){
 			
 			if(target!=null && target.userData.transformSelectionType=="IkPreset"){
 				target.userData.IkPresetOnClick(target);
-				ap.transformControls.detach();
+				
+				var ikName=target.userData.IkPresetIkName;
+				var newTarget=ap.ikControler.getIkTargetFromName(ikName);
+				
+				//reselect  ik
+				ap.signals.transformSelectionChanged.dispatch(newTarget);
 			}
 			
 			ap.ikControler.getPresets().updateVisibleAll();
-			
 		}
 		
 		

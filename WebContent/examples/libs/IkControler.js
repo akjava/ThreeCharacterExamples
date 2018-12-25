@@ -1,4 +1,8 @@
 var IkControler=function(boneAttachControler,ap){
+if(ap==undefined){
+	console.error("IkControler need ap to catch signals");
+	return;
+}
 this.iks={};
 this.ikTarget=null;
 this.ikIndices=null;
@@ -36,7 +40,25 @@ this.ap=ap;
 this.ikPresets=null;
 
 this._pos=new THREE.Vector3();
+
+this.onIkSelectionChanged=function(ikName){
+	var newTarget=ap.ikControler.getIkTargetFromName(ikName);
+	ap.signals.transformSelectionChanged.dispatch(newTarget);
+	}
+
+if(!ap.signals){
+	console.error("call after signals initialized");
+	return;
+	}
+
+if(ap.signals.ikSelectionChanged){
+	ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
+	}
 };
+
+IkControler.prototype.getIkTargetFromName=function(ikName){
+	return this.ikTargets[ikName];
+}
 
 IkControler.prototype.setPresets=function(ikPresets){
 	this.ikPresets=ikPresets;
@@ -162,8 +184,19 @@ IkControler.prototype.solveOtherIkTargets=function(){
 IkControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;
 	var scope=this;
+	if(ap.signals.ikSelectionChanged){
+		ap.signals.ikSelectionChanged.remove(this.onIkSelectionChanged);
+		}
+	
+	function onNotSelected(){
+		scope.setIkTarget(null);
+		if(ap.signals.ikSelectionChanged){
+			ap.signals.ikSelectionChanged.dispatch(null);
+		}
+	}
+	
 	if(target==null){
-		this.setIkTarget(null);
+		onNotSelected();
 	}else if(target.userData.transformSelectionType=="BoneIk"){
 		ap.transformControls.setMode( "translate" );
 		this.setIkTarget(target);
@@ -173,8 +206,11 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 			ap.signals.ikSelectionChanged.dispatch(target.ikName);
 		}
 	}else{//other
-		this.setIkTarget(null);
+		onNotSelected();
 	}
+	if(ap.signals.ikSelectionChanged){
+		ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
+		}
 }
 
 IkControler.prototype.onTransformStarted=function(target){

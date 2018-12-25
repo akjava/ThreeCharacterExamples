@@ -81,6 +81,14 @@ Sidebar.IkPreset=function(ap){
 	}
 	
 	function updateOptions(ikName){
+		presetList.setValue("");
+		if(ikName==null){
+			container.setDisplay("none");
+			
+			return;
+		}else{
+			container.setDisplay("");
+		}
 			button.setTextContent("Add");
 		
 			var rots=ap.ikControler.getPresets().getIkPresetRotations(ikName);
@@ -91,5 +99,39 @@ Sidebar.IkPreset=function(ap){
 	
 	ap.signals.ikSelectionChanged.add(updateOptions);
 	
+	var buttonRow=new UI.ButtonRow("Exec",function(){
+		var ikName=ap.ikControler.getSelectedIkName();
+		var rots=ap.ikControler.getPresets().getIkPresetRotations(ikName);
+		var selected=presetList.getValue();
+		
+		var object=rots[selected].getDeepestObject();
+		if(object){
+			object.userData.IkPresetOnClick(object);
+		}else{
+			console.error("Exec this has not object,");
+		}
+	});
+	container.add(buttonRow);
+	var newBt=new UI.Button("New").onClick(function(){
+		presetList.setValue("");
+		button.setTextContent("Add");
+	});
+	buttonRow.add(newBt);
+	var newBt=new UI.Button("Delete").onClick(function(){
+		var ikName=ap.ikControler.getSelectedIkName();
+		var confirm=window.confirm("Delete selection?");
+		if(!confirm){
+			return;
+		}
+		var selected=presetList.getValue();
+		var rots=ap.ikControler.getPresets().getIkPresetRotations(ikName);
+		var rot=rots[selected];
+		
+		ap.ikControler.getPresets().removeIkPresetRotation(ikName,rot);
+		
+		var ikName=ap.ikControler.getSelectedIkName();
+		updateOptions(ikName);
+	});
+	buttonRow.add(newBt);
 	return container;
 }

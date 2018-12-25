@@ -138,7 +138,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 	
 	var ikControler=this.ikControler;
 	var ap=ikControler.ap;
-	function addObject3d(indices,ikPresetRotation,onClick){
+	function addObject3d(ikName,indices,ikPresetRotation,onClick){
 		
 		var name=ikPresetRotation.name;
 		var rotations=ikPresetRotation.rotations;
@@ -163,7 +163,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			var diff=pos.clone().sub(parentPos);
 			var needLineToParent=true;
 			
-			box=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:0x000088,depthTest:false,transparent:true,opacity:.5}));
+			box=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({visible:false,color:0x000088,depthTest:false,transparent:true,opacity:.5}));
 			
 			if(parentMesh==null){
 				parentMesh=ikControler.boneAttachControler.containerList[parentIndex];
@@ -189,7 +189,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 				presetIndices.push(indices[j]);
 				presetRotations.push(rotations[j]);
 			}
-			
+			box.userData.IkPresetIkName=ikName
 			box.userData.IkPresetIndices=presetIndices;
 			box.userData.IkPresetRotations=presetRotations;
 			
@@ -202,6 +202,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			if(needLineToParent){
 				var line=AppUtils.lineTo(parentMesh,box);
 				line.material.depthTest=false;	
+				line.material.visible=false;	
 			}
 			
 			parentMesh=box;	
@@ -209,7 +210,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 	}
 	var indices=this.ikControler.getIndices(ikName);
 	
-	addObject3d(indices,ikPresetRotation,onClick)
+	addObject3d(ikName,indices,ikPresetRotation,onClick)
 }
 
 //add from manual
@@ -306,4 +307,16 @@ IkPresetRotation.prototype.toJSON=function(){
 			rotations:rots,
 			}
 	return json;
+}
+IkPresetRotation.prototype.getDeepestObject=function(){
+	var result=null;
+	if(this.object){
+		
+		this.object.traverse(function(obj){
+			if(obj.type=="Mesh"){
+				result=obj;
+			}//possible Line
+		});
+	}
+	return result;
 }
