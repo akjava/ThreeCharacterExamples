@@ -95,5 +95,21 @@ var Sidebar = function ( application ) {
 	var iks=new Sidebar.IkPreset(ap);
 	container.add(iks);
 	
+	var importPanel=Sidebar.JSONImport(ap,function(json){
+		if(json==null){
+			console.error("not support reset yet,TODO init default");
+			return;
+		}
+		ap.ikControler.setPresets(IkPresets.parse(json,ap.ikControler));
+	});
+	container.add(importPanel);
+	
+	var exportPanel=Sidebar.JSONExport(ap,function(fileName){
+		var ikPresets=ap.ikControler.getPresets();
+		var json=ikPresets.toJSON();
+		return JSON.stringify(json);
+	});
+	container.add(exportPanel);
+	
 	return container;
 }
