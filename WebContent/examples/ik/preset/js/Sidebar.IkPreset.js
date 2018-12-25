@@ -14,9 +14,12 @@ Sidebar.IkPreset=function(ap){
 	var button=new UI.Button("Add").onClick(function(){
 		var selection=presetList.getValue();
 		if(selection==""){
+			var ikName=ap.ikControler.getSelectedIkName();
 			var name=inputRow.input.getValue();
 			var ikPresets=ap.ikControler.getPresets();
 			var result=ikPresets.addRotationsFromBone(name);
+			
+			ikPresets.setVisible(ikName,true);
 			if(result){
 				inputRow.input.setValue("");
 			}

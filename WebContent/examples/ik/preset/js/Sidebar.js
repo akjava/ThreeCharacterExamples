@@ -43,8 +43,8 @@ var Sidebar = function ( application ) {
 	var lockBonePanel=new UI.TitlePanel("Lock Individual Bone Rotation");
 	container.add(lockBonePanel);
 	
-	function getSelectedBoneName(){
-		return BoneUtils.getBoneList(ap.skinnedMesh)[ap.boneSelectedIndex].name;
+	function getSelectedBoneName(index){
+		return BoneUtils.getBoneList(ap.skinnedMesh)[index].name;
 	}
 	
 	
@@ -56,9 +56,13 @@ var Sidebar = function ( application ) {
 	});
 	lockBonePanel.add(lockedCheck);
 	
-	var boneSelectionChanged=function(){
-		var name=getSelectedBoneName();
+	var boneSelectionChanged=function(index){
+		if(index==undefined){
+			return;
+		}
+		var name=getSelectedBoneName(index);
 		var value=ap.ikControler.boneLocked[name]!==undefined?ap.ikControler.boneLocked[name]:false;
+		
 		lockedCheck.checkbox.setValue(value);
 		lockedCheck.text.setValue(name);
 	};
