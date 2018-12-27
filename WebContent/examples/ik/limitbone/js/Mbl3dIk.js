@@ -99,7 +99,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			
 			
 			this.limitBone(boneList,"calf_R",0,0,0,165,0,0);
-			this.limitBone(boneList,"thigh_R",-120,0,-70,120,0,70);
+			this.limitBone(boneList,"thigh_R",-120,0,-70,90,0,70);
 			this.limitBone(boneList,"foot_R",-15,-5,-5,15,5,5);
 			
 			this.limitBone(boneList,"hand_R",-15,-15,-15,15,15,15);
@@ -109,7 +109,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			
 			
 			this.limitBone(boneList,"calf_L",0,0,0,165,0,0);
-			this.limitBone(boneList,"thigh_L",-120,0,-70,120,0,70);
+			this.limitBone(boneList,"thigh_L",-120,0,-70,90,0,70);
 			this.limitBone(boneList,"foot_L",-15,-5,-5,15,5,5);
 			
 			this.limitBone(boneList,"hand_L",-15,-15,-15,15,15,15);

@@ -146,11 +146,11 @@ Example=function(application){
 			ap.ikControler.solveIk();
 		});
 		
-		//TODO json
+		//for test json
 		var datas=[new THREE.Vector3(20,0,0),new THREE.Vector3(45,-75,0),new THREE.Vector3(-15,-120,15),new THREE.Vector3(0,0,0)];
 		
 		var ikPresets=new IkPresets(ap.ikControler);
-		ikPresets.addDegreeRotations("LeftArm",datas)
+		//ikPresets.addDegreeRotations("LeftArm",datas)
 	
 		ap.ikControler.ikPresets=ikPresets;
 		
