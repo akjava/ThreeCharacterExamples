@@ -1,0 +1,83 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	margin: 0;
+	overflow: hidden;
+}
+
+.Panel {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+
+	/* No support for these yet */
+	-o-user-select: none;
+	user-select: none;
+}
+.Row{
+	padding:1px;
+}
+
+.appname{
+	font-weight: 450;
+	color: #aaa; 
+	padding:4px;
+}
+
+.title{
+	font-weight: 900;
+	color: #666666; 
+	padding-bottom:4px;
+}
+
+
+input.Number {
+	color: #08f!important;
+	font-size: 12px;
+	border: 0px;
+	padding: 2px;
+	cursor: col-resize;
+}
+
+#viewport {
+	position: absolute;
+	top: 0px;
+	left: 0;
+	right: 300px;
+	bottom: 0;
+}
+
+#sidebar {
+	position: absolute;
+	right: 0;
+	top: 0px;
+	bottom: 0;
+	width: 300px;
+	background: #eee;
+	overflow: auto;
+}
+	#sidebar .Panel {
+		color: #888;
+		padding: 4px;
+		border-top: 1px solid #ccc;
+	}
+	
+		#sidebar * {
+		vertical-align: middle;
+	}
+	
+#tabs {
+	background-color: #ddd;
+	border-top: 1px solid #ccc;
+}
+
+	#tabs span {
+		color: #aaa;
+		border-right: 1px solid #ccc;
+		padding: 10px;
+	}
+
+	#tabs span.selected {
+		color: #888;
+		background-color: #eee;
+	}
