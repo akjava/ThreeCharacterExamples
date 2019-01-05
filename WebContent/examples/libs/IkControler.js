@@ -221,6 +221,10 @@ IkControler.prototype.onTransformStarted=function(target){
 IkControler.prototype.onTransformFinished=function(target){
 var scope=this;
 if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+	if(!scope.ap.signals.boneRotationChanged){
+		console.log("no scope.ap.signals.boneRotationChanged");
+		return;
+	}
 	var name=this.ikTarget.ikName;
 	var indices=this.iks[name];
 	indices.forEach(function(index){

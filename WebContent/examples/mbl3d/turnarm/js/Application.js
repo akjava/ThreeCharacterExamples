@@ -29,6 +29,10 @@ var Application = function () {
 
 
 	this.signals = {
+			applyTurnArm:new Signal(),
+			recoverTurnArm:new Signal(),
+			storeTurnArm:new Signal(),
+			
 			boneLimitLoaded:new Signal(),
 			boneLimitChanged:new Signal(),
 			boneSelectionChanged:new Signal(),

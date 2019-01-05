@@ -113,6 +113,28 @@ Example=function(application){
 			ap.ikControler.onTransformSelectionChanged(target);
 		},undefined,1);//need high priority to call first
 		
+		function onTransformStarted(target){
+			if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+				ap.signals.recoverTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+			}
+		}
+		
+		function onTransformFinished(target){
+			if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+				ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+				ap.signals.applyTurnArm.dispatch(ap.ikControler.getSelectedIkName());//store & update
+			}
+		}
+		
+		
+		ap.transformControls.addEventListener( 'mouseUp', function () {
+			ap.ikControler.onTransformFinished(scope.target);
+			onTransformFinished(scope.target);
+		});
+
+		ap.transformControls.addEventListener( 'mouseDown', function () {
+			onTransformStarted(scope.target);
+		});
 
 		
 		
