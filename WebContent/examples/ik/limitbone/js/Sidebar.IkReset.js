@@ -8,14 +8,22 @@ Sidebar.IkReset=function(ap){
 		if(ap.signals.boneTranslateChanged){
 			ap.signals.boneTranslateChanged.dispatch();
 		}
-		ap.signals.boneRotationChanged.dispatch();
+		if(ap.signals.boneRotationChanged){
+			ap.signals.boneRotationChanged.dispatch();
+		}
+		
 	});
 	resetPanel.add(buttonRow);
 	var resetSelection=new UI.Button("Reset Selection");
 	resetSelection.onClick(function(){
 		var index=ap.ikControler.boneSelectedIndex;
 		BoneUtils.resetBone(ap.skinnedMesh,index);
-		ap.signals.boneRotationChanged.dispatch(index);
+		if(ap.signals.boneRotationChanged){
+			ap.signals.boneRotationChanged.dispatch(index);
+		}else{
+			console.log("need ap.signals.boneRotationChanged")
+		}
+		
 		if(ap.signals.boneTranslateChanged){
 			ap.signals.boneTranslateChanged.dispatch();
 		}
