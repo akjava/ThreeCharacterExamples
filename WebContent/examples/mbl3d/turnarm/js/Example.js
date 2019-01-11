@@ -114,19 +114,31 @@ Example=function(application){
 			ap.ikControler.onTransformSelectionChanged(target);
 		},undefined,1);//need high priority to call first
 		
+		
+		var renderer=function(){
+			ap.renderer.render( ap.scene, ap.camera );	
+		}
+		ap.signals.rendered.add(renderer,undefined,1);
+		
+		
 		function onTransformStarted(target){
 			if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 				ap.signals.recoverTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+				ap.signals.rendered.remove(renderer);
 			}
 		}
 		
 		function onTransformFinished(target){
 			if(target!=null && target.userData.transformSelectionType=="BoneIk"){
-				ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
-				ap.signals.applyTurnArm.dispatch(ap.ikControler.getSelectedIkName());//store & update
+				//ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+				//ap.signals.applyTurnArm.dispatch(ap.ikControler.getSelectedIkName());//store & update
+				
+				ap.signals.rendered.add(renderer,undefined,1);
 			}
 		}
 		
+		
+	
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
 			ap.ikControler.onTransformFinished(scope.target);
@@ -135,6 +147,7 @@ Example=function(application){
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
 			onTransformStarted(scope.target);
+			ap.signals.rendered.remove(renderer);
 		});
 
 		
@@ -147,14 +160,26 @@ Example=function(application){
 		
 		
 		
-		ap.signals.transformChanged.add(function(){	
+		ap.signals.transformChanged.add(function(){
+			var target=scope.target;
+			if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+				ap.signals.recoverTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+			}
 			ap.ikControler.solveIk();
+			if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+				ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+				ap.signals.applyTurnArm.dispatch(ap.ikControler.getSelectedIkName());//store & update
+			}
+			
+			ap.renderer.render( ap.scene, ap.camera );
 		});
 		} catch(e) {
 			  console.error(e);
 			}
 	});
 	
+	
+
 	
 
 	

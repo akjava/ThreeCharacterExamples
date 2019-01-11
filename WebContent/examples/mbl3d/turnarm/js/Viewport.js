@@ -140,8 +140,6 @@ var Viewport = function ( application ) {
 	}
 	
 	function render() {
-		renderer.render( scene, camera );
-		
 		application.signals.rendered.dispatch();
 	}
 	
