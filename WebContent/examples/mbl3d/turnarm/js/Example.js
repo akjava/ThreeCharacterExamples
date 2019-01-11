@@ -101,7 +101,8 @@ Example=function(application){
 		var mbl3dik=new Mbl3dIk(ap);
 		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
-		
+		ap.ikControler.setEndSiteEnabled("LeftArm",true);
+		ap.ikControler.setEndSiteEnabled("RightArm",true);
 		
 		scope.target=null;
 		ap.signals.transformSelectionChanged.add(function(target){
