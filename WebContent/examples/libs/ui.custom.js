@@ -932,3 +932,17 @@ UI.Anchor = function (href,text) {
 };
 UI.Anchor.prototype = Object.create( UI.Element.prototype );
 UI.Anchor.prototype.constructor = UI.Anchor;
+
+UI.ButtonsDiv=function(labels,onClick){
+	var div=new UI.Div();
+	var bts=[];
+	labels.forEach(function(label){
+		var bt=new UI.Button(label);
+		bt.onClick(function(){onClick(bt.dom.textContent)});
+		div.add(bt);
+		bts.push(bt);
+		}
+	);
+	div.buttons=bts;
+	return div;
+}

@@ -90,11 +90,37 @@ Sidebar.TurnArm=function(ap){
 		ap.signals.applyTurnArm.dispatch("LeftArm");
 	},[-180,-90,0,90]);
 	panel.add(leftArm);
-	var leftArm=new UI.NumberButtons("Right",-180-45,90,10,0,function(v){
+	
+	var row1=new UI.Row();
+	row1.setTextAlign("Right");
+	row1.add(new UI.ButtonsDiv([-30,-15,-5,-1,1,5,15,30],function(v){
+		var num=Number(v);
+		var newValue=leftArm.getValue()+num;
+		leftArm.setValue(newValue);
+		
+		ap.turnArmAngle_L=newValue;
+		ap.signals.applyTurnArm.dispatch("LeftArm");
+	}));
+	panel.add(row1);
+	
+	
+	var rightArm=new UI.NumberButtons("Right",-180-45,90,10,0,function(v){
 		ap.turnArmAngle_R=v;
 		ap.signals.applyTurnArm.dispatch("RightArm");
 	},[-180,-90,0,90]);
-	panel.add(leftArm);
+	panel.add(rightArm);
+	
+	var row2=new UI.Row();
+	row2.setTextAlign("Right");
+	row2.add(new UI.ButtonsDiv([-30,-15,-5,-1,1,5,15,30],function(v){
+		var num=Number(v);
+		var newValue=rightArm.getValue()+num;
+		rightArm.setValue(newValue);
+		
+		ap.turnArmAngle_R=newValue;
+		ap.signals.applyTurnArm.dispatch("RightArm");
+	}));
+	panel.add(row2);
 	
 	return panel;
 }
