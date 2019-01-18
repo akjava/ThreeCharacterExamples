@@ -69,7 +69,7 @@ container.add( io);
 var ikTab = new UI.Text( 'Ik' ).onClick( onClick );
 tabs.add( ikTab);
 var ik= new UI.Span().add(
-		ikPanel
+		ikPanel,new Sidebar.IkRatio(ap)
 	);
 container.add( ik);
 
