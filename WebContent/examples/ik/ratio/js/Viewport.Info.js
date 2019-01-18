@@ -93,6 +93,7 @@ Viewport.Info = function ( application ) {
 
 		ikText.setValue(ikName);
 		if(!ikName==""){
+			//console.log(ap.ikControler.ikIndices);
 			var lastJoint=ap.ikControler.ikIndices[ap.ikControler.ikIndices.length-1];
 			var bone=BoneUtils.getBoneList(ap.skinnedMesh)[lastJoint];
 			var boneName=bone.name;

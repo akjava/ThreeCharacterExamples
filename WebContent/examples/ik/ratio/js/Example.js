@@ -109,19 +109,21 @@ Example=function(application){
 		ap.ikControler.resetAllIkTargets();
 		
 		
+		scope.target=null;
 		ap.signals.transformSelectionChanged.add(function(target){
-			
-			ap.ikControler.ikTarget=target;
-			
+			scope.target=target;
 			if(target==null){
-				ap.ikControler.ikIndices=null;
 				ap.transformControls.detach();
-			}else{
-				ap.signals.ikSelectionChanged.dispatch(target.ikName);
-				ap.ikControler.ikIndices=ap.ikControler.iks[target.ikName];
-				ap.transformControls.attach(target);
 			}
+			
+			ap.ikControler.onTransformSelectionChanged(target);
+
 		},undefined,1);//need high priority to call first
+		
+
+		ap.transformControls.addEventListener( 'mouseUp', function () {
+			ap.ikControler.onTransformFinished(scope.target);
+		});
 		
 		ap.signals.ikInitialized.dispatch();
 
