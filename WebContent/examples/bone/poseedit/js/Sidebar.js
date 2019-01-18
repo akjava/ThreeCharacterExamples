@@ -5,6 +5,7 @@ var Sidebar = function ( application ) {
 	container.add(new UI.AppName("Pose Edit"));
 	
 	
+	ap.ikControler.maxAngle=5;//change because of ikratio
 	
     var ikPanel=new Sidebar.IkLBasic(application);
     ikPanel.add(new Sidebar.IkSolve(ap));
@@ -68,6 +69,7 @@ container.add( io);
 
 var ikTab = new UI.Text( 'Ik' ).onClick( onClick );
 tabs.add( ikTab);
+
 var ik= new UI.Span().add(
 		ikPanel,new Sidebar.Iks(ap),new Sidebar.IkRatio(ap)
 	);

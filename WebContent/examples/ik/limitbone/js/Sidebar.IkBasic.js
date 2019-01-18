@@ -23,6 +23,7 @@ Sidebar.IkLBasic=function(ap){
 	minAngle.number.setValue(minAngle.number.getValue());
 	minAngle.text.setWidth("70px");
 	
+
 	var maxAngle=new UI.NumberButtons("Max Angle",0.1,45,1,ap.ikControler.maxAngle,function(v){
 		ap.ikControler.maxAngle=v;
 	},[0.1,1,5]);
