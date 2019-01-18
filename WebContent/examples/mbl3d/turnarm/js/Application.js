@@ -29,6 +29,7 @@ var Application = function () {
 
 
 	this.signals = {
+			boneRotationChanged:new Signal(),
 			applyTurnArm:new Signal(),
 			recoverTurnArm:new Signal(),
 			storeTurnArm:new Signal(),

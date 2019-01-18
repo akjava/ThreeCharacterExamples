@@ -86,6 +86,11 @@ Example=function(application){
 		
 		ap.signals.poseChanged.add(function(){
 			ap.ikControler.resetAllIkTargets();
+			ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
+		});
+		
+		ap.signals.boneRotationChanged.add(function(){
+			ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
 		});
 		
 		
