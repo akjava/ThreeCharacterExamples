@@ -118,7 +118,12 @@ BoneAttachControler.prototype.update=function(){
 
 BoneAttachControler.prototype.setVisible=function(visible){
 	this.containerList.forEach(function(container){
-		container.material.visible=visible;
+		container.traverse(function(object){
+			if(object.material){
+				object.material.visible=visible;
+			}
+		});
+		
 	});
 	
 }
@@ -151,12 +156,6 @@ BoneAttachControler.prototype.computeBoundingBox=function(){
 
 }
 
-BoneAttachControler.prototype.setVisible=function(visible){
-	this.containerList.forEach(function(container){
-		container.material.visible=visible;
-	});
-	
-}
 BoneAttachControler.prototype.setAllScale=function(scale){
 	this.containerList.forEach(function(container){
 		container.scale.setScalar(scale);

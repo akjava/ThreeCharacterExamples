@@ -2,6 +2,18 @@ Sidebar.IkLBasic=function(ap){
 
 	var ikPanel=new UI.TitlePanel("Ik Basic");
 
+	var enabled=new UI.CheckboxRow("Enabled",true,function(v){
+		var values=ap.ikControler.getIkTargetsValue();
+		values.forEach(function(target){
+			target.material.visible=v;
+			var name=ap.ikControler.getIkNameFromTarget(target);
+			var enableEndSite=ap.ikControler.isEnableEndSiteByName(name);
+			if(enableEndSite){
+				ap.ikControler.setEndSiteVisible(name,v);
+			}
+		});
+	});
+	ikPanel.add(enabled);
 	
 	var minAngle=new UI.NumberButtons("Min Angle",0.0001,1,0.001,IkUtils.minAngle,function(v){
 		IkUtils.minAngle=THREE.Math.degToRad(v);

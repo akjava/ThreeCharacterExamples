@@ -12,6 +12,21 @@ Example=function(application){
 	
 	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,transparent:true,opacity:1,depthTest: true});
 	
+	//handle texture
+	ap.signals.loadingTextureStarted.add (function () {
+		if(ap.textureUrl!=null){
+			ap.texture=new THREE.TextureLoader().load(ap.textureUrl);
+			ap.texture.flipY = true;//FBX
+			ap.texture.minFilter=THREE.LinearFilter;
+		}else{
+			ap.texture=null;
+		}
+	} );
+	
+	ap.signals.loadingTextureFinished.add (function () {
+		ap.skinnedMesh.material.map=ap.texture;
+		ap.skinnedMesh.material.needsUpdate=true;
+	} );
 	
 
 	var lastEuler=new THREE.Euler();

@@ -90,6 +90,11 @@ if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
 	this.refreshSphere();
 	}
 }
+RotatationControler.prototype.setVisible=function(v){
+	Object.values(this.rotationControls).forEach(function(object){
+		object.material.visible=v;
+	})
+}
 
 RotatationControler.prototype.refreshSphere=function(){
 	var bone=this.boneAttachControler.boneList[this.boneIndex];

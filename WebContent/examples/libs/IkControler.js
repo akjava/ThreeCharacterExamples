@@ -56,8 +56,20 @@ if(ap.signals.ikSelectionChanged){
 	}
 };
 
+IkControler.prototype.getIkNameFromTarget=function(target){
+	if(target.userData.ikName){
+		return target.userData.ikName;
+	}else{
+		//deprecated
+		return target.ikName;
+	}
+}
+
 IkControler.prototype.getIkTargetFromName=function(ikName){
 	return this.ikTargets[ikName];
+}
+IkControler.prototype.getIkTargetsValue=function(){
+	return Object.values(this.ikTargets);
 }
 
 IkControler.prototype.setPresets=function(ikPresets){
@@ -103,7 +115,7 @@ IkControler.prototype.isEnableEndSiteByName=function(name){
 	var index=indices[indices.length-1];
 	var object=this.boneAttachControler.containerList[index];
 	
-	return enableEndSite(object);
+	return this.enableEndSite(object);
 }
 
 IkControler.prototype.enableEndSite=function(object){
@@ -150,6 +162,21 @@ IkControler.prototype.setEndSiteEnabled=function(name,enabled){
 	lastMesh.userData.endsite.userData.enabled=enabled;
 	lastMesh.userData.endsite.material.visible=enabled;
 	lastMesh.userData.endsite.userData.joint.material.visible=enabled;
+}
+IkControler.prototype.setEndSiteVisible=function(name,visible){
+
+	var target=this.ikTargets[name];
+	if(target==undefined){
+		console.error("setEndSiteEnabled:No target found ",name);
+	}
+	var indices=this.iks[name];
+
+	var index=indices[indices.length-1];
+
+	var lastMesh=this.boneAttachControler.containerList[index];
+
+	lastMesh.userData.endsite.material.visible=visible;
+	lastMesh.userData.endsite.userData.joint.material.visible=visible;
 }
 
 IkControler.prototype.resetAllIkTargets=function(exclude){

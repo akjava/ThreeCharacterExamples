@@ -143,6 +143,7 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		sphere.userData.boneIndex=0;
 		sphere.userData.transformSelectionType="BoneTranslate";
 		ap.objects.push(sphere);
+		ap.translateControler=sphere;
 		
 		var pos=new THREE.Vector3();
 		function onTransformChanged(){

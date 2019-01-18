@@ -16,9 +16,14 @@ var Application = function () {
 	
 	this.ikControler=new IkControler(undefined,this);
 	
+	this.defaultTextureUrl=null;
+	this.textureUrl=this.defaultTextureUrl;
+	
 	var Signal = signals.Signal;
 
 	this.signals = {
+			loadingTextureStarted:new Signal(),
+			loadingTextureFinished:new Signal(),
 			ikInitialized:new Signal(),
 			solveIkCalled:new Signal(),
 			boneSelectionChanged:new Signal(),//bone selection changed by selector or click

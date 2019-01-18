@@ -4,6 +4,8 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Pose Edit"));
 	
+	
+	
     var ikPanel=new Sidebar.IkLBasic(application);
     ikPanel.add(new Sidebar.IkSolve(ap));
     
@@ -35,18 +37,25 @@ var Sidebar = function ( application ) {
 		select( event.target.textContent );
 
 	}
+	
+var visiblePanel=new UI.Panel();
+var visibleTransform=new UI.CheckboxRow("Visible transform controler",true,function(v){
+	ap.translateControler.material.visible=v;
+	ap.rotatationControler.setVisible(v);
+});
+visiblePanel.add(visibleTransform);
 
 var poseTab = new UI.Text( 'Pose' ).onClick( onClick );
 tabs.add( poseTab);
 var pose= new UI.Span().add(
-		rootTranslate,editPanel,ikReset,IkBoneList,ground
+		visiblePanel,rootTranslate,editPanel,ikReset,IkBoneList,ground
 	);
 container.add( pose);
 
 var settingsTab = new UI.Text( 'Settings' ).onClick( onClick );
 tabs.add( settingsTab);
 var settings= new UI.Span().add(
-		transparent
+		transparent,new Sidebar.Texture(ap)
 	);
 container.add( settings);
 
