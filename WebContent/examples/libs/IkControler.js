@@ -119,7 +119,8 @@ IkControler.prototype.isEnableEndSiteByName=function(name){
 }
 
 IkControler.prototype.enableEndSite=function(object){
-	return object.userData.endsite && object.userData.endsite.userData.enabled;
+	console.log(object.userData.endsite,object.userData.endsite.userData.enabled);
+	return object.userData.endsite && object.userData.endsite.userData.enabled == true;
 }
 
 IkControler.prototype.resetIkTargetPosition=function(name){
