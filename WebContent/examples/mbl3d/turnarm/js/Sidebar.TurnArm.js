@@ -85,7 +85,7 @@ Sidebar.TurnArm=function(ap){
 		
 	});
 	
-	var leftArm=new UI.NumberButtons("Left",-180-45,90,10,0,function(v){
+	var leftArm=new UI.NumberButtons("Left",-180-30,90,10,0,function(v){
 		ap.turnArmAngle_L=v;
 		ap.signals.applyTurnArm.dispatch("LeftArm");
 	},[-180,-90,0,90]);
@@ -104,7 +104,7 @@ Sidebar.TurnArm=function(ap){
 	panel.add(row1);
 	
 	
-	var rightArm=new UI.NumberButtons("Right",-180-45,90,10,0,function(v){
+	var rightArm=new UI.NumberButtons("Right",-180-30,90,10,0,function(v){
 		ap.turnArmAngle_R=v;
 		ap.signals.applyTurnArm.dispatch("RightArm");
 	},[-180,-90,0,90]);

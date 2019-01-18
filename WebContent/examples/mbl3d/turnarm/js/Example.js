@@ -84,6 +84,7 @@ Example=function(application){
 		
 
 		
+		//called when reset
 		ap.signals.poseChanged.add(function(){
 			ap.ikControler.resetAllIkTargets();
 			ap.signals.storeTurnArm.dispatch(ap.ikControler.getSelectedIkName());
