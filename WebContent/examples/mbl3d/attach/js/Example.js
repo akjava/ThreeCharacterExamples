@@ -1,12 +1,14 @@
 Example=function(application){
 	var ap=application;
+	var scale=100;
 	
-	ap.camera.position.set( 0, 100, 250 );
-	ap.controls.target.set(0,100,0);
+	ap.camera.position.set( 0, 1*scale, 2.5*scale );
+	ap.controls.target.set(0,1*scale,0);
 	ap.controls.update();
 	
 	AppUtils.decoderPath="../../libs/draco/gltf/";
-	var url="../../../dataset/mbl3d/models/anime2_nomorph_draco.glb";
+	//var url="../../../dataset/mbl3d/models/anime2_nomorph_draco.glb";
+	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
 	
 	var textureUrl="../../../dataset/mbl3d/texture/m_brown.png";
 	//var textureUrl="../models/m_brown.png";
@@ -15,10 +17,19 @@ Example=function(application){
 	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,morphTargets:true,map:texture,alphaTest:0.2});
 
 	var convertToZeroRotatedBoneMesh=true;
-	AppUtils.loadGltfMesh(url,function(mesh){
+	AppUtils.loadMesh(url,function(mesh){
+		var isGltf=mesh.isGltf;//set before convert //TODO switch userData
+		
 		if(convertToZeroRotatedBoneMesh){
 			mesh=BoneUtils.convertToZeroRotatedBoneMesh(mesh);
 		}
+		
+		if(isGltf){
+			mesh.scale.set(scale,scale,scale);
+		}else{
+			texture.flipY=true;
+		}
+		
 		mesh.normalizeSkinWeights();
 		
 		var container=new THREE.Group();
@@ -26,7 +37,7 @@ Example=function(application){
 		this.container=container;
 		
 		console.log("loadGltfMesh:",url);
-		mesh.scale.set(100,100,100);
+
 		mesh.material=material;
 		container.add(mesh);
 		ap.skinnedMesh=mesh;
