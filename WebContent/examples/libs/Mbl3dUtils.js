@@ -23,7 +23,8 @@ var Mbl3dUtils={
 			}
 			return shorten;
 		},
-		loadTexture:function(url){
+		loadTexture:function(url,flipY){
+			flipY=flipY==undefined?false:flipY;
 			var texture=new THREE.TextureLoader().load(url);
 			texture.flipY = false;
 			texture.minFilter=THREE.LinearFilter;
