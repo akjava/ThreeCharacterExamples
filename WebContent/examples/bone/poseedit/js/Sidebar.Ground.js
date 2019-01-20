@@ -56,7 +56,9 @@ Sidebar.Ground=function(ap){
 		var box=ap.ikControler.boneAttachControler.boundingBox;
 		
 		var v=Math.abs(box.min.y);
-		groundMargin.setValue(v);
+		v*=2;
+		console.log(v);
+		groundMargin.setValue(v);//modifer
 		scope.margin=v;
 	});
 	
