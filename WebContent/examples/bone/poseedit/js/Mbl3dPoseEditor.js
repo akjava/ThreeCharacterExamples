@@ -104,17 +104,7 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 			}
 		});
 		
-		ap.signals.transformChanged.add(function(){
-			//check conflict
-			ap.ikControler.solveIk();
-			
-			//solve others
-			if(!ap.ikControler.followOtherIkTargets){
-				ap.ikControler.solveOtherIkTargets();
-			}
-			
-			onTransformChanged();
-		});
+
 		var mbl3dik=new Mbl3dIk(ap);
 		ap.ikControler.ikTargets=mbl3dik.ikTargets;
 		
@@ -144,71 +134,33 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		ap.rotatationControler=rotatationControler;
 		
 		//translate control
-		var root=scope.boneAttachControler.containerList[0];
-		var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x000088,depthTest:false,transparent:true,opacity:.5}));
-		sphere.renderOrder=1;
-		sphere.position.copy(root.position);
-		ap.scene.add(sphere);
-		sphere.userData.boneIndex=0;
-		sphere.userData.transformSelectionType="BoneTranslate";
-		ap.objects.push(sphere);
-		ap.translateControler=sphere;
+		var translateControler=new TranslateControler(ap,scope.boneAttachControler);
+		translateControler.initialize();
+		
+		ap.translateControler=translateControler;
 		
 		var pos=new THREE.Vector3();
-		function onTransformChanged(){
-			var target=scope.target;
-			
-			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
-				var bonePos=scope.boneAttachControler.boneList[target.userData.boneIndex].position;
-				var diff=target.position.clone().sub(root.position);
-				
-				bonePos.add(diff);
-				scope.boneAttachControler.update();
-				
-				ap.signals.boneTranslateChanged.dispatch();
-			}
-		}
+
 		
 		ap.signals.boneTranslateChanged.add(function(){
 			ap.ikControler.resetAllIkTargets();
 		});
 		
 		
-		
-		function onBoneTranslateChanged(){
-			resetPosition();
+		ap.signals.transformChanged.add(function(){
+			//check conflict
+			ap.ikControler.solveIk();
 			
-		}
-		
-		ap.signals.boneTranslateChanged.add(onBoneTranslateChanged);
-		
-		function resetPosition(){
-			scope.boneAttachControler.update();
-			sphere.position.copy(root.position);
-		}
-		
-		function onTransformSelectionChanged(target){
-			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
-				ap.transformControls.setMode( "translate" );
-				ap.transformControls.attach(target);
-				//target.quaternion.copy(target.parent.quaternion);
-				//target.position.set(0,0,0);
+			//solve others
+			if(!ap.ikControler.followOtherIkTargets){
+				ap.ikControler.solveOtherIkTargets();
 			}
-		}
+			
+			translateControler.onTransformChanged(scope.target);
+		});
+
 		
-		function onTransformStarted(target){
-			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
-				ap.signals.boneTranslateChanged.remove(onBoneTranslateChanged);
-			}
-		}
-		
-		function onTransformFinished(target){
-			if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
-				ap.ikControler.resetAllIkTargets();
-				
-				ap.signals.boneTranslateChanged.add(onBoneTranslateChanged);
-			}
-		}
+
 		
 		//transformSelectionChanged
 		scope.target=null;
@@ -220,17 +172,17 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 			
 			ap.ikControler.onTransformSelectionChanged(target);
 			rotatationControler.onTransformSelectionChanged(target);
-			onTransformSelectionChanged(target);
+			translateControler.onTransformSelectionChanged(target);
 		},undefined,1);
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
 			rotatationControler.onTransformFinished(scope.target);
 			ap.ikControler.onTransformFinished(scope.target);
-			onTransformFinished(scope.target);
+			translateControler.onTransformFinished(scope.target);
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
-			onTransformStarted(scope.target);
+			translateControler.onTransformStarted(scope.target);
 			rotatationControler.onTransformStarted(scope.target);
 		});
 		

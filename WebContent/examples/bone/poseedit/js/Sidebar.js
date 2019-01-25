@@ -41,7 +41,7 @@ var Sidebar = function ( application ) {
 	
 var visiblePanel=new UI.Panel();
 var visibleTransform=new UI.CheckboxRow("Visible transform controler",true,function(v){
-	ap.translateControler.material.visible=v;
+	ap.translateControler.translateControls["root"].material.visible=v;
 	ap.rotatationControler.setVisible(v);
 });
 visiblePanel.add(visibleTransform);
