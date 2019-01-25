@@ -31,6 +31,12 @@ TranslateControler.prototype.initialize=function(){
 	}
 	scope.onBoneTranslateChanged=onBoneTranslateChanged;
 	ap.signals.boneTranslateChanged.add(onBoneTranslateChanged);
+	
+	ap.signals.poseChanged.add(function(){
+		
+		//translate
+		sphere.position.copy(root.position);
+	});
 }
 
 TranslateControler.prototype.onTransformChanged=function(target){

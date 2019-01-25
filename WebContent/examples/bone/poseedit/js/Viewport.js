@@ -80,6 +80,10 @@ var Viewport = function ( application ) {
 					lastHandleClick=-1;
 				}
 				var object = intersects[index ].object;
+				
+				if(object.type=="SkinnedMesh"){
+					object=intersects[0].object;
+				}
 
 				ap.signals.transformSelectionChanged.dispatch(object);
 				

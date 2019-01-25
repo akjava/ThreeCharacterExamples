@@ -1,4 +1,4 @@
-var Mbl3dPoseEditor=function(ap,scale){
+var Mbl3dPoseEditor=function(ap,scale,optionalControler){
 	this.ap=ap;
 	this.container=null;//add mesh here
 	this.scale=scale
@@ -9,6 +9,8 @@ var Mbl3dPoseEditor=function(ap,scale){
 			scope.boneAttachControler.update();
 		}
 	});
+	
+	this.optionalControler=optionalControler;
 }
 
 Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
@@ -80,9 +82,6 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		
 		ap.signals.poseChanged.add(function(){
 			ap.ikControler.resetAllIkTargets();
-			
-			//translate
-			sphere.position.copy(root.position);
 		});
 		
 		if(!ap.signals.solveIkCalled){
@@ -100,7 +99,7 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 			ap.ikControler.resetAllIkTargets(selection);
 			
 			if(index==0){
-				resetPosition();
+				ap.signals.boneTranslateChanged.dispatch();//I'm not sure this is need?
 			}
 		});
 		
@@ -173,17 +172,30 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 			ap.ikControler.onTransformSelectionChanged(target);
 			rotatationControler.onTransformSelectionChanged(target);
 			translateControler.onTransformSelectionChanged(target);
+			
+			if(scope.optionalControler){
+				scope.optionalControler.onTransformSelectionChanged(target);
+			}
+			
 		},undefined,1);
 		
 		ap.transformControls.addEventListener( 'mouseUp', function () {
 			rotatationControler.onTransformFinished(scope.target);
 			ap.ikControler.onTransformFinished(scope.target);
 			translateControler.onTransformFinished(scope.target);
+			
+			if(scope.optionalControler){
+				scope.optionalControler.onTransformFinished(scope.target);
+			}
 		});
 
 		ap.transformControls.addEventListener( 'mouseDown', function () {
 			translateControler.onTransformStarted(scope.target);
 			rotatationControler.onTransformStarted(scope.target);
+			
+			if(scope.optionalControler){
+				scope.optionalControler.onTransformStarted(scope.target);
+			}
 		});
 		
 
@@ -216,6 +228,8 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		}
 		loadHair();
 		ap.signals.ikInitialized.dispatch();
+		
+		
 		}catch(e){
 			console.error(e);
 		}
