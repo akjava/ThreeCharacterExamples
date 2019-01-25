@@ -158,7 +158,8 @@ var AppUtils={
 		},radToDeg:function(xyz){
 			return {x:THREE.Math.radToDeg(xyz.x),y:THREE.Math.radToDeg(xyz.y),z:THREE.Math.radToDeg(xyz.z)};
 		},
-		printVec:function(xyz){
+		printVec:function(xyz,text){
+			text=text==undefined?"":text;
 			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2),text)
 		}
 		,clearAllChildren:function(parent){

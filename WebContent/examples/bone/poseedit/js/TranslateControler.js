@@ -46,9 +46,14 @@ TranslateControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
 		var root=scope.boneAttachControler.containerList[0];
 		
-		var bonePos=scope.boneAttachControler.boneList[target.userData.boneIndex].position;
-		var diff=target.position.clone().sub(root.position);
 		
+		var diff=target.position.clone().sub(root.position);
+		//AppUtils.printVec(diff,"before");
+		var q=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().getInverse(root.matrixWorld));
+		diff.applyQuaternion(q);
+		//AppUtils.printVec(diff,"after");
+		
+		var bonePos=scope.boneAttachControler.boneList[target.userData.boneIndex].position;
 		bonePos.add(diff);
 		scope.boneAttachControler.update();
 		

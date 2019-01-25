@@ -90,7 +90,7 @@ Sidebar.MeshTransform=function(ap){
 	panel.add(boneMoveZ);
 	
 	//rotate
-	panel.add(new UI.Subtitle("Translate"));
+	panel.add(new UI.Subtitle("Rotate"));
 	
 	var bt=new UI.ButtonRow("Select Mesh",function(){
 		ap.skinnedMesh.userData.transformMode="ObjectRotate";
