@@ -7,7 +7,8 @@ var Sidebar = function ( application ) {
 	
 	ap.ikControler.maxAngle=5;//change because of ikratio
 	
-
+	var meshTransform=new Sidebar.MeshTransform(ap);
+	container.add(meshTransform);
 	
 	
 	return container;

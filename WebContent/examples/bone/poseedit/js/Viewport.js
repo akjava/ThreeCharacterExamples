@@ -80,15 +80,6 @@ var Viewport = function ( application ) {
 					lastHandleClick=-1;
 				}
 				var object = intersects[index ].object;
-				//try to ignore SkinnedMesh if another possible is exist
-				if(intersects.length >1 && object.type=="SkinnedMesh"){
-					if(index==0){
-						object=intersects[1].object;
-					}else{
-						object=intersects[0].object;
-					}
-					
-				}
 
 				ap.signals.transformSelectionChanged.dispatch(object);
 				

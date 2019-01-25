@@ -46,8 +46,6 @@ Example=function(application){
 	var objectTransformControler=new ObjectTransformControler(ap);
 	ap.signals.skinnedMeshChanged.add(function(mesh){
 		mesh.userData.transformSelectionType="ObjectTransform"
-		ap.objects.push(mesh);
-		//TODO remove
 	});
 	
 	var mbl3dPoseEditor=new Mbl3dPoseEditor(ap,scale,objectTransformControler);

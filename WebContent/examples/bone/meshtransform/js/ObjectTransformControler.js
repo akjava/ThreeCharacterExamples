@@ -1,19 +1,22 @@
 var ObjectTransformControler=function(ap){
 	this.ap=ap;
 	this.helper=null;
-	
-
+	var scope=this;
+	ap.signals.skinnedMeshTransformed.add(function(){
+		if(scope.helper!=null){
+			scope.helper.update();
+		}
+		ap.signals.poseChanged.dispatch();
+	});
 }
 
 ObjectTransformControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
 		if(target.userData.transformMode=="ObjectTranslate"){
-			ap.transformControls.setMode( "rotate" );
-			target.userData.transformMode="ObjectRotate"
-		}else{
 			ap.transformControls.setMode( "translate" );
-			target.userData.transformMode="ObjectTranslate"
+		}else{
+			ap.transformControls.setMode( "rotate" );
 		}
 		
 		ap.transformControls.attach(target);
@@ -47,5 +50,6 @@ ObjectTransformControler.prototype.onTransformFinished=function(target){
 		if(this.helper!=null){
 			this.helper.update();
 		}
+		ap.signals.skinnedMeshTransformed.dispatch();
 	}
 }
