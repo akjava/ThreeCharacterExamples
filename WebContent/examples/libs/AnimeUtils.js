@@ -16,6 +16,11 @@ var AnimeUtils={
 			}
 			
 		},
+		resetMesh:function(mesh){
+			mesh.position.set(0,0,0);
+			mesh.quaternion.set(0,0,0,1);
+			//TODO how to handel  scale
+		},
 		startClip:function(mixer,clip){
 			mixer.uncacheClip(clip);
 			return mixer.clipAction(clip).play();
@@ -480,9 +485,26 @@ var AnimeUtils={
 				return undefined;
 			}
 			return parseInt(result[1]);
+		},
+		
+		makeMeshClip:function(mesh){
+			var tracks=[];
+			
+			var q=mesh.quaternion;
+			var qtrack=new THREE.QuaternionKeyframeTrack(".quaternion", [0], q.toArray());
+			tracks.push(qtrack);
+			
+			var p=mesh.position;
+			var ptrack=new THREE.VectorKeyframeTrack(".position", [0], p.toArray());
+			tracks.push(ptrack);
+			
+			var s=mesh.scale;
+			var strack=new THREE.VectorKeyframeTrack(".scale", [0], s.toArray());
+			tracks.push(qtrack);
+			
+			var clip=new THREE.AnimationClip("makeMeshClip", -1, tracks);
+			return clip;
 		}
-		
-		
 		
 }
 

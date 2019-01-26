@@ -6,8 +6,14 @@ Sidebar.Export=function(ap){
 		var pos=ap.skinnedMesh.skeleton.bones[0].position;
 		var obj={0:pos};
 		var translate=AnimeUtils.makeTranslatePose(obj);
-		var newClip=AnimeUtils.concatClips([rotate,translate],"poseClip");
+		
+		
+		var meshClip=AnimeUtils.makeMeshClip(ap.skinnedMesh);
+		
+		var newClip=AnimeUtils.concatClips([rotate,translate,meshClip],"poseClip");
 		//console.log(newClip);
+		
+		//TODO support boneNames
 		
 		return newClip;
 	}

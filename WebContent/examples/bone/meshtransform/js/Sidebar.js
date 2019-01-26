@@ -10,6 +10,11 @@ var Sidebar = function ( application ) {
 	var meshTransform=new Sidebar.MeshTransform(ap);
 	container.add(meshTransform);
 	
+	var exportPanel=new Sidebar.Export(ap);
+	var importPanel=new Sidebar.Import(ap);
+	
+	container.add(exportPanel);
+	container.add(importPanel);
 	
 	return container;
 }

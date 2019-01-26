@@ -8,15 +8,30 @@ Sidebar.Import=function(ap){
 	var fileInput=new UI.TextFile(".json");
 	row1.add(fileInput);
 	
+	function callUpdate(){
+		//for some ik control
+		if(ap.ikControler){
+			ap.skinnedMesh.updateMatrixWorld(true);
+			ap.ikControler.boneAttachControler.update();
+		}
+		
+		if(ap.signals.skinnedMeshTransformed){
+			ap.signals.skinnedMeshTransformed.dispatch();
+			}
+		//maybe duplicate,usually skinnedMeshTransformed call poseChanged
+		if(ap.signals.poseChanged){
+			ap.signals.poseChanged.dispatch();
+			}
+	}
+	
 	fileInput.onChange(function(fileName,text){
 		var mixer=ap.mixer;
 		mixer.stopAllAction();
 		AnimeUtils.resetPose(ap.skinnedMesh);
+		AnimeUtils.resetMesh(ap.skinnedMesh);
 		
 		if(text==null){//just Reset
-			if(ap.signals.poseChanged){
-				ap.signals.poseChanged.dispatch();
-			}
+			callUpdate();
 			return;
 		}
 		
@@ -38,9 +53,8 @@ Sidebar.Import=function(ap){
 		mixer.update();
 		mixer.stopAllAction();
 		
-		if(ap.signals.poseChanged){
-			ap.signals.poseChanged.dispatch();
-		}
+		callUpdate();
+		
 	});
 	
 	return container;
