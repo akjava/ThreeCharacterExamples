@@ -18,6 +18,8 @@ var LoadPosePanel=function(ap,title,buttonTitle,onLoad,onReset,accepts){
 		var root=mixer.getRoot();
 		//TODO check is SkinnedMesh
 		AnimeUtils.resetPose(root);
+		AnimeUtils.resetMesh(root);
+		
 		
 		if(clip!=null){
 			AnimeUtils.clipToPose(clip,root);

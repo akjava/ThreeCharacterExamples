@@ -235,6 +235,36 @@ var AnimeUtils={
 			var clip=new THREE.AnimationClip("makeTranslateBoneAnimation", -1, tracks);
 			return clip
 		},
+		makeMeshTransformAnimation:function(startValues,endValues,intime,outtime,back){
+			back=back!=undefined?back:true;
+			var tracks=[];
+			
+			var times=[0,intime];
+			if(back)
+				times.push(intime+outtime);
+			
+			function toValues(start,end,back){
+				var values=[];
+				values=values.concat(start.toArray());
+				values=values.concat(end.toArray());
+				if(back)
+					values=values.concat(start.toArray());
+				return values;
+			}
+			
+			var qvalues=toValues(startValues.quaternion,endValues.quaternion,back);
+			var qtrack=new THREE.QuaternionKeyframeTrack(".quaternion", times, qvalues);
+			tracks.push(qtrack);
+			
+			var pvalues=toValues(startValues.position,endValues.position,back);
+			var ptrack=new THREE.VectorKeyframeTrack(".position", times, pvalues);
+			tracks.push(ptrack);
+			
+			//TODO support scale animation
+			
+			var clip=new THREE.AnimationClip("makeMeshTransformAnimation", -1, tracks);
+			return clip;
+		},
 		makeRotateBoneAnimation:function(indices,startRotates,endRotates,intime,outtime,back){
 			back=back!=undefined?back:true;
 			var tracks=[];
@@ -258,7 +288,7 @@ var AnimeUtils={
 			}
 			
 			var clip=new THREE.AnimationClip("makeRotateBoneAnimation", -1, tracks);
-			return clip
+			return clip;
 		},
 		makeTranslateBoneAnimation:function(indices,startPositions,endPositions,intime,outtime,back){
 			back=back!=undefined?back:true;
@@ -434,7 +464,7 @@ var AnimeUtils={
 			});
 			var skeleton={bones:list};
 			
-			return {skeleton:skeleton};
+			return {position:skinnedMesh.position.clone(),quaternion:skinnedMesh.quaternion.clone(),skeleton:skeleton};
 		},//for makeRotateBoneAnimation
 		boneListToIndices:function(boneList){
 			var list=[];
@@ -450,8 +480,8 @@ var AnimeUtils={
 			}
 			return list;
 		},//use first frame created by makeRotatePose 
-		clipToPose:function(clip,target){
-			
+		clipToPose:function(clip,target,applyMesh){
+			applyMesh=applyMesh==undefined?true:applyMesh;
 			var tracks=clip.tracks;			
 			tracks.forEach(function(track){
 				var index=AnimeUtils.trackNameToBoneIndex(track.name);
@@ -466,14 +496,27 @@ var AnimeUtils={
 					var y=values[1];
 					var z=values[2];
 					var w=values[3];
-					target.skeleton.bones[index].quaternion.set(x,y,z,w);
+					if(index==undefined){//not bone
+						if(applyMesh){
+							target.quaternion.set(x,y,z,w);
+						}
+					}else{
+						target.skeleton.bones[index].quaternion.set(x,y,z,w);
+					}
+					
 				}else if(track.name.endsWith("position")){
 					var values=track.values;
 					var x=values[0];
 					var y=values[1];
 					var z=values[2];
+					if(index==undefined){
+						if(applyMesh){
+							target.position.set(x,y,z);
+						}
+					}else{
+						target.skeleton.bones[index].position.set(x,y,z);
+					}
 					
-					target.skeleton.bones[index].position.set(x,y,z);
 				}
 				
 			});
@@ -481,7 +524,7 @@ var AnimeUtils={
 		trackNameToBoneIndex:function(name){
 			var re = /bones\[(\d+)\]\./;
 			var result=re.exec(name);
-			if(result.length<2){
+			if(result==null || result.length<2){
 				return undefined;
 			}
 			return parseInt(result[1]);
@@ -498,9 +541,10 @@ var AnimeUtils={
 			var ptrack=new THREE.VectorKeyframeTrack(".position", [0], p.toArray());
 			tracks.push(ptrack);
 			
-			var s=mesh.scale;
+			//TODO other method support scale
+			/*var s=mesh.scale;
 			var strack=new THREE.VectorKeyframeTrack(".scale", [0], s.toArray());
-			tracks.push(qtrack);
+			tracks.push(qtrack);*/
 			
 			var clip=new THREE.AnimationClip("makeMeshClip", -1, tracks);
 			return clip;

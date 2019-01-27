@@ -11,6 +11,7 @@ var Sidebar = function ( application ) {
 	this.initMesh=null;
 	this.time=0.5;
 	this.abaAnimation=true;
+	this.meshAnimation=true;
 	ap.signals.skinnedMeshChanged.add(function(mesh){
 		scope.initMesh=AnimeUtils.cloneSkeletonStructure(mesh);
 	});
@@ -30,10 +31,10 @@ var Sidebar = function ( application ) {
 		var startPositions=[boneList[0].position];
 		
 		
-		dummy=AnimeUtils.cloneSkeletonStructure(scope.initMesh);
-		boneList=BoneUtils.getBoneList(dummy);
+		var dummy2=AnimeUtils.cloneSkeletonStructure(scope.initMesh);
+		boneList=BoneUtils.getBoneList(dummy2);
 		if(scope.poseB!=null){
-			AnimeUtils.clipToPose(scope.poseB,dummy);
+			AnimeUtils.clipToPose(scope.poseB,dummy2);
 		}
 		var endRotates=AnimeUtils.boneListToQuaternions(boneList);
 		var endPositions=[boneList[0].position];
@@ -41,7 +42,16 @@ var Sidebar = function ( application ) {
 		var clip1=AnimeUtils.makeRotateBoneAnimation(indices,startRotates,endRotates,scope.time,scope.time,scope.abaAnimation);
 		var clip2=AnimeUtils.makeTranslateBoneAnimation([0],startPositions,endPositions,scope.time,scope.time,scope.abaAnimation);
 		
-		var clip=AnimeUtils.concatClips([clip1,clip2],"PoseClip");
+		
+		
+		var clip;
+		if(scope.meshAnimation){
+			var clip3=AnimeUtils.makeMeshTransformAnimation(dummy,dummy2,scope.time,scope.time,scope.abaAnimation);
+			clip=AnimeUtils.concatClips([clip1,clip2,clip3],"PoseClip");
+		}else{
+			clip=AnimeUtils.concatClips([clip1,clip2],"PoseClip");
+		}
+		
 		/*clip.tracks.forEach(function(track){
 			track.setInterpolation(scope.interpolate);
 		});*/
@@ -55,8 +65,11 @@ var Sidebar = function ( application ) {
 		scope.poseA=clip;
 		if(clip!=null)
 			AnimeUtils.clipToPose(clip,ap.skinnedMesh);
-		else
+		else{
 			AnimeUtils.resetPose(ap.skinnedMesh);
+			AnimeUtils.resetMesh(ap.skinnedMesh);
+		}
+			
 		updateClip();
 	});
 	container.add(loadPoseA);
@@ -65,8 +78,11 @@ var Sidebar = function ( application ) {
 		scope.poseB=clip;
 		if(clip!=null)
 			AnimeUtils.clipToPose(clip,ap.skinnedMesh);
-		else
+		else{
 			AnimeUtils.resetPose(ap.skinnedMesh);
+			AnimeUtils.resetMesh(ap.skinnedMesh);
+		}
+			
 		updateClip();
 	});
 	container.add(loadPoseA);
@@ -82,6 +98,9 @@ var Sidebar = function ( application ) {
 	
 	var timeRow=new UI.NumberButtons("time",0.01,10,1,scope.time,function(v){scope.time=v;updateClip();},[0.1,0.5,1,5]);
 	animationOptions.add(timeRow);
+	
+	var meshCheck=new UI.CheckboxRow("Mesh Animation",scope.meshAnimation,function(v){scope.meshAnimation=v;updateClip();});
+	animationOptions.add(meshCheck);
 	
 	var abaCheck=new UI.CheckboxRow("A-B-A Animation",scope.abaAnimation,function(v){scope.abaAnimation=v;updateClip();});
 	animationOptions.add(abaCheck);

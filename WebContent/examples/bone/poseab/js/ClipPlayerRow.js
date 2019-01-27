@@ -27,6 +27,10 @@ var ClipPlayerRow=function(ap,getClipFunction){
 			return;
 		}
 		mixer.uncacheClip(clip.name);
+		
+		AnimeUtils.resetPose(ap.skinnedMesh);
+		AnimeUtils.resetMesh(ap.skinnedMesh);
+		
 		scope.action=mixer.clipAction(clip).play();
 		playBt.setDisabled(true);
 		pauseBt.setDisabled(false);
