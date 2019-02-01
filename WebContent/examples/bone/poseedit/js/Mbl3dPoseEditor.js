@@ -55,12 +55,14 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		ap.mixer=new THREE.AnimationMixer(mesh);
 		ap.clock=new THREE.Clock();
 		
-		ap.signals.rendered.add(function(){
+		scope.onRendered=function(){
 			if(ap.mixer){
 				var delta = ap.clock.getDelta();
 				ap.mixer.update(delta);
 			}
-		});
+		}
+		
+		ap.signals.rendered.add(scope.onRendered);
 		
 		//init attach controler
 		var boxSize=0.05*scale;
