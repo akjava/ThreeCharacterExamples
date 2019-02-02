@@ -54,7 +54,6 @@ THREE.TimelinerController.prototype = {
 					spec.type, spec.propertyPath,
 					spec.initialValue, spec.interpolation ) );
 		}
-		console.log(tracks);
 
 		this._clip = new THREE.AnimationClip( 'editclip', 0, tracks );
 		this._action = this._mixer.clipAction( this._clip ).play();
