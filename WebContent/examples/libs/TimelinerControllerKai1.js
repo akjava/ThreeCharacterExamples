@@ -34,6 +34,7 @@ THREE.TimelinerController = function TimelinerController( scene, trackInfo, onUp
 	this._channelNames = [];
 	this._nameMaps={};
 
+	
 };
 
 THREE.TimelinerController.prototype = {
@@ -41,7 +42,7 @@ THREE.TimelinerController.prototype = {
 	constructor: THREE.TimelinerController,
 
 	init: function( timeliner ) {
-
+		this.timeliner=timeliner;
 		var tracks = [],
 			trackInfo = this._trackInfo;
 
@@ -225,6 +226,7 @@ THREE.TimelinerController.prototype = {
 
 			channels = structs.channels;
 
+		this.timeliner.context.totalTime=structs.duration;
 		this.setDuration( structs.duration );
 
 		

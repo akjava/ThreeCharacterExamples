@@ -1,4 +1,4 @@
-Sidebar.MorphEditor = function ( application ) {
+Sidebar.MorphSimpleEditor = function ( application ) {
 	var ap=application;
 	var scope=this;
 	var container = new UI.Panel();
@@ -27,6 +27,18 @@ Sidebar.MorphEditor = function ( application ) {
 	var morphValue=new UI.NumberButtons("value",0,1,1,0,function(v){
 		var index=Number(morphList.getValue());
 		ap.skinnedMesh.morphTargetInfluences[index]=v;
+		
+		function getKeyByValue(object, value) {
+			  return Object.keys(object).find(key => object[key] === value);
+			}
+		
+		var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,index);
+		
+		//mbl3d base
+		var header="Expressions_";
+		var name=key.substring(header.length,key.length);
+		ap.timeliner.context.dispatcher.fire('keyframe',name);
+		
 	},[0,0.5,1]); 
 	container.add(morphValue);
 	

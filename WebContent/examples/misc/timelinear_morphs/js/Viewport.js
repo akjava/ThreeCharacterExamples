@@ -165,6 +165,10 @@ var Viewport = function ( application ) {
 			trackInfo.push(info);
 		}
 		var timeliner=new Timeliner( new THREE.TimelinerController( ap.skinnedMesh, trackInfo, onUpdate ) );
+		ap.timeliner=timeliner;
+		timeliner.context.totalTime=3;
+		timeliner.context.timeScale=60;
+		timeliner.context.fileName="morphAnimation";
 		
 	});
 	

@@ -9,7 +9,7 @@ var Sidebar = function ( application ) {
 	title.dom.textContent="TimeLinear Morph";
 	div.add(title);
 	
-	var morph=new Sidebar.MorphEditor(application);
+	var morph=new Sidebar.MorphSimpleEditor(application);
 	container.add(morph);
 	
 	var camera=new Sidebar.Camera(application);
