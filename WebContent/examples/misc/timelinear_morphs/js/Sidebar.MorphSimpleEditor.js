@@ -37,7 +37,7 @@ Sidebar.MorphSimpleEditor = function ( application ) {
 		//mbl3d base
 		var header="Expressions_";
 		var name=key.substring(header.length,key.length);
-		ap.timeliner.context.dispatcher.fire('keyframe',name);
+		ap.timeliner.context.dispatcher.fire('keyframe',name,true);
 		
 	},[0,0.5,1]); 
 	container.add(morphValue);

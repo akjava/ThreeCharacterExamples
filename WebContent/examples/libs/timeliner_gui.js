@@ -1282,8 +1282,8 @@ function Timeliner( controller ) {
 		undo_manager.save(new UndoState(data, 'Loaded'), true);
 	});
 */
-	dispatcher.on('keyframe', function(channelName) {
-
+	dispatcher.on('keyframe', function(channelName,update) {
+		update=update==undefined?false:update;
 		var time = context.currentTime;
 
 		if ( time == null || channelName == null ) return;
@@ -1298,6 +1298,9 @@ function Timeliner( controller ) {
 		} else {
 
 			controller.delKeyframe( channelName, time );
+			if(update){
+				controller.setKeyframe( channelName, time );
+			}
 
 //			undo_manager.save(new UndoState(data, 'Remove Keyframe'));
 		}

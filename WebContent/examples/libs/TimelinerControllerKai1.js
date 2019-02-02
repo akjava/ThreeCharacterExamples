@@ -34,7 +34,7 @@ THREE.TimelinerController = function TimelinerController( scene, trackInfo, onUp
 	this._channelNames = [];
 	this._nameMaps={};
 
-	
+	this.setKeyframed=undefined;
 };
 
 THREE.TimelinerController.prototype = {
