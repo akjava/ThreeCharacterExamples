@@ -80,7 +80,7 @@ var Viewport = function ( application ) {
 	signals.materialTypeChanged.add(function(){
 		
 		 var material = new window['THREE'][application.materialType](
-				 {skinning: true,morphTargets:true ,transparent:true,alphaTest:0.6,wireframe:application.materialWireframe} 
+				 {side:THREE.DoubleSide,skinning: true,morphTargets:true ,transparent:true,alphaTest:0.6,wireframe:application.materialWireframe} 
 				 );
 		 
 		 application.skinnedMesh.material=material;
