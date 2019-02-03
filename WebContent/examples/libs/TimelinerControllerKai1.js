@@ -135,7 +135,7 @@ THREE.TimelinerController.prototype = {
 			times = track.times,
 			index = Timeliner.binarySearch( times, time );
 
-		console.log("del",channelName,time,index);
+		
 		// we disallow to remove the keyframe when it is the last one we have,
 		// since the animation system is designed to always produce a defined
 		// state
@@ -147,7 +147,6 @@ THREE.TimelinerController.prototype = {
 				stride = track.getValueSize(),
 				nValues = values.length - stride;
 
-			console.log(nTimes,values,stride,nValues);
 			
 			// note: no track.getValueSize when array sizes are out of sync
 
@@ -168,7 +167,6 @@ THREE.TimelinerController.prototype = {
 			values.length = nValues;
 
 		}
-		console.log(track.values);
 
 	},
 
