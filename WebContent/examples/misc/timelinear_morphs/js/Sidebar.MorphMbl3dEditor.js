@@ -392,7 +392,7 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 			var v=application.skinnedMesh.morphTargetInfluences[i];
 			if(v==0){ //for after edit
 				var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
-				application.skinnedMesh.morphTargetInfluences[i]=1.1;//seems not set 0
+				//application.skinnedMesh.morphTargetInfluences[i]=0;//seems not set 0
 				//mbl3d base
 				var header="Expressions_";
 				var name=key.substring(header.length,key.length);
@@ -409,7 +409,7 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 			var v=application.skinnedMesh.morphTargetInfluences[i];
 			//if(v!=0){ //for after edit
 				var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
-				application.skinnedMesh.morphTargetInfluences[i]=1.1;//seems not set 0
+				//application.skinnedMesh.morphTargetInfluences[i]=0;//seems not set 0
 				//mbl3d base
 				var header="Expressions_";
 				var name=key.substring(header.length,key.length);
