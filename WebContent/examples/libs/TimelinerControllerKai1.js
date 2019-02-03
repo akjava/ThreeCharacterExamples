@@ -91,7 +91,7 @@ THREE.TimelinerController.prototype = {
 	},
 
 	setKeyframe: function( channelName, time ) {
-
+		console.log("set",channelName,time);
 		var track = this._tracks[ this._toPropertyPath(channelName)  ],
 			times = track.times,
 			index = Timeliner.binarySearch( times, time ),
@@ -130,11 +130,12 @@ THREE.TimelinerController.prototype = {
 	},
 
 	delKeyframe: function( channelName, time ) {
-
+		
 		var track = this._tracks[ this._toPropertyPath(channelName)  ],
 			times = track.times,
 			index = Timeliner.binarySearch( times, time );
 
+		console.log("del",channelName,time,index);
 		// we disallow to remove the keyframe when it is the last one we have,
 		// since the animation system is designed to always produce a defined
 		// state
@@ -146,6 +147,8 @@ THREE.TimelinerController.prototype = {
 				stride = track.getValueSize(),
 				nValues = values.length - stride;
 
+			console.log(nTimes,values,stride,nValues);
+			
 			// note: no track.getValueSize when array sizes are out of sync
 
 			for ( var i = index; i !== nTimes; ++ i ) {
@@ -165,6 +168,7 @@ THREE.TimelinerController.prototype = {
 			values.length = nValues;
 
 		}
+		console.log(track.values);
 
 	},
 
