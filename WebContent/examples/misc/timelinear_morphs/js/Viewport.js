@@ -107,7 +107,6 @@ var Viewport = function ( application ) {
 				signals.materialTypeChanged.dispatch();	
 				
 				
-				
 				signals.loadingModelFinished.dispatch();
 			}catch(e){
 				console.log(e);
@@ -166,7 +165,8 @@ var Viewport = function ( application ) {
 		}
 		var timeliner=new Timeliner( new THREE.TimelinerController( ap.skinnedMesh, trackInfo, onUpdate ) );
 		ap.timeliner=timeliner;
-		timeliner.context.totalTime=3;
+		
+		timeliner.context.dispatcher.fire('totalTime.update',3);
 		timeliner.context.timeScale=120;
 		timeliner.context.fileName="morphAnimation";
 		
