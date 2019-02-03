@@ -91,7 +91,6 @@ THREE.TimelinerController.prototype = {
 	},
 
 	setKeyframe: function( channelName, time ) {
-		console.log("set",channelName,time);
 		var track = this._tracks[ this._toPropertyPath(channelName)  ],
 			times = track.times,
 			index = Timeliner.binarySearch( times, time ),

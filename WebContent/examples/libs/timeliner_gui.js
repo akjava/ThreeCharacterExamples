@@ -1298,6 +1298,7 @@ function Timeliner( controller ) {
 		} else {
 
 			controller.delKeyframe( channelName, time );
+			repaintAll();
 			if(update){
 				controller.setKeyframe( channelName, time );
 			}

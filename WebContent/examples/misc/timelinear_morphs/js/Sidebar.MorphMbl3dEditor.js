@@ -405,23 +405,34 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 	});
 	container.add(clearAllBt);
 	var clearBt=new UI.Button("Clear Keys").onClick(function(){
-		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
-			var v=application.skinnedMesh.morphTargetInfluences[i];
-			//if(v!=0){ //for after edit
-				var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
-				//application.skinnedMesh.morphTargetInfluences[i]=0;//seems not set 0
-				//mbl3d base
-				var header="Expressions_";
-				var name=key.substring(header.length,key.length);
-				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
-				ap.timeliner.context.dispatcher.fire('keyframe',name);
+		function fireKeyFrame(force){
+			for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
+				var v=application.skinnedMesh.morphTargetInfluences[i];
+				//if(v!=0){ //for after edit
+					var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
+					//application.skinnedMesh.morphTargetInfluences[i]=0;//seems not set 0
+					//mbl3d base
+					var header="Expressions_";
+					var name=key.substring(header.length,key.length);
+					ap.timeliner.context.dispatcher.fire('keyframe',name,force);
 				
-				//ap.timeliner.context.currentTime=0;//not fixed
-				
-			//}
+					
+					
+					//ap.timeliner.context.currentTime=0;//not fixed
+					
+				//}
+			}
+			ap.timeliner.context.controller.setDisplayTime(0);
+			ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
 		}
-		ap.timeliner.context.controller.setDisplayTime(0);
-		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
+		fireKeyFrame(true);
+		
+		setTimeout(function(){
+			fireKeyFrame(false);
+			
+			
+		},10);
+		
 	});
 	clearAllBt.add(clearBt);
 	
