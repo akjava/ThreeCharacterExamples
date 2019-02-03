@@ -114,5 +114,30 @@ var Mbl3dUtils={
 			return name= name.replace("_L","_twist_L");
 		},isRootBoneName:function(name){
 			return name.endsWith("root");
+		},getMorphTargetTypeName:function(name){
+			if(name.indexOf("eye")!=-1){
+				return "eye";
+			}
+			if(name.indexOf("brow")!=-1){
+				return "brow";
+			}
+			if(name.indexOf("mouth")!=-1){
+				return "mouth";
+			}
+			if(name.indexOf("tongue")!=-1){
+				return "tongue";
+			}
+			
+			return "other";
+		},getMorphDirectionTypeName:function(name){
+			if(name.indexOf("min")!=-1){
+				return "min";
+			}
+			if(name.indexOf("max")!=-1){
+				return "max";
+			}
+			
+			
+			return "other";
 		}
 }
