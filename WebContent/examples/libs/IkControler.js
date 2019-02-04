@@ -357,8 +357,8 @@ IkControler.prototype.solveIk=function(forceUpdate){
 			continue;
 		}
 		
-		
-		var euler=this._euler.setFromQuaternion(newQ);
+		var order=bone.rotation.order;
+		var euler=this._euler.setFromQuaternion(newQ,order);
 		
 		var r=bone.rotation;
 		

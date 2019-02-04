@@ -34,7 +34,7 @@ RotatationControler.prototype.initialize=function(boneFilter){
 			var cbone=index;
 			
 			sphere.quaternion.onChange(function(){
-				var euler=e.setFromQuaternion(sphere.quaternion);
+				var euler=e.setFromQuaternion(sphere.quaternion,bone.rotation.order);
 	
 				var r=scope.lastEuler;
 				var max=Math.abs(euler.x);

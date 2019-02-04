@@ -94,6 +94,23 @@ Example=function(application){
 			trackInfo.push(info);
 		}
 		
+		//order changes,TODO include finger 
+		var arms=["clavicle","upperarm","lowerarm","hand"];
+
+		for(var i=0;i<bones.length;i++){
+			bones[i].rotation.order="XZY";
+		}
+		
+		arms.forEach(function(name){
+			var lrs=["_L","_R"];
+			lrs.forEach(function(lr){
+				var boneName=name+lr;
+				var index=BoneUtils.findBoneIndexByEndsName(bones,boneName);
+				bones[index].rotation.order="YZX";
+			});
+		});
+		
+		
 		new Timeliner( new THREE.TimelinerController( ap.skinnedMesh, trackInfo, onUpdate ) );
 	});
 	
