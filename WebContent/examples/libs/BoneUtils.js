@@ -158,10 +158,10 @@ var BoneUtils={
 			return options;
 
 		},
-		makeQuaternionFromXYZDegree:function(x,y,z,defaultEuler){
-			return BoneUtils.makeQuaternionFromXYZRadian(THREE.Math.degToRad(x),THREE.Math.degToRad(y),THREE.Math.degToRad(z),defaultEuler);
+		makeQuaternionFromXYZDegree:function(x,y,z,defaultEuler,order){
+			return BoneUtils.makeQuaternionFromXYZRadian(THREE.Math.degToRad(x),THREE.Math.degToRad(y),THREE.Math.degToRad(z),defaultEuler,order);
 		},
-		makeQuaternionFromXYZRadian:function(x,y,z,defaultEuler){
+		makeQuaternionFromXYZRadian:function(x,y,z,defaultEuler,order){
 			if(x==undefined){
 				console.error("makeQuaternionFromXYZDegree:x is undefined");
 				return;
@@ -175,14 +175,14 @@ var BoneUtils={
 				return;
 			}
 			defaultEuler=defaultEuler!==undefined?defaultEuler:new THREE.Euler();
-			var q2=new  THREE.Quaternion();
-			var q=new THREE.Quaternion();
-			var xq=q2.setFromAxisAngle(new THREE.Vector3(1, 0, 0), x+defaultEuler.x);
-			q.multiply(xq);
-			var yq=q2.setFromAxisAngle(new THREE.Vector3(0, 1, 0), y+defaultEuler.y);
-			q.multiply(yq);
-			var zq=q2.setFromAxisAngle(new THREE.Vector3(0, 0, 1), z+defaultEuler.z);
-			q.multiply(zq);
+			order=order!==undefined?order:"XYZ";
+			
+			var q=new  THREE.Quaternion();
+			
+			var euler=new THREE.Euler(x+defaultEuler.x,y+defaultEuler.y,z+defaultEuler.z,order);
+			
+			q.setFromEuler(euler);
+			
 			return q;
 		},
 		//use BoneUtils.getBoneList(mesh)
