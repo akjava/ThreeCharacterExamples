@@ -29,6 +29,8 @@ ObjectTransformControler.prototype.onTransformSelectionChanged=function(target){
 			this.helper.material.visible=true;
 			this.helper.update();
 		}
+		
+		
 	}else{
 		if(this.helper!=null){
 			this.helper.material.visible=false;
@@ -46,10 +48,17 @@ ObjectTransformControler.prototype.onTransformStarted=function(target){
 ObjectTransformControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-		ap.signals.poseChanged.dispatch();
+		//ap.signals.poseChanged.dispatch();
+		
+		ap.signals.skinnedMeshTransformed.dispatch(target);
+		
+		if(ap.signals.skinnedMeshTransformeFinished){
+			ap.signals.skinnedMeshTransformeFinished.dispatch(target);
+		}
+		
+		
 		if(this.helper!=null){
 			this.helper.update();
 		}
-		ap.signals.skinnedMeshTransformed.dispatch();
 	}
 }

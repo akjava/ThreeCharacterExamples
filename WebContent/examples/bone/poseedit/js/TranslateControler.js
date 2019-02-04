@@ -42,10 +42,9 @@ TranslateControler.prototype.initialize=function(){
 TranslateControler.prototype.onTransformChanged=function(target){
 	var scope=this;
 	var ap=this.ap;
-	
+	//for Bone Translate ,not mesh translate
 	if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
 		var root=scope.boneAttachControler.containerList[0];
-		
 		
 		var diff=target.position.clone().sub(root.position);
 		//AppUtils.printVec(diff,"before");
@@ -57,7 +56,7 @@ TranslateControler.prototype.onTransformChanged=function(target){
 		bonePos.add(diff);
 		scope.boneAttachControler.update();
 		
-		ap.signals.boneTranslateChanged.dispatch();
+		ap.signals.boneTranslateChanged.dispatch(target.userData.boneIndex);
 	}
 }
 
@@ -84,5 +83,8 @@ TranslateControler.prototype.onTransformFinished=function(target){
 		ap.ikControler.resetAllIkTargets();
 		
 		ap.signals.boneTranslateChanged.add(this.onBoneTranslateChanged);
+		if(ap.signals.boneTranslateFinished){
+			ap.signals.boneTranslateFinished.dispatch(target.userData.boneIndex);
+		}
 	}
 }

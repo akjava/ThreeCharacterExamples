@@ -257,6 +257,9 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 	var indices=this.iks[name];
 	indices.forEach(function(index){
 		scope.ap.signals.boneRotationChanged.dispatch(index);
+		if(scope.ap.signals.boneRotationFinished){
+			scope.ap.signals.boneRotationFinished.dispatch(index);
+			}
 	})
 	
 	}

@@ -88,6 +88,11 @@ RotatationControler.prototype.onTransformFinished=function(target){
 if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
 	this.wireframe.material.color.set(0xaaaaaa);
 	this.refreshSphere();
+	
+	if(this.ap.signals.boneRotationFinished){
+		var boneIndex=target.userData.boneIndex;
+		this.ap.signals.boneRotationFinished.dispatch(boneIndex);
+		}
 	}
 }
 RotatationControler.prototype.setVisible=function(v){

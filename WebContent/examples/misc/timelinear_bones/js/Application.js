@@ -22,6 +22,9 @@ var Application = function () {
 	var Signal = signals.Signal;
 
 	this.signals = {
+			skinnedMeshTransformeFinished:new Signal(),
+			boneTranslateFinished:new Signal(),
+			boneRotationFinished:new Signal(),
 			skinnedMeshTransformed:new Signal(),
 			ikSelectionChanged:new Signal(),
 			loadingTextureStarted:new Signal(),

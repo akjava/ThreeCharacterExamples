@@ -111,7 +111,27 @@ Example=function(application){
 		});
 		
 		
-		new Timeliner( new THREE.TimelinerController( ap.skinnedMesh, trackInfo, onUpdate ) );
+		var timeliner=new Timeliner( new THREE.TimelinerController( ap.skinnedMesh, trackInfo, onUpdate ) );
+		ap.timeliner=timeliner;
+		
+		timeliner.context.dispatcher.fire('totalTime.update',3);
+		timeliner.context.timeScale=120;
+		timeliner.context.fileName="boneAnimation";
+		
+		ap.signals.skinnedMeshTransformeFinished.add(function(target){
+			console.log("mesh changed",target.userData.transformMode);
+		});
+		
+		ap.signals.boneTranslateFinished.add(function(index){
+			console.log("bone translate changed",index);
+		});
+		
+		ap.signals.boneRotationFinished.add(function(index){
+			console.log("bone rotation changed",index);
+		});
+		
+		
+		
 	});
 	
 }
