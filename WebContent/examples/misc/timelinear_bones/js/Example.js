@@ -58,13 +58,14 @@ Example=function(application){
 	}
 	
 	ap.signals.skinnedMeshChanged.add(function(){
+		
 		var trackInfo = [
 
 			{
 				type: THREE.VectorKeyframeTrack,
 				label:'Mesh Position',
 				propertyPath: '.position',
-				initialValue: [ 0, 0, 0 ],
+				initialValue: [0,0,0],
 				interpolation: THREE.InterpolateSmooth
 			},
 
@@ -75,9 +76,18 @@ Example=function(application){
 				initialValue: [ 0, 0, 0, 1 ],
 				interpolation: THREE.InterpolateLinear
 
-			}
+			},
+			{
+				type: THREE.VectorKeyframeTrack,
+				label:'Bone Position',
+				propertyPath: '.bones[0].position',
+				initialValue: ap.skinnedMesh.skeleton.bones[0].position.toArray(),
+				interpolation: THREE.InterpolateSmooth
+			},
 
 		];
+		
+		var boneNames=[];
 		//for bones
 		var bones=BoneUtils.getBoneList(ap.skinnedMesh);
 		for(var i=0;i<bones.length;i++){
@@ -88,10 +98,11 @@ Example=function(application){
 			var info={type: THREE.QuaternionKeyframeTrack,
 					label:name,
 					propertyPath:".bones["+i+"].quaternion",
-					initialValue: [ 0, 0, 0, 1 ],
+					initialValue: [ 0, 0, 0, 1 ],//TODO check
 					interpolation: THREE.InterpolateLinear
 					}
 			trackInfo.push(info);
+			boneNames.push(name);
 		}
 		
 		//order changes,TODO include finger 
@@ -118,16 +129,33 @@ Example=function(application){
 		timeliner.context.timeScale=120;
 		timeliner.context.fileName="boneAnimation";
 		
-		ap.signals.skinnedMeshTransformeFinished.add(function(target){
-			console.log("mesh changed",target.userData.transformMode);
+		ap.signals.skinnedMeshTransformeFinished.add(function(mode){
+			//console.log("mesh changed",mode);
+			if(mode=="ObjectTranslate"){
+				ap.timeliner.context.dispatcher.fire('keyframe',"Mesh Position",true);
+			}else{
+				ap.timeliner.context.dispatcher.fire('keyframe',"Mesh Quaternion",true);
+			}
 		});
 		
 		ap.signals.boneTranslateFinished.add(function(index){
-			console.log("bone translate changed",index);
+			//only support root:[0]
+			ap.timeliner.context.dispatcher.fire('keyframe',"Bone Position",true);
+		});
+		
+		ap.signals.poseChanged.add(function(){
+			boneNames.forEach(function(name){
+				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
+			});
+			
+			ap.timeliner.context.dispatcher.fire('keyframe',"Bone Position",true);
 		});
 		
 		ap.signals.boneRotationFinished.add(function(index){
-			console.log("bone rotation changed",index);
+			//console.log("bone rotation changed",index);
+			var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+			var name=boneList[index].name;
+			ap.timeliner.context.dispatcher.fire('keyframe',name,true);
 		});
 		
 		

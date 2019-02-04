@@ -15,8 +15,9 @@ Sidebar.Import=function(ap){
 			ap.ikControler.boneAttachControler.update();
 		}
 		
-		if(ap.signals.skinnedMeshTransformed){
-			ap.signals.skinnedMeshTransformed.dispatch();
+		if(ap.signals.skinnedMeshTransformeFinished){
+			ap.signals.skinnedMeshTransformeFinished.dispatch("ObjectTranslate");
+			ap.signals.skinnedMeshTransformeFinished.dispatch("ObjectRotate");
 			}
 		//maybe duplicate,usually skinnedMeshTransformed call poseChanged
 		if(ap.signals.poseChanged){

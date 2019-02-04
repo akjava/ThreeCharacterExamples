@@ -6,7 +6,10 @@ var ObjectTransformControler=function(ap){
 		if(scope.helper!=null){
 			scope.helper.update();
 		}
-		ap.signals.poseChanged.dispatch();
+		
+		if(ap.ikControler){
+			ap.ikControler.resetAllIkTargets();
+		}
 	});
 }
 
@@ -50,10 +53,10 @@ ObjectTransformControler.prototype.onTransformFinished=function(target){
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
 		//ap.signals.poseChanged.dispatch();
 		
-		ap.signals.skinnedMeshTransformed.dispatch(target);
+		ap.signals.skinnedMeshTransformed.dispatch(target.userData.transformMode);
 		
 		if(ap.signals.skinnedMeshTransformeFinished){
-			ap.signals.skinnedMeshTransformeFinished.dispatch(target);
+			ap.signals.skinnedMeshTransformeFinished.dispatch(target.userData.transformMode);
 		}
 		
 		
