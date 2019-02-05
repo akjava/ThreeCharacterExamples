@@ -108,7 +108,7 @@ Example=function(application){
 			trackInfo.push(info);
 			boneNames.push(name);
 		}
-		ap.timelinear_boneNames=boneNames;
+		ap.timeliner_boneNames=boneNames;
 		
 		//order changes,TODO include finger 
 		var arms=["clavicle","upperarm","lowerarm","hand"];

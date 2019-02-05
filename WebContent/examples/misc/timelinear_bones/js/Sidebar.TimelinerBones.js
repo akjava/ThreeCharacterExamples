@@ -1,4 +1,4 @@
-Sidebar.TimelinearBones = function ( application ) {
+Sidebar.TimelinerBones = function ( application ) {
 	var ap=application;
 	var scope=this;
 	var container = new UI.TitlePanel("Timeliner");
@@ -56,7 +56,7 @@ Sidebar.TimelinearBones = function ( application ) {
 			case "Bone Rotations":
 				//Do all
 				var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-				ap.timelinear_boneNames.forEach(function(boneName){
+				ap.timeliner_boneNames.forEach(function(boneName){
 					var index=BoneUtils.findBoneIndexByEndsName(boneList,boneName);
 					ap.skinnedMesh.skeleton.bones[index].quaternion.set(0,0,0,1);//TODO copy from default
 					setKeyFrame(boneName);
@@ -81,7 +81,7 @@ Sidebar.TimelinearBones = function ( application ) {
 			case "Bone Rotations":
 				//Do all
 				var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-				ap.timelinear_boneNames.forEach(function(boneName){
+				ap.timeliner_boneNames.forEach(function(boneName){
 					clearKeyFrame(boneName);
 				});
 				
@@ -101,7 +101,7 @@ Sidebar.TimelinearBones = function ( application ) {
 			case "Bone Rotations":
 				//Do all
 				var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-				ap.timelinear_boneNames.forEach(function(boneName){
+				ap.timeliner_boneNames.forEach(function(boneName){
 					setKeyFrame(boneName);
 				});
 				

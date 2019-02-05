@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("TimeLinear Bones"));
+	container.add(new UI.AppName("TimeLiner Bones"));
 	
 	
 	ap.ikControler.maxAngle=5;//change because of ikratio
@@ -19,8 +19,11 @@ var Sidebar = function ( application ) {
 	var texture=new Sidebar.Texture(application);
 	container.add(texture);
 	
-	var timelinear=new Sidebar.TimelinearBones(application);
-	container.add(timelinear);
+	var timeliner=new Sidebar.TimelinerBones(application);
+	container.add(timeliner);
+	
+	var timelinerClipExport=new Sidebar.TimelinerClipExport(application);
+	container.add(timelinerClipExport);
 	
 	return container;
 }
