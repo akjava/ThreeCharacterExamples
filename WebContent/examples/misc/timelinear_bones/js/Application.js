@@ -16,7 +16,8 @@ var Application = function () {
 	
 	this.ikControler=new IkControler(undefined,this);
 	
-	this.defaultTextureUrl=null;
+	
+	this.defaultTextureUrl="../../../dataset/mbl3d/texture/m_brown.png";
 	this.textureUrl=this.defaultTextureUrl;
 	
 	var Signal = signals.Signal;

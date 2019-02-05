@@ -16,5 +16,8 @@ var Sidebar = function ( application ) {
 	container.add(exportPanel);
 	container.add(importPanel);
 	
+	var texture=new Sidebar.Texture(application);
+	container.add(texture);
+	
 	return container;
 }

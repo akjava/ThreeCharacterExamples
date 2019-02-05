@@ -10,8 +10,9 @@ Example=function(application){
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";
 	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
 	
-	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,transparent:true,opacity:1,depthTest: true});
+	var material=new THREE.MeshPhongMaterial({skinning:true,transparent:true,opacity:1,alphaTest:0.6,depthTest: true});
 	
+
 	//handle texture
 	ap.signals.loadingTextureStarted.add (function () {
 		if(ap.textureUrl!=null){
@@ -159,7 +160,8 @@ Example=function(application){
 		});
 		
 		
-		
+		ap.signals.loadingTextureStarted.dispatch();
+		ap.signals.loadingTextureFinished.dispatch();
 	});
 	
 }

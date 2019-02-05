@@ -33,6 +33,7 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		mesh=BoneUtils.convertToZeroRotatedBoneMesh(mesh);
 		mesh.normalizeSkinWeights();
 		mesh.material=material;
+		console.log(mesh.material);
 		mesh.renderOrder = 0;
 		container.add(mesh);
 		ap.skinnedMesh=mesh;
