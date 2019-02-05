@@ -26,7 +26,7 @@ Sidebar.Export=function(ap){
 	nameRow.input.setWidth("140px");
 	exportPanel.add(nameRow);
 	
-	var bt=new UI.Button("Make Download").onClick( function () {
+	var bt=new UI.Button("Download").onClick( function () {
 		span.dom.innerHTML = ''
 		var clip=makeClip(ap);
 		var fileName=scope.fileName == ""?"pose":scope.fileName;
@@ -34,6 +34,7 @@ Sidebar.Export=function(ap){
 		var jsonText=AnimeUtils.clipToJsonText(clip);
 		var link=AppUtils.generateTextDownloadLink(jsonText,fileName,fileName,true);
 		span.dom.appendChild(link);
+		link.click();
 
 	} );
 	exportPanel.add(bt);
