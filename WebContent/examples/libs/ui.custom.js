@@ -628,13 +628,7 @@ UI.List=function(values,onChange,current){
 		onChange(select.getValue());
 	});
 	
-	row.getValue=function(){
-		return select.getValue();
-	}
 	
-	row.setValue=function(v){
-		return select.setValue(v);
-	}
 	
 	return select;
 }
