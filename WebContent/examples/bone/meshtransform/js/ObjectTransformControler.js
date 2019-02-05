@@ -10,6 +10,10 @@ var ObjectTransformControler=function(ap){
 		if(ap.ikControler){
 			ap.ikControler.resetAllIkTargets();
 		}
+		
+		if(ap.translateControler){//TODO switch signal?
+			ap.translateControler.updatePosition();
+		}
 	});
 }
 

@@ -4,6 +4,8 @@ var TranslateControler=function(ap,boneAttachControler){
 	this.boneAttachControler=boneAttachControler;
 	this.translateControls={};
 	//TODO support non-root bones
+	
+	
 }
 //so far only root support
 TranslateControler.prototype.initialize=function(){
@@ -17,6 +19,9 @@ TranslateControler.prototype.initialize=function(){
 	sphere.userData.boneIndex=0;
 	sphere.userData.transformSelectionType="BoneTranslate";
 	ap.objects.push(sphere);
+	
+	//temporary
+	scope._sphere=sphere;
 	
 	this.translateControls["root"]=sphere;
 	
@@ -34,9 +39,14 @@ TranslateControler.prototype.initialize=function(){
 	
 	ap.signals.poseChanged.add(function(){
 		
-		//translate
-		sphere.position.copy(root.position);
+		scope.updatePosition();
 	});
+}
+TranslateControler.prototype.updatePosition=function(){
+	this.boneAttachControler.update();
+	var root=this.boneAttachControler.containerList[0];
+	//translate
+	this._sphere.position.copy(root.position);
 }
 
 TranslateControler.prototype.onTransformChanged=function(target){
