@@ -56,6 +56,9 @@ Example=function(application){
 	var onUpdate=function(){
 		ap.skinnedMesh.updateMatrixWorld(true);
 		ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
+		
+		ap.ikControler.resetAllIkTargets();
+		ap.translateControler.updatePosition();
 	}
 	
 	ap.signals.skinnedMeshChanged.add(function(){
@@ -105,6 +108,7 @@ Example=function(application){
 			trackInfo.push(info);
 			boneNames.push(name);
 		}
+		ap.timelinear_boneNames=boneNames;
 		
 		//order changes,TODO include finger 
 		var arms=["clavicle","upperarm","lowerarm","hand"];

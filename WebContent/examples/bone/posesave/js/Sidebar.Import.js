@@ -1,5 +1,5 @@
 Sidebar.Import=function(ap){
-	var container=new UI.TitlePanel("Import");
+	var container=new UI.TitlePanel("Import Pose");
 	
 	var row1=new UI.Row();
 	container.add(row1);

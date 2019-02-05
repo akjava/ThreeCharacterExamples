@@ -19,5 +19,8 @@ var Sidebar = function ( application ) {
 	var texture=new Sidebar.Texture(application);
 	container.add(texture);
 	
+	var timelinear=new Sidebar.TimelinearBones(application);
+	container.add(timelinear);
+	
 	return container;
 }
