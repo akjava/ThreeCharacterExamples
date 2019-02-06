@@ -232,6 +232,8 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		loadHair();
 		ap.signals.ikInitialized.dispatch();
 		
+		ap.signals.loadingTextureStarted.dispatch();
+		ap.signals.loadingTextureFinished.dispatch();
 		
 		}catch(e){
 			console.error(e);

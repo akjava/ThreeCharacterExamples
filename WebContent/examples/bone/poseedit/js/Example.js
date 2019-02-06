@@ -10,6 +10,9 @@ Example=function(application){
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";
 	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
 	
+	ap.defaultTextureUrl="../../../dataset/mbl3d/texture/m_brown.png";
+	ap.textureUrl=ap.defaultTextureUrl;
+	
 	var material=new THREE.MeshPhongMaterial({alphaTest:0.6,skinning:true,transparent:true,opacity:1});
 	
 	//handle texture
