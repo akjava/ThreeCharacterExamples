@@ -29,6 +29,7 @@ var Sidebar = function ( application ) {
 	var transform=new RotationPanel1(application);
 	container.add(transform);
 	
+	//catching RotationPanel1
 	ap.signals.objectRotated.add(function(){
 		var angleX=transform.getAngleX();
 		var angleY=transform.getAngleY();

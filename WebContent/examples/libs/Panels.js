@@ -4,7 +4,7 @@ var RotationPanel1=function(ap){
 
 	function rotate(){
 		if(ap.signals.objectRotated)
-			ap.signals.objectRotated.dispatch(panel);
+			ap.signals.objectRotated.dispatch();
 		else
 			console.log("ap.signals.objectRotated is not exist");
 	}
@@ -261,6 +261,7 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			bt2.setDisabled(false);
 			
 			var mixer=application.mixer;
+			var order=scope.boneList[scope.boneAnimationIndex].rotation.order;
 			var boneName=scope.boneList[scope.boneAnimationIndex].name;
 			var defaultMatrix=application.defaultBoneMatrix[boneName];
 			
@@ -277,15 +278,15 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			var startRot=null;
 			if(currentMatrix!=null){
 				var rotation=currentMatrix.rotation;
-				startRot=[BoneUtils.makeQuaternionFromXYZRadian(rotation.x,rotation.y,rotation.z,defaultRotation)];
+				startRot=[BoneUtils.makeQuaternionFromXYZRadian(rotation.x,rotation.y,rotation.z,defaultRotation,order)];
 			}else{
-				startRot=[BoneUtils.makeQuaternionFromXYZRadian(0,0,0,defaultRotation)];
+				startRot=[BoneUtils.makeQuaternionFromXYZRadian(0,0,0,defaultRotation,order)];
 			}
 			
 			
 			//add start rot ref
 			
-			var endRot=[BoneUtils.makeQuaternionFromXYZDegree(scope.boneAngleX,scope.boneAngleY,scope.boneAngleZ,defaultRotation)]
+			var endRot=[BoneUtils.makeQuaternionFromXYZDegree(scope.boneAngleX,scope.boneAngleY,scope.boneAngleZ,defaultRotation,order)]
 			
 			var intime=scope.duration/2;
 			var endtime=scope.duration/2;
@@ -293,7 +294,7 @@ var BoneRotateAnimationPanel = function ( application ,param) {
 			var clip=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
 			
 			if(scope.animationOppositeDirection){
-				endRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,defaultRotation)]
+				endRot=[BoneUtils.makeQuaternionFromXYZDegree(-scope.boneAngleX,-scope.boneAngleY,-scope.boneAngleZ,defaultRotation,order)]
 				var clip2=AnimeUtils.makeRotateBoneAnimation(indices,startRot,endRot,intime,endtime);
 				var merged=AnimeUtils.joinTracks([clip.tracks[0],clip2.tracks[0]]);
 				clip=new THREE.AnimationClip("makeRotateBoneAnimation", -1, [merged]);

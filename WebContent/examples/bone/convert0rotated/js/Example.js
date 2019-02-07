@@ -57,8 +57,8 @@ Example=function(application){
 			
 		}
 		boneList=BoneUtils.getBoneList(mesh);
+		Mbl3dUtils.changeBoneOrders(mesh);
 		
-		//
 		
 		var helper=new THREE.SkeletonHelper(mesh);
 		helper.material.visible=ap.visibleSkeletonHelper;
