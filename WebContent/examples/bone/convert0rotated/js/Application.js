@@ -17,7 +17,7 @@ var Application = function () {
 	this.signals = {
 			windowResize: new Signal(),
 			rendered:new Signal(),
-			objectRotate:new Signal(),
+			objectRotated:new Signal(),
 			boneAnimationStarted:new Signal(),
 			boneAnimationFinished:new Signal(),
 			skinnedMeshChanged:new Signal(),

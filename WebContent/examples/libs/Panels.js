@@ -3,10 +3,10 @@ var RotationPanel1=function(ap){
 	panel.autoUpdate=true;
 
 	function rotate(){
-		if(ap.signals.objectRotate)
-			ap.signals.objectRotate.dispatch(panel);
+		if(ap.signals.objectRotated)
+			ap.signals.objectRotated.dispatch(panel);
 		else
-			console.log("ap.signals.objectRotate is not exist");
+			console.log("ap.signals.objectRotated is not exist");
 	}
 	
 	var row=new UI.Row();
