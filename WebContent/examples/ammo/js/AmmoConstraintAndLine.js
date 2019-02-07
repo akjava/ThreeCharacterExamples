@@ -22,11 +22,21 @@ Object.assign( AmmoConstraintAndLine.prototype, {
 			return;
 		}
 		
-		this.line.geometry.vertices[0].copy(this.body1.getMesh().position);
+		if(this.body1.syncWorldMatrix){
+			this.line.geometry.vertices[0].setFromMatrixPosition(this.body1.getMesh().matrixWorld );
+		}else{
+			this.line.geometry.vertices[0].copy(this.body1.getMesh().position);
+		}
+		
+		
 		
 		if(this.body2!=null){
 			//case 
-			this.line.geometry.vertices[1].copy(this.body2.getMesh().position);
+			if(this.body2.syncWorldMatrix){
+				this.line.geometry.vertices[1].setFromMatrixPosition(this.body2.getMesh().matrixWorld );
+			}else{
+				this.line.geometry.vertices[1].copy(this.body2.getMesh().position);
+			}
 		}else{
 			//case Point2PointConstraint
 			if(this.pivot0!=null){

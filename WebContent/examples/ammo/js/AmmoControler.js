@@ -243,7 +243,7 @@ createGeneric6DofSpringConstraint:function(body1,body2,frameIn1,frameIn2,disable
 	geo.vertices.push( new THREE.Vector3(  ));
 	geo.vertices.push( new THREE.Vector3(  ));
 	
-	var material=new THREE.LineBasicMaterial({color:0xaaaaaa,linewidth:10});
+	var material=new THREE.LineBasicMaterial({color:0x333333,linewidth:10});
 	
 	var joint = new THREE.Line( geo,material);
 	this.scene.add(joint);
