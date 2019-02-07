@@ -63,6 +63,7 @@ var Sidebar = function ( application ) {
 	});
 	
 	function rotate(){
+		var order=ap.selectedBone.rotation.order;
 		var name=Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name);
 		var name=(ap.selectedBone.name);
 		var rx=boneAngleX.getValue();
@@ -74,7 +75,7 @@ var Sidebar = function ( application ) {
 		ap.currentBoneMatrix[name].rotation.x=THREE.Math.degToRad(rx);
 		ap.currentBoneMatrix[name].rotation.y=THREE.Math.degToRad(ry);
 		ap.currentBoneMatrix[name].rotation.z=THREE.Math.degToRad(rz);
-		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix[name].rotation);
+		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix[name].rotation,order);
 		ap.selectedBone.quaternion.copy(q);
 
 		ap.selectedBone.updateMatrixWorld(true);
