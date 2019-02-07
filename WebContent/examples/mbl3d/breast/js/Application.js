@@ -13,6 +13,7 @@ var Application = function () {
 	this.stiffness=1000;
 	this.meshTransparent=0.5;
 	this.bothBreast=false;
+	moveSameDirection=true;
 	this.visibleAmmo=true;
 	this.bodyDamping=0.1;
 	var Signal = signals.Signal;

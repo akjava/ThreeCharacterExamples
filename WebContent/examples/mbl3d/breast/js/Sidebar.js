@@ -19,6 +19,10 @@ var Sidebar = function ( application ) {
 		application.bothBreast=v;
 	});
 	control.add(bothBreast);
+	var moveSameDirection=new UI.CheckboxRow("Move Same Direction",application.bothbreast,function(v){
+		application.moveSameDirection=v;
+	});
+	control.add(moveSameDirection);
 	
 	var visibleAmmo=new UI.CheckboxRow("Visible Ammo",application.visibleAmmo,function(v){
 		application.visibleAmmo=v;

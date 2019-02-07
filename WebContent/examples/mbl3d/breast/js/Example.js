@@ -200,10 +200,11 @@ Example=function(application){
 			//ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,0,euler));
 			
 			if(ap.bothBreast){
+				var opposite=ap.moveSameDirection?1:-1;//if opposite -1
 				var name=ap.skinnedMesh.skeleton.bones[breastL].name;
 				var euler=ap.defaultBoneMatrix[name].rotation;
 				var rotate=ap.breastBox.getMesh().rotation;
-				ap.skinnedMesh.skeleton.bones[breastL].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,-rotate.y,rotate.z,euler));
+				ap.skinnedMesh.skeleton.bones[breastL].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y*opposite,rotate.z,euler));
 			}
 			
 			AmmoUtils.forceDampingRotation(ap.breastBox.getBody(),1,1,0.5);
