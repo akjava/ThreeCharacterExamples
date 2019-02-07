@@ -44,12 +44,12 @@ Example=function(application){
 			mesh.scale.set(scale,scale,scale);
 		}
 		boneList=BoneUtils.getBoneList(mesh);
-		
+		Mbl3dUtils.changeBoneOrders(mesh);
 		
 		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		
 		
-		
+
 		
 		
 		
