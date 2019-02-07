@@ -96,11 +96,12 @@ var BoneEditPanel2 = function ( application ) {
 		var rz=boneAngleZ.getValue();
 		
 		
-		
+		var order=ap.selectedBone.rotation.order;
+		console.log(order);
 		ap.currentBoneMatrix[name].rotation.x=THREE.Math.degToRad(rx);
 		ap.currentBoneMatrix[name].rotation.y=THREE.Math.degToRad(ry);
 		ap.currentBoneMatrix[name].rotation.z=THREE.Math.degToRad(rz);
-		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix[name].rotation);
+		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix[name].rotation,order);
 		ap.selectedBone.quaternion.copy(q);
 
 		ap.selectedBone.updateMatrixWorld(true);
@@ -215,7 +216,7 @@ container.add(new UI.SubtitleRow("Rotation"));
 			var y=ap.currentBoneMatrix[name].rotation.y;
 			var z=ap.currentBoneMatrix[name].rotation.z;
 			
-			var q=BoneUtils.makeQuaternionFromXYZRadian(x,y,z,ap.defaultBoneMatrix[name].rotation);
+			var q=BoneUtils.makeQuaternionFromXYZRadian(x,y,z,ap.defaultBoneMatrix[name].rotation,bone.rotation.order);
 			bone.quaternion.copy(q);
 
 			bone.updateMatrixWorld(true);

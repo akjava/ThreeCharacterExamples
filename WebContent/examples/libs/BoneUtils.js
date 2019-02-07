@@ -328,7 +328,7 @@ var BoneUtils={
 				console.error("flipHorizontalRotation rotation must be Euler");
 			}
 			target=target==undefined?new THREE.Euler():target;
-			target.set(rotation.x,rotation.y*-1,rotation.z*-1);
+			target.set(rotation.x,rotation.y*-1,rotation.z*-1,rotation.order);
 			return target;
 		},swapHorizontalBone:function(bone1,bone2){
 			if(!bone1.isBone || !bone2.isBone){

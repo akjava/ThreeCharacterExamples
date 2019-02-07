@@ -44,7 +44,8 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 			mesh.scale.set(scale,scale,scale);
 		}
 		boneList=BoneUtils.getBoneList(mesh);
-		
+
+		Mbl3dUtils.changeBoneOrders(mesh);
 		
 		
 		
