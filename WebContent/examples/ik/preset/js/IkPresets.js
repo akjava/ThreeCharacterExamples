@@ -129,8 +129,8 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 				var index=presetIndices[i];
 				var bone=boneList[index];
 				
-				var rotation=presetRotations[i];
-				bone.rotation.copy(rotation);
+				var rotation=presetRotations[i]; //presetRotations has not order;
+				bone.rotation.set(rotation.x,rotation.y,rotation.z);
 				ap.signals.boneRotationChanged.dispatch(index);
 			}
 			ap.ikControler.resetAllIkTargets();
@@ -197,7 +197,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			
 			
 			var rad=rotations[i];
-			box.rotation.set(rad.x,rad.y,rad.z);
+			box.rotation.set(rad.x,rad.y,rad.z,bone.rotation.order);
 			
 			if(needLineToParent){
 				var line=AppUtils.lineTo(parentMesh,box);
