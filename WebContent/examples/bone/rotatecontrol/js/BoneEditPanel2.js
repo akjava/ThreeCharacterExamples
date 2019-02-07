@@ -97,7 +97,6 @@ var BoneEditPanel2 = function ( application ) {
 		
 		
 		var order=ap.selectedBone.rotation.order;
-		console.log(order);
 		ap.currentBoneMatrix[name].rotation.x=THREE.Math.degToRad(rx);
 		ap.currentBoneMatrix[name].rotation.y=THREE.Math.degToRad(ry);
 		ap.currentBoneMatrix[name].rotation.z=THREE.Math.degToRad(rz);
