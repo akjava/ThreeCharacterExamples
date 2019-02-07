@@ -1,5 +1,5 @@
 var Sidebar = function ( application ) {
-
+	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Physics Breast Bone Animation"));
@@ -45,7 +45,16 @@ var Sidebar = function ( application ) {
 	},[0,.1,.5,1]);
 	control.add(bodyDamping);
 	
+	var meshTransform=new Sidebar.MeshTransform(ap);
+	container.add(meshTransform);
 	
+	//test
+	var test=new UI.ButtonRow("reset initial pos",function(){
+		var pos=ap.resetBox.getWorldPosition(new THREE.Vector3());
+		AmmoUtils.setPosition(ap.breastBox.getBody(),pos.x,pos.y,pos.z);
+		
+	});
+	container.add(test);
 	
 	return container;
 }

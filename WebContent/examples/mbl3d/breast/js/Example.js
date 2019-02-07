@@ -86,6 +86,8 @@ Example=function(application){
 							);
 		 ap.sprineBox=sprine03Box;
 		 
+
+		 
 		 //sprine03Box.getMesh().matrixAutoUpdate=false;
 		/* AmmoUtils.setAngularFactor(sprine03Box.getBody(),1,1,1);
 		 AmmoUtils.setLinearFactor(sprine03Box.getBody(),1,1,1);
@@ -98,12 +100,20 @@ Example=function(application){
 		 
 		 var diff=new THREE.Vector3(0,5,10);
 		 
+		 var resetBox=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:0x00ff00}));
+		 resetBox.position.copy(diff);
+		 ammoContainer.add(resetBox);
+		 ap.resetBox=resetBox;
+		 
 		 
 		 var breastBox=ap.ammoControler.createSphere(6, .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
 		// var breastBox=ap.ammoControler.createBox(new THREE.Vector3(8, 8, 8), .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
 					new THREE.MeshPhongMaterial({color:0x000088})
 		 );
 		 ap.breastBox=breastBox;
+		 
+		 console.log(breastBox.getMesh().position);
+		 
 		 AmmoUtils.setLinearFactor(breastBox.getBody(),1,1,1);
 		 //AmmoUtils.setLinearFactor(breastBox.getBody(),0,0,0);
 		 AmmoUtils.setAngularFactor(breastBox.getBody(),1,1,0);
@@ -131,7 +141,7 @@ Example=function(application){
 		dof.setLinearUpperLimit(application.ammoControler.makeTemporaryVector3(limit, limit, limit));
 	
 		//dont need z-rotation
-		var rlimit=1.58/1;
+		var rlimit=1.58;
 		dof.setAngularLowerLimit(application.ammoControler.makeTemporaryVector3(-rlimit, -rlimit,-rlimit));
 		dof.setAngularUpperLimit(application.ammoControler.makeTemporaryVector3(rlimit, rlimit, rlimit));
 	
@@ -181,9 +191,11 @@ Example=function(application){
 			var name=ap.skinnedMesh.skeleton.bones[breastR].name;
 			var euler=ap.defaultBoneMatrix[name].rotation;
 			var rotate=ap.breastBox.getMesh().rotation;
+			var order=ap.breastBox.getMesh().rotation.order;
 			//console.log(euler);
 			//forget-Z or TODO reduce Z
-			ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler));
+			//i'm not sure why use euler
+			ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order));
 			//console.log("hello");
 			//ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,0,euler));
 			
@@ -208,6 +220,14 @@ Example=function(application){
 				diff.divideScalar(divided).add(application.sprineBox.getMesh().position);
 				AmmoUtils.setPosition(application.breastBox.getBody(),diff.x,diff.y,diff.z);
 			}
+			}
+			
+			//auto reset,when penetrate 
+			var pos=application.resetBox.getWorldPosition(new THREE.Vector3());
+			var distance2=pos.distanceTo(application.breastBox.getMesh().position);
+			if(distance2>18){
+				console.log("force reseted");
+				AmmoUtils.setPosition(ap.breastBox.getBody(),pos.x,pos.y,pos.z);
 			}
 		}
 	})

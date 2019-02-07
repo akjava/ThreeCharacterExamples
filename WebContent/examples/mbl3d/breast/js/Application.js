@@ -18,6 +18,7 @@ var Application = function () {
 	var Signal = signals.Signal;
 
 	this.signals = {
+			skinnedMeshTransformed: new Signal(),
 			windowResize: new Signal(),
 			rendered:new Signal(),
 			skinnedMeshChanged:new Signal(),

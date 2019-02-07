@@ -41,6 +41,7 @@ Viewport.Info = function ( application ) {
 	var sprinerotZText = new UI.Text( '0' ).setMarginLeft( '6px' );
 	
 	var distanceText = new UI.Text( '0' ).setMarginLeft( '6px' );
+	var distance2Text = new UI.Text( '0' ).setMarginLeft( '6px' );
 	
 	container.add( new UI.Break() , new UI.Break() );
 	
@@ -54,6 +55,7 @@ Viewport.Info = function ( application ) {
 	container.add( new UI.Text( 'Rot-Z' ), sprinerotZText, new UI.Break() );
 	container.add( new UI.Break() , new UI.Break() );
 	container.add( new UI.Text( 'Distance' ), distanceText, new UI.Break() );
+	container.add( new UI.Text( 'Distance' ), distance2Text, new UI.Break() );
 	container.add( new UI.Break() , new UI.Break() );
 	container.add(new UI.Text("3D Character is created by "),new UI.Break(),new UI.Anchor("http://www.manuelbastioni.com/","Manuel Bastioni"));
 	container.add( new UI.Break() , new UI.Break() );
@@ -108,6 +110,11 @@ Viewport.Info = function ( application ) {
 		var distance=application.sprineBox.getMesh().position.distanceTo(application.breastBox.getMesh().position);
 		
 		distanceText.setValue( distance.toFixed(2) );
+		
+		
+		var pos=application.resetBox.getWorldPosition(new THREE.Vector3());
+		var distance2=pos.distanceTo(application.breastBox.getMesh().position);
+		distance2Text.setValue( distance2.toFixed(2) );
 	}
 
 	return container;
