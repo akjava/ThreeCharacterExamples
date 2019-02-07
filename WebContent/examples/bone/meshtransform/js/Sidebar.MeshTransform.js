@@ -10,13 +10,21 @@ Sidebar.MeshTransform=function(ap){
 	
 	panel.add(new UI.Subtitle("Translate"));
 	
+	if(ap.signals.transformSelectionChanged){
 	var bt=new UI.ButtonRow("Select Mesh",function(){
 		ap.skinnedMesh.userData.transformMode="ObjectTranslate";
 		ap.signals.transformSelectionChanged.dispatch(ap.skinnedMesh);
 	});
 	panel.add(bt);
+	}else{
+		console.log("no ap.signals.transformSelectionChanged and skipped making select button");
+	}
 	
 	
+	if(!ap.signals.skinnedMeshTransformed){
+		console.error("need ap.signals.skinnedMeshTransformed");
+		return;
+	}
 	
 	ap.signals.skinnedMeshTransformed.add(function(){
 		update();
@@ -91,12 +99,13 @@ Sidebar.MeshTransform=function(ap){
 	
 	//rotate
 	panel.add(new UI.Subtitle("Rotate"));
-	
+	if(ap.signals.transformSelectionChanged){
 	var bt=new UI.ButtonRow("Select Mesh",function(){
 		ap.skinnedMesh.userData.transformMode="ObjectRotate";
 		ap.signals.transformSelectionChanged.dispatch(ap.skinnedMesh);
 	});
 	panel.add(bt);
+	}
 	
 	function rotate(){
 		var rotation=ap.skinnedMesh.rotation;
