@@ -37,15 +37,18 @@ RotatationControler.prototype.initialize=function(boneFilter){
 				var euler=e.setFromQuaternion(sphere.quaternion,bone.rotation.order);
 	
 				var r=scope.lastEuler;
-				var max=Math.abs(euler.x);
+				/*
+				 * TODO limit maximum
+				 * var max=Math.abs(euler.x);
 				if(euler.y>max){
 					max=Math.abs(euler.y);
 				}
 				if(euler.z>max){
 					max=Math.abs(euler.z);
-				}
+				}*/
 				
 				//TODO limit
+				//TODO limi axis,xy xz x ..?
 				euler.set(euler.x+r.x,euler.y+r.y,euler.z+r.z);
 				var rotation=ap.skinnedMesh.skeleton.bones[cbone].rotation;
 				rotation.copy(euler);
