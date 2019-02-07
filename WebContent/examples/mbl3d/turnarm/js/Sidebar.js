@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Turn Arm"));
+	container.add(new UI.AppName("Turn Arm(Deprecated)"));
 	
 	var exportPanel=new Sidebar.Export(ap);
 	container.add(exportPanel);
