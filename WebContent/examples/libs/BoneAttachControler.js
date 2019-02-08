@@ -52,6 +52,9 @@ var BoneAttachControler=function(skinnedMesh,param){
 	});
 };
 
+BoneAttachControler.prototype.getBoneList=function(){
+	return this.boneList;
+}
 BoneAttachControler.prototype.getDefaultBonePosition=function(index){
 	var matrix=this.defaultBoneMatrixs[index];
 	var position=new THREE.Vector3();

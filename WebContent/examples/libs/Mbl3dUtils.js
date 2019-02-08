@@ -26,7 +26,7 @@ var Mbl3dUtils={
 		loadTexture:function(url,flipY){
 			flipY=flipY==undefined?false:flipY;
 			var texture=new THREE.TextureLoader().load(url);
-			texture.flipY = false;
+			texture.flipY = flipY;
 			texture.minFilter=THREE.LinearFilter;
 			return texture;
 		},isFingerBoneName:function(name){
