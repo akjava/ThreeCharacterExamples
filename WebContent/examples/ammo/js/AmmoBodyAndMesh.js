@@ -21,6 +21,8 @@ AmmoBodyAndMesh = function(body,mesh){
 	this.syncBone=false;
 	this.targetBone=null;
 	this.defaultBoneRotation=null;
+	this._tmpQuaternion=null;
+	this.parentBodyAndMesh=null;
 }
 
 Object.assign( AmmoBodyAndMesh.prototype, {
@@ -96,16 +98,28 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			this.body.getMotionState().setWorldTransform(transform);
 		}
 		
+		
+		//limited working,maybe scalling
 		if(this.syncBone && this.targetBone!=null){
 			if(this.defaultBoneRotation==null){
 				this.defaultBoneRotation=new THREE.Euler();
+			}
+			if(this._tmpQuaternion==null){
+				this._tmpQuaternion=new THREE.Quaternion();
 			}
 			
 			var euler=this.defaultBoneRotation;
 			var rotate=this.getMesh().rotation;
 			var order=this.getMesh().rotation.order;
 			
-			this.targetBone.quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order));	
+			var newQ=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
+			//var newQ=this.getMesh().quaternion.clone();
+			
+			this._tmpQuaternion.setFromRotationMatrix(this.parentBodyAndMesh.getMesh().matrixWorld).inverse();
+			
+			newQ.multiply(this._tmpQuaternion);
+			
+			this.targetBone.quaternion.copy(newQ);	
 		}
 		
 	},
