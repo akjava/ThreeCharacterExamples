@@ -17,6 +17,10 @@ AmmoBodyAndMesh = function(body,mesh){
 	this._position=new THREE.Vector3();
 	this._rotation=new THREE.Quaternion();
 	this._scale=new THREE.Vector3(1,1,1);
+	
+	this.syncBone=false;
+	this.targetBone=null;
+	this.defaultBoneRotation=null;
 }
 
 Object.assign( AmmoBodyAndMesh.prototype, {
@@ -91,6 +95,19 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			this.body.setCenterOfMassTransform(transform);
 			this.body.getMotionState().setWorldTransform(transform);
 		}
+		
+		if(this.syncBone && this.targetBone!=null){
+			if(this.defaultBoneRotation==null){
+				this.defaultBoneRotation=new THREE.Euler();
+			}
+			
+			var euler=this.defaultBoneRotation;
+			var rotate=this.getMesh().rotation;
+			var order=this.getMesh().rotation.order;
+			
+			this.targetBone.quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order));	
+		}
+		
 	},
 	getBody:function(){
 		return this.body;
