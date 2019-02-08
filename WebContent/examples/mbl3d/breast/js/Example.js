@@ -1,6 +1,6 @@
 /*
  * 
- * not good at mesh rotation.
+ * somehow not good at mesh rotation.
  * 
  */
 Example=function(application){
@@ -86,7 +86,7 @@ Example=function(application){
 		});
 		
 		 var p=ammoContainer.position;
-		 sprine03Box=ap.ammoControler.createBox(new THREE.Vector3(1, 1, 5), 0, p.x,p.y,p.z, 
+		 sprine03Box=ap.ammoControler.createBox(new THREE.Vector3(80, 80, 5), 0, p.x,p.y,p.z, 
 					new THREE.MeshPhongMaterial({color:0x008800})
 							);
 		 ap.sprineBox=sprine03Box;
