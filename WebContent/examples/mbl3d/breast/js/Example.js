@@ -1,3 +1,8 @@
+/*
+ * 
+ * not good at mesh rotation.
+ * 
+ */
 Example=function(application){
 	var ap=application;
 	
@@ -81,11 +86,11 @@ Example=function(application){
 		});
 		
 		 var p=ammoContainer.position;
-		 sprine03Box=ap.ammoControler.createBox(new THREE.Vector3(80, 80, 5), 0, p.x,p.y,p.z, 
+		 sprine03Box=ap.ammoControler.createBox(new THREE.Vector3(1, 1, 5), 0, p.x,p.y,p.z, 
 					new THREE.MeshPhongMaterial({color:0x008800})
 							);
 		 ap.sprineBox=sprine03Box;
-		 
+
 
 		 
 		 //sprine03Box.getMesh().matrixAutoUpdate=false;
@@ -98,7 +103,7 @@ Example=function(application){
 
 		 var diff=breastRContainer.position.clone().sub(ammoContainer.position);
 		 
-		 var diff=new THREE.Vector3(0,5,10);
+		 var diff=new THREE.Vector3(0,5,20);
 		 
 		 var resetBox=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:0x00ff00}));
 		 resetBox.position.copy(diff);
@@ -111,8 +116,7 @@ Example=function(application){
 					new THREE.MeshPhongMaterial({color:0x000088})
 		 );
 		 ap.breastBox=breastBox;
-		 
-		 console.log(breastBox.getMesh().position);
+
 		 
 		 AmmoUtils.setLinearFactor(breastBox.getBody(),1,1,1);
 		 //AmmoUtils.setLinearFactor(breastBox.getBody(),0,0,0);
@@ -157,6 +161,7 @@ Example=function(application){
 		
 	});
 	
+	var pq=new THREE.Quaternion();
 	ap.signals.rendered.add(function(){
 		
 		
@@ -195,7 +200,11 @@ Example=function(application){
 			//console.log(euler);
 			//forget-Z or TODO reduce Z
 			//i'm not sure why use euler
-			ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order));
+			pq.setFromRotationMatrix(ammoContainer.matrixWorld).inverse();
+			
+			var q=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
+			q.multiply(pq)
+			ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(q);
 			//console.log("hello");
 			//ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,0,euler));
 			
@@ -210,7 +219,7 @@ Example=function(application){
 			AmmoUtils.forceDampingRotation(ap.breastBox.getBody(),1,1,0.5);
 			//safety-distance limit
 			
-			var limitDistance=true;
+			var limitDistance=false;
 			if(limitDistance){
 			var distance=application.sprineBox.getMesh().position.distanceTo(application.breastBox.getMesh().position);
 			//if(distance>12){//TODO auto set
@@ -224,12 +233,16 @@ Example=function(application){
 			}
 			
 			//auto reset,when penetrate 
-			var pos=application.resetBox.getWorldPosition(new THREE.Vector3());
-			var distance2=pos.distanceTo(application.breastBox.getMesh().position);
-			if(distance2>18){
-				console.log("force reseted");
-				AmmoUtils.setPosition(ap.breastBox.getBody(),pos.x,pos.y,pos.z);
+			var forceReset=false;
+			if(forceReset){
+				var pos=application.resetBox.getWorldPosition(new THREE.Vector3());
+				var distance2=pos.distanceTo(application.breastBox.getMesh().position);
+				if(distance2>18){
+					console.log("force reseted");
+					AmmoUtils.setPosition(ap.breastBox.getBody(),pos.x,pos.y,pos.z);
+				}
 			}
+			
 		}
 	})
 }
