@@ -7,13 +7,14 @@ Example=function(application){
 	
 	AppUtils.decoderPath="../../libs/draco/gltf/";
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph_draco.glb";
+	
 	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
 	
 	var textureUrl="../../../dataset/mbl3d/texture/m_brown.png";
-	//var textureUrl="../models/m_brown.png";
+	ap.defaultTextureUrl=textureUrl;
 	
-	var texture=Mbl3dUtils.loadTexture(textureUrl);
-	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,morphTargets:true,map:texture,transparent:true,opacity:ap.meshTransparent,alphaTest:0.2});
+	
+	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,morphTargets:true,map:null,transparent:true,opacity:ap.meshTransparent,alphaTest:0.2});
 	
 	ap.signals.meshTransparentChanged.add(function(){
 		material.opacity=ap.meshTransparent;
@@ -43,9 +44,20 @@ Example=function(application){
 		
 		if(isGltf){
 			mesh.scale.set(100,100,100);
-		}else{
-			texture.flipY=true;
 		}
+		
+		ap.signals.loadingTextureFinished.add(function(texture){
+			if(texture!=null){
+				if(!isGltf){
+					texture.flipY=true;
+				}
+			}
+			
+			material.map=texture;
+			material.needsUpdate=true;
+		});
+		
+		ap.signals.loadingTextureStarted.dispatch(textureUrl);
 		
 		mesh.material=material;
 		container.add(mesh);
@@ -274,9 +286,11 @@ Example=function(application){
 	var wpos=new THREE.Vector3();
 	ap.signals.rendered.add(function(){
 		if(ap.mixer){
+			
 			ap.ammoControler.update();
 			var delta = ap.clock.getDelta();
 			ap.mixer.update(delta);
+			ap.skinnedMesh.updateMatrixWorld(true);
 			ap.attachControler.update();
 			
 			//auto reset,when penetrate 

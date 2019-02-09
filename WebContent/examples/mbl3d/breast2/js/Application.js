@@ -3,7 +3,7 @@ var Application = function () {
 	this.scene.name = 'Scene';
 	this.scene.background = new THREE.Color( 0xaaaaaa );
 	
-	this.camera = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
+	this.camera = new THREE.PerspectiveCamera( 50, 1, 1, 1000 );
 	this.camera.name = 'Camera';
 	this.camera.position.set( 0, 5, 10 );
 	this.camera.lookAt( new THREE.Vector3() );
@@ -17,7 +17,7 @@ var Application = function () {
 	this.breastPosZ=10;
 	
 	this.damping=1;
-	this.stiffness=1000;
+	this.stiffness=100;
 	this.meshTransparent=.5;
 	this.visibleAmmo=true;
 	this.bodyDamping=0.75;
@@ -59,6 +59,10 @@ var Application = function () {
 	var Signal = signals.Signal;
 
 	this.signals = {
+			loadingTextureStarted:new Signal(),
+			loadingTextureFinished:new Signal(),
+			loadingModelStarted:new Signal(),
+			loadingModelFinished:new Signal(),
 			newBreast: new Signal(),
 			skinnedMeshTransformed: new Signal(),
 			windowResize: new Signal(),

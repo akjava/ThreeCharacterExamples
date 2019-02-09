@@ -1273,6 +1273,7 @@ function Timeliner( controller ) {
 	var scrollbar = new ScrollBar(0, 10);
 
 	var div = document.createElement('div');
+	context.div=div;
 
 	controller.setDuration(context.totalTime);
 

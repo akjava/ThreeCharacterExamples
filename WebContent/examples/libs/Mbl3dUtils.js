@@ -24,6 +24,9 @@ var Mbl3dUtils={
 			return shorten;
 		},
 		loadTexture:function(url,flipY){
+			if(url==null){
+				return null;
+			}
 			flipY=flipY==undefined?false:flipY;
 			var texture=new THREE.TextureLoader().load(url);
 			texture.flipY = flipY;
