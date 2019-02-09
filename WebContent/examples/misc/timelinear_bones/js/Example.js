@@ -3,8 +3,9 @@ Example=function(application){
 	var scope=this;
 	var scale=100;
 	
-	ap.camera.position.set( 0, 1*scale, 2.5*scale );
-	ap.controls.target.set(0,1*scale,0);
+	
+	ap.camera.position.set( 0, 1.25*scale, 2.8*scale );
+	ap.controls.target.set(0,0.6*scale,0);
 	ap.controls.update();
 	
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";

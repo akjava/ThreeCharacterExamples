@@ -93,6 +93,7 @@ BoneAttachControler.prototype.getContainerByBoneName=function(name){
 }
 
 
+//if delay frame call ap.skinnedMesh.updateMatrixWorld(true);
 BoneAttachControler.prototype.update=function(){
 	var scope=this;
 	this._matrixWorldInv.getInverse( this.object3d.matrixWorld );

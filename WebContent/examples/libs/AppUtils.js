@@ -24,6 +24,7 @@ var AppUtils={
 				var mesh=null;
 				var bone=null;
 				gltf.scene.traverse( function ( child ) {
+					
 					if ( child.isMesh ) {
 						mesh=child;
 						
@@ -82,6 +83,10 @@ var AppUtils={
 					if(mesh.skeleton!==undefined){
 						mesh.skeleton.pose();
 						console.log("Some how FBXModle Root-Bone scale is",mesh.skeleton.bones[0].scale);
+					}
+					
+					if(mesh.scale.x!=1){
+						console.error("fbx usually scale is 1,if this  model is invalid ,Use -Z Foward Y Up,Experimental apply transform")
 					}
 					
 					callback(mesh);

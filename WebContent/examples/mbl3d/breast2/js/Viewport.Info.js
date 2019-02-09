@@ -23,7 +23,7 @@ Viewport.Info = function ( application ) {
 	var rotYText = new UI.Text( '0' ).setMarginLeft( '6px' );
 	var rotZText = new UI.Text( '0' ).setMarginLeft( '6px' );
 
-	container.add( new UI.Text( 'Breast' ),  new UI.Break() , new UI.Break() );
+	container.add( new UI.Text( 'Breast-R' ),  new UI.Break() , new UI.Break() );
 	container.add( new UI.Text( 'Pos-X' ), posXText, new UI.Break() );
 	container.add( new UI.Text( 'Pos-Y' ), posYText, new UI.Break() );
 	container.add( new UI.Text( 'Pos-Z' ), posZText, new UI.Break() );
@@ -45,7 +45,7 @@ Viewport.Info = function ( application ) {
 	
 	container.add( new UI.Break() , new UI.Break() );
 	
-	container.add( new UI.Text( 'Sprine' ),  new UI.Break() , new UI.Break() );
+/*	container.add( new UI.Text( 'Sprine' ),  new UI.Break() , new UI.Break() );
 	container.add( new UI.Text( 'Pos-X' ), sprineposXText, new UI.Break() );
 	container.add( new UI.Text( 'Pos-Y' ), sprineposYText, new UI.Break() );
 	container.add( new UI.Text( 'Pos-Z' ), sprineposZText, new UI.Break() );
@@ -53,7 +53,7 @@ Viewport.Info = function ( application ) {
 	container.add( new UI.Text( 'Rot-X' ), sprinerotXText, new UI.Break() );
 	container.add( new UI.Text( 'Rot-Y' ), sprinerotYText, new UI.Break() );
 	container.add( new UI.Text( 'Rot-Z' ), sprinerotZText, new UI.Break() );
-	container.add( new UI.Break() , new UI.Break() );
+	container.add( new UI.Break() , new UI.Break() );*/
 	container.add( new UI.Text( 'Distance' ), distanceText, new UI.Break() );
 	container.add( new UI.Text( 'Distance' ), distance2Text, new UI.Break() );
 	container.add( new UI.Break() , new UI.Break() );
@@ -72,27 +72,28 @@ Viewport.Info = function ( application ) {
 	
 	var wpos=new THREE.Vector3();
 	function update() {
-		
-		if(application.breastBox==undefined){
+		var bc=ap.breastControler;
+		if(bc.breastBoxR==undefined){
 			return;
 		}
-		var x=application.breastBox.getMesh().position.x;
-		var y=application.breastBox.getMesh().position.y;
-		var z=application.breastBox.getMesh().position.z;
+		
+		var x=bc.breastBoxR.getMesh().position.x;
+		var y=bc.breastBoxR.getMesh().position.y;
+		var z=bc.breastBoxR.getMesh().position.z;
 		
 		posXText.setValue( x.toFixed(2) );
 		posYText.setValue( y.toFixed(2) );
 		posZText.setValue( z.toFixed(2) );
 		
-		var x=THREE.Math.radToDeg(application.breastBox.getMesh().rotation.x);
-		var y=THREE.Math.radToDeg(application.breastBox.getMesh().rotation.y);
-		var z=THREE.Math.radToDeg(application.breastBox.getMesh().rotation.z);
+		var x=THREE.Math.radToDeg(bc.breastBoxR.getMesh().rotation.x);
+		var y=THREE.Math.radToDeg(bc.breastBoxR.getMesh().rotation.y);
+		var z=THREE.Math.radToDeg(bc.breastBoxR.getMesh().rotation.z);
 	
 		rotXText.setValue( x.toFixed(2) );
 		rotYText.setValue( y.toFixed(2) );
 		rotZText.setValue( z.toFixed(2) );
 		
-		var x=application.sprineBox.getMesh().position.x;
+/*		var x=application.sprineBox.getMesh().position.x;
 		var y=application.sprineBox.getMesh().position.y;
 		var z=application.sprineBox.getMesh().position.z;
 		
@@ -106,20 +107,16 @@ Viewport.Info = function ( application ) {
 	
 		sprinerotXText.setValue( x.toFixed(2) );
 		sprinerotYText.setValue( y.toFixed(2) );
-		sprinerotZText.setValue( z.toFixed(2) );
+		sprinerotZText.setValue( z.toFixed(2) );*/
 		
 		
 		
 		
 		
 		
-		function distance(box){
-			wpos.setFromMatrixPosition(box.getMesh().userData.breastBase.getMesh().matrixWorld);
-			var distance=wpos.distanceTo(box.getMesh().position);
-			return distance;
-		}
-		distanceText.setValue( distance(ap.breastBox).toFixed(2) );
-		distance2Text.setValue( distance(ap.breastBoxL).toFixed(2) );
+		
+		distanceText.setValue( ap.breastControler.getDistance(true).toFixed(2) );
+		distance2Text.setValue( ap.breastControler.getDistance(false).toFixed(2) );
 		
 		//wpos.setFromMatrixPosition(application.resetBox.matrixWorld);
 		

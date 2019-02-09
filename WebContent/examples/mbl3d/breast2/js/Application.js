@@ -11,16 +11,12 @@ var Application = function () {
 	
 
 	this.breastBox=null;
-	this.breastSize=5;
-	this.breastPosX=0;
-	this.breastPosY=-2;
-	this.breastPosZ=10;
+
 	
-	this.damping=1;
-	this.stiffness=100;
+	
 	this.meshTransparent=.5;
 	this.visibleAmmo=true;
-	this.bodyDamping=0.75;
+
 	
 	//hard
 /*	this.lockX=false;
@@ -44,17 +40,9 @@ var Application = function () {
 	this.breastPosZ=10;*/
 	
 	//more soft
-	this.lockX=false;
-	this.lockY=false;
-	this.lockZ=false;
+
 	
-	this.allowAngleX=45;
-	this.allowAngleY=30;
-	this.allowAngleZ=90;
-	this.breastPosZ=6;
-	
-	this.autoResetPosition=true;
-	
+	this.breastControler=new BreastControler();
 	
 	var Signal = signals.Signal;
 

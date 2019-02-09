@@ -1272,8 +1272,9 @@ function Timeliner( controller ) {
 
 	var scrollbar = new ScrollBar(0, 10);
 
+	
 	var div = document.createElement('div');
-	context.div=div;
+	
 
 	controller.setDuration(context.totalTime);
 
@@ -1768,6 +1769,8 @@ function Timeliner( controller ) {
  		transitionDuration: '0.25s',
 		transitionTimingFunction: 'ease-in-out'
 	});
+	context.pane=pane;
+	context.ghostpane=ghostpane;
 
 	document.body.appendChild(pane);
 	document.body.appendChild(ghostpane);
@@ -1888,6 +1891,16 @@ function Timeliner( controller ) {
 		var domParent = pane.parentElement;
 		domParent.removeChild(pane);
 		domParent.removeChild(ghostpane);
+
+	};
+	this.setVisible = function setVisible(visible) {
+		if(!visible){
+			ghostpane.style.display='none';
+			pane.style.display='none';
+		}else{
+			ghostpane.style.display='';
+			pane.style.display='';
+		}
 
 	};
 
