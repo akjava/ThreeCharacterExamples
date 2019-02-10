@@ -7,14 +7,9 @@ var Sidebar = function ( application ) {
 	
 	ap.ikControler.maxAngle=5;//change because of ikratio
 	
-	var visible=true;
-	var bt=new UI.ButtonRow("TimeLiner Switch Show/Hide",function(){
-		visible=!visible;
-		ap.timeliner.setVisible(visible);
-	});
-	container.add(bt);
 	
 	
+	container.add(new Sidebar.TimelinerVisibleRow(ap));
 	container.add(new Sidebar.CameraControler(ap));
 	
 	
