@@ -48,6 +48,8 @@ var Application = function () {
 	this.timelinerClipExportName="clip_timeliner_morphs";
 	
 	this.signals = {
+			hairModelLoaded:new Signal(),
+			timelinerDisplayTimeChanged: new Signal(),
 			windowResize: new Signal(),
 			loadingModelStarted:new Signal(),
 			loadingModelFinished:new Signal(),

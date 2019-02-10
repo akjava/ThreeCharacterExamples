@@ -19,7 +19,7 @@ Sidebar.TimelinerClipExport=function(ap){
 		var clip=makeClip(ap);
 		var defaultName=ap.timelinerClipExportName==undefined?"timeliner_clip":ap.timelinerClipExportName;
 		var fileName=scope.fileName == ""?defaultName:scope.fileName;
-		console.log(defaultName,fileName);
+		
 		fileName=fileName+".json";
 		var jsonText=AnimeUtils.clipToJsonText(clip);
 		var link=AppUtils.generateTextDownloadLink(jsonText,fileName,fileName,true);

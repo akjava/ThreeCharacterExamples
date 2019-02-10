@@ -10,7 +10,7 @@ var Sidebar = function ( application ) {
 	title.dom.textContent="TimeLinear Morph";
 	div.add(title);
 
-	
+	container.add(new Sidebar.TimelinerVisibleRow(ap));
 	
 	var tabs = new UI.Div();
 	tabs.setId( 'tabs' );
@@ -26,7 +26,7 @@ var Sidebar = function ( application ) {
 var editorTab = new UI.Text( 'Editor' ).onClick( onClick );
 tabs.add( editorTab);
 var editor= new UI.Span().add(
-		new Sidebar.TimelinerVisibleRow(ap),
+		
 		new Sidebar.MorphMbl3dEditor(application),
 		new Sidebar.Camera(application)
 	);
@@ -47,7 +47,8 @@ var inputOutput= new UI.Span().add(
 		new Sidebar.Texture(application),
 		new Sidebar.TimelinerClipExport(application),
 		new Sidebar.ExportMorphFrameClip(ap),
-		new Sidebar.Import(ap)
+		new Sidebar.Import(ap),
+		new Sidebar.ImportTimelinerBackground(ap)
 	);
 container.add( inputOutput);
 

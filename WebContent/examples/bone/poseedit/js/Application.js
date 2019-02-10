@@ -22,6 +22,7 @@ var Application = function () {
 	var Signal = signals.Signal;
 
 	this.signals = {
+			hairModelLoaded:new Signal(),
 			ikSelectionChanged:new Signal(),
 			loadingTextureStarted:new Signal(),
 			loadingTextureFinished:new Signal(),

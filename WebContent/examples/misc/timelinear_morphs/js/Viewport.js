@@ -107,6 +107,10 @@ var Viewport = function ( application ) {
 				signals.materialTypeChanged.dispatch();	
 				
 				
+				application.boneAttachControler=new BoneAttachControler(skinnedMesh);
+				application.boneAttachControler.setVisible(false);
+				application.scene.add(application.boneAttachControler.object3d);
+				
 				signals.loadingModelFinished.dispatch();
 			}catch(e){
 				console.log(e);
@@ -116,12 +120,21 @@ var Viewport = function ( application ) {
 	
 	}
 
-	
+	application.signals.hairModelLoaded.add(function(){
+		var index=BoneUtils.findBoneIndexByEndsName(ap.boneAttachControler.getBoneList(),"head");
+		var name=ap.boneAttachControler.getBoneList()[index].name;
+		var hairContainer=ap.boneAttachControler.getContainerByBoneName(name);
+		hairContainer.add( ap.hairMesh );
+		ap.hairMesh.updateMatrixWorld(true);
+	});
 	
 	
 	
 	function animate() {
 		requestAnimationFrame( animate );
+		
+		
+		
 		//controls.update();
 		render();
 	}
@@ -130,6 +143,11 @@ var Viewport = function ( application ) {
 	
 	
 	function render() {
+		
+		if(ap.boneAttachControler){
+			ap.skinnedMesh.updateMatrixWorld(true);
+			ap.boneAttachControler.update();	
+		}
 		
 		if(application.drawOutline){
 			scope.effect.render( scene, camera );
@@ -144,6 +162,7 @@ var Viewport = function ( application ) {
 		var trackInfo = [];
 		var onUpdate=function(){
 			application.signals.morphAnimationSelectionChanged.dispatch();
+			ap.signals.timelinerDisplayTimeChanged.dispatch();
 		};
 		
 		var header="Expressions_";

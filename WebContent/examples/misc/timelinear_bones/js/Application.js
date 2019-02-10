@@ -28,6 +28,7 @@ var Application = function () {
 	var Signal = signals.Signal;
 
 	this.signals = {
+			hairModelLoaded:new Signal(),
 			skinnedMeshTransformeFinished:new Signal(),
 			boneTranslateFinished:new Signal(),
 			boneRotationFinished:new Signal(),

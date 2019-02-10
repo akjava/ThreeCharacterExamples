@@ -189,17 +189,19 @@ Sidebar.Hair = function ( application ) {
 
 				// onLoad callback
 				function ( geometry, materials ) {
+					geometry.center();
 					if(application.hairMesh!=null){
-						application.scene.remove(application.hairMesh);
+						application.hairMesh.parent.remove(application.hairMesh);
 					}
 					
 					
 					application.hairMesh = new THREE.Mesh( geometry);
 					application.hairMesh.castShadow = true;
-					application.hairMesh.scale.set(scope.hairX,scope.hairY,scope.hairZ)
-					application.scene.add( application.hairMesh );
-					//TODO fix position,better to avoid reload.
 					
+					application.hairMesh.scale.set(scope.hairX,scope.hairY,scope.hairZ);
+					application.hairMesh.position.set(0,10,0);//no way to modify so far
+					
+					application.signals.hairModelLoaded.dispatch();
 					application.signals.hairMaterialTypeChanged.dispatch();
 				}
 				
@@ -210,10 +212,16 @@ Sidebar.Hair = function ( application ) {
 		
 	}
 	
-	loadHair();
+	application.signals.loadingModelFinished.add(function(){
+		loadHair();
+	});
 	
 	application.signals.hairMaterialTypeChanged.add(function(){
+		if(application.hairMesh==null || application.hairMesh==undefined){
+			return;
+		}
 		scope.hairMaterial =  new window['THREE'][application.materialType]({wireframe:application.materialWireframe,color:scope.hairColor,shininess:100,specular:0x444444});
+		console.log(application.hairMesh,scope.hairMaterial);
 		application.hairMesh.material=scope.hairMaterial;
 	});
 	

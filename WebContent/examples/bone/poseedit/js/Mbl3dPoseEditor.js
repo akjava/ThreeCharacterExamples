@@ -206,10 +206,17 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		//add hair & hand item
 		//temporary
-		var index=BoneUtils.findBoneIndexByEndsName(ap.ikControler.getBoneList(),"head");
-		var name=boneList[index].name;
 		
-		var hairContainer=ap.ikControler.boneAttachControler.getContainerByBoneName(name);
+		
+		application.signals.hairModelLoaded.add(function(){
+			var index=BoneUtils.findBoneIndexByEndsName(ap.ikControler.getBoneList(),"head");
+			var name=boneList[index].name;
+			var hairContainer=ap.ikControler.boneAttachControler.getContainerByBoneName(name);
+			hairContainer.add( ap.hairMesh );
+			ap.hairMesh.updateMatrixWorld(true);
+		});
+		
+		
 		function loadHair(){
 			var hairUrl="../../../dataset/mbl3d/hairs/geometry-twelve-short.json";
 			var loader = new THREE.JSONLoader();
@@ -223,9 +230,9 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 						ap.hairMesh = new THREE.Mesh( geometry,m);
 						ap.hairMesh.scale.set(100,100,100);
 						ap.hairMesh.position.set(0,10,0);//no way to modify so far
-						hairContainer.add( ap.hairMesh );
 						
-						ap.hairMesh.updateMatrixWorld(true);
+						application.signals.hairModelLoaded.dispatch();
+						
 					}
 					
 					);
