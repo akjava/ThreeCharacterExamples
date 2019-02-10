@@ -2577,6 +2577,7 @@ function openAs(callback, target) {
 		input = document.createElement('input');
 		input.style.display = 'none';
 		input.type = 'file';
+		input.accept='.json';
 		input.addEventListener('change', handleFileSelect);
 		target = target || document.body;
 		target.appendChild(input);
