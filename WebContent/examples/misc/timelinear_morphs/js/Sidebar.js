@@ -1,4 +1,5 @@
 var Sidebar = function ( application ) {
+	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
 	
@@ -8,6 +9,8 @@ var Sidebar = function ( application ) {
 	var title=new UI.Span();
 	title.dom.textContent="TimeLinear Morph";
 	div.add(title);
+	
+	container.add(new Sidebar.TimelinerVisibleRow(ap));
 	
 	var morph=new Sidebar.MorphMbl3dEditor(application);
 	container.add(morph);

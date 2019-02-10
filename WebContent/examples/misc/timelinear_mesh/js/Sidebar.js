@@ -3,7 +3,8 @@ var Sidebar = function ( application ) {
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("TimeLinear Mesh"));
-	
+
+	container.add(new Sidebar.TimelinerVisibleRow(ap));
 	
 	ap.ikControler.maxAngle=5;//change because of ikratio
 	
