@@ -9,6 +9,7 @@ var Sidebar = function ( application ) {
 	var title=new UI.Span();
 	title.dom.textContent="TimeLinear Morph";
 	div.add(title);
+
 	
 	
 	var tabs = new UI.Div();
@@ -45,7 +46,7 @@ tabs.add( inputOutputTab);
 var inputOutput= new UI.Span().add(
 		new Sidebar.Texture(application),
 		new Sidebar.TimelinerClipExport(application),
-		new Sidebar.Export(ap),
+		new Sidebar.ExportMorphFrameClip(ap),
 		new Sidebar.Import(ap)
 	);
 container.add( inputOutput);

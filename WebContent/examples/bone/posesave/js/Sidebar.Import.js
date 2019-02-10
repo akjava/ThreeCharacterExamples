@@ -1,5 +1,5 @@
 Sidebar.Import=function(ap){
-	var container=new UI.TitlePanel("Import Single Pose Frame Clip");
+	var container=new UI.TitlePanel("Import Single Any Frame Clip");
 	
 	var row1=new UI.Row();
 	container.add(row1);
@@ -8,6 +8,7 @@ Sidebar.Import=function(ap){
 	var fileInput=new UI.TextFile(".json");
 	row1.add(fileInput);
 	
+	//TODO move to arg
 	function callUpdate(){
 		//for some ik control
 		if(ap.ikControler){

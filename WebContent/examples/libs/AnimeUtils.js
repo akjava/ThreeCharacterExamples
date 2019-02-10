@@ -548,7 +548,17 @@ var AnimeUtils={
 			
 			var clip=new THREE.AnimationClip("makeMeshClip", -1, tracks);
 			return clip;
-		}
+		},makeMorphFrameClip:function(skinnedMesh){
+			var tracks=[];
+			for(var i=0;i<skinnedMesh.morphTargetInfluences.length;i++){
+				var name=".morphTargetInfluences["+i+"]";
+				var values=[skinnedMesh.morphTargetInfluences[i]];
+				var times=[0];
+				var track=new THREE.NumberKeyframeTrack(name,times,values);
+				tracks.push(track);
+			}var clip=new THREE.AnimationClip("makeMorphFrameClip", -1, tracks);
+			return clip
+		},
 		
 }
 

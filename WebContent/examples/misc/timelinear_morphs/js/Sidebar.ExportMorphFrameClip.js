@@ -1,10 +1,12 @@
-Sidebar.TimelinerClipExport=function(ap){
+Sidebar.ExportMorphFrameClip=function(ap){
 	var scope=this;
-	function makeClip(ap){
-		return ap.timeliner.context.controller._clip;
+	function makeClip(){
+		var morphClip=AnimeUtils.makeMorphFrameClip(ap.skinnedMesh);
+		//TODO support morph dictionary
+		return morphClip;
 	}
 	this.fileName="";
-	var exportPanel=new UI.TitlePanel("Export Timeliner As Clip");
+	var exportPanel=new UI.TitlePanel("Export Single Morph Frame Clip");
 	var nameRow=new UI.InputRow("Name","",function(v){scope.fileName=v});
 	nameRow.text.setWidth("110px");
 	nameRow.text.setMarginRight("6px");
@@ -12,14 +14,10 @@ Sidebar.TimelinerClipExport=function(ap){
 	nameRow.input.setWidth("140px");
 	exportPanel.add(nameRow);
 	
-	
-	
 	var bt=new UI.Button("Download").onClick( function () {
 		span.dom.innerHTML = ''
 		var clip=makeClip(ap);
-		var defaultName=ap.timelinerClipExportName==undefined?"timeliner_clip":ap.timelinerClipExportName;
-		var fileName=scope.fileName == ""?defaultName:scope.fileName;
-		console.log(defaultName,fileName);
+		var fileName=scope.fileName == ""?"morph_frame":scope.fileName;
 		fileName=fileName+".json";
 		var jsonText=AnimeUtils.clipToJsonText(clip);
 		var link=AppUtils.generateTextDownloadLink(jsonText,fileName,fileName,true);

@@ -345,7 +345,10 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 		updateMorphList();
 	})
 	
-	var resetBt=new UI.ButtonRow("Insert 0 All",function(){
+	container.add(new UI.Subtitle("Set All"));
+	var setAllRow=new UI.Row();
+	container.add(setAllRow);
+	var resetBt=new UI.Button("overwrite 0").onClick(function(){
 		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
 			var v=application.skinnedMesh.morphTargetInfluences[i];
 			//if(v!=0){ //for after edit
@@ -358,7 +361,26 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 			//}
 		}
 	});
-	container.add(resetBt);
+	setAllRow.add(resetBt);
+	
+	var setBt=new UI.Button("Current Value").onClick(function(){
+		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
+			var v=application.skinnedMesh.morphTargetInfluences[i];
+			//if(v!=0){ //for after edit
+				var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
+				
+				//mbl3d base
+				var header="Expressions_";
+				var name=key.substring(header.length,key.length);
+				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
+			//}
+		}
+	});
+	setAllRow.add(setBt);
+	
+	container.add(new UI.Subtitle("Set or Update If it need"));
+	var modifyRow=new UI.Row();
+	container.add(modifyRow);
 	var replaceBt=new UI.Button("Replace 0 ").onClick(function(){
 		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
 			var v=application.skinnedMesh.morphTargetInfluences[i];
@@ -372,7 +394,7 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 			}
 		}
 	});
-	resetBt.add(replaceBt);
+	modifyRow.add(replaceBt);
 	
 	var copyBt=new UI.Button("Copy Not 0 Value").onClick(function(){
 		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
@@ -386,25 +408,15 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 			}
 		}
 	});
-	resetBt.add(copyBt);
-	var clearAllBt=new UI.ButtonRow("Clear 0 keys",function(){
-		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
-			var v=application.skinnedMesh.morphTargetInfluences[i];
-			if(v==0){ //for after edit
-				var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
-				//application.skinnedMesh.morphTargetInfluences[i]=0;//seems not set 0
-				//mbl3d base
-				var header="Expressions_";
-				var name=key.substring(header.length,key.length);
-				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
-				ap.timeliner.context.dispatcher.fire('keyframe',name);
-			}
-		}
-		ap.timeliner.context.controller.setDisplayTime(0);
-		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
-	});
-	container.add(clearAllBt);
-	var clearBt=new UI.Button("Clear Keys").onClick(function(){
+	modifyRow.add(copyBt);
+	
+	
+	
+	container.add(new UI.Subtitle("Clear"));
+	var clearAllRow=new UI.Row();
+	container.add(clearAllRow);
+	
+	function clearAll(){
 		function fireKeyFrame(force){
 			for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
 				var v=application.skinnedMesh.morphTargetInfluences[i];
@@ -425,16 +437,70 @@ Sidebar.MorphMbl3dEditor = function ( application ) {
 			ap.timeliner.context.controller.setDisplayTime(0);
 			ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
 		}
+
 		fireKeyFrame(true);
-		
-		setTimeout(function(){
-			fireKeyFrame(false);
-			
-			
-		},10);
-		
-	});
-	clearAllBt.add(clearBt);
+		fireKeyFrame(false);
+	}
 	
+	var clearBt=new UI.Button("Clear All Keys").onClick(function(){
+		clearAll();
+	});
+	clearAllRow.add(clearBt);
+	
+	var clearZeroBt=new UI.Button("Clear 0 keys").onClick(function(){
+		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
+			var v=application.skinnedMesh.morphTargetInfluences[i];
+			if(v==0){ //for after edit
+				var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
+				//application.skinnedMesh.morphTargetInfluences[i]=0;//seems not set 0
+				//mbl3d base
+				var header="Expressions_";
+				var name=key.substring(header.length,key.length);
+				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
+				ap.timeliner.context.dispatcher.fire('keyframe',name);
+			}
+		}
+		ap.timeliner.context.controller.setDisplayTime(0);
+		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
+	});
+	clearAllRow.add(clearZeroBt);
+	
+
+	container.add(new UI.Subtitle("Control"));
+	var controlRow=new UI.Row();
+	container.add(controlRow);
+	
+	var clipBoard=[];
+	var copyBt=new UI.Button("Cut").onClick(function(){
+		clipBoard=[];
+		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
+			var v=application.skinnedMesh.morphTargetInfluences[i];
+			clipBoard.push(v);
+		}
+		clearAll();
+	});
+	controlRow.add(copyBt);
+	var copyBt=new UI.Button("Copy").onClick(function(){
+		clipBoard=[];
+		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
+			var v=application.skinnedMesh.morphTargetInfluences[i];
+			clipBoard.push(v);
+		}
+	});
+	controlRow.add(copyBt);
+	var pasteBt=new UI.Button("Paste").onClick(function(){
+
+		for(var i=0;i<application.skinnedMesh.morphTargetInfluences.length;i++){
+			application.skinnedMesh.morphTargetInfluences[i]=clipBoard[i];
+			
+			var key=getKeyByValue(application.skinnedMesh.morphTargetDictionary,i);
+			
+			//mbl3d base
+			var header="Expressions_";
+			var name=key.substring(header.length,key.length);
+			ap.timeliner.context.dispatcher.fire('keyframe',name,true);
+		}
+	});
+	controlRow.add(pasteBt);
 	return container;
 };
