@@ -58,7 +58,7 @@ Sidebar.Import=function(ap){
 		mixer.uncacheClip(clip.name);
 		mixer.clipAction(clip).play();
 		mixer.update();
-		mixer.stopAllAction();
+		//mixer.stopAllAction();
 		
 		callUpdate();
 		

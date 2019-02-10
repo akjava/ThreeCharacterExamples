@@ -97,7 +97,7 @@ var Viewport = function ( application ) {
 				if(application.skinnedMesh!=null){
 					application.scene.remove(application.skinnedMesh);
 				}
-				
+				skinnedMesh=BoneUtils.convertToZeroRotatedBoneMesh(skinnedMesh);
 				application.skinnedMesh=skinnedMesh;
 				application.scene.add(skinnedMesh);
 				

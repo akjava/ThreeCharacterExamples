@@ -104,6 +104,58 @@ var BoneUtils={
 			
 			
 		},
+		copyMorphTargets:function(fromGeo,toGeo){
+			try{
+				
+			
+			if(!fromGeo){
+				console.error("copyMorphTargets:fromGeo undefined or null");
+			}
+			if(!toGeo){
+				console.error("copyMorphTargets:toGeo undefined or null");
+			}
+			if ( !  toGeo.isGeometry  ) {
+				console.error("copyMorphTargets:toGeo only support Normal Geometry");
+			}
+			
+			
+			
+			if(fromGeo.isGeometry){
+				console.error("copyMorphTargets:fromGeo only support Buffered Geometry so far");
+			}else if(fromGeo.isBufferGeometry){
+				
+				var morphAttributes=fromGeo.morphAttributes;
+				if(morphAttributes.position==undefined){
+					return;
+				}
+				var poses=morphAttributes.position;
+				
+				toGeo.morphTargets=[];
+				
+				poses.forEach(function(attribute){
+					var name=attribute.name;
+					var count=attribute.count;
+					var array=attribute.array;
+					
+					var target={name:name,vertices:[]};
+					toGeo.morphTargets.push(target);
+					
+					for(var i=0;i<count;i++){
+						var vec=new THREE.Vector3(array[i*3],array[i*3+1],array[i*3+2]);
+						target.vertices.push(vec);
+					}
+					
+				});
+				
+				
+			}else{
+				console.error("copyIndicesAndWeights:toGeo is not Geometry nor BufferGeometry");
+			}
+			
+			}catch(e){
+				console.log(e);
+			}
+		},
 		
 		//copy from SkeletonHelper.js
 		getChildBoneList:function ( object ) {
@@ -292,8 +344,11 @@ var BoneUtils={
 			
 			var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
 			BoneUtils.copyIndicesAndWeights(mesh.geometry,geo);
+			BoneUtils.copyMorphTargets(mesh.geometry,geo);
+			
 			geo.bones=rawbones;
-			return new THREE.SkinnedMesh(geo);
+			var skinnedMesh= new THREE.SkinnedMesh(geo);
+			return skinnedMesh;
 		},
 		resetBone:function(mesh,boneSelectedIndex){
 			var boneList=BoneUtils.getBoneList(mesh);

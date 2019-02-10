@@ -26,6 +26,9 @@ So In this case see history and use old code what you want example.
 Using Gltf Format has 2 problem.First problem I didnt solve Morph target problem.I'm using gltf-pipeline to compress file,but this is not support morph target.Second Problem is indices weight,some how gltf exported from Blender model's skinning result is not good at some vertex.I have no time to solve problem.
 
 That Why Most of case I'm using FBX Format;perfect skinning,soso goood data compression.
+###Bones
+I converted bone matrix inside for easy limit-bone-angles,that why export animation not compatible original bone - character.
+see BoneUtils.convertToZeroRotatedBoneMesh()
 
 ## Usefull Links
 
