@@ -9,7 +9,7 @@ Example=function(application){
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph_draco.glb";
 	
 	//var url="../../../dataset/mbl3d/models/anime2_female.fbx";
-	var url="../../../dataset/mbl3d/models/anime2_female_modifier.fbx";//smooth,but slow ftp and big file size
+	var url="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
 	
 	
 	var textureUrl="../../../dataset/mbl3d/texture/m_brown.png";
