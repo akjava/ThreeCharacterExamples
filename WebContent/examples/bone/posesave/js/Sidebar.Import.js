@@ -1,5 +1,5 @@
 Sidebar.Import=function(ap){
-	var container=new UI.TitlePanel("Import Pose");
+	var container=new UI.TitlePanel("Import Single Pose Frame Clip");
 	
 	var row1=new UI.Row();
 	container.add(row1);
@@ -24,9 +24,15 @@ Sidebar.Import=function(ap){
 			ap.signals.poseChanged.dispatch();
 			}
 	}
+	this.mixer=null;
 	
+	var scope=this;
 	fileInput.onChange(function(fileName,text){
-		var mixer=ap.mixer;
+		if(scope.mixer==null){
+			scope.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
+			console.log("mixer initialized");
+		}
+		var mixer=scope.mixer;
 		mixer.stopAllAction();
 		AnimeUtils.resetPose(ap.skinnedMesh);
 		AnimeUtils.resetMesh(ap.skinnedMesh);

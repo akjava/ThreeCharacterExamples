@@ -44,7 +44,9 @@ var inputOutputTab = new UI.Text( 'InputOutput' ).onClick( onClick );
 tabs.add( inputOutputTab);
 var inputOutput= new UI.Span().add(
 		new Sidebar.Texture(application),
-		new Sidebar.TimelinerClipExport(application)
+		new Sidebar.TimelinerClipExport(application),
+		new Sidebar.Export(ap),
+		new Sidebar.Import(ap)
 	);
 container.add( inputOutput);
 

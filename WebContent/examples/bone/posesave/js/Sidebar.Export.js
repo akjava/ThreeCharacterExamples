@@ -18,7 +18,7 @@ Sidebar.Export=function(ap){
 		return newClip;
 	}
 	this.fileName="";
-	var exportPanel=new UI.TitlePanel("Export Pose");
+	var exportPanel=new UI.TitlePanel("Export Single Pose Frame Clip");
 	var nameRow=new UI.InputRow("Name","",function(v){scope.fileName=v});
 	nameRow.text.setWidth("110px");
 	nameRow.text.setMarginRight("6px");
