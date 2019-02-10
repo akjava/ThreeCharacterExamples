@@ -24,6 +24,7 @@ var Application = function () {
 	this.defaultTextureUrl="../../../dataset/mbl3d/texture/m_brown.png";
 	this.textureUrl=this.defaultTextureUrl;
 	
+	this.timelinerClipExportName="clip_timeliner_bones";
 	var Signal = signals.Signal;
 
 	this.signals = {

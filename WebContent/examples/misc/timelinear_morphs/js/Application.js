@@ -43,6 +43,9 @@ var Application = function () {
 	this.materialWireframe=false;
 	
 	this.drawOutline=true;
+	
+	this.timelinerClipExportName="clip_timeliner_morphs";
+	
 	this.signals = {
 			windowResize: new Signal(),
 			loadingModelStarted:new Signal(),

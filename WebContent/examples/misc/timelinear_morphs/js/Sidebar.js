@@ -10,16 +10,80 @@ var Sidebar = function ( application ) {
 	title.dom.textContent="TimeLinear Morph";
 	div.add(title);
 	
-	container.add(new Sidebar.TimelinerVisibleRow(ap));
 	
-	var morph=new Sidebar.MorphMbl3dEditor(application);
-	container.add(morph);
+	var tabs = new UI.Div();
+	tabs.setId( 'tabs' );
 	
-	var camera=new Sidebar.Camera(application);
-	container.add(camera);
+	container.add( tabs );
+
+	function onClick( event ) {
+
+		select( event.target.textContent );
+
+	}
+
+var editorTab = new UI.Text( 'Editor' ).onClick( onClick );
+tabs.add( editorTab);
+var editor= new UI.Span().add(
+		new Sidebar.TimelinerVisibleRow(ap),
+		new Sidebar.MorphMbl3dEditor(application),
+		new Sidebar.Camera(application)
+	);
+container.add( editor);
+
+var settingTab = new UI.Text( 'Setting' ).onClick( onClick );
+tabs.add( settingTab);
+var setting= new UI.Span().add(
+		new Sidebar.Hair(application),
+		new Sidebar.Material(application),
+		new Sidebar.Light(application)
+	);
+container.add( setting);
+
+var inputOutputTab = new UI.Text( 'InputOutput' ).onClick( onClick );
+tabs.add( inputOutputTab);
+var inputOutput= new UI.Span().add(
+		new Sidebar.Texture(application),
+		new Sidebar.TimelinerClipExport(application)
+	);
+container.add( inputOutput);
+
+function select( section ) {
+	//move here
+	editorTab.setClass( '' );
+	editor.setDisplay( 'none' );
+	settingTab.setClass( '' );
+	setting.setDisplay( 'none' );
+	inputOutputTab.setClass( '' );
+	inputOutput.setDisplay( 'none' );
+	switch ( section ) {
+
 	
-	var texture=new Sidebar.Texture(application);
-	container.add(texture);
+
+	case 'Editor':
+					editorTab.setClass( 'selected' );
+					editor.setDisplay( '' );
+					break;
+	
+
+	case 'Setting':
+					settingTab.setClass( 'selected' );
+					setting.setDisplay( '' );
+					break;
+	
+
+	case 'InputOutput':
+					inputOutputTab.setClass( 'selected' );
+					inputOutput.setDisplay( '' );
+					break;
+	}
+	// move 
+	}
+select('Editor');
+	
+	
+	
+	
 	
 	/*
 	 * TODO support glb
@@ -27,14 +91,7 @@ var Sidebar = function ( application ) {
 	//var model=new Sidebar.Model(application);
 	//container.add(model);
 	
-	var hair=new Sidebar.Hair(application);
-	container.add(hair);
 	
-	var material=new Sidebar.Material(application);
-	container.add(material);
-	
-	var light=new Sidebar.Light(application);
-	container.add(light);
 	
 	return container;
 }

@@ -12,10 +12,14 @@ Sidebar.TimelinerClipExport=function(ap){
 	nameRow.input.setWidth("140px");
 	exportPanel.add(nameRow);
 	
+	
+	
 	var bt=new UI.Button("Download").onClick( function () {
 		span.dom.innerHTML = ''
 		var clip=makeClip(ap);
-		var fileName=scope.fileName == ""?"timeliner_clip":scope.fileName;
+		var defaultName=ap.timelinerClipExportName==undefined?"timeliner_clip":ap.timelinerClipExportName;
+		var fileName=scope.fileName == ""?defaultName:scope.fileName;
+		console.log(defaultName,fileName);
 		fileName=fileName+".json";
 		var jsonText=AnimeUtils.clipToJsonText(clip);
 		var link=AppUtils.generateTextDownloadLink(jsonText,fileName,fileName,true);
