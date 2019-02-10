@@ -4,8 +4,8 @@ Example=function(application){
 	var scale=100;
 	
 	
-	ap.camera.position.set( 0, 1.25*scale, 2.8*scale );
-	ap.controls.target.set(0,0.6*scale,0);
+	ap.camera.position.set(0,ap.cameraY, ap.cameraZ );
+	ap.controls.target.set(0,ap.targetY,0);
 	ap.controls.update();
 	
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";

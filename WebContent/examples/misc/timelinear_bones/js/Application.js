@@ -16,6 +16,10 @@ var Application = function () {
 	
 	this.ikControler=new IkControler(undefined,this);
 	
+	this.cameraY=125;
+	this.targetY=60;
+	this.cameraZ=280;
+	
 	
 	this.defaultTextureUrl="../../../dataset/mbl3d/texture/m_brown.png";
 	this.textureUrl=this.defaultTextureUrl;

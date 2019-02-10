@@ -15,23 +15,8 @@ var Sidebar = function ( application ) {
 	container.add(bt);
 	
 	
-	function update(){
-		var scale=100;
-		var y1=ypos.getValue();
-		var y2=ypos2.getValue();
-		ap.camera.position.set( 0, y1*scale, 2.5*scale );
-		ap.controls.target.set(0,y2*scale,0);
-		ap.controls.update();
-	}
+	container.add(new Sidebar.CameraControler(ap));
 	
-	var ypos=new UI.NumberRow("y1",0,10,1,1,function(){
-		update();
-	});
-	container.add(ypos);
-	var ypos2=new UI.NumberRow("y2",0,10,1,1,function(){
-		update();
-	});
-	container.add(ypos2);
 	
 	
 	var meshTransform=new Sidebar.MeshTransform(ap);
