@@ -1,4 +1,4 @@
-Sidebar.Light = function ( application ) {
+Sidebar.BasicLightShadow = function ( application ) {
 	var scope=this;
 	var container=new UI.Panel();
 	container.setId( 'light' );

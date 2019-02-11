@@ -37,7 +37,7 @@ tabs.add( settingTab);
 var setting= new UI.Span().add(
 		new Sidebar.Hair(application),
 		new Sidebar.Material(application),
-		new Sidebar.Light(application)
+		new Sidebar.BasicLightShadow(application)
 	);
 container.add( setting);
 

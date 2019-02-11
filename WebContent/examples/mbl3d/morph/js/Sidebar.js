@@ -30,7 +30,7 @@ var Sidebar = function ( application ) {
 	var material=new Sidebar.Material(application);
 	container.add(material);
 	
-	var light=new Sidebar.Light(application);
+	var light=new Sidebar.BasicLightShadow(application);
 	container.add(light);
 	
 	return container;
