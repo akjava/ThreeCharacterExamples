@@ -5,7 +5,7 @@ var Mbl3dIk=function(ap){
 	
 	this.boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 	
-	this.registIk(this.ikTargets,"Hip",["root","spine01"]);
+	this.registIk(this.ikTargets,"Hip",["pelvis","spine01"]);//somehow root not work fine
 	this.registIk(this.ikTargets,"Head",["spine01","spine02","spine03","neck","head"]);
 	//this.registIk(this.ikTargets,"LeftArm",["clavicle_L","upperarm_L","lowerarm_L","hand_L","middle00_L"]);
 	//this.registIk(this.ikTargets,"RightArm",["clavicle_R","upperarm_R","lowerarm_R","hand_R","middle00_R"]);
@@ -122,7 +122,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			this.limitBone(boneList,"spine02",-45,-45,-45,45,45,45);
 			this.limitBone(boneList,"spine03",-45,-45,-45,45,45,45);
 			this.limitBone(boneList,"neck",-45,-45,-45,45,45,45);
-			this.limitBone(boneList,"root",-180,-180,-180,180,180,180);
+			this.limitBone(boneList,"pelvis",-180,-180,-180,180,180,180);
 			
 			 
 			//copy to default

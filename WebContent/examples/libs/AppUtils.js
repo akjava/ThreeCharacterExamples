@@ -82,7 +82,8 @@ var AppUtils={
 					}
 					if(mesh.skeleton!==undefined){
 						mesh.skeleton.pose();
-						console.log("Some how FBXModle Root-Bone scale is",mesh.skeleton.bones[0].scale);
+						if(mesh.skeleton.bones[0].scale.x>1.01)
+							console.log("Scale is not 1,on Blender2.79-mbl3d1.61 FBX Scale Option should be 0.01 for compatible",mesh.skeleton.bones[0].scale);
 					}
 					
 					if(mesh.scale.x!=1){

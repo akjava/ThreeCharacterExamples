@@ -37,8 +37,8 @@ var BoneAttachControler=function(skinnedMesh,param){
 		
 	});
 	
-	
-	
+	//default hide all
+	this.setVisible(this.visible);
 	
 	
 	this._boneMatrix=new THREE.Matrix4();
@@ -51,6 +51,17 @@ var BoneAttachControler=function(skinnedMesh,param){
 		scope.defaultBoneMatrixs.push(bone.matrixWorld.clone());
 	});
 };
+
+BoneAttachControler.prototype.setParentObject=function(parent){
+	parent.add(this.object3d);
+}
+
+BoneAttachControler.prototype.dispose=function(){
+	var object3d=this.object3d;
+	if(object3d.parent!=null){
+		object3d.parent.remove(object3d);
+	}
+}
 
 BoneAttachControler.prototype.getBoneList=function(){
 	return this.boneList;
@@ -92,9 +103,21 @@ BoneAttachControler.prototype.getContainerByBoneName=function(name){
 	return this.containerList[index];
 }
 
+BoneAttachControler.prototype.getContainerByBoneEndName=function(name){
+	var index=BoneUtils.findBoneIndexByEndsName(this.boneList,name);
+	if(index==-1){
+		console.log("BoneAttachControler.getContainerByBoneName:not containe,"+name);
+		return null;
+	}
+	return this.containerList[index];
+}
+
 
 //if delay frame call ap.skinnedMesh.updateMatrixWorld(true);
-BoneAttachControler.prototype.update=function(){
+BoneAttachControler.prototype.update=function(forceUpdateMatrixWorld){
+	if(forceUpdateMatrixWorld){
+		this.skinnedMesh.updateMatrixWorld(true);
+	}
 	var scope=this;
 	this._matrixWorldInv.getInverse( this.object3d.matrixWorld );
 	this.object3d.getWorldQuaternion(this._quaternion);

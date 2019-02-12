@@ -9,7 +9,7 @@ Example=function(application){
 	//var url="../../../dataset/mbl3d/models/anime2_nomorph_draco.glb";
 	
 	//var url="../../../dataset/mbl3d/models/anime2_female.fbx";
-	var url="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
+	var url="../../../dataset/mbl3d/models/anime2_modifybreast.fbx";
 	
 	
 	var textureUrl="../../../dataset/mbl3d/texture/m_brown.png";
@@ -43,9 +43,9 @@ Example=function(application){
 		this.container=container;
 		
 		if(isGltf){
-			mesh.scale.set(100,100,100);
+			
 		}
-		mesh.scale.set(1,1,1);
+		mesh.scale.set(100,100,100);
 		
 		ap.signals.loadingTextureFinished.add(function(texture){
 			if(texture!=null){

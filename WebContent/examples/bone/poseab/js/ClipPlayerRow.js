@@ -13,6 +13,13 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		row.update();
 	}
 	
+	var updateMixer=function (){
+		var delta = ap.clock.getDelta();
+		ap.mixer.update(delta);
+	};
+	
+	
+	
 	var playBt=new UI.Button("Play");
 	row.add(playBt);
 	var play=function(){
@@ -21,11 +28,16 @@ var ClipPlayerRow=function(ap,getClipFunction){
 			console.error("ClipPlayerRow:no clip");
 			return;
 		}
-		var mixer=ap.mixer;
-		if(mixer==undefined){
-			console.error("ap.mixer is undefined");
-			return;
+		if(ap.mixer==undefined){
+			console.info("ap.mixer is undefined,mixer created,warn signals calling oeder is not sure.if frame dropped make mixer update first");
+			ap.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
+			ap.clock=new THREE.Clock();
+			
+			ap.signals.rendered.add(updateMixer);
 		}
+		
+		var mixer=ap.mixer;
+		
 		mixer.uncacheClip(clip.name);
 		
 		AnimeUtils.resetPose(ap.skinnedMesh);
@@ -39,6 +51,14 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		stopBt.setDisabled(false);
 		scope.paused=false;
 	};
+	
+	if(!ap.signals.clipPlayerPlayed){
+		ap.signals.clipPlayerPlayed=new signals.Signal();
+	}
+	ap.signals.clipPlayerPlayed.add(function(){
+		play();
+	})
+	
 	row.play=play;
 	playBt.onClick(play);
 	var pauseBt=new UI.Button("Pause");
@@ -64,23 +84,25 @@ var ClipPlayerRow=function(ap,getClipFunction){
 	
 	//Support stop when pose changed.
 	var stop=function(){
-		var mixer=ap.mixer;
-		if(mixer==undefined){
-			console.error("ap.mixer is undefined");
-			return;
-		}
-		if(scope.action!=null){
-			scope.action.stop();
-		}
+		
 		playBt.setDisabled(false);
 		pauseBt.setDisabled(true);
 		stopBt.setDisabled(true);
 		
 		scope.paused=false;
 		pauseBt.setTextContent("Pause");
+		
+		if(scope.action!=null){
+			scope.action.stop();
+		}
 	};
 	row.stop=stop;
 	stopBt.onClick(stop);
+	
+	ap.signals.loadingModelFinished.add(function(){
+		stop();
+		ap.signals.rendered.remove(updateMixer);
+	})
 	
 	//Support update duration when clip updated
 	var timeLabel=new UI.Text("0.00/0.00");

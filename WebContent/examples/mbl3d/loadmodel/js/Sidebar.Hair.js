@@ -1,6 +1,3 @@
-/*
- * @deprecated
- */
 Sidebar.Hair = function ( application ) {
 	var scope=this;
 	var container=new UI.Panel();
@@ -23,48 +20,7 @@ Sidebar.Hair = function ( application ) {
 	//list
 	var hairNameList=[
 		 '',
-		 'geometry-twelve-short'/*,
-		 'geometry-twelve-bob-divided',
-		 'geometry-twelve-bob',
-		 'geometry-twelve-extra_long',
-		 'geometry-twelve-long',
-		 'geometry-twelve-medium',
-		 'geometry-twelve-semi_long',
-		 'geometry-twelve-short_bob',
-		 'geometry-twelve-short_bob2',
-		 'geometry-twelve-short_bob3',
-		 'geometry-twelve-super_long',
-		 'geometry-twelve-very_short',
-		 'geometry-twelve01-hair01a',
-		 'geometry-twelve01-hair02',
-		 'geometry-twelve01-hair03',
-		 'geometry-twelve01-hair03b',
-		 'geometry-twelve01-hair09',
-		 'geometry-twelve01-hair10',
-		 'geometry-twelve01-hair11',
-		 'geometry-twelve01-hair12',
-		 'geometry-soso1-hair1',
-		 'geometry-soso1-hair2',
-		 'geometry-soso1-hair3',
-		 'geometry-soso2-hair1',
-		 'geometry-soso2-hair2',
-		 'geometry-soso2-hair3',
-		 'geometry-soso3-hair03',
-		 'geometry-soso3-hair03a',
-		 'geometry-soso4-hair03',
-		 'geometry-soso4-hair08',
-		 'geometry-soso5-hair04',
-		 'geometry-soso5-hair05',
-		 'geometry-soso5-hair05a',
-		 'geometry-soso5-hair05b',
-		 'geometry-soso5-hair05c',
-		 'geometry-soso5-hair05d',
-		 'geometry-soso5-hair05e',
-		 'geometry-soso5-hair05f',
-		 'geometry-soso5-hair05g',
-		 'geometry-soso5-hair05x',
-		 'geometry-soso6-hair06',
-		 'geometry-soso6-hair06a'*/
+		 'geometry-twelve-short'
 	 ];
 	
 	var options={};
@@ -202,10 +158,9 @@ Sidebar.Hair = function ( application ) {
 					application.hairMesh.castShadow = true;
 					
 					application.hairMesh.scale.set(scope.hairX,scope.hairY,scope.hairZ);
-					application.hairMesh.position.set(0,10,0);//no way to modify so far
+					application.hairMesh.position.set(0,10,0);//TODO
 					
-					application.signals.hairModelLoaded.dispatch(application.hairMesh);
-					application.signals.hairMaterialTypeChanged.dispatch();
+					application.signals.loadingHairFinished.dispatch(application.hairMesh);	
 				}
 				
 				);
@@ -220,11 +175,19 @@ Sidebar.Hair = function ( application ) {
 	});
 	
 	
+	if(application.signals.loadingHairFinished==undefined){
+		application.signals.loadingHairFinished=new signals.Signal();
+	}
+	application.signals.loadingHairFinished.add(function(){
+		application.signals.hairMaterialChanged.dispatch();
+	});
+	
+	
 	//hair material?
 	if(application.signals.hairMaterialTypeChanged==undefined){
-		application.signals.hairMaterialTypeChanged=new signals.Signal();
+		application.signals.hairMaterialChanged=new signals.Signal();
 	}
-	application.signals.hairMaterialTypeChanged.add(function(){
+	application.signals.hairMaterialChanged.add(function(){
 		if(application.hairMesh==null || application.hairMesh==undefined){
 			return;
 		}
@@ -241,10 +204,6 @@ Sidebar.Hair = function ( application ) {
 		application.hairMesh.material=scope.hairMaterial;
 	});
 	
-	
-	application.signals.materialChanged.add(function(){
-		scope.hairMaterial.wireframe=application.materialWireframe;
-	})
 	
 	return container;
 }
