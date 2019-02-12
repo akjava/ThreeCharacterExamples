@@ -39,9 +39,9 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		ap.skinnedMesh=mesh;
 		
 		
-		
+		mesh.scale.set(scale,scale,scale);
 		if(isGltf){
-			mesh.scale.set(scale,scale,scale);
+			
 		}
 		boneList=BoneUtils.getBoneList(mesh);
 

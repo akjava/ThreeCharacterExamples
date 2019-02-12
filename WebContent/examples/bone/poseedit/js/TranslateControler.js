@@ -1,6 +1,6 @@
 var TranslateControler=function(ap,boneAttachControler){
 	var scope=this;
-	this.ap=ap;
+	this.ap=ap;//TODO remove
 	this.boneAttachControler=boneAttachControler;
 	this.translateControls={};
 	//TODO support non-root bones
@@ -63,7 +63,7 @@ TranslateControler.prototype.onTransformChanged=function(target){
 		//AppUtils.printVec(diff,"after");
 		
 		var bonePos=scope.boneAttachControler.boneList[target.userData.boneIndex].position;
-		bonePos.add(diff);
+		bonePos.add(diff.divide(this.boneAttachControler.skinnedMesh.scale));
 		scope.boneAttachControler.update();
 		
 		ap.signals.boneTranslateChanged.dispatch(target.userData.boneIndex);
