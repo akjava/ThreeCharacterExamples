@@ -27,6 +27,7 @@ Example=function(application){
 		if(isGltf){
 			mesh.scale.set(scale,scale,scale);
 		}else{
+			mesh.scale.set(scale,scale,scale);
 			texture.flipY=true;
 		}
 		

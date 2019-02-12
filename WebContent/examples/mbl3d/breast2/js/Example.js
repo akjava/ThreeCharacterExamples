@@ -42,9 +42,7 @@ Example=function(application){
 		ap.scene.add(container);
 		this.container=container;
 		
-		if(isGltf){
-			
-		}
+		
 		mesh.scale.set(100,100,100);
 		
 		ap.signals.loadingTextureFinished.add(function(texture){

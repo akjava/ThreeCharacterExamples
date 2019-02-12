@@ -33,9 +33,7 @@ Example=function(application){
 		
 		
 		
-		if(isGltf){
-			mesh.scale.set(scale,scale,scale);
-		}
+		mesh.scale.set(scale,scale,scale);
 		boneList=BoneUtils.getBoneList(mesh);
 		
 		ap.signals.skinnedMeshChanged.dispatch(mesh);

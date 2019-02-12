@@ -50,12 +50,10 @@ Example=function(application){
 		var isGltf=mesh.isGltf;
 	
 		mesh=BoneUtils.convertToZeroRotatedBoneMesh(originMesh);
-		if(isGltf){
-			
-			mesh.scale.set(scale,scale,scale);
-			originMesh.scale.set(scale,scale,scale);
-			
-		}
+		
+		mesh.scale.set(scale,scale,scale);
+		originMesh.scale.set(scale,scale,scale);
+		
 		boneList=BoneUtils.getBoneList(mesh);
 		Mbl3dUtils.changeBoneOrders(mesh);
 		

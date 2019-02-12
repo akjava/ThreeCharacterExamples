@@ -40,9 +40,7 @@ Mbl3dPoseEditor.prototype.loadMesh=function(url,material){
 		
 		
 		mesh.scale.set(scale,scale,scale);
-		if(isGltf){
-			
-		}
+		
 		boneList=BoneUtils.getBoneList(mesh);
 
 		Mbl3dUtils.changeBoneOrders(mesh);

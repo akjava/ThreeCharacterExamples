@@ -35,11 +35,8 @@ Example=function(application){
 		container.add(mesh);
 		ap.skinnedMesh=mesh;
 		
-		console.log(mesh);
 		
-		if(isGltf){
-			mesh.scale.set(scale,scale,scale);
-		}
+		mesh.scale.set(scale,scale,scale);
 		boneList=BoneUtils.getBoneList(mesh);
 		Mbl3dUtils.changeBoneOrders(mesh);
 		

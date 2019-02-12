@@ -35,9 +35,7 @@ Example=function(application){
 		
 		
 		
-		if(isGltf){
-			mesh.scale.set(scale,scale,scale);
-		}
+		mesh.scale.set(scale,scale,scale);
 		ap.signals.skinnedMeshChanged.dispatch(mesh);
 		
 		
