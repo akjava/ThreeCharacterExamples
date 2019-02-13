@@ -20,3 +20,11 @@ var MinApplication = function () {
 	AppUtils.decoderPath="../../libs/draco/gltf/";
 };
 
+MinApplication.prototype.getSignal=function(key){
+	var signal= this.signals[key];
+	if(signal==undefined){
+		signal=new signals.Signal();
+		this.signals[key]=signal;
+	}
+	return signal;
+}

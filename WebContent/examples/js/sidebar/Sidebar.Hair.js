@@ -175,19 +175,11 @@ Sidebar.Hair = function ( application ) {
 	});
 	
 	
-	if(application.signals.loadingHairFinished==undefined){
-		application.signals.loadingHairFinished=new signals.Signal();
-	}
-	application.signals.loadingHairFinished.add(function(){
+	application.getSignal("loadingHairFinished").add(function(){
 		application.signals.hairMaterialChanged.dispatch();
 	});
 	
-	
-	//hair material?
-	if(application.signals.hairMaterialTypeChanged==undefined){
-		application.signals.hairMaterialChanged=new signals.Signal();
-	}
-	application.signals.hairMaterialChanged.add(function(){
+	application.getSignal("hairMaterialChanged").add(function(){
 		if(application.hairMesh==null || application.hairMesh==undefined){
 			return;
 		}
