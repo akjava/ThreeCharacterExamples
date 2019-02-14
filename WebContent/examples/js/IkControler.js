@@ -3,6 +3,8 @@ if(ap==undefined){
 	console.error("IkControler need ap to catch signals");
 	return;
 }
+this.ap=ap;
+
 this.iks={};
 this.ikTarget=null;
 this.ikIndices=null;
@@ -35,11 +37,11 @@ this.ikTargets={};
 this.ikBoneRatio={};
 
 this.followOtherIkTargets=true;
-this.ap=ap;
 
 this.ikPresets=null;
 
 this._pos=new THREE.Vector3();
+
 
 this.onIkSelectionChanged=function(ikName){
 	var newTarget=ap.ikControler.getIkTargetFromName(ikName);
@@ -54,7 +56,87 @@ if(!ap.signals){
 if(ap.signals.ikSelectionChanged){
 	ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
 	}
+
+
+this._initialized=false;
+this._enabled=true;//just visible
 };
+
+IkControler.prototype.setEnabled=function(enabled){
+	this._enabled=enabled;
+	var scope=this;
+	var values=scope.getIkTargetsValue();
+	values.forEach(function(target){
+		target.material.visible=enabled;
+		var name=scope.getIkNameFromTarget(target);
+		var enableEndSite=scope.isEnableEndSiteByName(name);
+		if(enableEndSite){
+			scope.setEndSiteVisible(name,enabled);
+		}
+	});
+};
+IkControler.prototype.isEnabled=function(){
+	return this._enabled;
+}
+
+
+IkControler.prototype.setBoneAttachControler=function(boneAttachControler){
+	this.boneSelectedIndex=0;
+	this.boneAttachControler=boneAttachControler;
+	this.resetIkSettings();
+	
+	
+	this.resetAllIkTargets();
+}
+IkControler.prototype.resetIkSettings=function(){
+	var list=this.boneAttachControler.containerList;
+	this.ikSettings.endSites.forEach(function(endsite){
+		var index=endsite.userData.endSiteIndex;
+		list[index].add(endsite);
+		list[index].add(endsite.userData.joint);
+		list[index].userData.endsite=endsite;
+	});
+}
+
+IkControler.prototype.initialize=function(ikSettings){
+	var ap=this.ap;
+	this.ikSettings=ikSettings;
+	this.ikTargets=ikSettings.ikTargets;
+	//TODO ikSettings move somewhere for switch settings
+	
+	//ap.objects.push(ikBox);//TODO do at init
+	//ap.scene.add(ikBox);
+	
+	ap.getSignal("boneSelectionChanged").add(function(index){
+		ap.ikControler.boneSelectedIndex=index;
+	});
+	
+	ap.getSignal("poseChanged").add(function(){
+		ap.ikControler.resetAllIkTargets();
+	});
+	ap.getSignal("solveIkCalled").add(function(){
+		ap.ikControler.solveIk(true);
+	});
+	
+	/*
+	 ikControler call when onTransformFinished for editor
+	 rotationControler call when edited
+	 */
+	ap.getSignal("boneRotationChanged").add(function(index){
+		var selection=ap.ikControler.getSelectedIkName();
+		ap.ikControler.resetAllIkTargets(selection);
+		
+		if(index==0){
+			ap.signals.boneTranslateChanged.dispatch();//I'm not sure this is need?
+		}
+	});
+	this._initialized=true;
+}
+
+IkControler.prototype.isInitialized=function(){
+	return this._initialized;
+}
+
 
 IkControler.prototype.getIkNameFromTarget=function(target){
 	if(target.userData.ikName){
@@ -239,6 +321,17 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 	if(ap.signals.ikSelectionChanged){
 		ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
 		}
+}
+
+IkControler.prototype.onTransformChanged=function(target){
+	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+		this.solveIk();
+		
+		//solve others,TODO independent
+		if(!this.followOtherIkTargets){
+			this.solveOtherIkTargets();
+		}
+	}
 }
 
 IkControler.prototype.onTransformStarted=function(target){

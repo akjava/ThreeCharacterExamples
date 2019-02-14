@@ -1,6 +1,7 @@
 var AppUtils={
-		loadMesh:function(url,callback){
-			if(url.toLowerCase().endsWith(".fbx")){
+		loadMesh:function(url,callback,fileName){
+			fileName=fileName==undefined?url:fileName;
+			if(fileName.toLowerCase().endsWith(".fbx")){
 				AppUtils.loadFbxMesh(url,function(mesh){
 					mesh.isFbx=true;
 					callback(mesh);

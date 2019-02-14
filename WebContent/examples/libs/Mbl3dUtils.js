@@ -24,7 +24,7 @@ var Mbl3dUtils={
 			return shorten;
 		},
 		loadTexture:function(url,flipY){
-			if(url==null){
+			if(url==null || url==""){
 				return null;
 			}
 			flipY=flipY==undefined?false:flipY;

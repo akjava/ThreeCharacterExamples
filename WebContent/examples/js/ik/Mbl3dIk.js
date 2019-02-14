@@ -2,6 +2,7 @@ var Mbl3dIk=function(ap){
 	
 	this.ikTargets={};
 	this.ap=ap;
+	this.endSites=[];
 	
 	this.boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 	
@@ -15,6 +16,7 @@ var Mbl3dIk=function(ap){
 	this.registIk(this.ikTargets,"RightLeg",["thigh_R","calf_R","foot_R"]);
 	
 	this.initlimitBone();
+	
 }
 
 Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
@@ -37,17 +39,19 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	});
 	
 	//add endsite
-	var list=ap.ikControler.boneAttachControler.containerList;
+	var list=ap.boneAttachControler.containerList;
+	/*
 	var diff=list[indices[indices.length-1]].position.clone().sub(list[indices[indices.length-2]].position);
-	diff.setLength(10);
+	diff.setLength(10);*/
 	//diff.add(list[indices[indices.length-1]].position);
 	
 	var endsite=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:0x008800,depthTest:false,transparent:true,opacity:.5}));
 	endsite.renderOrder = 2;
 	list[indices[indices.length-1]].add(endsite);
 	list[indices[indices.length-1]].userData.endsite=endsite;
-	endsite.position.copy(diff);
+	//endsite.position.copy(diff);
 	endsite.material.visible=false;
+	endsite.userData.endSiteIndex=indices[indices.length-1];//TODO switch to name
 	
 	var joint=AppUtils.lineTo(list[indices[indices.length-1]],endsite);
 	joint.material.depthTest=false;
@@ -57,14 +61,15 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	joint.material.visible=false;
 	endsite.userData.joint=joint;
 	
+	scope.endSites.push(endsite);
 	
 	var ikBox=new THREE.Mesh(new THREE.BoxGeometry(5,5,5),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
 	ikBox.renderOrder = 1;
 	var index=indices.length-1;
-	ikBox.position.copy(ap.ikControler.boneAttachControler.containerList[indices[indices.length-1]].position);
+	//ikBox.position.copy(ap.ikControler.boneAttachControler.containerList[indices[indices.length-1]].position);
 	ikBox.ikName=ikName;
 	ikBox.userData.transformSelectionType="BoneIk";
-	ap.objects.push(ikBox);//TODO do at init
+	ap.objects.push(ikBox);//TODO do at init for switch
 	ikTargets[ikName]=ikBox;
 	ap.scene.add(ikBox);
 

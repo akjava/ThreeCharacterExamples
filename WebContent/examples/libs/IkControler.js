@@ -1,3 +1,4 @@
+/** old version **/
 var IkControler=function(boneAttachControler,ap){
 if(ap==undefined){
 	console.error("IkControler need ap to catch signals");
@@ -55,6 +56,12 @@ if(ap.signals.ikSelectionChanged){
 	ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
 	}
 };
+
+IkControler.prototype.setBoneAttachControler=function(boneAttachControler){
+	this.boneAttachControler=boneAttachControler;
+	this.resetAllIkTargets();
+}
+
 
 IkControler.prototype.getIkNameFromTarget=function(target){
 	if(target.userData.ikName){

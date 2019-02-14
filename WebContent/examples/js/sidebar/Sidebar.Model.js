@@ -7,7 +7,7 @@ Sidebar.Model = function ( application ) {
 	
 	this.modelBase="../../../dataset/mbl3d/models/";
 
-	var itemList=["anime2_female.fbx","anime1_female.fbx","anime1_male.fbx","anime2_male.fbx","anime2_modifybreast.fbx","anime2_nomorph.glb"];
+	var itemList=["anime2_female.fbx","anime2_flatnipple.fbx","anime1_female.fbx","anime1_male.fbx","anime2_male.fbx","anime2_modifybreast.fbx","anime2_nomorph.glb"];
 	application.defaultModelUrl=scope.modelBase+itemList[0];
 	application.modelUrl=application.defaultModelUrl;
 	
@@ -33,7 +33,7 @@ Sidebar.Model = function ( application ) {
 			application.modelUrl=application.defaultModelUrl;
 		}
 		
-		application.signals.loadingModelStarted.dispatch(application.modelUrl);
+		application.signals.loadingModelStarted.dispatch(application.modelUrl,fileName);
 	});
 	
 	return container;

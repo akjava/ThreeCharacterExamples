@@ -51,7 +51,7 @@ var BasicCore = function ( application ) {
 	ap.root=root;
 	ap.scene.add(root);
 	
-	ap.signals.loadingModelStarted.add(function(url){
+	ap.signals.loadingModelStarted.add(function(url,fileName){
 		if(ap.skinnedMesh!=null && ap.skinnedMesh.parent!=null){
 			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
 		}
@@ -80,7 +80,7 @@ var BasicCore = function ( application ) {
 				console.log(e);
 			}
 			
-		});
+		},fileName);
 	});
 	
 	animate();
