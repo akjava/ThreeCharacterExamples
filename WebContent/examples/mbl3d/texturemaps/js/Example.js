@@ -29,9 +29,13 @@ Example=function(application){
 	
 	//sidebar.texture	
 	application.signals.materialChanged.add(function(){
-		var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true});
+		var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,transparent:true,alphaTest:0.6});
 		
 		material.displacementScale=ap.displacementScale;
+		material.bumpScale=ap.bumpScale;
+		material.displacementBias=ap.displacementBias;
+		material.emissiveIntensity=ap.emissiveIntensity;
+		material.emissive.set(ap.emissive);
 		
 		Object.keys(ap.textures).forEach(function(key){
 			var texture=ap.textures[key];

@@ -138,7 +138,8 @@ UI.BlobFile = function ( accepts) {
 	input2.value='Upload';
 	dom.appendChild( input2 );
 	
-	
+
+	this.form=form;
 
 	
 	return this;
@@ -407,7 +408,7 @@ UI.ColorRow=function(label,color,onChange){
 	
 	colorBox.onChange(function(e){
 		hexText.setValue(e.target.value);
-		onChange(e);
+		onChange(e.target.value);
 	});
 	
 	var hexText=new UI.Text(colorBox.getValue()).setWidth( '90px' );

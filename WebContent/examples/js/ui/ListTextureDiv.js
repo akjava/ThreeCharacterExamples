@@ -34,6 +34,7 @@ var ListTextureDiv=function(ap,itemList,type){
 	row1.add(fileInput);
 	
 	
+	var fileInputUrl=null;
 	
 	fileInput.onChange(function(fileName,blobUrl){
 		application.textureUrls[type]=blobUrl;
@@ -41,6 +42,7 @@ var ListTextureDiv=function(ap,itemList,type){
 			list.setValue(itemList[0]);
 			application.textureUrls[type]=application.defaultTextureUrls[type];
 		}
+		fileInputUrl=application.textureUrls[type];
 		application.signals.loadingTextureStarted.dispatch(application.textureUrls[type],type);
 		
 	});
@@ -60,6 +62,10 @@ var ListTextureDiv=function(ap,itemList,type){
 			}else{
 				texture.flipY = true;//FBX
 			}
+		}
+		
+		if(fileInputUrl!=application.textureUrls[type]){
+			fileInput.name.value="";
 		}
 		
 		ap.textures[type]=texture;

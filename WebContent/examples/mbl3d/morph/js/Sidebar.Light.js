@@ -103,8 +103,8 @@ Sidebar.BasicLightShadow = function ( application ) {
 	this.ambientLight = new THREE.AmbientLight(this.ambientColor);
 	application.scene.add( this.ambientLight );
 	
-	var ambientRow=new UI.ColorRow("Color",this.ambientColor,function(e){
-		scope.ambientColor=event.target.value;
+	var ambientRow=new UI.ColorRow("Color",this.ambientColor,function(value){
+		scope.ambientColor=value;
 		scope.ambientLight.color.set(scope.ambientColor);
 	});
 	container.add(ambientRow);
@@ -119,13 +119,13 @@ Sidebar.BasicLightShadow = function ( application ) {
 	application.scene.add( this. hemisphereLight );
 	this.hemisphereLight.intensity=0;//control visible
 	
-	var hemisphereSkyRow=new UI.ColorRow("Sky Color",this.hemisphereSkyColor,function(e){
-		scope.hemisphereSkyColor=event.target.value;
+	var hemisphereSkyRow=new UI.ColorRow("Sky Color",this.hemisphereSkyColor,function(v){
+		scope.hemisphereSkyColor=v;
 		scope.hemisphereLight.color.set(scope.hemisphereSkyColor);
 	});
 	
-	var hemisphereGroundRow=new UI.ColorRow("Ground Color",this.hemisphereGroundColor,function(e){
-		scope.hemisphereGroundColor=event.target.value;
+	var hemisphereGroundRow=new UI.ColorRow("Ground Color",this.hemisphereGroundColor,function(v){
+		scope.hemisphereGroundColor=v;
 		scope.hemisphereLight.groundColor.set(scope.hemisphereGroundColor);
 	});
 	
@@ -154,8 +154,8 @@ Sidebar.BasicLightShadow = function ( application ) {
 	application.scene.add(this.directionalLightHelper);
 	
 	
-	var directionalRow=new UI.ColorRow("Color",this.directionalColor,function(e){
-		scope.directionalColor=event.target.value;
+	var directionalRow=new UI.ColorRow("Color",this.directionalColor,function(v){
+		scope.directionalColor=v;
 		scope.directionalLight.color.set(scope.directionalColor);
 	});
 	
