@@ -342,9 +342,11 @@ var BoneUtils={
 				rawbones.push(rawbone);
 			}
 			
-			var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
+			/*var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
 			BoneUtils.copyIndicesAndWeights(mesh.geometry,geo);
-			BoneUtils.copyMorphTargets(mesh.geometry,geo);
+			BoneUtils.copyMorphTargets(mesh.geometry,geo);*/
+			
+			var geo=new THREE.BufferGeometry().copy(mesh.geometry);
 			
 			geo.bones=rawbones;
 			var skinnedMesh= new THREE.SkinnedMesh(geo);

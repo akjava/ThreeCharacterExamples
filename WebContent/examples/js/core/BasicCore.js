@@ -51,6 +51,8 @@ var BasicCore = function ( application ) {
 	ap.root=root;
 	ap.scene.add(root);
 	
+	ap.convertToZeroRotatedBoneMesh=true;
+	
 	ap.signals.loadingModelStarted.add(function(url,fileName){
 		if(ap.skinnedMesh!=null && ap.skinnedMesh.parent!=null){
 			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
@@ -67,11 +69,7 @@ var BasicCore = function ( application ) {
 			
 			//TODO check and set
 			mesh.scale.set(100,100,100);
-			if(isGltf){
-				
-				//animation not compatible gltf
-				//mesh.skeleton.bones[0].scale.set(100,100,100);
-			}
+			
 			
 			ap.root.add(mesh);
 			ap.skinnedMesh=mesh;
