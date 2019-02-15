@@ -341,7 +341,6 @@ var BoneUtils={
 				rawbone.name=bone.name;
 				rawbones.push(rawbone);
 			}
-			console.log(mesh);
 			var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
 			BoneUtils.copyIndicesAndWeights(mesh.geometry,geo);
 			BoneUtils.copyMorphTargets(mesh.geometry,geo);

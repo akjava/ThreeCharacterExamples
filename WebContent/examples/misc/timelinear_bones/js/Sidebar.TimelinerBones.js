@@ -3,7 +3,6 @@ Sidebar.TimelinerBones = function ( application ) {
 	var scope=this;
 	var container = new UI.TitlePanel("Timeliner");
 	
-	console.log(ap);
 	
 	var row=new UI.Row();
 	container.add(row);
