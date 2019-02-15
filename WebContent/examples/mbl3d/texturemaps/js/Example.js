@@ -31,11 +31,17 @@ Example=function(application){
 	application.signals.materialChanged.add(function(){
 		var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,transparent:true,alphaTest:0.6});
 		
+		material.color.set(ap.color);
+		material.shininess=ap.shininess;
+		
 		material.displacementScale=ap.displacementScale;
 		material.bumpScale=ap.bumpScale;
 		material.displacementBias=ap.displacementBias;
 		material.emissiveIntensity=ap.emissiveIntensity;
 		material.emissive.set(ap.emissive);
+		material.specular.set(ap.specular);
+		material.aoMapIntensity=ap.aoIntensity;
+		//TODO normalmap
 		
 		Object.keys(ap.textures).forEach(function(key){
 			var texture=ap.textures[key];
@@ -43,9 +49,12 @@ Example=function(application){
 			material[key]=texture;
 		});
 		
+		material.needsUpdate=true;
 		
 		ap.skinnedMesh.material=material;
 	});
+	
+	
 	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.boneAttachControler!=null){
@@ -63,6 +72,12 @@ Example=function(application){
 			ap.boneAttachControler.update(true);
 		}
 	},undefined,-1);//call later
+	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		var geometry=mesh.geometry;
+		//for aoMap
+		geometry.faceVertexUvs.push(geometry.faceVertexUvs[0]);
+		});
 	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }

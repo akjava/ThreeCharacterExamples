@@ -23,9 +23,9 @@ Sidebar.ClipPlayer=function(ap){
 }
 
 Sidebar.ClipAutoStartRow=function(ap){
-	var autoStart=new UI.CheckboxRow("Auto Start",function(v){
+	var autoStart=new UI.CheckboxRow("Auto Start",ap.clipAutoStart,function(v){
 		ap.clipAutoStart=v;
-	},ap.clipAutoStart);
+	});
 	
 	ap.signals.loadingModelFinished.add(function(){
 		if(ap.clipAutoStart && ap.clip!=null){
