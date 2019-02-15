@@ -56,13 +56,7 @@ var ListTextureDiv=function(ap,itemList,type){
 		if(type!=tp){
 			return;
 		}
-		if(texture!=null){
-			if(ap.isGltf){
-				texture.flipY = false;
-			}else{
-				texture.flipY = true;//FBX
-			}
-		}
+		
 		
 		if(fileInputUrl!=application.textureUrls[type]){
 			fileInput.name.value="";

@@ -43,8 +43,21 @@ Example=function(application){
 		material.aoMapIntensity=ap.aoIntensity;
 		//TODO normalmap
 		
+		
+		
 		Object.keys(ap.textures).forEach(function(key){
+			
 			var texture=ap.textures[key];
+			if(key=="map"){
+				if(texture!=null){
+					if(ap.isGltf){
+						texture.flipY = false;
+					}else{
+						texture.flipY = true;//FBX
+					}
+				}
+			}
+			
 			//texture.minFilter=THREE.LinearMipMapNearestFilter;
 			material[key]=texture;
 		});
@@ -75,8 +88,13 @@ Example=function(application){
 	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		var geometry=mesh.geometry;
+		if(geometry.isGeometry){
+			geometry.faceVertexUvs.push(geometry.faceVertexUvs[0]);
+		}else{
+			geometry.attributes.uv2 = geometry.attributes.uv
+		}
 		//for aoMap
-		geometry.faceVertexUvs.push(geometry.faceVertexUvs[0]);
+		
 		});
 	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
