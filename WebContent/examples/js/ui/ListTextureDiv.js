@@ -12,7 +12,13 @@ var ListTextureDiv=function(ap,itemList,type){
 	
 	
 	var list=new UI.List(itemList,function(v){
-		ap.signals.loadingTextureStarted.dispatch(scope.textureBase+v,type);
+		var url;
+		if(v==""){
+			url=null;
+		}else{
+			url=scope.textureBase+v;
+		}
+		ap.signals.loadingTextureStarted.dispatch(url,type);
 	});
 	container.add(list);
 	
@@ -57,6 +63,7 @@ var ListTextureDiv=function(ap,itemList,type){
 			return;
 		}
 		
+
 		
 		if(fileInputUrl!=application.textureUrls[type]){
 			fileInput.name.value="";

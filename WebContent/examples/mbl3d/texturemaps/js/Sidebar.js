@@ -4,11 +4,23 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Texture Map"));
 	
-	container.add(new Sidebar.Model(ap));
-	container.add(new Sidebar.TextureMaps(ap));
+	var tab=new UI.Tab();
+	container.add(tab);
+	tab.addItem("Main").add(
+			new Sidebar.Model(ap),
+			new Sidebar.TextureMaps(ap),
+			new Sidebar.ClipPlayer(ap)
+			);
 	
-	container.add(new Sidebar.Hair(ap));
-	container.add(new Sidebar.ClipPlayer(ap));
+	
+	tab.addItem("Sub").add(
+			new Sidebar.Hair(ap),
+			new Sidebar.ShadowLight(ap),
+			new Sidebar.MaterialType(ap),
+			new Sidebar.OutlineEffect(ap)
+			);
+	
+	tab.select("Sub");
 	
 	return container;
 }

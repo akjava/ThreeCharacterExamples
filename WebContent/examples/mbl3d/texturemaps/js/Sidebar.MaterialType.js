@@ -1,8 +1,12 @@
 Sidebar.MaterialType = function ( application ) {
+	var ap=application;
 	var container=new UI.Panel();
 	container.setId( 'material' );
 	
-	var materialDiv=new UI.Div().setClass("title").add(new UI.Text("MaterialType"));
+	ap.materialType='MeshToonMaterial';
+	ap.materialWireframe=false;
+	
+	var materialDiv=new UI.Div().setClass("title").add(new UI.Text("Material"));
 	container.add(materialDiv);
 	
 	var row1=new UI.Row();
@@ -30,16 +34,12 @@ Sidebar.MaterialType = function ( application ) {
 	row2.add(materialSelect);
 	materialSelect.onChange(function(){
 		application.materialType=materialSelect.getValue();
-		application.signals.materialTypeChanged.dispatch();
-		application.signals.loadingTextureFinished.dispatch();
+		application.signals.materialChanged.dispatch();
 	});
 	materialSelect.setOptions(materialOptions);
 	materialSelect.setValue(application.materialType);
 	
-	var outlineCheckRow=new UI.CheckboxRow("Draw Outline",application.drawOutline,function(v){
-		application.drawOutline=v;
-	})
-	container.add(outlineCheckRow);
+	
 	
 	return container;
 }

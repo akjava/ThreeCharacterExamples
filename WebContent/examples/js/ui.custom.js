@@ -941,3 +941,79 @@ UI.ButtonsDiv=function(labels,onClick){
 	div.buttons=bts;
 	return div;
 }
+
+
+UI.Tab=function(isPanel){
+	UI.Element.call( this );
+	this.dom = document.createElement( 'div' );
+	if(isPanel){
+		this.dom.className = 'Panel';
+	}
+	
+	
+	var tabs = new UI.Div();
+	this.tabs=tabs;
+	tabs.setId( 'tabs' );
+	this.add(tabs);
+	
+	this.titles=[];
+	this.headers=[];
+	this.containers=[];
+	
+	
+	var scope=this;
+	this.onClick=function onClick( event ) {
+
+		scope.select( event.target.textContent );
+
+	};
+	
+	
+	return this;
+}
+UI.Tab.prototype = Object.create( UI.Element.prototype );
+UI.Tab.prototype.constructor = UI.Tab;
+
+UI.Tab.prototype.select = function ( selection ) {
+	
+	var index=-1;
+	var titles=this.titles;
+	var containers=this.containers;
+	var headers=this.headers;
+	
+	for(var i=0;i<titles.length;i++){
+		if(titles[i]==selection){
+			index=i;
+		}
+		
+		headers[i].setClass( '' );
+		containers[i].setDisplay( 'none' );
+	}
+	
+	
+	if(index!=-1){
+		headers[index].setClass( 'selected' );
+		containers[index].setDisplay( '' );
+	}
+}
+
+UI.Tab.prototype.addItem = function ( title ) {
+	var header = new UI.Text( title ).onClick( this.onClick );
+	this.tabs.add( header);
+	
+	
+	
+	var container= new UI.Span();
+	this.add(container);
+	
+	
+	this.titles.push(title);
+	this.headers.push(header);
+	this.containers.push(container);
+	
+	if(this.titles.length>0){
+		this.select(this.titles[0]);
+	}
+	
+	return container;
+};

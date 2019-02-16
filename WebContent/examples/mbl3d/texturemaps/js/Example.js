@@ -11,14 +11,14 @@ Example=function(application){
 
 	//simple light
 	//light
-	var light = new THREE.DirectionalLight(0xaaaaaa);
+	/*var light = new THREE.DirectionalLight(0xaaaaaa);
 	light.position.set(100, 100, 100);
 	ap.scene.add(light);
 	var light2 = new THREE.DirectionalLight(0xaaaaaa);
 	light2.position.set(-100, -100, -100);
 	ap.scene.add(light2);
 	
-	ap.scene.add(new THREE.AmbientLight(0x666666));
+	ap.scene.add(new THREE.AmbientLight(0x666666));*/
 	
 	//sidebar.Hair
 	application.signals.loadingHairFinished.add(function(hair){
@@ -29,7 +29,11 @@ Example=function(application){
 	
 	//sidebar.texture	
 	application.signals.materialChanged.add(function(){
-		var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,transparent:true,alphaTest:0.6});
+		
+		//var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,transparent:true,alphaTest:0.6});
+		 var material = new window['THREE'][application.materialType](
+				 {skinning: true,morphTargets:true ,transparent:true,alphaTest:0.6,wireframe:application.materialWireframe} 
+				 );
 		
 		material.color.set(ap.color);
 		material.shininess=ap.shininess;
@@ -48,17 +52,17 @@ Example=function(application){
 		Object.keys(ap.textures).forEach(function(key){
 			
 			var texture=ap.textures[key];
-			if(key=="map"){
-				if(texture!=null){
-					if(ap.isGltf){
-						texture.flipY = false;
-					}else{
-						texture.flipY = true;//FBX
-					}
+			//reset here
+			if(texture!=null && texture!==undefined){
+				if(ap.isGltf){
+					texture.flipY = false;
+				}else{
+					texture.flipY = true;//FBX
 				}
+				texture.needsUpdate=true;
 			}
 			
-			//texture.minFilter=THREE.LinearMipMapNearestFilter;
+			
 			material[key]=texture;
 		});
 		
