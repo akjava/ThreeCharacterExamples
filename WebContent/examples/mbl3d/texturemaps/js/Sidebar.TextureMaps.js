@@ -75,7 +75,7 @@ Sidebar.TextureMaps=function(ap){
 			);
 	titlePanel.add(emissive);
 	ap.emissiveIntensity=0;
-	var emissiveIntensity=new UI.NumberButtons("Intensity",0,10,1,ap.emissiveIntensity,function(v){
+	var emissiveIntensity=new UI.NumberButtons("Intensity",0,1,1,ap.emissiveIntensity,function(v){
 		ap.emissiveIntensity=v;
 		application.signals.materialChanged.dispatch();
 	},[0,0.1,0.5,1]);
@@ -110,7 +110,7 @@ Sidebar.TextureMaps=function(ap){
 	
 	ap.aoIntensity=1.0;
 	
-	var aoIntensity=new UI.NumberButtons("Intensity",0,10,10,ap.aoIntensity,function(v){
+	var aoIntensity=new UI.NumberButtons("Intensity",0,10,1,ap.aoIntensity,function(v){
 		ap.aoIntensity=v;
 		application.signals.materialChanged.dispatch();
 	},[0,0.5,1.0,1.5]);

@@ -8,7 +8,9 @@ Sidebar.CameraControler=function(ap){
 		ap.controls.target.set(0,y2,0);
 		ap.controls.update();
 	}
-
+	ap.cameraY=125;
+	ap.cameraZ=225;
+	ap.targetY=90;
 	
 	var cameraY=new UI.NumberButtons("Camera Y",-500,500,100,ap.cameraY,function(){
 		update();

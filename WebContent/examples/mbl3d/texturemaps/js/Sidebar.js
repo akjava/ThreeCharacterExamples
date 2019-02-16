@@ -14,6 +14,7 @@ var Sidebar = function ( application ) {
 	
 	
 	tab.addItem("Sub").add(
+			new Sidebar.CameraControler(ap),
 			new Sidebar.Hair(ap),
 			new Sidebar.ShadowLight(ap),
 			new Sidebar.MaterialType(ap),
