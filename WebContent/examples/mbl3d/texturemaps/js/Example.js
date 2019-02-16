@@ -44,8 +44,6 @@ Example=function(application){
 		material.aoMapIntensity=ap.aoIntensity;
 		//TODO normalmap
 		
-		
-		
 		Object.keys(ap.textures).forEach(function(key){
 			
 			var texture=ap.textures[key];
@@ -56,12 +54,15 @@ Example=function(application){
 				}else{
 					texture.flipY = true;//FBX
 				}
-				texture.needsUpdate=true;
+				
+				if(texture.image!=undefined)
+					texture.needsUpdate=true;
 			}
 			
 			
 			material[key]=texture;
 		});
+		
 		
 		material.needsUpdate=true;
 		
@@ -69,7 +70,7 @@ Example=function(application){
 	});
 	
 	
-	
+	//boneAttachControler
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.boneAttachControler!=null){
 			ap.boneAttachControler.dispose();
@@ -87,16 +88,17 @@ Example=function(application){
 		}
 	},undefined,-1);//call later
 	
+	
+	//for material aoMap
 	ap.signals.loadingModelFinished.add(function(mesh){
 		var geometry=mesh.geometry;
+		
 		if(geometry.isGeometry){
 			geometry.faceVertexUvs.push(geometry.faceVertexUvs[0]);
 		}else{
 			geometry.attributes.uv2 = geometry.attributes.uv
 		}
-		//for aoMap
-		
-		});
+	});
 	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }
