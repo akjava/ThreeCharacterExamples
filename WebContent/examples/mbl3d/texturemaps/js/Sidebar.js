@@ -9,7 +9,7 @@ var Sidebar = function ( application ) {
 	tab.addItem("Main").add(
 			new Sidebar.Model(ap),
 			new Sidebar.TextureMaps(ap),
-			new Sidebar.ClipPlayer(ap)
+			new Sidebar.DoubleClipPlayer(ap)
 			);
 	
 	

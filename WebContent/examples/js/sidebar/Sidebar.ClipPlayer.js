@@ -1,5 +1,5 @@
 Sidebar.ClipPlayer=function(ap){
-	var titlePanel=new UI.TitlePanel("ClipPlayer");
+	var titlePanel=new UI.TitlePanel("Clip Player");
 	ap.clip=null;
 	
 	ap.clipAutoStart=true;

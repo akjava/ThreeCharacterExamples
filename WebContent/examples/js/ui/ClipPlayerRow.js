@@ -85,7 +85,6 @@ var ClipPlayerRow=function(ap,getClipFunction){
 	
 	//Support stop when pose changed.
 	var stop=function(){
-		console.log("call stopped");
 		playBt.setDisabled(false);
 		pauseBt.setDisabled(true);
 		stopBt.setDisabled(true);
