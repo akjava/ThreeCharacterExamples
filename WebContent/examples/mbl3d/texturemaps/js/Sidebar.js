@@ -21,7 +21,7 @@ var Sidebar = function ( application ) {
 			new Sidebar.OutlineEffect(ap)
 			);
 	
-	tab.select("Sub");
+	//tab.select("Sub");
 	
 	return container;
 }

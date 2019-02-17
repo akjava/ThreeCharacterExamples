@@ -7,10 +7,12 @@ Sidebar.ClipPlayer=function(ap){
 	
 	var loadClipRow=new LoadClipRow(function(clip){
 		ap.clip=clip;
-		if(ap.clipAutoStart && clip!=null){
-			if(ap.signals.clipPlayerPlayed){
+		if(ap.clipAutoStart ){
+			if(clip!=null){
 				ap.signals.clipPlayerPlayed.dispatch();
-			}	
+			}else{
+				ap.signals.clipPlayerStopped.dispatch();
+			}
 		}
 	});
 	

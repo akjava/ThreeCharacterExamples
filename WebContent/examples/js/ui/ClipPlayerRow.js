@@ -52,11 +52,12 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		scope.paused=false;
 	};
 	
-	if(!ap.signals.clipPlayerPlayed){
-		ap.signals.clipPlayerPlayed=new signals.Signal();
-	}
-	ap.signals.clipPlayerPlayed.add(function(){
+	ap.getSignal("clipPlayerPlayed").add(function(){
+		stop();
 		play();
+	});
+	ap.getSignal("clipPlayerStopped").add(function(){
+		stop();
 	})
 	
 	row.play=play;
@@ -84,7 +85,7 @@ var ClipPlayerRow=function(ap,getClipFunction){
 	
 	//Support stop when pose changed.
 	var stop=function(){
-		
+		console.log("call stopped");
 		playBt.setDisabled(false);
 		pauseBt.setDisabled(true);
 		stopBt.setDisabled(true);
