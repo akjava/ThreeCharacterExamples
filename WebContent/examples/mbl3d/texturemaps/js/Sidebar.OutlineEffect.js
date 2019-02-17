@@ -16,6 +16,7 @@ Sidebar.OutlineEffect = function ( ap ) {
 		
 	}
 	
+	if(ap.outlinerColor==undefined)
 	ap.outlinerColor=0;
 	var outlinerColor=new UI.ColorRow("color",ap.outlinerColor,function(v){
 		ap.outlinerColor=v;
@@ -24,7 +25,7 @@ Sidebar.OutlineEffect = function ( ap ) {
 
 	container.add(outlinerColor);
 	
-	
+	if(ap.outlinerThickness==undefined)
 	ap.outlinerThickness=0.0005;
 	var outlinerThickness=new UI.NumberButtons("Thickness",0.0001,0.1,.001,ap.outlinerThickness,function(v){
 		ap.outlinerThickness=v;

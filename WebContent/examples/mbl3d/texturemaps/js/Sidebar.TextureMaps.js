@@ -8,7 +8,8 @@ Sidebar.TextureMaps=function(ap){
 	});
 	titlePanel.add(color);
 	
-	ap.shininess=30;
+	if(ap.shininess==undefined)
+		ap.shininess=30;
 	
 	var shininess=new UI.NumberButtons("Shininess",0,1000,100,ap.shininess,function(v){
 		ap.shininess=v;
@@ -37,15 +38,15 @@ Sidebar.TextureMaps=function(ap){
 			,"displacementMap"
 			);
 	titlePanel.add(displacement);
-	
-	ap.displacementScale=0.02;
+	if(ap.displacementScale==undefined)
+		ap.displacementScale=0.02;
 	var displacementScale=new UI.NumberButtons("Scale",0,1,.01,ap.displacementScale,function(v){
 		ap.displacementScale=v;
 		application.signals.materialChanged.dispatch();
 	},[0,0.01,0.02]);
 	displacementScale.number.precision=3;
 	titlePanel.add(displacementScale);
-	
+	if(ap.displacementBias==undefined)
 	ap.displacementBias=0;
 	var displacementBias=new UI.NumberButtons("Bias",-10,10,.1,ap.displacementBias,function(v){
 		ap.displacementBias=v;
@@ -60,6 +61,7 @@ Sidebar.TextureMaps=function(ap){
 			,"bumpMap"
 			);
 	titlePanel.add(bump);
+	if(ap.bumpScale==undefined)
 	ap.bumpScale=1;
 	var bumpScale=new UI.NumberButtons("Scale",0,1,.01,ap.bumpScale,function(v){
 		ap.bumpScale=v;
@@ -74,6 +76,7 @@ Sidebar.TextureMaps=function(ap){
 			,"emissiveMap"
 			);
 	titlePanel.add(emissive);
+	if(ap.emissiveIntensity==undefined)
 	ap.emissiveIntensity=0;
 	var emissiveIntensity=new UI.NumberButtons("Intensity",0,1,1,ap.emissiveIntensity,function(v){
 		ap.emissiveIntensity=v;
@@ -81,6 +84,7 @@ Sidebar.TextureMaps=function(ap){
 	},[0,0.1,0.5,1]);
 	titlePanel.add(emissiveIntensity);
 	
+	if(ap.emissive==undefined)
 	ap.emissive=0xffffff;
 	var emissiveColor=new UI.ColorRow("color",ap.emissive,function(v){
 		ap.emissive=v;
@@ -94,6 +98,7 @@ Sidebar.TextureMaps=function(ap){
 			,"specularMap"
 			);
 	titlePanel.add(specular);
+	if(ap.specular==undefined)
 	ap.specular=0x111111;
 	var specularColor=new UI.ColorRow("color",ap.specular,function(v){
 		ap.specular=v;
@@ -107,7 +112,7 @@ Sidebar.TextureMaps=function(ap){
 			,"aoMap"
 			);
 	titlePanel.add(ao);
-	
+	if(ap.aoIntensity==undefined)
 	ap.aoIntensity=1.0;
 	
 	var aoIntensity=new UI.NumberButtons("Intensity",0,10,1,ap.aoIntensity,function(v){

@@ -3,7 +3,9 @@ Sidebar.MaterialType = function ( application ) {
 	var container=new UI.Panel();
 	container.setId( 'material' );
 	
+	if(ap.materialType==undefined)
 	ap.materialType='MeshToonMaterial';
+	if(ap.materialWireframe==undefined)
 	ap.materialWireframe=false;
 	
 	var materialDiv=new UI.Div().setClass("title").add(new UI.Text("Material"));
