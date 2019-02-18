@@ -506,7 +506,12 @@ UI.ListRow=function(label,values,onChange,current){
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
 	
+	var select=new UI.Select();
+	
 	row.setList=function(values){
+		if(values==undefined || values==null){
+			return;
+		}
 		var options={};
 		for(var i=0;i<values.length;i++){
 			var value=String(values[i]);
@@ -517,7 +522,7 @@ UI.ListRow=function(label,values,onChange,current){
 	
 	
 	
-	var select=new UI.Select();
+	
 	row.setList(values);
 	if(current){
 		select.setValue(current);	
@@ -613,17 +618,30 @@ UI.Select2Row=function(label,options,onChange,current){
 
 
 UI.List=function(values,onChange,current){
-	var options={};
-	for(var i=0;i<values.length;i++){
-		options[values[i]]=values[i];
-	}
+	
+	
+	
+	
 	
 	var select=new UI.Select();
-	select.setOptions(options);
+	select.setList=function(values){
+		if(values==undefined || values==null){
+			return;
+		}
+		var options={};
+		for(var i=0;i<values.length;i++){
+			var value=String(values[i]);
+			options[value]=value;
+		}
+		select.setOptions(options);
+	}
+	select.setList(values);
+	
 	if(current){
 		select.setValue(current);	
 	}else{
-		select.setValue(values[0]);
+		if(values!==undefined && values!=null)
+			select.setValue(values[0]);
 	}
 	select.onChange(function(e){
 		onChange(select.getValue());
