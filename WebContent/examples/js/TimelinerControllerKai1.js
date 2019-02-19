@@ -69,7 +69,7 @@ THREE.TimelinerController.prototype = {
 		this._action.time = time;
 		this._mixer.update( 0 );
 
-		this._onUpdate();
+		this._onUpdate(time);
 
 	},
 

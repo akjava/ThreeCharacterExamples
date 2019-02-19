@@ -142,7 +142,7 @@ var Mbl3dUtils={
 			
 			
 			return "other";
-		},changeBoneOrders:function(skinnedMesh){
+		},changeBoneEulerOrders:function(skinnedMesh){
 			var bones=BoneUtils.getBoneList(skinnedMesh);
 			var arms=["clavicle","upperarm","lowerarm","hand"];
 

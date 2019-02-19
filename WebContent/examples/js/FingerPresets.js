@@ -217,5 +217,99 @@ var FingerPresets=function(){
 	registPreset("pinky03_L",0.00,0.00,-120.00);
 	presets["thumb"]=current;
 	
+	current={};
+	registPreset("thumb01_L",3.72,0.50,2.12);
+	registPreset("thumb02_L",39.68,11.53,-4.09);
+	registPreset("thumb03_L",21.95,33.60,-4.96);
+	registPreset("index01_L",0.00,3.20,-40.30);
+	registPreset("index02_L",0.00,0.00,-57.78);
+	registPreset("index03_L",0.00,0.00,-71.42);
+	registPreset("middle01_L",0.00,0.00,-43.40);
+	registPreset("middle02_L",0.00,0.00,-62.00);
+	registPreset("middle03_L",0.00,0.00,-74.40);
+	registPreset("ring01_L",0.00,-3.80,-46.50);
+	registPreset("ring02_L",0.00,0.00,-62.00);
+	registPreset("ring03_L",0.00,0.00,-69.07);
+	registPreset("pinky01_L",0.00,-8.80,-52.70);
+	registPreset("pinky02_L",0.00,0.00,-62.00);
+	registPreset("pinky03_L",0.00,0.00,-68.08);
+	presets["ring"]=current;
+	
+	current={};
+	registPreset("thumb01_L",5.08,2.90,-14.02);
+	registPreset("thumb02_L",36.92,14.17,8.39);
+	registPreset("thumb03_L",37.15,53.30,-3.24);
+	registPreset("index01_L",0.00,0.00,-57.20);
+	registPreset("index02_L",0.00,0.00,-82.02);
+	registPreset("index03_L",0.00,0.00,-55.00);
+	registPreset("middle01_L",0.00,0.00,-61.60);
+	registPreset("middle02_L",0.00,0.00,-88.00);
+	registPreset("middle03_L",0.00,0.00,-55.00);
+	registPreset("ring01_L",0.00,0.00,-66.00);
+	registPreset("ring02_L",0.00,0.00,-88.00);
+	registPreset("ring03_L",0.00,0.00,-55.00);
+	registPreset("pinky01_L",0.00,0.00,-61.80);
+	registPreset("pinky02_L",0.00,0.00,-88.00);
+	registPreset("pinky03_L",0.00,0.00,-40.00);
+	presets["grasp"]=current;
+	
+	current={};
+	registPreset("thumb01_L",22.72,16.50,-3.28);
+	registPreset("thumb02_L",11.00,9.20,5.40);
+	registPreset("thumb03_L",21.40,16.40,11.40);
+	registPreset("index00_L",3.80,0.00,0.00);
+	registPreset("index01_L",0.00,1.00,-16.10);
+	registPreset("index02_L",0.00,0.00,-60.98);
+	registPreset("index03_L",0.00,0.00,-11.40);
+	registPreset("middle01_L",0.00,-9.00,-13.20);
+	registPreset("middle02_L",0.00,0.00,-61.80);
+	registPreset("middle03_L",0.00,0.00,-6.80);
+	registPreset("ring00_L",-2.60,0.00,-1.60);
+	registPreset("ring01_L",0.00,-13.20,-13.00);
+	registPreset("ring02_L",0.00,0.00,-48.40);
+	registPreset("ring03_L",0.00,0.00,-17.00);
+	registPreset("pinky00_L",-6.80,0.00,0.00);
+	registPreset("pinky01_L",0.00,-20.60,-43.30);
+	presets["triangle"]=current;
+	
+	current={};
+	registPreset("thumb01_L",22.72,16.50,-3.28);
+	registPreset("thumb02_L",11.00,9.20,5.40);
+	registPreset("thumb03_L",21.40,16.40,11.40);
+	registPreset("index00_L",3.80,0.00,0.00);
+	registPreset("index01_L",0.00,0.00,-8.70);
+	registPreset("index02_L",0.00,0.00,-76.78);
+	registPreset("index03_L",0.00,0.00,-11.40);
+	registPreset("middle01_L",0.00,-5.40,1.00);
+	registPreset("middle02_L",0.00,0.00,-94.80);
+	registPreset("middle03_L",0.00,0.00,-6.80);
+	registPreset("ring01_L",0.00,0.00,-60.00);
+	registPreset("ring02_L",0.00,0.00,-80.00);
+	registPreset("ring03_L",0.00,0.00,-89.12);
+	registPreset("pinky01_L",0.00,0.00,-68.00);
+	registPreset("pinky02_L",0.00,0.00,-80.00);
+	registPreset("pinky03_L",0.00,0.00,-87.84);
+	presets["pick"]=current;
+	
+
+	current={};
+	registPreset("thumb01_L",0.00,0.00,18.00);
+	registPreset("thumb02_L",64.80,0.00,0.00);
+	registPreset("thumb03_L",32.40,21.60,-32.40);
+	registPreset("index01_L",0.00,0.00,-19.01);
+	registPreset("index02_L",0.00,0.00,-28.51);
+	registPreset("index03_L",0.00,0.00,-85.00);
+	registPreset("middle01_L",0.00,0.00,-19.01);
+	registPreset("middle02_L",0.00,0.00,-28.51);
+	registPreset("middle03_L",0.00,0.00,-85.00);
+	registPreset("ring01_L",0.00,0.00,-19.01);
+	registPreset("ring02_L",0.00,0.00,-28.51);
+	registPreset("ring03_L",0.00,0.00,-85.00);
+	registPreset("pinky01_L",0.00,0.00,-19.01);
+	registPreset("pinky02_L",0.00,0.00,-28.51);
+	registPreset("pinky03_L",0.00,0.00,-85.00);
+
+	presets["scoop"]=current;
+	
 	return presets;
 }

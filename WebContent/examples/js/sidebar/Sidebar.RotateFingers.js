@@ -280,7 +280,22 @@ Sidebar.RotateFingers=function(ap){
 		ap.fingerPresetsControler.update();
 		reselect();
 	});
-	container.add(presetListL);
+	var rowL=new UI.Row();
+	container.add(rowL);
+	rowL.add(presetListL);
+	var copyRBt=new UI.Button("Copy to R").onClick(function(){
+		var p=presetListL.getValue();
+		var i=intensityL.getValue();
+		
+		presetListR.setValue(p);
+		intensityR.setValue(i);
+		
+		ap.fingerPresetsControler.presetNameR=p;
+		ap.fingerPresetsControler.intensityR=i;
+		ap.fingerPresetsControler.update();
+		reselect();
+	});
+	rowL.add(copyRBt);
 	
 	var intensityL=new UI.NumberButtons("Intensity",0,1,1,1,function(v){
 		ap.fingerPresetsControler.intensityL=v;
@@ -299,7 +314,22 @@ Sidebar.RotateFingers=function(ap){
 		ap.fingerPresetsControler.update();
 		reselect();
 	});
-	container.add(presetListR);
+	var rowR=new UI.Row();
+	container.add(rowR);
+	rowR.add(presetListR);
+	var copyLBt=new UI.Button("Copy to L").onClick(function(){
+		var p=presetListR.getValue();
+		var i=intensityR.getValue();
+		
+		presetListL.setValue(p);
+		intensityL.setValue(i);
+		
+		ap.fingerPresetsControler.presetNameL=p;
+		ap.fingerPresetsControler.intensityL=i;
+		ap.fingerPresetsControler.update();
+		reselect();
+	});
+	rowR.add(copyLBt);
 	
 	var intensityR=new UI.NumberButtons("Intensity",0,1,1,1,function(v){
 		ap.fingerPresetsControler.intensityR=v;
@@ -311,8 +341,20 @@ Sidebar.RotateFingers=function(ap){
 	intensityR.number.setWidth("40px");
 	container.add(intensityR);
 	
+	var swapBt=new UI.ButtonRow("Swap",function(){
+		var p=ap.fingerPresetsControler.presetNameL;
+		var i=ap.fingerPresetsControler.intensityL;
+		
+		ap.fingerPresetsControler.presetNameL=ap.fingerPresetsControler.presetNameR;
+		ap.fingerPresetsControler.intensityL=ap.fingerPresetsControler.intensityR;
+		ap.fingerPresetsControler.presetNameR=p
+		ap.fingerPresetsControler.intensityR=i;
+		ap.fingerPresetsControler.update();
+		reselect();
+	});
+	container.add(swapBt);
 	
-	var printBt=new UI.ButtonRow("Loggins fingers as Preset",function(){
+	var printBt=new UI.Button("Loggins fingers as Preset").onClick(function(){
 		var indices=getFingerBoneIndexes(scope.isL);
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		var text="current={};\n";
@@ -327,7 +369,19 @@ Sidebar.RotateFingers=function(ap){
 		text+="presets[\"\"]=current;";
 		console.log(text);
 	});
-	container.add(printBt);
+	printBt.setMarginLeft("8px");
+	swapBt.add(printBt);
+	
+	ap.getSignal("fingerPresetChanged").add(function(isL,fireEvent){
+		var c=ap.fingerPresetsControler;
+		if(isL){
+			presetListL.setValue(c.presetNameL);
+			intensityL.setValue(c.intensityL);
+		}else{
+			presetListR.setValue(c.presetNameR);
+			intensityR.setValue(c.intensityR);
+		}
+	});
 	
 	return container;
 }

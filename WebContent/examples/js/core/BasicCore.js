@@ -69,7 +69,7 @@ var BasicCore = function ( application ) {
 			
 			//TODO check and set
 			mesh.scale.set(100,100,100);
-			
+			Mbl3dUtils.changeBoneEulerOrders(mesh);//Euler XYZ
 			
 			ap.root.add(mesh);
 			ap.skinnedMesh=mesh;

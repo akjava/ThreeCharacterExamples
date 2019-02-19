@@ -8,6 +8,8 @@ var FingerPresetsControler=function(ap,presets){
 	this._intensityL=1.0;
 	this._intensityR=1.0;
 	
+	this.test="";
+	
 	this.needsUpdateL=false;
 	this.needsUpdateR=false;
 	
@@ -17,6 +19,9 @@ var FingerPresetsControler=function(ap,presets){
 	
 	this._presetsL={};
 	this._presetsR={};
+	
+	this._quaternion=new THREE.Quaternion();
+	this._euler=new THREE.Euler();
 	
 	function convertPresets(isL){
 		var result={};
@@ -66,6 +71,12 @@ var FingerPresetsControler=function(ap,presets){
 	},undefined,100);//call first
 	
 }
+
+FingerPresetsControler.prototype.getFingerBoneIndices=function(isL){
+	return isL?this.fingerBoneIndicesL:this.fingerBoneIndicesR;
+}
+
+
 FingerPresetsControler.prototype.constructor =FingerPresetsControler;
 Object.defineProperty(FingerPresetsControler.prototype, 'intensityL', {
 	  get() {
@@ -109,13 +120,29 @@ Object.defineProperty(FingerPresetsControler.prototype, 'presetNameR', {
 	  },
 	});
 
+FingerPresetsControler.prototype.convertToQuaternion=function(boneIndex,presetName,intensicy,isL){
+	var scope=this;
+	var bone=scope.boneList[boneIndex];
+	var obj=isL?scope._presetsL[presetName]:scope._presetsR[presetName];
+	var rads=obj[boneIndex];
+	if(rads==undefined){
+		//console.log("no rad",bone.name,obj,scope._presetsL,presetName);
+		rads={x:0,y:0,z:0};
+	}
+	var v=intensicy;
+	
+	this._euler.set(rads.x*v,rads.y*v,rads.z*v,bone.rotation.order);
+	this._quaternion.setFromEuler(this._euler);
+	return this._quaternion;
+}
 
-FingerPresetsControler.prototype.update=function(force){
+FingerPresetsControler.prototype.update=function(fireEvent){
+	fireEvent=fireEvent==undefined?true:fireEvent;
 	if(this.boneList==null){
 		console.log("FingerPresetsControler.update() not ready,need load mesh.");
 		return;
 	}
-	if(!this.needsUpdateL && !this.needsUpdateR && force!=true){
+	if(!this.needsUpdateL && !this.needsUpdateR){
 		return;
 	}
 	var scope=this;
@@ -149,6 +176,9 @@ FingerPresetsControler.prototype.update=function(force){
 			var index=Number(key);
 			scope.boneList[index].rotation.set(rads.x*v,rads.y*v,rads.z*v);	
 		});
+		
+			this.ap.getSignal("fingerPresetChanged").dispatch(true,fireEvent);
+			this.needsUpdateL=false;
 	}
 	
 	if(this.needsUpdateR){
@@ -162,6 +192,9 @@ FingerPresetsControler.prototype.update=function(force){
 			var index=Number(key);
 			scope.boneList[index].rotation.set(rads.x*v,rads.y*v,rads.z*v);	
 		});
+		
+			this.ap.getSignal("fingerPresetChanged").dispatch(false,fireEvent);
+			this.needsUpdateR=false;
 	}
 	
 }
@@ -169,3 +202,10 @@ FingerPresetsControler.prototype.update=function(force){
 FingerPresetsControler.prototype.getPresetKeys=function(){
 	return Object.keys(this.presets);
 }
+
+var  FingerPresetsDummyControler=function(){
+	this.presetNameL="default";
+	this.presetNameR="default";
+	this.intensityL=1.0;
+	this.intensityR=1.0;
+};

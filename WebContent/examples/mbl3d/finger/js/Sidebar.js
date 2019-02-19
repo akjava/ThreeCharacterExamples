@@ -4,6 +4,8 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Finger Control"));
 	
+	container.add(new Sidebar.TimelinerVisibleRow(ap));
+	
 	ap.materialType='MeshPhongMaterial';
 	
 	var tab=new UI.Tab();
@@ -27,7 +29,12 @@ var Sidebar = function ( application ) {
 			new Sidebar.OutlineEffect(ap)
 			);
 	
-	//tab.select("Sub");
+	tab.addItem("Timeliner").add(
+			new Sidebar.TimelinerFingerPresets(ap),
+			new Sidebar.TimelinerBackgroundClip(ap)
+			);
+	
+	tab.select("Timeliner");
 	
 	return container;
 }

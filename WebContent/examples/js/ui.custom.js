@@ -872,7 +872,7 @@ UI.TextRow=function(label,text2){
 	row.text=text;
 	
 	if(text2!=undefined){
-		var uiText=new UI.Text();
+		var uiText=new UI.Text(text2);
 		row.add(uiText);
 		row.text2=uiText;
 	}

@@ -10,7 +10,7 @@ Example=function(application){
 	var light = new THREE.DirectionalLight(0x333333);
 	light.position.set(200, 0, 0);
 	light.target.position.set(200, 100, 0);
-	ap.scene.add(light);
+	//ap.scene.add(light);
 	
 	//simple light
 	//light
@@ -74,6 +74,7 @@ Example=function(application){
 		
 		ap.skinnedMesh.material=material;
 	});
+	
 	
 	
 	//boneAttachControler
