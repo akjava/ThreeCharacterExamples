@@ -2,7 +2,9 @@ var ObjectTransformControler=function(ap){
 	this.ap=ap;
 	this.helper=null;
 	var scope=this;
-	ap.signals.skinnedMeshTransformed.add(function(){
+	
+	
+	function onMeshTransformed(){
 		if(scope.helper!=null){
 			scope.helper.update();
 		}
@@ -14,13 +16,23 @@ var ObjectTransformControler=function(ap){
 		if(ap.translateControler){//TODO switch signal?
 			ap.translateControler.updatePosition();
 		}
-	});
+	}
+	
+	this.onMeshTransformed=onMeshTransformed;
+	ap.getSignal("meshTransformed").add(onMeshTransformed);
 }
 
+ObjectTransformControler.prototype.dispose=function(){
+	var ap=this.ap;
+	ap.getSignal("meshTransformed").remove(this.onMeshTransformed);
+};
+
+
 ObjectTransformControler.prototype.onTransformSelectionChanged=function(target){
+	
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-		if(target.userData.transformMode=="ObjectTranslate"){
+		if(target.userData.transformMode=="translate"){
 			ap.transformControls.setMode( "translate" );
 		}else{
 			ap.transformControls.setMode( "rotate" );
@@ -52,12 +64,20 @@ ObjectTransformControler.prototype.onTransformStarted=function(target){
 	}
 }
 
+ObjectTransformControler.prototype.onTransformChanged=function(target){
+	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
+		if(this.helper!=null){
+			this.helper.update();
+		}
+	}
+}
+
 ObjectTransformControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
 		//ap.signals.poseChanged.dispatch();
 		
-		ap.signals.skinnedMeshTransformed.dispatch(target.userData.transformMode);
+		ap.signals.meshTransformed.dispatch(target.userData.transformMode);
 		
 		if(ap.signals.skinnedMeshTransformeFinished){
 			ap.signals.skinnedMeshTransformeFinished.dispatch(target.userData.transformMode);

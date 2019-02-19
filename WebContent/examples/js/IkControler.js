@@ -59,21 +59,26 @@ if(ap.signals.ikSelectionChanged){
 
 
 this._initialized=false;
-this._enabled=true;//just visible
+this._enabled=true;
 };
 
-IkControler.prototype.setEnabled=function(enabled){
-	this._enabled=enabled;
+
+IkControler.prototype.setVisible=function(visible){
 	var scope=this;
 	var values=scope.getIkTargetsValue();
 	values.forEach(function(target){
-		target.material.visible=enabled;
+		target.material.visible=visible;
 		var name=scope.getIkNameFromTarget(target);
 		var enableEndSite=scope.isEnableEndSiteByName(name);
 		if(enableEndSite){
-			scope.setEndSiteVisible(name,enabled);
+			scope.setEndSiteVisible(name,visible);
 		}
 	});
+	
+}
+IkControler.prototype.setEnabled=function(enabled){
+	this._enabled=enabled;
+	this.setVisible(enabled);
 };
 IkControler.prototype.isEnabled=function(){
 	return this._enabled;
@@ -307,7 +312,7 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 	
 	if(target==null){
 		onNotSelected();
-	}else if(target.userData.transformSelectionType=="BoneIk"){
+	}else if(target.userData.transformSelectionType=="BoneIk" && this._enabled){
 		ap.transformControls.setMode( "translate" );
 		this.setIkTarget(target);
 		ap.transformControls.attach(target);

@@ -5,7 +5,6 @@ var TranslateControler=function(ap,boneAttachControler){
 	this.translateControls={};
 	//TODO support non-root bones
 	
-	this.objects=[];
 }
 //so far only root support
 TranslateControler.prototype.initialize=function(){
@@ -20,7 +19,6 @@ TranslateControler.prototype.initialize=function(){
 	sphere.userData.boneIndex=0;
 	sphere.userData.transformSelectionType="BoneTranslate";
 	ap.objects.push(sphere);
-	this.objects.push(sphere);
 	//temporary
 	scope._sphere=sphere;
 	
@@ -38,17 +36,38 @@ TranslateControler.prototype.initialize=function(){
 	scope.onBoneTranslateChanged=onBoneTranslateChanged;
 	ap.getSignal("boneTranslateChanged").add(onBoneTranslateChanged);
 	
-	ap.getSignal("poseChanged").add(function(){
+	
+	function onPoseChanged(){
 		scope.updatePosition();
-	});
+	}
+	
+	scope.onPoseChanged=onPoseChanged;
+	
+	ap.getSignal("poseChanged").add(onPoseChanged);
 }
 
+
+TranslateControler.prototype.setEnabled=function(v){
+	this._enabled=v;
+	this.setVisible(v);
+}
+TranslateControler.prototype.setVisible=function(v){
+	Object.values(this.translateControls).forEach(function(object){
+		object.material.visible=v;
+	});
+}
 TranslateControler.prototype.dispose=function(){
-	this.objects.forEach(function(object){
+	var ap=this.ap;
+	var scope=this;
+	
+	ap.getSignal("boneTranslateChanged").remove(scope.onBoneTranslateChanged);
+	ap.getSignal("poseChanged").remove(scope.onPoseChanged);
+	
+	var objects=Object.values(this.translateControls);
+	objects.forEach(function(object){
 		object.parent.remove(object);
 	});
-	var ap=this.ap;
-	ap.objects=AppUtils.removeAllFromArray(ap.objects,this.objects);
+	ap.objects=AppUtils.removeAllFromArray(ap.objects,objects);
 };
 
 TranslateControler.prototype.updatePosition=function(){

@@ -5,5 +5,15 @@ Sidebar.ControlerCheck=function(ap){
 		ap.ikControler.setEnabled(v);
 	});
 	titlePanel.add(ik);
+	var rotate=new UI.CheckboxRow("Rotate Enabled",true,function(v){
+		ap.rotationControler.setEnabled(v);
+	});
+	titlePanel.add(rotate);
+	
+	var translate=new UI.CheckboxRow("Translate Enabled",true,function(v){
+		ap.translateControler.setEnabled(v);
+	});
+	titlePanel.add(translate);
+	
 	return titlePanel;
 }
