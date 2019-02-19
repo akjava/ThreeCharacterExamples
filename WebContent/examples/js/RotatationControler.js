@@ -14,6 +14,8 @@ var RotatationControler=function(ap,boneAttachControler){
 	this.wireframe = new THREE.LineSegments( geo, mat );
 
 	ap.scene.add( this.wireframe );
+	
+	this.objects=[];
 }
 RotatationControler.prototype.initialize=function(boneFilter){
 	var scope=this;
@@ -25,6 +27,7 @@ RotatationControler.prototype.initialize=function(boneFilter){
 	boneList.forEach(function(bone){
 		if(boneFilter(bone)){
 			var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
+			sphere.name="rot-c-"+bone.name;
 			sphere.renderOrder=1;
 			scope.rotationControls[bone.name]=sphere;
 			scope.boneAttachControler.containerList[index].add(sphere);
@@ -56,10 +59,16 @@ RotatationControler.prototype.initialize=function(boneFilter){
 				
 			});
 			ap.objects.push(sphere);
+			scope.objects.push(sphere);
 		}
 		index++;
 	});
 }
+
+RotatationControler.prototype.dispose=function(){
+	var ap=this.ap;
+	ap.objects=AppUtils.removeAllFromArray(ap.objects,this.objects);
+};
 
 RotatationControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;

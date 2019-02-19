@@ -103,6 +103,69 @@ Example=function(application){
 		
 	},undefined,50);
 	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		ap.transformControls.detach();
+	});
+	ap.signals.loadingModelFinished.add(function(mesh){
+		
+		if(ap.rotatationControler!=null){
+			ap.rotatationControler.dispose();
+		}
+		
+		var rotatationControler=new RotatationControler(ap,ap.boneAttachControler);
+		rotatationControler.initialize(function(bone){
+			return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name) && !Mbl3dUtils.isRootBoneName(bone.name);
+		});
+		ap.rotatationControler=rotatationControler;
+		
+		//move to initialize?
+		ap.signals.transformSelectionChanged.add(function(target){
+			ap.rotatationControler.onTransformSelectionChanged(target);
+		});
+		
+		ap.signals.transformFinished.add( function () {
+			ap.rotatationControler.onTransformFinished(scope.target);
+		});
+		ap.signals.transformStarted.add( function () {
+			//console.log(ap.objects);
+			ap.rotatationControler.onTransformStarted(scope.target);
+		});
+		
+	});
+	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		if(ap.translateControler!=null){
+			ap.translateControler.dispose();
+		}
+		
+		var translateControler=new TranslateControler(ap,ap.boneAttachControler);
+		translateControler.initialize();
+		ap.translateControler=translateControler;
+		
+		ap.signals.transformSelectionChanged.add(function(target){
+			ap.translateControler.onTransformSelectionChanged(target);
+		});
+		
+		ap.signals.transformStarted.add( function () {
+			ap.translateControler.onTransformStarted(scope.target);
+		});
+		
+		ap.signals.transformFinished.add( function () {
+			ap.translateControler.onTransformFinished(scope.target);
+		});
+		ap.signals.transformChanged.add( function () {
+			ap.translateControler.onTransformChanged(scope.target);
+		});
+		
+		//mbl3d specific & somehow ik rotate target index changed from 0 to 1;
+		ap.signals.boneRotationChanged.add(function(index){
+			if(index==0 || index==1){
+				ap.signals.boneTranslateChanged.dispatch(index);
+			}
+		});
+	});
+	
+	//TODO move Core?
 	scope.target=null;
 	ap.signals.transformSelectionChanged.add(function(target){
 		scope.target=target;

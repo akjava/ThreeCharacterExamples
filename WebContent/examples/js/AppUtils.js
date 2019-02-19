@@ -185,9 +185,12 @@ var AppUtils={
 				if(index==-1){
 					//TODO logging
 					//console.log("removeAllFromArray:not contain",remove);
+				}else{
+					array=array.slice(1,index);
 				}
-				array.slice(1,index);
+				
 			});
+			return array;
 		},
 		/*
 		not support minus

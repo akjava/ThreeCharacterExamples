@@ -5,7 +5,7 @@ var TranslateControler=function(ap,boneAttachControler){
 	this.translateControls={};
 	//TODO support non-root bones
 	
-	
+	this.objects=[];
 }
 //so far only root support
 TranslateControler.prototype.initialize=function(){
@@ -13,13 +13,14 @@ TranslateControler.prototype.initialize=function(){
 	var ap=this.ap;
 	var root=scope.boneAttachControler.containerList[0];
 	var sphere=new THREE.Mesh(new THREE.SphereGeometry(2),new THREE.MeshBasicMaterial({color:0x000088,depthTest:false,transparent:true,opacity:.5}));
+	sphere.name="trans-c-"+"root";
 	sphere.renderOrder=1;
 	sphere.position.copy(root.position);
 	ap.scene.add(sphere);
 	sphere.userData.boneIndex=0;
 	sphere.userData.transformSelectionType="BoneTranslate";
 	ap.objects.push(sphere);
-	
+	this.objects.push(sphere);
 	//temporary
 	scope._sphere=sphere;
 	
@@ -35,13 +36,21 @@ TranslateControler.prototype.initialize=function(){
 		
 	}
 	scope.onBoneTranslateChanged=onBoneTranslateChanged;
-	ap.signals.boneTranslateChanged.add(onBoneTranslateChanged);
+	ap.getSignal("boneTranslateChanged").add(onBoneTranslateChanged);
 	
-	ap.signals.poseChanged.add(function(){
-		
+	ap.getSignal("poseChanged").add(function(){
 		scope.updatePosition();
 	});
 }
+
+TranslateControler.prototype.dispose=function(){
+	this.objects.forEach(function(object){
+		object.parent.remove(object);
+	});
+	var ap=this.ap;
+	ap.objects=AppUtils.removeAllFromArray(ap.objects,this.objects);
+};
+
 TranslateControler.prototype.updatePosition=function(){
 	this.boneAttachControler.update();
 	var root=this.boneAttachControler.containerList[0];
