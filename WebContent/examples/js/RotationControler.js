@@ -1,4 +1,4 @@
-var RotatationControler=function(ap,boneAttachControler){
+var RotationControler=function(ap,boneAttachControler){
 	var scope=this;
 	this.ap=ap;
 	this.boneAttachControler=boneAttachControler;
@@ -15,9 +15,11 @@ var RotatationControler=function(ap,boneAttachControler){
 
 	ap.scene.add( this.wireframe );
 	
+	this._enabled=true;
+	
 	this.objects=[];
 }
-RotatationControler.prototype.initialize=function(boneFilter){
+RotationControler.prototype.initialize=function(boneFilter){
 	var scope=this;
 	var ap=this.ap;
 	var e=new THREE.Euler();
@@ -65,17 +67,17 @@ RotatationControler.prototype.initialize=function(boneFilter){
 	});
 }
 
-RotatationControler.prototype.dispose=function(){
+RotationControler.prototype.dispose=function(){
 	var ap=this.ap;
 	ap.objects=AppUtils.removeAllFromArray(ap.objects,this.objects);
 };
 
-RotatationControler.prototype.onTransformSelectionChanged=function(target){
+RotationControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;
 	var scope=this;
 	if(target==null){
 		this.wireframe.material.visible=false;
-	}else if(target.userData.transformSelectionType=="BoneRotation"){
+	}else if(target.userData.transformSelectionType=="BoneRotation" && this._enabled){
 		ap.transformControls.setMode( "rotate" );
 		ap.transformControls.attach(target);
 		var boneIndex=target.userData.boneIndex;
@@ -90,13 +92,13 @@ RotatationControler.prototype.onTransformSelectionChanged=function(target){
 		this.wireframe.material.visible=false;
 	}
 }
-RotatationControler.prototype.onTransformStarted=function(target){
+RotationControler.prototype.onTransformStarted=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
 		this.wireframe.material.color.set(0xffffff);
 		this.refreshSphere();
 	}
 }
-RotatationControler.prototype.onTransformFinished=function(target){
+RotationControler.prototype.onTransformFinished=function(target){
 if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
 	this.wireframe.material.color.set(0xaaaaaa);
 	this.refreshSphere();
@@ -107,13 +109,18 @@ if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
 		}
 	}
 }
-RotatationControler.prototype.setVisible=function(v){
+RotationControler.prototype.setVisible=function(v){
 	Object.values(this.rotationControls).forEach(function(object){
 		object.material.visible=v;
 	})
 }
 
-RotatationControler.prototype.refreshSphere=function(){
+RotationControler.prototype.setEnabled=function(v){
+	this.setVisible(v);
+	this._enabled=v;
+}
+
+RotationControler.prototype.refreshSphere=function(){
 	var bone=this.boneAttachControler.boneList[this.boneIndex];
 	this.lastEuler.copy(bone.rotation);
 	var rotC=this.rotationControls[bone.name];
