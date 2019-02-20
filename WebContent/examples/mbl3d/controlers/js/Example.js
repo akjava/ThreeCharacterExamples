@@ -31,7 +31,7 @@ Example=function(application){
 	
 	//sidebar.texture	
 	application.signals.materialChanged.add(function(){
-		var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,map:ap.texture});
+		var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,map:ap.texture,transparent:true,alphaTest:0.6});
 		ap.skinnedMesh.material=material;
 	});
 	
