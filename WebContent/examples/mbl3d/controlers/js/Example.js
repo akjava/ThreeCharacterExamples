@@ -55,6 +55,8 @@ Example=function(application){
 		}
 	},undefined,-1);//call later
 	
+
+	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		ap.transformControls.detach();
 	});
@@ -234,7 +236,7 @@ Example=function(application){
 		}else{
 			ap.breastControler.dispose();
 		}
-		
+		ap.breastControler.logging=false;
 		ap.breastControler.initialize(ammoControler,ap.boneAttachControler);
 		ap.breastControler.newBreast();
 		

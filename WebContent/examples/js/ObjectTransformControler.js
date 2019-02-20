@@ -8,12 +8,16 @@ var ObjectTransformControler=function(ap){
 		if(scope.helper!=null){
 			scope.helper.update();
 		}
+		//TODO switch signal?
+		if(ap.boneAttachControler){
+			ap.boneAttachControler.update(true);	
+		}
 		
 		if(ap.ikControler){
 			ap.ikControler.resetAllIkTargets();
 		}
 		
-		if(ap.translateControler){//TODO switch signal?
+		if(ap.translateControler){
 			ap.translateControler.updatePosition();
 		}
 	}
@@ -69,6 +73,7 @@ ObjectTransformControler.prototype.onTransformChanged=function(target){
 		if(this.helper!=null){
 			this.helper.update();
 		}
+		this.ap.getSignal("meshTransformed").dispatch(target.userData.transformMode);
 	}
 }
 
@@ -77,11 +82,9 @@ ObjectTransformControler.prototype.onTransformFinished=function(target){
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
 		//ap.signals.poseChanged.dispatch();
 		
-		ap.signals.meshTransformed.dispatch(target.userData.transformMode);
+		//ap.signals.meshTransformed.dispatch(target.userData.transformMode);
 		
-		if(ap.signals.skinnedMeshTransformeFinished){
-			ap.signals.skinnedMeshTransformeFinished.dispatch(target.userData.transformMode);
-		}
+		ap.getSignal("meshTransformeFinished").dispatch(target.userData.transformMode);
 		
 		
 		if(this.helper!=null){
