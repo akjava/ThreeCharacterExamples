@@ -6,6 +6,7 @@ var Sidebar = function ( application ) {
 	
 	var tab=new UI.Tab();
 	container.add(tab);
+	
 	tab.addItem("Main").add(
 			new Sidebar.Model(ap),
 			new Sidebar.TextureMaps(ap),

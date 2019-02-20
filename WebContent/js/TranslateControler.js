@@ -118,9 +118,7 @@ TranslateControler.prototype.onTransformStarted=function(target){
 TranslateControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
-		ap.ikControler.resetAllIkTargets();
-		
-		ap.signals.boneTranslateChanged.add(this.onBoneTranslateChanged);
+		ap.signals.boneTranslateChanged.add(this.onBoneTranslateChanged);//not catch myself
 		if(ap.signals.boneTranslateFinished){
 			ap.signals.boneTranslateFinished.dispatch(target.userData.boneIndex);
 		}

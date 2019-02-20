@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>Load Model</title>
+		<title>Controls</title>
 	</head>
 	<body ontouchstart="">
 	<link href="../../css/shared.css" rel="stylesheet" />
@@ -11,20 +11,22 @@
 	<script src="../../../libs/ui.js"></script>
 	<script src="../../../libs/OrbitControls.js"></script>
 	<script src="../../../libs/signals.min.js"></script>
+	
 	<script src="../../../libs/DRACOLoader.js"></script>
 	<script src="../../../libs/GLTFLoader.js"></script>
 	<script src="../../../libs/inflate.min.js"></script>
 	<script src="../../../libs/FBXLoader.js"></script>
 	<script src="../../../libs/ammo.js"></script>
-
+	<script src="../../../libs/TransformControls.js"></script>
+	<script src="../../../libs/OutlineEffect.js"></script>
 	
 	<!-- my jslib -->
 	<script src="../../../js/ui.custom.js"></script>
 	<script src="../../../js/AnimeUtils.js"></script>
 	<script src="../../../js/BoneUtils.js"></script>
-	<script src="../../../js/BoneAttachControler.js"></script>
 	<script src="../../../js/Mbl3dUtils.js"></script>
 	<script src="../../../js/AppUtils.js"></script>
+	<script src="../../../js/BoneAttachControler.js"></script>
 	
 	<script src="../../../js/ammo/AmmoUtils.js"></script>
 	<script src="../../../js/ammo/AmmoControler.js"></script>
@@ -33,21 +35,44 @@
 	<script src="../../../js/ammo/AmmoSphereBodyAndMesh.js"></script>
 	<script src="../../../js/ammo/AmmoConstraintAndLine.js"></script>
 
-	
+	<script src="../../../js/IkUtils.js"></script>
+	<script src="../../../js/IkControler.js"></script>
+	<script src="../../../js/TranslateControler.js"></script>
+	<script src="../../../js/RotationControler.js"></script>
+	<script src="../../../js/ObjectTransformControler.js"></script>
+	<script src="../../../js/BreastControler.js"></script>
+	<script src="../../../js/ik/Mbl3dIk.js"></script>
+	<script src="../../../js/Logics.js"></script>
 	
 	<script src="../../../js/application/MinApplication.js"></script>
-	<script src="../../../js/core/BasicCore.js"></script>
+	<script src="../../../js/core/TransformCore.js"></script>
 	<script src="js/Info.js"></script>
 	<script src="js/Sidebar.js"></script>
 	
 	<!-- sidebars -->
-	<script src="../../../js/sidebar/Sidebar.SimpleLight.js"></script>
-	<script src="../../../js/sidebar/Sidebar.ClipPlayer.js"></script>
-	<script src="../../../js/sidebar/Sidebar.Model.js"></script>
+	<script src="../../../js/sidebar/Sidebar.CameraControler.js"></script>
+	<script src="../../../js/sidebar/Sidebar.ControlerCheck.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Ground.js"></script>
 	<script src="../../../js/sidebar/Sidebar.Hair.js"></script>
+	<script src="../../../js/sidebar/Sidebar.ShadowLight.js"></script>
+	<script src="../../../js/sidebar/Sidebar.SimpleLight.js"></script>
+	<script src="../../../js/sidebar/Sidebar.MaterialType.js"></script>
+	<script src="../../../js/sidebar/Sidebar.MeshTransform.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Model.js"></script>
+	<script src="../../../js/sidebar/Sidebar.OutlineEffect.js"></script>
 	<script src="../../../js/sidebar/Sidebar.Texture.js"></script>
+	<script src="../../../js/sidebar/Sidebar.TextureMaps.js"></script>
+	
+	
+	
+	
+	
+	<!--  ui parts -->
 	<script src="../../../js/ui/LoadClipRow.js"></script>
 	<script src="../../../js/ui/ClipPlayerRow.js"></script>
+	<script src="../../../js/ui/ListTextureDiv.js"></script>
+	
+	<!-- logic -->
 	
 	<script src="js/Example.js"></script>
 	
@@ -60,7 +85,7 @@
 	
 	var application = new MinApplication();
 	
-	var core = new BasicCore( application );
+	var core = new TransformCore( application );
 	document.body.appendChild( core.dom );
 	
 	var info=new Info(application);

@@ -3,6 +3,11 @@ Sidebar.ShadowLight = function ( application ) {
 	var container=new UI.Panel();
 	container.setId( 'light' );
 	
+	application.signals.loadingModelFinished.add(function(mesh){
+		mesh.castShadow = true;
+	});
+	
+	
 	var lightDiv=new UI.Div().setClass("title").add(new UI.Text("Shadow"));
 	container.add(lightDiv);
 	
