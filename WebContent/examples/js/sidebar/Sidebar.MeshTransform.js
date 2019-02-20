@@ -55,6 +55,7 @@ Sidebar.MeshTransform=function(ap){
 	function translate(){
 		var pos=ap.skinnedMesh.position;
 		pos.set(scope.boneMoveX,scope.boneMoveY,scope.boneMoveZ);
+		ap.skinnedMesh.updateMatrixWorld(true);
 		ap.signals.meshTransformed.remove(onSkinnedMeshTransformed);
 		ap.signals.meshTransformed.dispatch("translate",ap.skinnedMesh);
 		ap.signals.meshTransformed.add(onSkinnedMeshTransformed);
@@ -103,6 +104,7 @@ Sidebar.MeshTransform=function(ap){
 		var y=THREE.Math.degToRad(scope.boneAngleY);
 		var z=THREE.Math.degToRad(scope.boneAngleZ);
 		rotation.set(x,y,z);
+		ap.skinnedMesh.updateMatrixWorld(true);
 		ap.signals.meshTransformed.remove(onSkinnedMeshTransformed);
 		ap.signals.meshTransformed.dispatch("rotate",ap.skinnedMesh);
 		ap.signals.meshTransformed.add(onSkinnedMeshTransformed);
