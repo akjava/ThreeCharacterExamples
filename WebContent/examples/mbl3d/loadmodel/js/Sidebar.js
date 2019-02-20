@@ -8,6 +8,6 @@ var Sidebar = function ( application ) {
 	container.add(new Sidebar.Texture(ap));
 	container.add(new Sidebar.Hair(ap));
 	container.add(new Sidebar.ClipPlayer(ap));
-	
+	container.add(new Sidebar.SimpleLight(ap));
 	return container;
 }

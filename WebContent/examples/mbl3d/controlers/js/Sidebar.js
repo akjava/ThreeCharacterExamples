@@ -12,7 +12,7 @@ var Sidebar = function ( application ) {
 	container.add(new Sidebar.MeshTransform(ap));
 	
 	container.add(new Sidebar.ClipPlayer(ap));
-	
+	container.add(new Sidebar.SimpleLight(ap));
 	
 	
 	return container;

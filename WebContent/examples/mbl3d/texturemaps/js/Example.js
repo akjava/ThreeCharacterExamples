@@ -6,16 +6,7 @@ Example=function(application){
 	var url="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
-	//simple light
-	//light
-	/*var light = new THREE.DirectionalLight(0xaaaaaa);
-	light.position.set(100, 100, 100);
-	ap.scene.add(light);
-	var light2 = new THREE.DirectionalLight(0xaaaaaa);
-	light2.position.set(-100, -100, -100);
-	ap.scene.add(light2);
-	
-	ap.scene.add(new THREE.AmbientLight(0x666666));*/
+
 	
 	//sidebar.Hair
 	application.signals.loadingHairFinished.add(function(hair){
