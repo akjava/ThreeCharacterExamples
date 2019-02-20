@@ -28,6 +28,8 @@ Example=function(application){
 		}
 	});
 
+
+	
 	var ammoContainer=null;
 	var sprine03Box;
 	var breastR,breastL;
@@ -69,10 +71,10 @@ Example=function(application){
 		//attach
 		var boneList=BoneUtils.getBoneList(mesh);
 		var sprine03=BoneUtils.findBoneIndexByEndsName(boneList,"spine03");
+		
+
 		breastR=BoneUtils.findBoneIndexByEndsName(boneList,"breast_R");
 		breastL=BoneUtils.findBoneIndexByEndsName(boneList,"breast_L");
-		
-		
 		
 		
 		ammoContainer=ap.attachControler.getContainerByBoneIndex(sprine03);
@@ -98,10 +100,6 @@ Example=function(application){
 		 AmmoUtils.setLinearFactor(sprine03Box.getBody(),1,1,1);
 		 sprine03Box.getBody().setActivationState(AmmoUtils.DISABLE_DEACTIVATION);*/
 		 
-		 //breastR
-		 var breastRContainer=ap.attachControler.getContainerByBoneIndex(breastR);
-
-		 var diff=breastRContainer.position.clone().sub(ammoContainer.position);
 		 
 		 var diff=new THREE.Vector3(0,5,20);
 		 
@@ -145,7 +143,7 @@ Example=function(application){
 		dof.setLinearUpperLimit(application.ammoControler.makeTemporaryVector3(limit, limit, limit));
 	
 		//dont need z-rotation
-		var rlimit=1.58;
+		var rlimit=Math.PI;
 		dof.setAngularLowerLimit(application.ammoControler.makeTemporaryVector3(-rlimit, -rlimit,-rlimit));
 		dof.setAngularUpperLimit(application.ammoControler.makeTemporaryVector3(rlimit, rlimit, rlimit));
 	
@@ -179,6 +177,8 @@ Example=function(application){
 			
 			//sync-rotate
 			var q=ammoContainer.quaternion;
+			var tmp=new THREE.Euler().setFromQuaternion(q);
+			
 			var p=ammoContainer.position;
 			AmmoUtils.setPosition(sprine03Box.getBody(),p.x,p.y,p.z);
 			AmmoUtils.setRotationFromXYZW(sprine03Box.getBody(),q.x,q.y,q.z,q.w);
@@ -202,6 +202,9 @@ Example=function(application){
 			//i'm not sure why use euler
 			pq.setFromRotationMatrix(ammoContainer.matrixWorld).inverse();
 			
+			var tmp=new THREE.Euler().setFromQuaternion(pq);
+			
+			
 			var q=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
 			q.multiply(pq)
 			ap.skinnedMesh.skeleton.bones[breastR].quaternion.copy(q);
@@ -216,10 +219,11 @@ Example=function(application){
 				ap.skinnedMesh.skeleton.bones[breastL].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y*opposite,rotate.z,euler));
 			}
 			
-			AmmoUtils.forceDampingRotation(ap.breastBox.getBody(),1,1,0.5);
+			//broken when rotated
+			//AmmoUtils.forceDampingRotation(ap.breastBox.getBody(),1,1,0.5);
 			//safety-distance limit
 			
-			var limitDistance=false;
+			var limitDistance=true;
 			if(limitDistance){
 			var distance=application.sprineBox.getMesh().position.distanceTo(application.breastBox.getMesh().position);
 			//if(distance>12){//TODO auto set
@@ -233,7 +237,7 @@ Example=function(application){
 			}
 			
 			//auto reset,when penetrate 
-			var forceReset=false;
+			var forceReset=true;
 			if(forceReset){
 				var pos=application.resetBox.getWorldPosition(new THREE.Vector3());
 				var distance2=pos.distanceTo(application.breastBox.getMesh().position);

@@ -361,7 +361,14 @@ DISABLE_SIMULATION :5
 		position:vec3,
 		rotation:quaternion
 	}
-},forceDampingRotation:function(body,dampx,dampy,dampz,quaternion,euler){
+},/**
+TODO check again,when rotated broken
+maybe convert q->e not expectedly.
+
+DEPRECATED
+
+*/
+forceDampingRotation:function(body,dampx,dampy,dampz,quaternion,euler){
 	euler=euler!==undefined?euler:new THREE.Euler();
 	quaternion=quaternion!==undefined?quaternion:new THREE.Quaternion();
 	var transform=AmmoUtils.getSharedBtTransform();
@@ -371,8 +378,8 @@ DISABLE_SIMULATION :5
 	AmmoUtils.copyToQuaternion(transform.getRotation(),quaternion);
 	euler.setFromQuaternion(quaternion);
 	euler.x=euler.x*dampx;
-	euler.y=euler.y*dampx;
-	euler.z=euler.z*dampx;
+	euler.y=euler.y*dampy;
+	euler.z=euler.z*dampz;
 	
 	quaternion.setFromEuler(euler);
 	var btQuaternion=AmmoUtils.copyFromQuaternion(null,quaternion);

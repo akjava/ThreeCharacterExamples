@@ -371,8 +371,8 @@ DISABLE_SIMULATION :5
 	AmmoUtils.copyToQuaternion(transform.getRotation(),quaternion);
 	euler.setFromQuaternion(quaternion);
 	euler.x=euler.x*dampx;
-	euler.y=euler.y*dampx;
-	euler.z=euler.z*dampx;
+	euler.y=euler.y*dampy;
+	euler.z=euler.z*dampz;
 	
 	quaternion.setFromEuler(euler);
 	var btQuaternion=AmmoUtils.copyFromQuaternion(null,quaternion);
