@@ -37,8 +37,10 @@ Example=function(application){
 	
 	//add bone attach
 	ap.signals.loadingModelFinished.add(function(mesh){
+		
 		if(ap.boneAttachControler!=null){
 			ap.boneAttachControler.dispose();
+			
 		}
 		ap.boneAttachControler=new BoneAttachControler(mesh);
 		ap.boneAttachControler.setParentObject(ap.root);
@@ -69,6 +71,7 @@ Example=function(application){
 		
 		//on
 		if(!ap.ikControler.isInitialized()){
+			console.log("ik initialized");
 			ap.ikControler.initialize(new Mbl3dIk(ap));
 			
 			//
@@ -211,6 +214,7 @@ Example=function(application){
 		}
 		
 		if(ap.objectTransformControler!=null){
+			
 			ap.objectTransformControler.dispose();
 		}
 		
@@ -218,6 +222,31 @@ Example=function(application){
 		ap.objectTransformControler=objectTransformControler;
 		
 	});
+	
+	//ammo
+	var world=AmmoUtils.initWorld();
+	var ammoControler=new AmmoControler(ap.scene,world);
+	ap.ammoControler=ammoControler;
+	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		if(ap.breastControler==undefined){
+			ap.breastControler=new BreastControler();
+		}else{
+			ap.breastControler.dispose();
+		}
+		
+		ap.breastControler.initialize(ammoControler,ap.boneAttachControler);
+		ap.breastControler.newBreast();
+		
+		ammoControler.setVisibleAll(false);
+	});
+	
+	ap.signals.rendered.add(function(){
+		if(ap.breastControler){
+			ap.ammoControler.update();
+			ap.breastControler.update();
+		}
+	},undefined,-2);//call later boneAttach
 	
 	
 	//TODO move Core?
@@ -228,7 +257,6 @@ Example=function(application){
 			ap.transformControls.detach();
 		}
 	},undefined,100);//do first
-	
 	
 	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);

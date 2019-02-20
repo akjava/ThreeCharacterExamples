@@ -15,5 +15,24 @@ Sidebar.ControlerCheck=function(ap){
 	});
 	titlePanel.add(translate);
 	
+	var ammo=new UI.CheckboxRow("Ammo Visible",false,function(v){
+		ap.ammoControler.setVisibleAll(v);
+	});
+	titlePanel.add(ammo);
+	
+	var breast=new UI.CheckboxRow("Breast Enabled",true,function(v){
+		ap.breastControler.resetPosition();
+		ap.ammoControler.update();
+		ap.ammoControler.setEnabled(v);
+		ap.breastControler.setEnabled(v);
+		
+	});
+	titlePanel.add(breast);
+	
+	var tmp=new UI.ButtonRow("test",function(){
+		ap.breastControler.newBreast();
+	});
+	titlePanel.add(tmp);
+	
 	return titlePanel;
 }

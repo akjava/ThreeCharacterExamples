@@ -22,7 +22,11 @@ var AmmoControler=function(object3d,world){
 	this.garbage=[];
 	//TODO set container
 	this._matrixWorldInv=new THREE.Matrix4();
+	
+	this._enabled=true;
 }
+
+
 //step time
 AmmoControler.prototype = {
 
@@ -35,6 +39,9 @@ AmmoControler.prototype = {
 			return this._matrixWorldInv;
 		},
 update:function(delta){
+	if(!this._enabled){
+		return;
+	}
 	var scope=this;
 	delta = delta !== undefined? delta : 1.0/60;
 	//more see https://github.com/bulletphysics/bullet3/blob/master/src/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.cpp
@@ -57,6 +64,9 @@ update:function(delta){
 	});
 	
 	this.deleteGarbages();
+},
+setEnabled:function(v){
+	this._enabled=v;
 },
 deleteGarbages:function(){
 	this.garbage.forEach(function(object){

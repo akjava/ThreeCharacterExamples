@@ -1,0 +1,2 @@
+my libs to move to /example/js/
+still exist for  old examples

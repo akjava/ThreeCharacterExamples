@@ -64,10 +64,11 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	scope.endSites.push(endsite);
 	
 	var ikBox=new THREE.Mesh(new THREE.BoxGeometry(5,5,5),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
+	ikBox.name="ik-c-"+ikName;
 	ikBox.renderOrder = 1;
 	var index=indices.length-1;
 	//ikBox.position.copy(ap.ikControler.boneAttachControler.containerList[indices[indices.length-1]].position);
-	ikBox.ikName=ikName;
+	ikBox.ikName=ikName;//TODO move userData
 	ikBox.userData.transformSelectionType="BoneIk";
 	ap.objects.push(ikBox);//TODO do at init for switch
 	ikTargets[ikName]=ikBox;

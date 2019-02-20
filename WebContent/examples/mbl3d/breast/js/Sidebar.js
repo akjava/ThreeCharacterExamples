@@ -53,7 +53,7 @@ var Sidebar = function ( application ) {
 	container.add(meshTransform);
 	
 	//test
-	var test=new UI.ButtonRow("reset initial pos",function(){
+	var test=new UI.ButtonRow("Reset Breast to initial pos",function(){
 		var pos=ap.resetBox.getWorldPosition(new THREE.Vector3());
 		AmmoUtils.setPosition(ap.breastBox.getBody(),pos.x,pos.y,pos.z);
 		
