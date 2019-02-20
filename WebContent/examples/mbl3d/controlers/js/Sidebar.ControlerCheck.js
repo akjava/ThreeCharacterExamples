@@ -1,5 +1,26 @@
 Sidebar.ControlerCheck=function(ap){
 	var titlePanel=new UI.TitlePanel("Controler Check");
+	
+	function setValue(v){
+		ik.setValue(v);
+		ap.ikControler.setEnabled(v);
+		rotate.setValue(v);
+		ap.rotationControler.setEnabled(v);
+		translate.setValue(v);
+		ap.translateControler.setEnabled(v);
+		
+	}
+	
+	var buttonRow=new UI.ButtonRow("Hide",function(){
+		setValue(false);
+	});
+	titlePanel.add(buttonRow);
+	var show=new UI.Button("Show Most").onClick(function(){
+		setValue(true);
+	});
+	buttonRow.add(show);
+	
+	
 	//enable all / disable all
 	var ik=new UI.CheckboxRow("Ik Enabled",true,function(v){
 		ap.ikControler.setEnabled(v);
@@ -28,11 +49,6 @@ Sidebar.ControlerCheck=function(ap){
 		
 	});
 	titlePanel.add(breast);
-	
-	var tmp=new UI.ButtonRow("test",function(){
-		ap.breastControler.newBreast();
-	});
-	titlePanel.add(tmp);
 	
 	return titlePanel;
 }
