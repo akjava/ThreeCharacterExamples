@@ -445,7 +445,8 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		
 		var inverseQ=bone.parent.getWorldQuaternion(new THREE.Quaternion()).inverse();
 		if(!bone.parent.isBone){
-			inverseQ=new THREE.Quaternion();//no parent;
+			//root but using skinned mesh quaterrnion,no problem.
+			//inverseQ=new THREE.Quaternion();//no parent;
 		}
 		
 		var maxAngle=this.maxAngle*this.getBoneRatio(bone.name);

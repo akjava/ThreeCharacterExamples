@@ -123,6 +123,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			this.limitBone(boneList,"spine03",-45,-45,-45,45,45,45);
 			this.limitBone(boneList,"neck",-45,-45,-45,45,45,45);
 			this.limitBone(boneList,"pelvis",-180,-180,-180,180,180,180);
+			this.limitBone(boneList,"root",-180,-180,-180,180,180,180);
 			
 			 
 			//copy to default
