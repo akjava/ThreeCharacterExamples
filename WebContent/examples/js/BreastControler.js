@@ -44,7 +44,7 @@ BreastControler.prototype.initialize=function(ammoControler,boneAttachControler)
 	this.ammoContainer=ammoContainer;
 	
 	var p=ammoContainer.position;
-	var sprine03Box=this.ammoControler.createBox(new THREE.Vector3(80, 80, 5), 0, 0,0,0, 
+	var sprine03Box=this.ammoControler.createBox(new THREE.Vector3(80, 80, 10), 0, 0,0,-5, 
 				new THREE.MeshPhongMaterial({color:0x008800})
 						);
 				
