@@ -186,7 +186,7 @@ var AppUtils={
 					//TODO logging
 					//console.log("removeAllFromArray:not contain",remove);
 				}else{
-					array=array.slice(1,index);
+					array.splice(index,1);
 				}
 				
 			});
