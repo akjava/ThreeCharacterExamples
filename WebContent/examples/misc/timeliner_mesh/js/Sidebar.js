@@ -6,6 +6,8 @@ var Sidebar = function ( application ) {
 	container.add(new Sidebar.TimelinerVisibleRow(ap));
 	container.add(new Sidebar.TimelinerMesh(ap));
 	
+	container.add(new Sidebar.CameraControler(ap));
+	
 	
 	container.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);

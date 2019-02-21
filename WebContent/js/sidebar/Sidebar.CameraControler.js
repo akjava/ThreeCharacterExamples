@@ -12,6 +12,14 @@ Sidebar.CameraControler=function(ap){
 	ap.cameraZ=225;
 	ap.targetY=90;
 	
+	ap.getSignal("cameraControlerChanged").add(function(cpos,tpos){
+		
+		cameraY.setValue(cpos.y);
+		cameraZ.setValue(cpos.z);
+		targetY.setValue(tpos.y);
+		update();
+	})
+	
 	var cameraY=new UI.NumberButtons("Camera Y",-500,500,100,ap.cameraY,function(){
 		update();
 	},[100,125,150]);
