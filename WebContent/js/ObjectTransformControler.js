@@ -70,9 +70,6 @@ ObjectTransformControler.prototype.onTransformStarted=function(target){
 
 ObjectTransformControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-		if(this.helper!=null){
-			this.helper.update();
-		}
 		this.ap.getSignal("meshTransformed").dispatch(target.userData.transformMode);
 	}
 }

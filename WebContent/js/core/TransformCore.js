@@ -84,6 +84,20 @@ var TransformCore = function ( application ) {
 		ap.signals.transformStarted.dispatch(ap.transformControlsTarget);
 	});
 	
+	
+	ap.getSignal("transformSelectionChanged").add(function(target){
+		ap.transformControlsTarget=target;
+		if(target==null){
+			ap.transformControls.detach();
+		}
+	},undefined,100);//do first
+	
+
+	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		ap.transformControls.detach();
+	});
+	
 	var raycaster = new THREE.Raycaster();
 	var mouse = new THREE.Vector2();
 
