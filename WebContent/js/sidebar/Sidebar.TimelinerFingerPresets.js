@@ -77,10 +77,12 @@ Sidebar.TimelinerFingerPresets=function(ap){
 	
 	
 	
-	//command
+	//mesh must be same bone structure.
+	//timeliner controller target is ap.fingerPresetsControler ,that is always directlly call ap.skinnedMesh,so no need change target.
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.timeliner!==undefined){
-			ap.timeliner.dispose();
+			ap.timeliner.context.dispatcher.fire("time.update",0);
+			return;
 		}
 		
 		var trackInfo = [];

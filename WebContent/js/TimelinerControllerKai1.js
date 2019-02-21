@@ -72,7 +72,13 @@ THREE.TimelinerController.prototype = {
 		this._onUpdate(time);
 
 	},
-
+	setScene: function( scene ) {
+		this._mixer.stopAllAction();
+		this._scene = scene;
+		this._mixer = new THREE.AnimationMixer( scene );
+		this._action = this._mixer.clipAction( this._clip ).play();
+		this.timeliner.context.controller.setDisplayTime(0);
+	},
 	setDuration: function( duration ) {
 
 		this._clip.duration = duration;
