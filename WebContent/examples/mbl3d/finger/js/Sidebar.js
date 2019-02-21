@@ -19,7 +19,8 @@ var Sidebar = function ( application ) {
 			new Sidebar.TextureMaps(ap),
 			new Sidebar.DoubleClipPlayer(ap)
 			);
-	
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.materialChangedForTextureMaps(ap);
 	
 	tab.addItem("Sub2").add(
 			new Sidebar.CameraControler(ap),
@@ -28,6 +29,8 @@ var Sidebar = function ( application ) {
 			new Sidebar.MaterialType(ap),
 			new Sidebar.OutlineEffect(ap)
 			);
+
+	Logics.loadingHairFinished(ap);
 	
 	tab.addItem("Timeliner").add(
 			new Sidebar.TimelinerFingerPresets(ap),
