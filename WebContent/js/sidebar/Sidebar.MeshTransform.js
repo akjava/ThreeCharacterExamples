@@ -25,7 +25,7 @@ Sidebar.MeshTransform=function(ap){
 		update();
 	}
 	
-	ap.getSignal("meshTransformed").add(onSkinnedMeshTransformed);
+	ap.getSignal("meshTransformChanged").add(onSkinnedMeshTransformed);
 	
 	function update(){
 		var pos=ap.skinnedMesh.position;
@@ -56,9 +56,10 @@ Sidebar.MeshTransform=function(ap){
 		var pos=ap.skinnedMesh.position;
 		pos.set(scope.boneMoveX,scope.boneMoveY,scope.boneMoveZ);
 		ap.skinnedMesh.updateMatrixWorld(true);
-		ap.signals.meshTransformed.remove(onSkinnedMeshTransformed);
-		ap.signals.meshTransformed.dispatch("translate",ap.skinnedMesh);
-		ap.signals.meshTransformed.add(onSkinnedMeshTransformed);
+		ap.signals.meshTransformChanged.remove(onSkinnedMeshTransformed);
+		ap.signals.meshTransformChanged.dispatch("translate",ap.skinnedMesh);
+		ap.signals.meshTransformChanged.add(onSkinnedMeshTransformed);
+		ap.getSignal("meshTransformFinished").dispatch("translate");
 	}
 
 	var boneMoveX=new UI.NumberPlusMinus("X",-500,500,1,scope.boneMoveX,function(v){
@@ -105,9 +106,10 @@ Sidebar.MeshTransform=function(ap){
 		var z=THREE.Math.degToRad(scope.boneAngleZ);
 		rotation.set(x,y,z);
 		ap.skinnedMesh.updateMatrixWorld(true);
-		ap.signals.meshTransformed.remove(onSkinnedMeshTransformed);
-		ap.signals.meshTransformed.dispatch("rotate",ap.skinnedMesh);
-		ap.signals.meshTransformed.add(onSkinnedMeshTransformed);
+		ap.signals.meshTransformChanged.remove(onSkinnedMeshTransformed);
+		ap.signals.meshTransformChanged.dispatch("rotate",ap.skinnedMesh);
+		ap.signals.meshTransformChanged.add(onSkinnedMeshTransformed);
+		ap.getSignal("meshTransformFinished").dispatch("rotate");
 	}
 	
 	var boneAngleX=new UI.NumberPlusMinus("X",-180,180,10,scope.boneAngleX,function(v){

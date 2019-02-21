@@ -23,12 +23,12 @@ var ObjectTransformControler=function(ap){
 	}
 	
 	this.onMeshTransformed=onMeshTransformed;
-	ap.getSignal("meshTransformed").add(onMeshTransformed);
+	ap.getSignal("meshTransformChanged").add(onMeshTransformed);
 }
 
 ObjectTransformControler.prototype.dispose=function(){
 	var ap=this.ap;
-	ap.getSignal("meshTransformed").remove(this.onMeshTransformed);
+	ap.getSignal("meshTransformChanged").remove(this.onMeshTransformed);
 };
 
 
@@ -70,18 +70,15 @@ ObjectTransformControler.prototype.onTransformStarted=function(target){
 
 ObjectTransformControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-		this.ap.getSignal("meshTransformed").dispatch(target.userData.transformMode);
+		this.ap.getSignal("meshTransformChanged").dispatch(target.userData.transformMode);
 	}
 }
 
 ObjectTransformControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-		//ap.signals.poseChanged.dispatch();
 		
-		//ap.signals.meshTransformed.dispatch(target.userData.transformMode);
-		
-		ap.getSignal("meshTransformeFinished").dispatch(target.userData.transformMode);
+		ap.getSignal("meshTransformFinished").dispatch(target.userData.transformMode);
 		
 		
 		if(this.helper!=null){

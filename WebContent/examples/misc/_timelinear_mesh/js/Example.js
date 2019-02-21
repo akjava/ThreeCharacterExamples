@@ -52,10 +52,7 @@ Example=function(application){
 	mbl3dPoseEditor.loadMesh(url,material);
 	
 	
-	var onUpdate=function(){
-		ap.skinnedMesh.updateMatrixWorld(true);
-		ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
-	}
+
 	
 	ap.signals.skinnedMeshChanged.add(function(){
 		var trackInfo = [
