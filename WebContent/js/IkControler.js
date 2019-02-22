@@ -353,12 +353,13 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 	}
 	var name=this.ikTarget.ikName;
 	var indices=this.iks[name];
-	indices.forEach(function(index){
-		scope.ap.signals.boneRotationChanged.dispatch(index);
-		if(scope.ap.signals.boneRotationFinished){
-			scope.ap.signals.boneRotationFinished.dispatch(index);
-			}
-	})
+	
+	var length=this.isEnableEndSiteByName(name)?indices.length:indices.length-1;
+	for(var i=0;i<length;i++){
+		var index=indices[i];
+		scope.ap.getSignal("boneRotationChanged").dispatch(index);//really need?
+		scope.ap.getSignal("boneRotationFinished").dispatch(index);
+	}
 	
 	}
 }
