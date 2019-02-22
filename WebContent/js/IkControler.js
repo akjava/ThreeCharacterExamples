@@ -60,6 +60,8 @@ if(ap.signals.ikSelectionChanged){
 
 this._initialized=false;
 this._enabled=true;
+
+this._ikSolved=false;
 };
 
 
@@ -341,7 +343,7 @@ IkControler.prototype.onTransformChanged=function(target){
 
 IkControler.prototype.onTransformStarted=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
-		
+		this._ikSolved=false;
 	}
 }
 IkControler.prototype.onTransformFinished=function(target){
@@ -351,6 +353,12 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 		console.log("no scope.ap.signals.boneRotationChanged");
 		return;
 	}
+	
+	if(!this._ikSolved==true){
+		//just selected
+		return;
+	}
+	
 	var name=this.ikTarget.ikName;
 	var indices=this.iks[name];
 	
@@ -544,4 +552,5 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	if(this.followOtherIkTargets){
 		this.resetAllIkTargets(this.ikTarget.ikName);
 	}
+	this._ikSolved=true;
 };

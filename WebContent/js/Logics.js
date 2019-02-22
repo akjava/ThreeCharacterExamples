@@ -5,6 +5,14 @@ var Logics={
 			var ammoControler=new AmmoControler(ap.scene,world);
 			ap.ammoControler=ammoControler;
 		},
+		timeliner_clearFrame:function(key){
+			ap.timeliner.context.dispatcher.fire('keyframe',key,true);
+			ap.timeliner.context.controller.setDisplayTime(0);
+			ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
+			ap.timeliner.context.dispatcher.fire('keyframe',key);
+			ap.timeliner.context.controller.setDisplayTime(0);
+			ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
+		},
 		loadingModelFinishedForTranslateControler:function(ap){
 			var translateControlerInitialized=false;
 			
@@ -55,6 +63,9 @@ var Logics={
 					ap.signals.transformSelectionChanged.add(function(target){
 						ap.rotationControler.onTransformSelectionChanged(target);
 					});
+					/*ap.signals.transformChanged.add( function (target) {
+						ap.rotationControler.onTransformChanged(target);
+					});*/
 					
 					ap.signals.transformFinished.add( function (target) {
 						ap.rotationControler.onTransformFinished(target);
@@ -115,6 +126,9 @@ var Logics={
 						ap.ikControler.onTransformSelectionChanged(target);
 					});
 					
+					ap.signals.transformStarted.add( function (target) {
+						ap.ikControler.onTransformStarted(target);
+					});
 					
 					ap.signals.transformFinished.add( function (target) {
 						ap.ikControler.onTransformFinished(target);

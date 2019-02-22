@@ -1,14 +1,7 @@
 Sidebar.TimelinerMesh=function(ap){
 	var container=new UI.TitlePanel("Timeliner Mesh");
 	
-	function clearFrame(key){
-		ap.timeliner.context.dispatcher.fire('keyframe',key,true);
-		ap.timeliner.context.controller.setDisplayTime(0);
-		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
-		ap.timeliner.context.dispatcher.fire('keyframe',key);
-		ap.timeliner.context.controller.setDisplayTime(0);
-		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
-	}
+	
 	//maybe should use binding,I dont know how to do.
 	
 	var clipboard={};
@@ -60,7 +53,7 @@ Sidebar.TimelinerMesh=function(ap){
 			clipboard={};
 			targets.forEach(function(target){
 				copyFrame(target);
-				clearFrame(target);
+				Logics.timeliner_clearFrame(target);
 			});
 	});
 	row.add(cutBt);

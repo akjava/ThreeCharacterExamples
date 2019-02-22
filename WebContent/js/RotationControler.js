@@ -18,6 +18,8 @@ var RotationControler=function(ap,boneAttachControler){
 	this._enabled=true;
 	
 	this.objects=[];
+	
+	this._lastQuaternion=new THREE.Quaternion();
 }
 RotationControler.prototype.initialize=function(boneFilter){
 	var scope=this;
@@ -78,6 +80,7 @@ RotationControler.prototype.onTransformSelectionChanged=function(target){
 	if(target==null){
 		this.wireframe.material.visible=false;
 	}else if(target.userData.transformSelectionType=="BoneRotation" && this._enabled){
+		
 		ap.transformControls.setMode( "rotate" );
 		ap.transformControls.attach(target);
 		var boneIndex=target.userData.boneIndex;
@@ -94,19 +97,39 @@ RotationControler.prototype.onTransformSelectionChanged=function(target){
 }
 RotationControler.prototype.onTransformStarted=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
+		var index=boneIndex=target.userData.boneIndex;;
+		
+		var bone=this.boneAttachControler.boneList[index];
+		this._lastQuaternion.copy(bone.quaternion);
+		
+		
 		this.wireframe.material.color.set(0xffffff);
 		this.refreshSphere();
 	}
 }
+/*
+ * RotationControler.prototype.onTransformChanged=function(target){
+	if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
+		console.log("changed");
+	}
+}
+*/
+
 RotationControler.prototype.onTransformFinished=function(target){
 if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
+	
 	this.wireframe.material.color.set(0xaaaaaa);
 	this.refreshSphere();
 	
-	if(this.ap.signals.boneRotationFinished){
+	var index=boneIndex=target.userData.boneIndex;;
+	var bone=this.boneAttachControler.boneList[index];
+	
+	if(!this._lastQuaternion.equals(bone.quaternion)){
 		var boneIndex=target.userData.boneIndex;
-		this.ap.signals.boneRotationFinished.dispatch(boneIndex);
-		}
+		
+		this.ap.getSignal("boneRotationFinished").dispatch(boneIndex);
+	}
+	
 	}
 }
 RotationControler.prototype.setVisible=function(v){

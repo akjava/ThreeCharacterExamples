@@ -20,7 +20,7 @@ Sidebar.ImportPose=function(ap){
 	fileInput.onChange(function(fileName,text){
 		if(scope.mixer==null){
 			scope.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
-			console.log("mixer initialized");
+			//console.log("mixer initialized");
 		}
 		var mixer=scope.mixer;
 		mixer.stopAllAction();
