@@ -401,7 +401,7 @@ var AnimeUtils={
 			return THREE.AnimationClip.parse(jsonObject);
 		},
 		/* object={key} is index */
-		makeRotationPose:function(object){
+		makeRotatePose:function(object){
 			var tracks=[];
 			Object.keys(object).forEach(function(key){
 				var boneIndex=key;
@@ -415,6 +415,10 @@ var AnimeUtils={
 			});
 			var clip=new THREE.AnimationClip("makeRotationPose", -1, tracks);
 			return clip
+		},
+		makeRotationPose:function(object){
+			console.log("deprecated use makeRotatePose");
+			this.makeRotatePose(object);
 		},
 		makeTranslatePose:function(object){
 			var tracks=[];
@@ -431,7 +435,7 @@ var AnimeUtils={
 			var clip=new THREE.AnimationClip("makeTranslatePose", -1, tracks);
 			return clip
 		},
-		//rotation only so far
+		
 		makePoseClip:function(skinnedMesh){
 			var boneNames=[];
 			var objects={};
@@ -442,7 +446,16 @@ var AnimeUtils={
 				objects[String(index)]=bone.quaternion;
 				index++;
 			});
-			var clip=AnimeUtils.makeRotationPose(objects);
+			var rotate=AnimeUtils.makeRotatePose(objects);
+			
+			//translate only root
+			var pos=skinnedMesh.skeleton.bones[0].position;
+			var obj={0:pos};
+			var translate=AnimeUtils.makeTranslatePose(obj);
+			
+			var meshClip=AnimeUtils.makeMeshClip(skinnedMesh);
+			var clip=AnimeUtils.concatClips([rotate,translate,meshClip],"poseClip");
+			
 			clip.boneNames=boneNames;
 			return clip;
 		},

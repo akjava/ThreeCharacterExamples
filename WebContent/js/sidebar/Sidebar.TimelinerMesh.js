@@ -84,30 +84,13 @@ Sidebar.TimelinerMesh=function(ap){
 	
 	container.add(targetList);
 	
-	var execBt=new UI.Button("Exec").onClick(function(){
-		var command=commandList.getValue();
-		var targets=keyGroups[targetList.getValue()];
-		switch(command){
-		case "Cut":
-			clipboard={};
-			targets.forEach(function(target){
-				copyFrame(target);
-				clearFrame(target);
-			});
-			break;
-		case "Copy":
-			clipboard={};
-			targets.forEach(function(target){
-				copyFrame(target);
-			});
-			break;
-		case "Paste":
-			//paste ignore filter
-			pasteFrames();
-			break;
-		}
+
+	
+	ap.getSignal("poseChanged").add(function(){
+		keyGroups["Both"].forEach(function(key){
+			ap.timeliner.context.dispatcher.fire('keyframe',key,true);
+		});
 	});
-	//row.add(execBt);
 	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.timeliner!==undefined){

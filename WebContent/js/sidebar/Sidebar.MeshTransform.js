@@ -24,6 +24,7 @@ Sidebar.MeshTransform=function(ap){
 	var onSkinnedMeshTransformed=function(){
 		update();
 	}
+	ap.getSignal("poseChanged").add(onSkinnedMeshTransformed);
 	
 	ap.getSignal("meshTransformChanged").add(onSkinnedMeshTransformed);
 	

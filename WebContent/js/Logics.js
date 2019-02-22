@@ -168,8 +168,16 @@ var Logics={
 				ap.boneAttachControler.getContainerByBoneEndName("head").add(hair);
 			});	
 		},loadingModelFinishedForBoneAttachControler:function(ap){
+			var boneAttachControlerInitialized=false;
 			//boneAttachControler
 			ap.signals.loadingModelFinished.add(function(mesh){
+				
+				if(!boneAttachControlerInitialized){
+					ap.getSignal("poseChanged").add(function(){
+						ap.boneAttachControler.update(true);
+					});
+				}
+				
 				if(ap.boneAttachControler!=null){
 					ap.boneAttachControler.dispose();
 				}

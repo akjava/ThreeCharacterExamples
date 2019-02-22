@@ -8,6 +8,12 @@ var Sidebar = function ( application ) {
 	
 	container.add(new Sidebar.CameraControler(ap));
 	
+	container.add(new Sidebar.MeshTransform(ap));
+	Logics.loadingModelFinishedForMeshTransform(ap);
+	
+	container.add(new Sidebar.ImportPose(ap));
+	container.add(new Sidebar.ExportPose(ap));
+	
 	
 	container.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
@@ -20,8 +26,7 @@ var Sidebar = function ( application ) {
 	
 
 	
-	container.add(new Sidebar.MeshTransform(ap));
-	Logics.loadingModelFinishedForMeshTransform(ap);
+	
 	
 	container.add(new Sidebar.SimpleLight(ap));
 	
