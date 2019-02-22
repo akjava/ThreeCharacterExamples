@@ -359,7 +359,7 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 		return;
 	}
 	
-	var name=this.ikTarget.ikName;
+	var name=this.getIkNameFromTarget(target);
 	var indices=this.iks[name];
 	
 	var length=this.isEnableEndSiteByName(name)?indices.length:indices.length-1;
@@ -370,6 +370,17 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 	}
 	
 	}
+}
+IkControler.prototype.getEffectedBoneIndices=function(name){
+	var indices=this.iks[name];
+	
+	var result=[];
+	var length=this.isEnableEndSiteByName(name)?indices.length:indices.length-1;
+	for(var i=0;i<length;i++){
+		var index=indices[i];
+		result.push(index);
+	}
+	return result;
 }
 
 

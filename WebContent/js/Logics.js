@@ -5,7 +5,7 @@ var Logics={
 			var ammoControler=new AmmoControler(ap.scene,world);
 			ap.ammoControler=ammoControler;
 		},
-		timeliner_clearFrame:function(key){
+		timeliner_clearFrame:function(ap,key){
 			ap.timeliner.context.dispatcher.fire('keyframe',key,true);
 			ap.timeliner.context.controller.setDisplayTime(0);
 			ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
@@ -36,7 +36,7 @@ var Logics={
 					
 					//mbl3d specific & somehow ik rotate target index changed from 0 to 1;
 					ap.signals.boneRotationChanged.add(function(index){
-						if(index==0 || index==1){
+						if(index==0){
 							ap.signals.boneTranslateChanged.dispatch(index);
 						}
 					});
@@ -121,6 +121,8 @@ var Logics={
 					ap.ikControler.setBoneRatio("upperarm_R",0.1);
 					ap.ikControler.setBoneRatio("lowerarm_R",1);
 					ap.ikControler.setBoneRatio("hand_R",0.1);
+					
+					ap.getSignal("ikSettingChanged").dispatch();
 					
 					ap.signals.transformSelectionChanged.add(function(target){
 						ap.ikControler.onTransformSelectionChanged(target);

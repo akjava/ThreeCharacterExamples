@@ -53,7 +53,7 @@ Sidebar.TimelinerMesh=function(ap){
 			clipboard={};
 			targets.forEach(function(target){
 				copyFrame(target);
-				Logics.timeliner_clearFrame(target);
+				Logics.timeliner_clearFrame(ap,target);
 			});
 	});
 	row.add(cutBt);
