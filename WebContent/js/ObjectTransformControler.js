@@ -64,7 +64,7 @@ ObjectTransformControler.prototype.onTransformStarted=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
 	
-		
+		ap.getSignal("meshTransformChanged").add(this.onMeshTransformed);
 	}
 }
 
@@ -77,7 +77,7 @@ ObjectTransformControler.prototype.onTransformChanged=function(target){
 ObjectTransformControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-		
+		ap.getSignal("meshTransformChanged").remove(this.onMeshTransformed);
 		ap.getSignal("meshTransformFinished").dispatch(target.userData.transformMode);
 		
 		

@@ -1,6 +1,113 @@
 Sidebar.TimelinerMesh=function(ap){
 	var container=new UI.TitlePanel("Timeliner Mesh");
 	
+	function clearFrame(key){
+		ap.timeliner.context.dispatcher.fire('keyframe',key,true);
+		ap.timeliner.context.controller.setDisplayTime(0);
+		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
+		ap.timeliner.context.dispatcher.fire('keyframe',key);
+		ap.timeliner.context.controller.setDisplayTime(0);
+		ap.timeliner.context.controller.setDisplayTime(ap.timeliner.context.currentTime);
+	}
+	//maybe should use binding,I dont know how to do.
+	
+	var clipboard={};
+	function copyFrame(key){
+		var value;
+		if(key==keyMeshPosition){
+			value=ap.skinnedMesh.position;
+		}else{
+			value=ap.skinnedMesh.quaternion;
+		}
+		clipboard[key]=value.clone();
+	}
+	function pasteFrames(){
+		Object.keys(clipboard).forEach(function(key){
+			var value=clipboard[key];
+			if(key==keyMeshPosition){
+				ap.skinnedMesh.position.copy(value);
+			}else{
+				ap.skinnedMesh.quaternion.copy(value);
+			}
+			
+			ap.timeliner.context.dispatcher.fire('keyframe',key,true);
+		});
+	}
+	
+	var keyMeshPosition="Mesh Position";
+	var keyMeshQuaternion="Mesh Quaternion";
+	
+	var keyGroups={};
+	keyGroups["Both"]=[keyMeshPosition,keyMeshQuaternion];
+	keyGroups["Position"]=[keyMeshPosition];
+	keyGroups["Quaternion"]=[keyMeshQuaternion];
+	
+	var row=new UI.Row();
+	container.add(row);
+	var commandList=new UI.List(["Cut","Copy","Paste"],function(v){
+		//do nothing
+		if(v=="Paste"){
+			targetList.setDisabled(true);
+		}else{
+			targetList.setDisabled(false);
+		}
+	});
+	//row.add(commandList);
+	
+	var cutBt=new UI.Button("Cut").onClick(function(){
+		var targets=keyGroups[targetList.getValue()];
+		
+			clipboard={};
+			targets.forEach(function(target){
+				copyFrame(target);
+				clearFrame(target);
+			});
+	});
+	row.add(cutBt);
+	var copyBt=new UI.Button("Copy").onClick(function(){
+		var targets=keyGroups[targetList.getValue()];
+			clipboard={};
+			targets.forEach(function(target){
+				copyFrame(target);
+			});
+	});
+	row.add(copyBt);
+	var pasteBt=new UI.Button("Paste(No care target)").onClick(function(){
+			pasteFrames();
+	});
+	row.add(pasteBt);
+	
+	
+	var targetList=new UI.ListRow("Target",Object.keys(keyGroups),function(v){
+		//do nothing
+	});
+	
+	container.add(targetList);
+	
+	var execBt=new UI.Button("Exec").onClick(function(){
+		var command=commandList.getValue();
+		var targets=keyGroups[targetList.getValue()];
+		switch(command){
+		case "Cut":
+			clipboard={};
+			targets.forEach(function(target){
+				copyFrame(target);
+				clearFrame(target);
+			});
+			break;
+		case "Copy":
+			clipboard={};
+			targets.forEach(function(target){
+				copyFrame(target);
+			});
+			break;
+		case "Paste":
+			//paste ignore filter
+			pasteFrames();
+			break;
+		}
+	});
+	//row.add(execBt);
 	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.timeliner!==undefined){
@@ -12,16 +119,19 @@ Sidebar.TimelinerMesh=function(ap){
 		
 		
 		var onUpdate=function(){
+			ap.getSignal("meshTransformChanged").dispatch("translate");
+			ap.getSignal("meshTransformChanged").dispatch("rotate");
 			//ap.skinnedMesh.updateMatrixWorld(true);
 			ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
 		}
 		
 		//initial
+		
 		var trackInfo = [
 
 			{
 				type: THREE.VectorKeyframeTrack,
-				label:"Mesh Position",
+				label:keyMeshPosition,
 				propertyPath: '.position',
 				initialValue: [ 0, 0, 0 ],
 				interpolation: THREE.InterpolateSmooth
@@ -29,7 +139,7 @@ Sidebar.TimelinerMesh=function(ap){
 
 			{
 				type: THREE.QuaternionKeyframeTrack,
-				label:"Mesh Quaternion",
+				label:keyMeshQuaternion,
 				propertyPath: '.quaternion',
 				initialValue: [ 0, 0, 0, 1 ],
 				interpolation: THREE.InterpolateLinear
@@ -46,9 +156,9 @@ Sidebar.TimelinerMesh=function(ap){
 		
 		ap.getSignal("meshTransformFinished").add(function(mode){
 			if(mode=="translate"){
-				ap.timeliner.context.dispatcher.fire('keyframe',"Mesh Position",true);
+				ap.timeliner.context.dispatcher.fire('keyframe',keyMeshPosition,true);
 			}else{
-				ap.timeliner.context.dispatcher.fire('keyframe',"Mesh Quaternion",true);
+				ap.timeliner.context.dispatcher.fire('keyframe',keyMeshQuaternion,true);
 			}
 		});
 	});
