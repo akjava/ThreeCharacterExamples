@@ -4,7 +4,8 @@ var TranslateControler=function(ap,boneAttachControler){
 	this.boneAttachControler=boneAttachControler;
 	this.translateControls={};
 	//TODO support non-root bones
-	
+
+	this._lastPosition=new THREE.Vector3();
 }
 //so far only root support
 TranslateControler.prototype.initialize=function(){
@@ -112,6 +113,9 @@ TranslateControler.prototype.onTransformStarted=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
 		ap.signals.boneTranslateChanged.remove(this.onBoneTranslateChanged);
+		
+		var index=target.userData.boneIndex;
+		this._lastPosition.copy(this.boneAttachControler.boneList[index].position);
 	}
 }
 
@@ -119,8 +123,10 @@ TranslateControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="BoneTranslate"){
 		ap.signals.boneTranslateChanged.add(this.onBoneTranslateChanged);//not catch myself
-		if(ap.signals.boneTranslateFinished){
-			ap.signals.boneTranslateFinished.dispatch(target.userData.boneIndex);
+		var index=target.userData.boneIndex;
+		if(!this.boneAttachControler.boneList[index].position.equals(this._lastPosition)){
+			ap.getSignal("boneTranslateFinished").dispatch(target.userData.boneIndex);
 		}
+	
 	}
 }
