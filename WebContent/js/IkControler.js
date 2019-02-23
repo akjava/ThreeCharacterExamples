@@ -31,6 +31,7 @@ this.boneAttachControler=boneAttachControler;
 this.lastTargetMovedPosition=new THREE.Vector3();
 this._euler=new THREE.Euler();
 this.logging=false;
+this.debug=false;
 
 this.ikTargets={};
 
@@ -61,7 +62,7 @@ if(ap.signals.ikSelectionChanged){
 this._initialized=false;
 this._enabled=true;
 
-this._ikSolved=false;
+this._ikSolved={};
 };
 
 
@@ -291,7 +292,10 @@ IkControler.prototype.solveOtherIkTargets=function(){
 	Object.values(this.ikTargets).forEach(function(target){
 		scope.setIkTarget(target);
 		if(current!=target){
-			scope.solveIk();
+			var solved=scope.solveIk();
+			if(solved){
+				scope._ikSolved[scope.getIkNameFromTarget(target)]=true;
+			}
 		}
 	});
 	this.setIkTarget(current);
@@ -332,42 +336,49 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 
 IkControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
-		this.solveIk();
+		var solved=this.solveIk();
+		//_ikSolved overwrited in solveOtherIkTargets
 		
-		//solve others,TODO independent
-		if(!this.followOtherIkTargets){
-			this.solveOtherIkTargets();
+		
+		
+		if(solved){
+			this._ikSolved[this.getIkNameFromTarget(target)]=true;
+			
+			//solve others,TODO independent
+			if(!this.followOtherIkTargets){
+				this.solveOtherIkTargets();
+			}
 		}
+		
 	}
 }
 
 IkControler.prototype.onTransformStarted=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
-		this._ikSolved=false;
+		this._ikSolved={};//reset all
+		
+		/*
+		 * TODO add fixed attribute
+		 * this is for non-follow ik target & resolve,however sometime this reset move iktarget position.
+		 */
+		this.resetAllIkTargets(this.getIkNameFromTarget(target));//for previus selected iktarget
 	}
 }
 IkControler.prototype.onTransformFinished=function(target){
 var scope=this;
 if(target!=null && target.userData.transformSelectionType=="BoneIk"){
-	if(!scope.ap.signals.boneRotationChanged){
-		console.log("no scope.ap.signals.boneRotationChanged");
-		return;
-	}
 	
-	if(!this._ikSolved==true){
-		//just selected
-		return;
-	}
 	
-	var name=this.getIkNameFromTarget(target);
-	var indices=this.iks[name];
 	
-	var length=this.isEnableEndSiteByName(name)?indices.length:indices.length-1;
-	for(var i=0;i<length;i++){
-		var index=indices[i];
-		scope.ap.getSignal("boneRotationChanged").dispatch(index);//really need?
-		scope.ap.getSignal("boneRotationFinished").dispatch(index);
-	}
+	Object.keys(this._ikSolved).forEach(function(key){
+		if(scope._ikSolved[key]==true){
+			var indices=scope.getEffectedBoneIndices(key);
+			indices.forEach(function(index){
+				scope.ap.getSignal("boneRotationChanged").dispatch(index);//really need?
+				scope.ap.getSignal("boneRotationFinished").dispatch(index);
+			});
+		}
+	});
 	
 	}
 }
@@ -402,8 +413,10 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		if(this.logging){
 			console.log("ikTarget is null");
 		}
-		return;
+		return false;
 	}	
+	
+	var ikTargetName=this.getIkNameFromTarget(this.ikTarget);
 	
 	var lastMesh=this.boneAttachControler.containerList[this.ikIndices[this.ikIndices.length-1]];
 	var targetMesh=this.ikTarget;
@@ -414,16 +427,22 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	if(this.lastTargetMovedPosition.equals(targetPos) && forceUpdate==false){
 		//this Ik need move or force
 		if(this.logging){
-			console.log("lastTargetMovedPosition same as targetPos forceUpdate=",forceUpdate);
+			console.log(ikTargetName,"lastTargetMovedPosition same as targetPos forceUpdate=",forceUpdate);
 		}
-		return;
+		return false;
 	}
 	this.lastTargetMovedPosition.copy(targetPos);
 	
 	
 	if(this.ikTarget.position.equals(getEndSitePos(lastMesh))){
+		
+		if(this.logging){
+			console.log(ikTargetName,"ik target pos == endsitepos");
+		}
+		
+		
 		//no need to solve,just reseted
-		return;
+		return false;
 	}
 	
 	
@@ -456,9 +475,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		//TODO improve,maybe never happen exactlly equals
 		if(targetPos.equals(lastJointPos)){
 			if(this.logging){
-				console.log("no need ik, skipped");
+				console.log(ikTargetName,"no need ik, skipped");
 			}
-			return;
+			return false;
 		}
 		
 		//var newQ=IkUtils.calculateAngles(lastJointPos,jointPos,jointRotQ,targetPos,this.maxAngle,false);
@@ -502,6 +521,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 			}
 			
 			if(!this.ikLimitMin[bone.name]){
+				if(this.logging)
 				console.log("no ikLimitMin",bone.name);
 			}
 			
@@ -510,21 +530,21 @@ IkControler.prototype.solveIk=function(forceUpdate){
 				x=x+euler.x;
 			//console.log(bone.name,"ok",this.ikLimitMin[bone.name].x,this.ikLimitMax[bone.name].x,tmpX);
 			}else{
-				if(this.logging)
+				if(this.debug)
 				console.log(bone.name,"limit-x",this.ikLimitMin[bone.name].x,this.ikLimitMax[bone.name].x,tmpX);
 			}
 			var tmpY=toDegree(y,euler.y);
 			if(!this.ikLockY && tmpY >=this.ikLimitMin[bone.name].y && tmpY<=this.ikLimitMax[bone.name].y){
 				y=y+euler.y;
 			}else{
-				if(this.logging)
+				if(this.debug)
 				console.log(bone.name,"limit-y",this.ikLimitMin[bone.name].y,this.ikLimitMax[bone.name].y,tmpY);
 			}
 			var tmpZ=toDegree(z,euler.z);
 			if(!this.ikLockZ && tmpZ >=this.ikLimitMin[bone.name].z && tmpZ<=this.ikLimitMax[bone.name].z){
 				z=z+euler.z;
 			}else{
-				if(this.logging)
+				if(this.debug)
 				console.log(bone.name,"limit-z",this.ikLimitMin[bone.name].z,this.ikLimitMax[bone.name].z,tmpZ);
 			}
 			
@@ -563,5 +583,6 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	if(this.followOtherIkTargets){
 		this.resetAllIkTargets(this.ikTarget.ikName);
 	}
-	this._ikSolved=true;
+	
+	return true;
 };
