@@ -18,16 +18,21 @@ Sidebar.TimelinerBones=function(ap){
 		clipboard[String(key)]=value.clone();
 	}
 	function pasteFrames(){
+		ap.getSignal("transformSelectionChanged").dispatch(null);//selected ik not move
+		
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		Object.keys(clipboard).forEach(function(key){
 			var value=clipboard[key];
 			if(key==rootPositionName){
 				boneList[0].position.copy(value);
-				ap.timeliner.context.dispatcher.fire('keyframe',key,true);
+				ap.getSignal("boneTranslateFinished").dispatch(0);
+				//ap.timeliner.context.dispatcher.fire('keyframe',key,true);
 			}else{
 				var index=Number(key);
 				boneList[index].quaternion.copy(value);
-				ap.timeliner.context.dispatcher.fire('keyframe',boneList[index].name,true);
+				ap.getSignal("boneRotationChanged").dispatch(index);
+				ap.getSignal("boneRotationFinished").dispatch(index);
+				//ap.timeliner.context.dispatcher.fire('keyframe',boneList[index].name,true);
 			}
 		});
 	}
