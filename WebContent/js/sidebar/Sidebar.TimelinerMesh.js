@@ -94,9 +94,12 @@ Sidebar.TimelinerMesh=function(ap){
 		}
 		
 		
-		var onUpdate=function(){
+		var onUpdate=function(time){
 			ap.getSignal("meshTransformChanged").dispatch("translate");
 			ap.getSignal("meshTransformChanged").dispatch("rotate");
+			
+			ap.getSignal("timelinerSeeked").dispatch(time);
+			
 			//ap.skinnedMesh.updateMatrixWorld(true);
 			ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
 		}

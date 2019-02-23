@@ -5,6 +5,9 @@ var TransformCore = function ( application ) {
 	
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
+	ap.core=container;
+	
+	
 	
 	var camera = application.camera;
 	var scene = application.scene;

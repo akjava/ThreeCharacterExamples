@@ -5,6 +5,7 @@ var BasicCore = function ( application ) {
 	
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
+	ap.appContainer=container;
 	
 	var camera = application.camera;
 	var scene = application.scene;

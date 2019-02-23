@@ -123,6 +123,15 @@ Sidebar.BackgroundVideo=function(ap){
 	var duration=new UI.Text("");
 	titlePanel.add(duration);
 	
+	ap.getSignal("timelinerSeeked").add(function(time){
+		if(ap.video!==undefined &&ap.video!=null){
+			var d=ap.video.duration;
+			if(time>d){
+				time=time%d;
+			}
+			ap.video.currentTime=time;
+		}
+	});
 	
 	
 	return titlePanel;

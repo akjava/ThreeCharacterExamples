@@ -46,6 +46,13 @@ input.Number {
 	right: 300px;
 	bottom: 0;
 }
+#viewport2 {
+	position: absolute;
+	top: 0px;
+	left: 0;
+	right: 300px;
+	bottom: 267px;
+}
 
 #sidebar {
 	position: absolute;

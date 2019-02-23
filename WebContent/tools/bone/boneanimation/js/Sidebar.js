@@ -6,17 +6,19 @@ var Sidebar = function ( application ) {
 	
 	var tab=new UI.Tab();
 	container.add(tab);
-	tab.addItem("Main").add(
+	var main=tab.addItem("Main");
+	main.add(
 			new Sidebar.MeshTransform(ap));
+	
+	main.add(new Sidebar.TimelinerBones(ap));
+	main.add(new Sidebar.BoneRootTranslate(ap));
+	main.add(new Sidebar.BoneRotate(ap));
 	
 
 	Logics.loadingModelFinishedForMeshTransform(ap);
 	
-	tab.addItem("Dataset").add(
-			new Sidebar.Model(ap),
-			new Sidebar.Hair(ap),
-			new Sidebar.Ground(ap)
-			);
+	var dataset=tab.addItem("Dataset");
+	dataset.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.loadingModelFinishedForTranslateControler(ap);
 	Logics.loadingModelFinishedForRotationControler(ap);
@@ -24,7 +26,17 @@ var Sidebar = function ( application ) {
 	Logics.initializeAmmo(ap);
 	Logics.loadingModelFinishedForBreastControler(ap);
 	
+	dataset.add(new Sidebar.Hair(ap));
 	Logics.loadingHairFinished(ap);
+	
+	dataset.add(new Sidebar.Ground(ap));
+	dataset.add(new Sidebar.BackgroundVideo(ap));
+	dataset.add(new Sidebar.ImportPose(ap));
+	dataset.add(new Sidebar.ExportPose(ap));
+	
+	
+	
+
 	
 	
 	tab.addItem("Material").add(
@@ -38,8 +50,8 @@ var Sidebar = function ( application ) {
 			new Sidebar.ControlerCheck(ap),new Sidebar.ShadowLight(ap),new Sidebar.OutlineEffect(ap)
 			);
 	
-	tab.addItem("Time").add(
-			);
+	var time=tab.addItem("Time");
+	time.add(new Sidebar.TimelinerVisibleRow(ap));
 	
 	return container;
 }

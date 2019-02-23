@@ -4,7 +4,7 @@ Sidebar.TimelinerBones=function(ap){
 	var rootPositionName='Bone Position';
 	var clipboard={};
 	var scope=this;
-	
+	this.logging=false;
 	
 	function copyFrame(key){
 		var value;
@@ -87,10 +87,11 @@ Sidebar.TimelinerBones=function(ap){
 		}
 		
 		
-		var onUpdate=function(){
+		var onUpdate=function(time){
 			ap.getSignal("poseChanged").remove(onPoseChanged);
 			ap.getSignal("poseChanged").dispatch();
 			ap.getSignal("poseChanged").add(onPoseChanged);
+			ap.getSignal("timelinerSeeked").dispatch(time);
 			//ap.skinnedMesh.updateMatrixWorld(true);
 			ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
 		}
@@ -146,7 +147,9 @@ Sidebar.TimelinerBones=function(ap){
 			ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
 		});
 		function onPoseChanged(){
-			console.log("pose changed");
+			if(scope.logging)
+				console.log("pose changed");
+			
 			ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
 			ap.timeliner_boneNames.forEach(function(name){
 				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
@@ -155,7 +158,9 @@ Sidebar.TimelinerBones=function(ap){
 		
 		ap.getSignal("poseChanged").add(onPoseChanged);
 		ap.getSignal("boneRotationFinished").add(function(index){
-			console.log("bone changed",index);
+			if(scope.logging)
+				console.log("bone changed",index);
+			
 			if(boneIndices.indexOf(index)!=-1)
 				ap.timeliner.context.dispatcher.fire('keyframe',getBoneName(index),true);
 			else
