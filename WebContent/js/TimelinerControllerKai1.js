@@ -82,7 +82,6 @@ THREE.TimelinerController.prototype = {
 	setDuration: function( duration ) {
 
 		this._clip.duration = duration;
-
 	},
 
 	getChannelNames: function() {

@@ -14,5 +14,10 @@ Example=function(application){
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	
+	ap.signals.loadingModelFinished.add(function(){
+		//timeliner create when model loaded
+		ap.getSignal("timelinerVisible").dispatch(true,true);
+	},undefined,-100);
+	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }

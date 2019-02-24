@@ -4,6 +4,8 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Bone Animation Editor"));
 	
+	container.add(new Sidebar.TimelinerVisibleRow(ap));
+	
 	var tab=new UI.Tab();
 	container.add(tab);
 	var main=tab.addItem("Main");
@@ -51,7 +53,10 @@ var Sidebar = function ( application ) {
 			);
 	
 	var time=tab.addItem("Time");
-	time.add(new Sidebar.TimelinerVisibleRow(ap));
+	time.add(new Sidebar.TimelinerControl(ap));
+	
+	var ik=tab.addItem("Ik");
+	ik.add(new Sidebar.IkControl(ap));
 	
 	return container;
 }

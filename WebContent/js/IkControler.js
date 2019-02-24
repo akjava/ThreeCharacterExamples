@@ -54,9 +54,6 @@ if(!ap.signals){
 	return;
 	}
 
-if(ap.signals.ikSelectionChanged){
-	ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
-	}
 
 
 this._initialized=false;
@@ -125,6 +122,9 @@ IkControler.prototype.initialize=function(ikSettings){
 	ap.getSignal("solveIkCalled").add(function(){
 		ap.ikControler.solveIk(true);
 	});
+	
+	ap.getSignal("ikSelectionChanged").add(this.onIkSelectionChanged);
+
 	
 	/*
 	 ikControler call when onTransformFinished for editor

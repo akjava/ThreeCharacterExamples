@@ -1371,6 +1371,12 @@ function Timeliner( controller ) {
 	dispatcher.on('totalTime.update', function(value) {
 		context.totalTime = value;
 		controller.setDuration(value);
+		//timeline.repaint();
+		repaintAll();
+	});
+	
+	dispatcher.on('scrollTime.update', function(value) {
+		context.scrollTime = value;
 		timeline.repaint();
 	});
 

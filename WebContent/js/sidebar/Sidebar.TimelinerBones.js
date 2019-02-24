@@ -105,7 +105,7 @@ Sidebar.TimelinerBones=function(ap){
 				label:rootPositionName,
 				propertyPath: '.bones[0].position',
 				initialValue: ap.skinnedMesh.skeleton.bones[0].position.toArray(),
-				interpolation: THREE.InterpolateSmooth
+				interpolation: THREE.InterpolateLinear
 			},
 
 		];

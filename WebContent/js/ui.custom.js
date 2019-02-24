@@ -814,6 +814,55 @@ UI.NumberPlusMinus=function(label,min,max,step,value,onChange,buttonValues,reset
 	return row;
 }
 
+UI.IntegerPlusMinus=function(label,min,max,step,value,onChange,buttonValues,resetValue){
+	resetValue=resetValue!==undefined?resetValue:0;
+	var row=new UI.Row();
+	var text=new UI.Text(label).setWidth('80px');
+	row.add(text);
+	row.text=text;
+	
+	if(buttonValues){
+		for(var i=buttonValues.length-1;i>=0;i--){
+			var v=-buttonValues[i];
+			row.add(new UI.Button(String(v)).onClick(function(e){number.setValue(number.getValue()+Number(e.target.innerText));update()}));
+		}
+	}
+	
+	var number=new UI.Integer().setWidth('45px');
+	number.min=min;
+	number.max=max;
+	number.step=step;
+	number.setValue(value);
+	row.number=number;
+	
+	function update(){
+		onChange(number.getValue());
+	}
+	
+	number.onChange(function(){
+		update();
+	});
+	row.add(number);
+	
+	if(buttonValues){
+		for(var i=0;i<buttonValues.length;i++){
+			var v=buttonValues[i];
+			row.add(new UI.Button(String(v)).onClick(function(e){number.setValue(number.getValue()+Number(e.target.innerText));update()}));
+		}
+	}
+	
+	row.add(new UI.Button("reset").setFontSize("6px").onClick(function(e){number.setValue(resetValue);update()}));
+	
+	row.getValue=function(){
+		return number.getValue();
+	}
+	
+	row.setValue=function(v){
+		return number.setValue(v);
+	}
+	return row;
+}
+
 UI.IntegerButtons=function(label,min,max,step,value,onChange,buttonValues){
 	var row=new UI.Row();
 	var text=new UI.Text(label).setWidth('90px');

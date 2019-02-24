@@ -13,6 +13,8 @@ Sidebar.BackgroundVideo=function(ap){
 	var texture=null;
 	var video=null;
 	
+	this.updateTimeLiner=false;
+	
 	titlePanel.loadVideo=function(fileName,url){
 		if(url==null){
 			scope.texture=null;
@@ -30,7 +32,10 @@ Sidebar.BackgroundVideo=function(ap){
 	    video.addEventListener('pause',function(){console.log("pause")},false);
 	    video.addEventListener('ended',function(){console.log("ended")},false);
 	    video.addEventListener('timeupdate',function(){
-	    	current.setValue(video.currentTime)
+	    	current.setValue(video.currentTime);
+	    	if(scope.updateTimeLiner && ap.timeliner){
+	    		ap.timeliner.context.dispatcher.fire("time.update",video.currentTime);
+	    	}
 	    	},false);
 	    video.load();
 	    ap.video=video;
@@ -70,6 +75,11 @@ Sidebar.BackgroundVideo=function(ap){
 		ap.video.pause();
 	});
 	bt.add(pauseBt);
+	
+	var check=new UI.CheckboxText("Call Timeliner",false,function(v){
+		scope.updateTimeLiner=v;
+	});
+	bt.add(check);
 	
 	var timeRow=new UI.Row();
 	titlePanel.add(timeRow);
@@ -124,6 +134,9 @@ Sidebar.BackgroundVideo=function(ap){
 	titlePanel.add(duration);
 	
 	ap.getSignal("timelinerSeeked").add(function(time){
+		if(scope.updateTimeLiner){
+			return;//not update from timeliner
+		}
 		if(ap.video!==undefined &&ap.video!=null){
 			var d=ap.video.duration;
 			if(time>d){
