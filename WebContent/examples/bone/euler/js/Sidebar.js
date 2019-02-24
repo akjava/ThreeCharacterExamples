@@ -4,18 +4,17 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Bone Rotation with Euler-Order"));
 	
-	//TODO later
-	var ik=new Sidebar.Ik(ap);
-	//container.add(ik);
+	container.add(new Sidebar.BoneRotateWithOrder(ap));
 	
-	var exportPanel=new Sidebar.Export(ap);
-	container.add(exportPanel);
+	container.add(new Sidebar.Model(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	
-	var importPanel=new Sidebar.Import(ap);
-	container.add(importPanel);
+	container.add(new Sidebar.Texture(ap));
+	Logics.materialChangedForSimple(ap);
 	
-	var editPanel=new BoneEditPanel3(ap);
-	container.add(editPanel);
+	container.add(new Sidebar.Hair(ap));
+	Logics.loadingHairFinished(ap);
 	
+	container.add(new Sidebar.SimpleLight(ap));
 	return container;
 }
