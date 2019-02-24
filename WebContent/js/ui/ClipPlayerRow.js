@@ -13,12 +13,6 @@ var ClipPlayerRow=function(ap,getClipFunction){
 		row.update();
 	}
 	
-	var updateMixer=function (){
-		var delta = ap.clock.getDelta();
-		ap.mixer.update(delta);
-	};
-	
-	
 	
 	var playBt=new UI.Button("Play");
 	row.add(playBt);
@@ -29,11 +23,7 @@ var ClipPlayerRow=function(ap,getClipFunction){
 			return;
 		}
 		if(ap.mixer==undefined){
-			console.info("ap.mixer is undefined,mixer created,warn signals calling oeder is not sure.if frame dropped make mixer update first");
-			ap.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
-			ap.clock=new THREE.Clock();
-			
-			ap.signals.rendered.add(updateMixer);
+			Logics.initializeSkinnedMeshMixer(ap);
 		}
 		
 		var mixer=ap.mixer;
