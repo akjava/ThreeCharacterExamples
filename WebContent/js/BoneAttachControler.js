@@ -3,10 +3,10 @@
  * however angle still broken.
  */
 var BoneAttachControler=function(skinnedMesh,param){
-	param=param!==undefined?param: {color: 0x880000,boxSize:0.5};
+	param=param!==undefined?param: {color: 0x880000,boxSize:2};
 	param.visible=false;
 	var boxSize=param.boxSize;
-	var material={color:param.color};
+	var material={color:param.color,depthTest:false,transparent:true,opacity:.9};
 	
 	this.skinnedMesh=skinnedMesh;
 	skinnedMesh.updateMatrixWorld(true);
@@ -29,6 +29,7 @@ var BoneAttachControler=function(skinnedMesh,param){
 		}
 		scope.parentIndexs[name]=list;
 		var container=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshPhongMaterial( material) );
+		container.renderOrder=1;
 		scope.containerList.push(container);
 		container.userData.bone=list[0];
 		scope.object3d.add(container);
@@ -145,6 +146,11 @@ BoneAttachControler.prototype.update=function(forceUpdateMatrixWorld){
 
 BoneAttachControler.prototype.setVisible=function(visible){
 	this.containerList.forEach(function(container){
+		container.material.visible=visible;
+	});
+}
+BoneAttachControler.prototype.setVisibleAll=function(visible){
+	this.containerList.forEach(function(container){
 		container.traverse(function(object){
 			if(object.material){
 				object.material.visible=visible;
@@ -152,7 +158,6 @@ BoneAttachControler.prototype.setVisible=function(visible){
 		});
 		
 	});
-	
 }
 
 BoneAttachControler.prototype.computeBoundingBox=function(){

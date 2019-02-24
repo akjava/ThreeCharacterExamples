@@ -1,3 +1,6 @@
+/*
+ * deprecated
+ */
 var RotationPanel1=function(ap){
 	var panel=new UI.Panel();
 	panel.autoUpdate=true;

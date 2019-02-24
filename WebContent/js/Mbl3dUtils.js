@@ -142,12 +142,19 @@ var Mbl3dUtils={
 			
 			
 			return "other";
-		},changeBoneEulerOrders:function(skinnedMesh){
+		},/** only good work 0 rotated bones,see /examples/bone/convert0rotated/ **/
+		changeBoneEulerOrders:function(skinnedMesh){
 			var bones=BoneUtils.getBoneList(skinnedMesh);
 			var arms=["clavicle","upperarm","lowerarm","hand"];
 
 			for(var i=0;i<bones.length;i++){
-				bones[i].rotation.order="XZY";
+				var name=bones[i].name;
+				if(this.isFingerBoneName(name)){
+					bones[i].rotation.order="XYZ";
+				}else{
+					bones[i].rotation.order="XZY";
+				}
+				
 			}
 			
 			arms.forEach(function(name){

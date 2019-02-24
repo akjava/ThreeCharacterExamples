@@ -1,4 +1,5 @@
-Sidebar.MeshTransform=function(ap){
+Sidebar.MeshTransform=function(ap,enableSelectButton){
+	enableSelectButton=enableSelectButton==undefined?true:enableSelectButton;
 	var scope=this;
 	var panel=new UI.TitlePanel("Mesh Transform");
 	this.boneMoveX=0;
@@ -10,12 +11,14 @@ Sidebar.MeshTransform=function(ap){
 	
 	panel.add(new UI.Subtitle("Translate"));
 	
+	if(enableSelectButton){
+		var bt=new UI.ButtonRow("Select Mesh",function(){
+			ap.skinnedMesh.userData.transformMode="translate";
+			ap.getSignal("transformSelectionChanged").dispatch(ap.skinnedMesh);
+		});
+		panel.add(bt);
+	}
 	
-	var bt=new UI.ButtonRow("Select Mesh",function(){
-		ap.skinnedMesh.userData.transformMode="translate";
-		ap.getSignal("transformSelectionChanged").dispatch(ap.skinnedMesh);
-	});
-	panel.add(bt);
 	
 	
 	
@@ -92,7 +95,8 @@ Sidebar.MeshTransform=function(ap){
 	
 	//rotate
 	panel.add(new UI.Subtitle("Rotate"));
-	if(ap.signals.transformSelectionChanged){
+	
+	if(enableSelectButton){
 	var bt=new UI.ButtonRow("Select Mesh",function(){
 		ap.skinnedMesh.userData.transformMode="rotate";
 		ap.signals.transformSelectionChanged.dispatch(ap.skinnedMesh);

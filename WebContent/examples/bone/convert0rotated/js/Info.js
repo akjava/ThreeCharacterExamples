@@ -2,7 +2,8 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Viewport.Info = function ( application ) {
+var Info = function ( application ) {
+var scope=this;
 	var ap=application;
 	var signals = application.signals;
 
@@ -70,17 +71,22 @@ Viewport.Info = function ( application ) {
 	var rotation=new THREE.Quaternion();
 	var euler=new THREE.Euler();
 	
+	
+	application.getSignal("boneAnimationIndexChanged").add(function(index){
+		scope.selectedBone=BoneUtils.getBoneList(ap.skinnedMesh)[index];
+	});
+	
 	function update() {
-		if(ap.selectedBone==null){
+		if(scope.selectedBone==null){
 			
 			return;
 		}
 		
-		//name.setValue(Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name));
-		name.setValue(ap.selectedBone.name);
+		//name.setValue(Mbl3dUtils.shortenMbl3dBoneName(scope.selectedBone.name));
+		name.setValue(scope.selectedBone.name);
 		
 		
-		translate.setFromMatrixPosition(ap.selectedBone.matrix);
+		translate.setFromMatrixPosition(scope.selectedBone.matrix);
 		
 		/*var x=application.ball.getMesh().position.x;
 		var y=application.ball.getMesh().position.y;
@@ -90,21 +96,24 @@ Viewport.Info = function ( application ) {
 		posYText.setValue( translate.y.toFixed(2) );
 		posZText.setValue( translate.z.toFixed(2) );
 		
-		//rotation.setFromRotationMatrix(ap.selectedBone.matrix);
-		euler.setFromRotationMatrix(ap.selectedBone.matrix);
+		//rotation.setFromRotationMatrix(scope.selectedBone.matrix);
+		euler.setFromRotationMatrix(scope.selectedBone.matrix);
 		
 		rotateXText.setValue( THREE.Math.radToDeg(euler.x).toFixed(2) );
 		rotateYText.setValue( THREE.Math.radToDeg(euler.y).toFixed(2) );
 		rotateZText.setValue( THREE.Math.radToDeg(euler.z).toFixed(2) );
 		
 		
-		euler.setFromRotationMatrix(ap.selectedBone.matrixWorld);
+		
+		
+		scope.selectedBone.getWorldQuaternion(rotation);
+		euler.setFromQuaternion(rotation);
 		
 		wrotateXText.setValue( THREE.Math.radToDeg(euler.x).toFixed(2) );
 		wrotateYText.setValue( THREE.Math.radToDeg(euler.y).toFixed(2) );
 		wrotateZText.setValue( THREE.Math.radToDeg(euler.z).toFixed(2) );
 		
-		/*translate.setFromMatrixPosition(ap.selectedBone.matrixWorld);
+		/*translate.setFromMatrixPosition(scope.selectedBone.matrixWorld);
 		wtranslateXText.setValue( translate.x.toFixed(2) );
 		wtranslateYText.setValue( translate.y.toFixed(2) );
 		wtranslateZText.setValue( translate.z.toFixed(2) );*/

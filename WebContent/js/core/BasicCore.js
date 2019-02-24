@@ -5,7 +5,9 @@ var BasicCore = function ( application ) {
 	
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
-	ap.appContainer=container;
+	ap.core=container;
+	
+	
 	
 	var camera = application.camera;
 	var scene = application.scene;
@@ -45,14 +47,13 @@ var BasicCore = function ( application ) {
 	
 	ap.onRender=render;
 	
-	ap.convertToZeroRotatedBoneMesh=true;
-	
 	
 	var root=new THREE.Group();
 	ap.root=root;
 	ap.scene.add(root);
 	
 	ap.convertToZeroRotatedBoneMesh=true;
+	ap.convertBoneEulerOrders=true;
 	
 	ap.signals.loadingModelStarted.add(function(url,fileName){
 		if(ap.skinnedMesh!=null && ap.skinnedMesh.parent!=null){
@@ -70,7 +71,10 @@ var BasicCore = function ( application ) {
 			
 			//TODO check and set
 			mesh.scale.set(100,100,100);
-			Mbl3dUtils.changeBoneEulerOrders(mesh);//Euler XYZ
+			if(ap.convertBoneEulerOrders){
+				Mbl3dUtils.changeBoneEulerOrders(mesh);//Euler XYZ	
+			}
+			
 			
 			ap.root.add(mesh);
 			ap.skinnedMesh=mesh;

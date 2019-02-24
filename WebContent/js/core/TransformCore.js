@@ -26,6 +26,68 @@ var TransformCore = function ( application ) {
 	controls.screenSpacePanning=true;
 	application.controls=controls;
 	
+	//camera & control position will set in Examples
+	
+	signals.windowResize.add( function () {
+		camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+		camera.updateProjectionMatrix();
+		
+		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
+	} );
+	
+	function animate() {
+		requestAnimationFrame( animate );
+		ap.onRender();
+	}
+	
+	function render() {
+		renderer.render( scene, camera );
+		ap.signals.rendered.dispatch();
+	}
+	
+	ap.onRender=render;
+	
+	
+	var root=new THREE.Group();
+	ap.root=root;
+	ap.scene.add(root);
+	
+	ap.convertToZeroRotatedBoneMesh=true;
+	ap.convertBoneEulerOrders=true;
+	
+	ap.signals.loadingModelStarted.add(function(url,fileName){
+		if(ap.skinnedMesh!=null && ap.skinnedMesh.parent!=null){
+			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
+		}
+		AppUtils.loadMesh(url,function(mesh){
+			try{
+			var isGltf=mesh.isGltf;//set before convert
+			ap.isGltf=isGltf;
+			
+			if(ap.convertToZeroRotatedBoneMesh){
+				mesh=BoneUtils.convertToZeroRotatedBoneMesh(mesh);
+			}
+			
+			
+			//TODO check and set
+			mesh.scale.set(100,100,100);
+			if(ap.convertBoneEulerOrders){
+				Mbl3dUtils.changeBoneEulerOrders(mesh);//Euler XYZ	
+			}
+			
+			
+			ap.root.add(mesh);
+			ap.skinnedMesh=mesh;
+			ap.signals.loadingModelFinished.dispatch(mesh);
+			}catch(e){
+				console.log(e);
+			}
+			
+		},fileName);
+	});
+	
+	animate();
+	
 	//transform
 	var control = new THREE.TransformControls( ap.camera, ap.renderer.domElement );
 	control.addEventListener( 'dragging-changed', function ( event ) {
@@ -148,69 +210,6 @@ var TransformCore = function ( application ) {
 		document.removeEventListener( 'mouseup', onMouseUp, false );
 
 	}
-	
-	//camera & control position will set in Examples
-	
-	signals.windowResize.add( function () {
-		camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
-		camera.updateProjectionMatrix();
-		
-		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
-	} );
-	
-	function animate() {
-		requestAnimationFrame( animate );
-		ap.onRender();
-	}
-	
-	function render() {
-		renderer.render( scene, camera );
-		ap.signals.rendered.dispatch();
-	}
-	
-	ap.onRender=render;
-	
-	ap.convertToZeroRotatedBoneMesh=true;
-	
-	
-	var root=new THREE.Group();
-	ap.root=root;
-	ap.scene.add(root);
-	
-	ap.signals.loadingModelStarted.add(function(url,fileName){
-		if(ap.skinnedMesh!=null && ap.skinnedMesh.parent!=null){
-			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
-		}
-		AppUtils.loadMesh(url,function(mesh){
-			try{
-			var isGltf=mesh.isGltf;//set before convert
-			ap.isGltf=isGltf;
-			
-			if(ap.convertToZeroRotatedBoneMesh){
-				mesh=BoneUtils.convertToZeroRotatedBoneMesh(mesh);
-			}
-			
-			
-			//TODO check and set
-			mesh.scale.set(100,100,100);
-			Mbl3dUtils.changeBoneEulerOrders(mesh);
-			if(isGltf){
-				
-				//animation not compatible gltf
-				//mesh.skeleton.bones[0].scale.set(100,100,100);
-			}
-			
-			ap.root.add(mesh);
-			ap.skinnedMesh=mesh;
-			ap.signals.loadingModelFinished.dispatch(mesh);
-			}catch(e){
-				console.log(e);
-			}
-			
-		},fileName);
-	});
-	
-	animate();
 	
 	return container;
 }

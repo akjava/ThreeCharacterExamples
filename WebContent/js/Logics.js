@@ -5,6 +5,17 @@ var Logics={
 			var ammoControler=new AmmoControler(ap.scene,world);
 			ap.ammoControler=ammoControler;
 		},
+		initializeSkinnedMeshMixer:function(ap){
+			var updateMixer=function (){
+				var delta = ap.clock.getDelta();
+				ap.mixer.update(delta);
+			};
+			ap.onUpdateMixer=updateMixer;
+			
+			ap.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
+			ap.clock=new THREE.Clock();
+			ap.signals.rendered.add(updateMixer);
+		},
 		timeliner_clearFrame:function(ap,key){
 			ap.timeliner.context.dispatcher.fire('keyframe',key,true);
 			ap.timeliner.context.controller.setDisplayTime(0);

@@ -34,6 +34,11 @@ body {
 	color: #888888; 
 	padding-bottom:2px;
 }
+.description{
+	font-weight: 100;
+	color: #333333; 
+	padding-bottom:1px;
+}
 
 
 input.Number {

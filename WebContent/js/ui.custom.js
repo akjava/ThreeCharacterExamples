@@ -1010,7 +1010,8 @@ UI.ButtonsDiv=function(labels,onClick){
 }
 
 
-UI.Tab=function(isPanel){
+UI.Tab=function(ap,isPanel){
+	this.ap=ap;//for future
 	UI.Element.call( this );
 	this.dom = document.createElement( 'div' );
 	if(isPanel){
@@ -1084,3 +1085,7 @@ UI.Tab.prototype.addItem = function ( title ) {
 	
 	return container;
 };
+
+UI.Description=function(text){
+	return new UI.Text(text).setClass("description");
+}

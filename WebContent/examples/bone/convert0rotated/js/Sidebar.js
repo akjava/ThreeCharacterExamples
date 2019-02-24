@@ -2,45 +2,59 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Convert 0 Rotated Bone"));
+	container.add(new UI.AppName("Convert 0 Rotated"));
 	
-	var visiblePanel=new UI.TitlePanel("Visible");
-	container.add(visiblePanel);
-	var visibleOrigin=new UI.CheckboxRow("Origin Bone",ap.visibleOriginBone,function(v){
-		ap.visibleOriginBone=v;
-		ap.signals.boxVisibleChanged.dispatch();
+	
+	var tab=new UI.Tab();
+	
+	container.add(tab);
+	var main=tab.addItem("Main");
+	var sub=tab.addItem("sub");
+	
+	var panel=new UI.TitlePanel("Convert Check");
+	main.add(panel);
+	
+	//logging
+	ap.signals.loadingModelStarted.add(function(){BoneUtils.logging=true;},undefined,100);
+	ap.signals.loadingModelFinished.add(function(){BoneUtils.logging=false;},undefined,100);
+	
+	
+	
+	panel.add(new UI.Text("Need reload model.without convert 0 rot,euler order not work at fingers").setClass("description"));
+	var convertCheck=new UI.CheckboxRow("Convert 0 Rot",true,function(v){
+		ap.convertToZeroRotatedBoneMesh=v;
 	});
-	visiblePanel.add(visibleOrigin);
-	var visibleBone=new UI.CheckboxRow("Zero Rotated Bone",ap.visibleBone,function(v){
-		ap.visibleBone=v;
-		ap.signals.boxVisibleChanged.dispatch();
+	panel.add(convertCheck);
+	var eulerCheck=new UI.CheckboxRow("Convert Euler Order",true,function(v){
+		ap.convertBoneEulerOrders=v;
 	});
-	visiblePanel.add(visibleBone);
+	panel.add(eulerCheck);
 	
-	var visibleSkeletonHelper=new UI.CheckboxRow("Bone Helper",ap.visibleSkeletonHelper,function(v){
-		ap.visibleSkeletonHelper=v;
-		ap.skeletonHelper.material.visible=v;
+	var boneCheck=new UI.CheckboxRow("Visible Bone Position",true,function(v){
+		ap.boneAttachControler.setVisible(v);
 	});
-	visiblePanel.add(visibleSkeletonHelper);
+	panel.add(boneCheck);
 	
-	var titleRow=new UI.TitleRow("Container Rotation");
-	container.add(titleRow);
+	ap.signals.loadingModelFinished.add(function(){
+		ap.boneAttachControler.setVisible(boneCheck.getValue());
+	},undefined,-1);//wait boneattach recreate
 	
-	var transform=new RotationPanel1(application);
-	container.add(transform);
+	main.add(new Sidebar.Model(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	
-	//catching RotationPanel1
-	ap.signals.objectRotated.add(function(){
-		var angleX=transform.getAngleX();
-		var angleY=transform.getAngleY();
-		var angleZ=transform.getAngleZ();
-		var q=BoneUtils.makeQuaternionFromXYZDegree(angleX,angleY,angleZ);
-		ap.container.quaternion.copy(q);
-	});
+	main.add(new Sidebar.MeshTransform(ap,false));
 	
+	var ba=new Sidebar.BoneRotateAnimationPanel(ap);
+	main.add(ba);
+	ba.add(new UI.Description("not good at non 0 rotated,because use absolute rotation"));
 	
-	var boneAnimation=new BoneRotateAnimationPanel(application);
-	container.add(boneAnimation);
+	sub.add(new Sidebar.Texture(ap));
+	Logics.materialChangedForSimple(ap);
 	
+	sub.add(new Sidebar.Hair(ap));
+	Logics.loadingHairFinished(ap);
+	
+	sub.add(new Sidebar.ClipPlayer(ap));
+	sub.add(new Sidebar.SimpleLight(ap));
 	return container;
 }

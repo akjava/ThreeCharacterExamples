@@ -1,4 +1,5 @@
 var BoneUtils={
+		logging:false,
 		/*
 		 * dont forget set parent
 		 */
@@ -323,23 +324,42 @@ var BoneUtils={
 			
 			
 			
+			if(BoneUtils.logging){
+				console.log("convertToZeroRotatedBoneMesh:origin bone pos,rot(fixed2)");
+			}
 			
 			var bonePosition=[];
 			originBoneList.forEach(function(bone){
-				var pos=new THREE.Vector3().setFromMatrixPosition( bone.matrixWorld );
+				var pos=new THREE.Vector3().setFromMatrixPosition( bone.matrixWorld );//Need Rotation Applied position
 				bonePosition.push(pos);
+				if(BoneUtils.logging){
+					var p=bone.position;
+					console.log(bone.name+"-raw-pos",p.x.toFixed(2),p.y.toFixed(2),p.z.toFixed(2));
+					console.log(bone.name+"-pos",pos.x.toFixed(2),pos.y.toFixed(2),pos.z.toFixed(2));
+					var rot=bone.rotation;
+					console.log(bone.name+"-rot",THREE.Math.radToDeg(rot.x).toFixed(2),THREE.Math.radToDeg(rot.y).toFixed(2),THREE.Math.radToDeg(rot.z).toFixed(2))
+				}
 			});
+			if(BoneUtils.logging){
+				console.log("convertToZeroRotatedBoneMesh:converted relative position");
+			}
 			var rawbones=[];
 			for(var i=0;i<originBoneList.length;i++){
 				var bone=originBoneList[i];
 				var parent=originBoneList.indexOf(bone.parent);
 				var parentPos=parent==-1?new THREE.Vector3():bonePosition[parent].clone();
 				var newPos=bonePosition[i].clone().sub(parentPos);
+				if(BoneUtils.logging){
+					console.log(bone.name+"-pos",newPos.x.toFixed(2),newPos.y.toFixed(2),newPos.z.toFixed(2));
+				}
 				var rawbone=BoneUtils.createBone();
 				rawbone.pos=newPos.toArray();
 				rawbone.parent=parent;
 				rawbone.name=bone.name;
 				rawbones.push(rawbone);
+				if(BoneUtils.logging){
+					console.log(rawbone);
+				}
 			}
 			
 			/*var geo=new THREE.Geometry().fromBufferGeometry(mesh.geometry);
