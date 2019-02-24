@@ -4,7 +4,7 @@ var ObjectTransformControler=function(ap){
 	var scope=this;
 	
 	this.logging=false;
-	
+	this.started=false;
 	function onMeshTransformed(mode){
 		if(scope.helper!=null){
 			scope.helper.update();
@@ -91,11 +91,15 @@ ObjectTransformControler.prototype.onTransformStarted=function(target){
 			console.log("ObjectTransformControler:started");
 		};
 		ap.getSignal("meshTransformChanged").add(this.onMeshTransformed);
+		this.started=true;
 	}
 }
 
 ObjectTransformControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
+		if(!this.started){
+			return;
+		}
 		if(this.logging){
 			console.log("ObjectTransformControler:changed.dispatch meshTransformChanged");
 		};
@@ -117,5 +121,6 @@ ObjectTransformControler.prototype.onTransformFinished=function(target){
 		if(this.helper!=null){
 			this.helper.update();
 		}
+		this.started=false;
 	}
 }
