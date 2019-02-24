@@ -3,23 +3,37 @@ var ObjectTransformControler=function(ap){
 	this.helper=null;
 	var scope=this;
 	
+	this.logging=false;
 	
-	function onMeshTransformed(){
+	function onMeshTransformed(mode){
 		if(scope.helper!=null){
 			scope.helper.update();
 		}
+		var log="call";
 		//TODO switch signal?
 		if(ap.boneAttachControler){
 			ap.boneAttachControler.update(true);	
+			if(scope.logging){
+				log+=" boneAttachControler.update";
+			};
 		}
 		
 		if(ap.ikControler){
 			ap.ikControler.resetAllIkTargets();
+			if(scope.logging){
+				log+=" ikControler.resetAllIkTargets";
+			};
 		}
 		
 		if(ap.translateControler){
 			ap.translateControler.updatePosition();
+			if(scope.logging){
+				log+=" translateControler.updatePosition";
+			};
 		}
+		if(scope.logging){
+			console.log(log+"("+mode+")");
+		};
 	}
 	
 	this.onMeshTransformed=onMeshTransformed;
@@ -29,6 +43,9 @@ var ObjectTransformControler=function(ap){
 ObjectTransformControler.prototype.dispose=function(){
 	var ap=this.ap;
 	ap.getSignal("meshTransformChanged").remove(this.onMeshTransformed);
+	if(this.logging){
+		console.log("ObjectTransformControler disposed");
+	};
 };
 
 
@@ -42,10 +59,17 @@ ObjectTransformControler.prototype.onTransformSelectionChanged=function(target){
 			ap.transformControls.setMode( "rotate" );
 		}
 		
+		if(this.logging){
+			console.log("ObjectTransform selected mode=",ap.transformControls.getMode());
+		};
+		
 		ap.transformControls.attach(target);
 		if(this.helper==null){
 			this.helper=new THREE.BoxHelper(target);
 			ap.scene.add(this.helper);
+			if(this.logging){
+				console.log("ObjectTransformControler helper initialized");
+			};
 		}
 		
 		if(this.helper!=null){
@@ -63,13 +87,18 @@ ObjectTransformControler.prototype.onTransformSelectionChanged=function(target){
 ObjectTransformControler.prototype.onTransformStarted=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
-	
+		if(this.logging){
+			console.log("ObjectTransformControler:started");
+		};
 		ap.getSignal("meshTransformChanged").add(this.onMeshTransformed);
 	}
 }
 
 ObjectTransformControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
+		if(this.logging){
+			console.log("ObjectTransformControler:changed.dispatch meshTransformChanged");
+		};
 		this.ap.getSignal("meshTransformChanged").dispatch(target.userData.transformMode);
 	}
 }
@@ -78,6 +107,10 @@ ObjectTransformControler.prototype.onTransformFinished=function(target){
 	var ap=this.ap;
 	if(target!=null && target.userData.transformSelectionType=="ObjectTransform"){
 		ap.getSignal("meshTransformChanged").remove(this.onMeshTransformed);
+		
+		if(this.logging){
+			console.log("ObjectTransformControler:changed.dispatch meshTransformFinished");
+		};
 		ap.getSignal("meshTransformFinished").dispatch(target.userData.transformMode);
 		
 		

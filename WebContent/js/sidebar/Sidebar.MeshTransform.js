@@ -60,6 +60,11 @@ Sidebar.MeshTransform=function(ap,enableSelectButton){
 		var pos=ap.skinnedMesh.position;
 		pos.set(scope.boneMoveX,scope.boneMoveY,scope.boneMoveZ);
 		ap.skinnedMesh.updateMatrixWorld(true);
+		
+		if(ap.objectTransformControler && ap.objectTransformControler.logging){
+			console.log("sidebar dispatch meshTransformChanged,meshTransformFinished (translate)");
+		}
+		
 		ap.signals.meshTransformChanged.remove(onSkinnedMeshTransformed);
 		ap.signals.meshTransformChanged.dispatch("translate",ap.skinnedMesh);
 		ap.signals.meshTransformChanged.add(onSkinnedMeshTransformed);
@@ -111,6 +116,11 @@ Sidebar.MeshTransform=function(ap,enableSelectButton){
 		var z=THREE.Math.degToRad(scope.boneAngleZ);
 		rotation.set(x,y,z);
 		ap.skinnedMesh.updateMatrixWorld(true);
+		
+		if(ap.objectTransformControler && ap.objectTransformControler.logging){
+			console.log("sidebar dispatch meshTransformChanged,meshTransformFinished (rotate)");
+		}
+		
 		ap.signals.meshTransformChanged.remove(onSkinnedMeshTransformed);
 		ap.signals.meshTransformChanged.dispatch("rotate",ap.skinnedMesh);
 		ap.signals.meshTransformChanged.add(onSkinnedMeshTransformed);
