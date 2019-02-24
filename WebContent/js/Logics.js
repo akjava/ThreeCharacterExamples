@@ -1,4 +1,14 @@
 var Logics={
+		loadTextureAtOnce:function(ap,url,type){
+			var loaded=false;
+			ap.signals.loadingModelFinished.add(function(){
+				if(!loaded){
+					var texture=Mbl3dUtils.loadTexture(url);
+					ap.signals.loadingTextureFinished.dispatch(texture,type);
+					loaded=true;
+				}
+			});
+		},
 		initializeAmmo:function(ap){
 			//ammo
 			var world=AmmoUtils.initWorld();
