@@ -5,6 +5,15 @@ var Logics={
 			var ammoControler=new AmmoControler(ap.scene,world);
 			ap.ammoControler=ammoControler;
 		},
+		disposeSkinnedMeshMixer:function(ap){
+			if(ap.onUpdateMixer){
+				ap.signals.rendered.remove(ap.onUpdateMixer);
+			}
+			if(ap.mixer){
+				ap.mixer.stopAllAction();
+				ap.mixer=undefined;
+			}
+		},
 		initializeSkinnedMeshMixer:function(ap){
 			var updateMixer=function (){
 				var delta = ap.clock.getDelta();
@@ -162,7 +171,7 @@ var Logics={
 				ap.ikControler.setEndSiteEnabled("LeftArm",true);
 				ap.ikControler.setEndSiteEnabled("RightArm",true);
 				
-				ap.mixer=undefined;
+				
 				
 			},undefined,50);
 			

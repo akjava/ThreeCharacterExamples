@@ -29,6 +29,7 @@ var BoneAttachControler=function(skinnedMesh,param){
 		}
 		scope.parentIndexs[name]=list;
 		var container=new THREE.Mesh( new THREE.BoxGeometry(boxSize,boxSize,boxSize), new THREE.MeshPhongMaterial( material) );
+		container.name="bac-"+name;
 		container.renderOrder=1;
 		scope.containerList.push(container);
 		container.userData.bone=list[0];
@@ -66,6 +67,9 @@ BoneAttachControler.prototype.dispose=function(){
 
 BoneAttachControler.prototype.getBoneList=function(){
 	return this.boneList;
+}
+BoneAttachControler.prototype.getContainerList=function(){
+	return this.containerList;
 }
 BoneAttachControler.prototype.getDefaultBonePosition=function(index){
 	var matrix=this.defaultBoneMatrixs[index];

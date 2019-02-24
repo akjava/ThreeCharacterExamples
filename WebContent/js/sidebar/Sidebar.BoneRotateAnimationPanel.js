@@ -213,7 +213,6 @@ Sidebar.BoneRotateAnimationPanel = function ( application ,param) {
 		
 		
 		
-		console.log(mixer,clip);
 		
 		mixer.stopAllAction();
 		application.skinnedMesh.skeleton.pose();//TODO mixer base
@@ -241,7 +240,7 @@ Sidebar.BoneRotateAnimationPanel = function ( application ,param) {
 	application.signals.loadingModelFinished.add(function(mesh){
 		//possible conflict
 		if(application.mixer){
-			application.mixer.stopAllAction();
+			Logics.disposeSkinnedMeshMixer(ap);
 		}
 		
 		Logics.initializeSkinnedMeshMixer(ap);
@@ -260,6 +259,7 @@ Sidebar.BoneRotateAnimationPanel = function ( application ,param) {
 		}
 		
 		application.getSignal("boneAnimationIndexChanged").dispatch(scope.boneAnimationIndex);
+		
 		
 	});
 	

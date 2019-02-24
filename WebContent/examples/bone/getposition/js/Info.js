@@ -2,8 +2,8 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Viewport.Info = function ( application ) {
-
+var Info = function ( application ) {
+	var ap=application;
 	var signals = application.signals;
 
 	var container = new UI.Panel();
@@ -15,11 +15,9 @@ Viewport.Info = function ( application ) {
 	container.setColor( '#fff' );
 	container.setWidth('120px');
 	
-	container.add(new UI.Text("3D Character is created by "),new UI.Break(),new UI.Anchor("http://www.manuelbastioni.com/","Manuel Bastioni"));
-	
+	signals.rendered.add( update );
 
 	function update() {
-		
 		
 	}
 

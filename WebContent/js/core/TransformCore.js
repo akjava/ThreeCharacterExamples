@@ -59,6 +59,11 @@ var TransformCore = function ( application ) {
 		if(ap.skinnedMesh!=null && ap.skinnedMesh.parent!=null){
 			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
 		}
+		if(fileName){
+			application.modelFileName=fileName;
+		}else{
+			application.modelFileName=url;
+		}
 		AppUtils.loadMesh(url,function(mesh){
 			try{
 			var isGltf=mesh.isGltf;//set before convert
