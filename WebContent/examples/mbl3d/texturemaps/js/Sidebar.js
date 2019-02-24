@@ -7,21 +7,19 @@ var Sidebar = function ( application ) {
 	var tab=new UI.Tab();
 	container.add(tab);
 	
-	tab.addItem("Main").add(
-			new Sidebar.Model(ap),
-			new Sidebar.TextureMaps(ap),
-			new Sidebar.DoubleClipPlayer(ap)
-			);
+	var main=tab.addItem("Main");
+	main.add(new Sidebar.Model(ap));
+	main.add(new Sidebar.TextureMaps(ap));
+	main.add(new Sidebar.DoubleClipPlayer(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.materialChangedForTextureMaps(ap);
 	
-	tab.addItem("Sub").add(
-			new Sidebar.CameraControler(ap),
-			new Sidebar.Hair(ap),
-			new Sidebar.ShadowLight(ap),
-			new Sidebar.MaterialType(ap),
-			new Sidebar.OutlineEffect(ap)
-			);
+	var sub=tab.addItem("Sub");
+	sub.add(new Sidebar.CameraControler(ap));
+	sub.add(new Sidebar.Hair(ap));
+	sub.add(new Sidebar.ShadowLight(ap));
+	sub.add(new Sidebar.MaterialType(ap));
+	sub.add(new Sidebar.OutlineEffect(ap));
 	Logics.loadingHairFinished(ap);
 	
 	//tab.select("Sub");
