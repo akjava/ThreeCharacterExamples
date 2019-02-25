@@ -1,6 +1,8 @@
 Sidebar.ImportPose=function(ap){
 	var container=new UI.TitlePanel("Import Single Any Frame Clip");
 	
+	var scope=this;
+	
 	var row1=new UI.Row();
 	container.add(row1);
 	
@@ -8,7 +10,22 @@ Sidebar.ImportPose=function(ap){
 	var fileInput=new UI.TextFile(".json");
 	row1.add(fileInput);
 	
+	this.clip=null;
+	
 	function callUpdate(){
+		if(container.logging){
+			console.log("Import Pose Clip",scope.clip);
+			if(scope.clip!=null){
+				scope.clip.tracks.forEach(function(track){
+					console.log(track.name);
+				});
+			}	
+				
+			
+		}
+		if(container.logging){
+			console.log("sidebar-importPose dispatch poseChanged");
+		}
 		ap.getSignal("poseChanged").dispatch();
 		//boneAttachControler update
 		//ikControler resetAllIkTargets
@@ -19,15 +36,22 @@ Sidebar.ImportPose=function(ap){
 	var scope=this;
 	fileInput.onChange(function(fileName,text){
 		if(scope.mixer==null){
+			if(container.logging){
+				console.log("sidebar-importPose initialize own mixer");
+			}
 			scope.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
-			//console.log("mixer initialized");
+			
 		}
 		var mixer=scope.mixer;
 		mixer.stopAllAction();
 		AnimeUtils.resetPose(ap.skinnedMesh);
 		AnimeUtils.resetMesh(ap.skinnedMesh);
+		if(container.logging){
+			console.log("sidebar-importPose resetPose & resetMesh");
+		}
 		
-		if(text==null){//just Reset
+		if(text==null){
+			scope.clip=null;
 			callUpdate();
 			return;
 		}
@@ -41,14 +65,13 @@ Sidebar.ImportPose=function(ap){
 		if(json.boneNames!==undefined){
 			clip.boneNames=json.boneNames;
 		}
-		
+		scope.clip=clip;
 		
 		
 		
 		mixer.uncacheClip(clip.name);
 		mixer.clipAction(clip).play();
 		mixer.update();
-		//mixer.stopAllAction();
 		
 		callUpdate();
 		

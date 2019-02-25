@@ -3,6 +3,9 @@ Sidebar.ExportPose=function(ap){
 	
 	function makeClip(){
 		var clip=AnimeUtils.makePoseClip(ap.skinnedMesh);
+		if(exportPanel.logging){
+			console.log("Sidebar.ExportPose not contain morph");
+		}
 		return clip;
 	}
 	
@@ -18,6 +21,12 @@ Sidebar.ExportPose=function(ap){
 	var bt=new UI.Button("Download").onClick( function () {
 		span.dom.innerHTML = ''
 		var clip=makeClip(ap);
+		if(exportPanel.logging){
+			console.log("Export Pose Clip",clip);
+			clip.tracks.forEach(function(track){
+				console.log(track.name);
+			});
+		}
 		var fileName=scope.fileName == ""?"pose":scope.fileName;
 		fileName=fileName+".json";
 		var jsonText=AnimeUtils.clipToJsonText(clip);
