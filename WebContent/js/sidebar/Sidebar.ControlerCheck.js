@@ -9,6 +9,9 @@ Sidebar.ControlerCheck=function(ap){
 		translate.setValue(v);
 		ap.translateControler.setEnabled(v);
 		
+		if(!v){
+			ap.signals.transformSelectionChanged.dispatch(null);
+		}
 	}
 	
 	var buttonRow=new UI.ButtonRow("Hide",function(){
