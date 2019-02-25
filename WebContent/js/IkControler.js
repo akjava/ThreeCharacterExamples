@@ -4,7 +4,7 @@ if(ap==undefined){
 	return;
 }
 this.ap=ap;
-
+var scope=this;
 this.iks={};
 this.ikTarget=null;
 this.ikIndices=null;
@@ -45,6 +45,9 @@ this._pos=new THREE.Vector3();
 
 
 this.onIkSelectionChanged=function(ikName){
+	if(scope.logging){
+		console.log("onIkSelectionChanged called",ikName);
+	}
 	var newTarget=ap.ikControler.getIkTargetFromName(ikName);
 	ap.signals.transformSelectionChanged.dispatch(newTarget);
 	}
@@ -147,6 +150,9 @@ IkControler.prototype.isInitialized=function(){
 
 
 IkControler.prototype.getIkNameFromTarget=function(target){
+	if(target==null || target==undefined){
+		return target;
+	}
 	if(target.userData.ikName){
 		return target.userData.ikName;
 	}else{
@@ -295,6 +301,9 @@ IkControler.prototype.solveOtherIkTargets=function(){
 			var solved=scope.solveIk();
 			if(solved){
 				scope._ikSolved[scope.getIkNameFromTarget(target)]=true;
+				if(scope.logging){
+					console.log("ik solved",scope.getIkNameFromTarget(target));
+				}
 			}
 		}
 	});
@@ -305,9 +314,7 @@ IkControler.prototype.solveOtherIkTargets=function(){
 IkControler.prototype.onTransformSelectionChanged=function(target){
 	var ap=this.ap;
 	var scope=this;
-	if(ap.signals.ikSelectionChanged){
-		ap.signals.ikSelectionChanged.remove(this.onIkSelectionChanged);
-		}
+	ap.getSignal("ikSelectionChanged").remove(this.onIkSelectionChanged);
 	
 	function onNotSelected(){
 		scope.setIkTarget(null);
@@ -318,21 +325,31 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 	if(target==null){
 		onNotSelected();
 	}else if(target.userData.transformSelectionType=="BoneIk" && this._enabled){
+		if(this.logging){
+			console.log("IkControler onTransformSelectionChanged");
+		}
+		
 		ap.transformControls.setMode( "translate" );
 		this.setIkTarget(target);
 		ap.transformControls.attach(target);
 		
 		ap.getSignal("ikSelectionChanged").dispatch(this.getIkNameFromTarget(target));
+		
+		if(this.logging){
+			console.log("IkControler dispatch ikSelectionChanged",this.getIkNameFromTarget(target));
+		}
 	}else{//other
 		onNotSelected();
 	}
-	if(ap.signals.ikSelectionChanged){
-		ap.signals.ikSelectionChanged.add(this.onIkSelectionChanged);
-		}
+		ap.getSignal("ikSelectionChanged").add(this.onIkSelectionChanged);
+		
 }
 
 IkControler.prototype.onTransformChanged=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+		if(this.logging){
+			console.log("IkControler onTransformChanged");
+		}
 		var solved=this.solveIk();
 		//_ikSolved overwrited in solveOtherIkTargets
 		
@@ -340,7 +357,9 @@ IkControler.prototype.onTransformChanged=function(target){
 		
 		if(solved){
 			this._ikSolved[this.getIkNameFromTarget(target)]=true;
-			
+			if(this.logging){
+				console.log("ik solved",this.getIkNameFromTarget(target));
+			}
 			//solve others,TODO independent
 			if(!this.followOtherIkTargets){
 				this.solveOtherIkTargets();
@@ -352,6 +371,10 @@ IkControler.prototype.onTransformChanged=function(target){
 
 IkControler.prototype.onTransformStarted=function(target){
 	if(target!=null && target.userData.transformSelectionType=="BoneIk"){
+		if(this.logging){
+			console.log("IkControler onTransformStarted");
+		}
+		
 		this._ikSolved={};//reset all
 		
 		/*
@@ -364,7 +387,9 @@ IkControler.prototype.onTransformStarted=function(target){
 IkControler.prototype.onTransformFinished=function(target){
 var scope=this;
 if(target!=null && target.userData.transformSelectionType=="BoneIk"){
-	
+	if(this.logging){
+		console.log("IkControler onTransformFinished");
+	}
 	
 	
 	Object.keys(this._ikSolved).forEach(function(key){
@@ -372,7 +397,13 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 			var indices=scope.getEffectedBoneIndices(key);
 			indices.forEach(function(index){
 				scope.ap.getSignal("boneRotationChanged").dispatch(index);//really need?
+				if(this.logging){
+					console.log("IkControler dispatch boneRotationChanged",index);
+				}
 				scope.ap.getSignal("boneRotationFinished").dispatch(index);
+				if(this.logging){
+					console.log("IkControler dispatch boneRotationFinished",index);
+				}
 			});
 		}
 	});
@@ -393,7 +424,9 @@ IkControler.prototype.getEffectedBoneIndices=function(name){
 
 
 IkControler.prototype.solveIk=function(forceUpdate){
-	
+	if(this.logging){
+		console.log("call solveIk ",this.getIkNameFromTarget(this.ikTarget));
+	}
 	var forceUpdate=forceUpdate!=undefined?forceUpdate:false;
 	var scope=this;
 	
@@ -407,7 +440,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	
 	if(this.ikTarget==null){
-		if(this.logging){
+		if(this.debug){
 			console.log("ikTarget is null");
 		}
 		return false;
@@ -423,7 +456,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	var targetPos=targetMesh.position;
 	if(this.lastTargetMovedPosition.equals(targetPos) && forceUpdate==false){
 		//this Ik need move or force
-		if(this.logging){
+		if(this.debug){
 			console.log(ikTargetName,"lastTargetMovedPosition same as targetPos forceUpdate=",forceUpdate);
 		}
 		return false;
@@ -433,7 +466,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	if(this.ikTarget.position.equals(getEndSitePos(lastMesh))){
 		
-		if(this.logging){
+		if(this.debug){
 			console.log(ikTargetName,"ik target pos == endsitepos");
 		}
 		

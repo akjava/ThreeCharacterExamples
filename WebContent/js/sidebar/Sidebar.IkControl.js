@@ -2,7 +2,7 @@ Sidebar.IkControl=function(ap){
 var scope=this;
 this.selectedIkName=null;
 
-var titlePanel=new UI.TitlePanel("Iks");
+var titlePanel=new UI.TitlePanel("Ik Control");
 
 this.endSite=false;
 var ikList=new UI.ListRow("Iks",[],function(v){
@@ -82,7 +82,11 @@ var buttons=new UI.ButtonRow("Copy from Opposite",function(){
 			bone.rotation.copy(BoneUtils.flipHorizontalRotation(opposite.rotation));
 			
 			if(ap.signals.boneRotationChanged)//Optional
+				
 				ap.signals.boneRotationChanged.dispatch(index);
+			if(ap.ikControler.logging){
+				console.log("Sidebar.IkControl dispatch boneRotationChanged",index);
+			}
 		}
 	});
 	ap.ikControler.resetAllIkTargets();
@@ -100,9 +104,21 @@ var swap=new UI.Button("swap").onClick(function(){
 			BoneUtils.swapHorizontalBone(bone,opposite);
 			var oppositeIndex=boneList.indexOf(opposite);
 			ap.getSignal("boneRotationChanged").dispatch(index);
+			if(ap.ikControler.logging){
+				console.log("Sidebar.IkControl dispatch boneRotationChanged",index);
+			}
 			ap.signals.boneRotationChanged.dispatch(oppositeIndex);
+			if(ap.ikControler.logging){
+				console.log("Sidebar.IkControl dispatch boneRotationChanged",oppositeIndex);
+			}
 			ap.getSignal("boneRotationFinished").dispatch(index);
+			if(ap.ikControler.logging){
+				console.log("Sidebar.IkControl dispatch boneRotationFinished",index);
+			}
 			ap.signals.boneRotationFinished.dispatch(oppositeIndex);
+			if(ap.ikControler.logging){
+				console.log("Sidebar.IkControl dispatch boneRotationFinished",oppositeIndex);
+			}
 		}
 		
 		ap.ikControler.resetAllIkTargets();
@@ -120,7 +136,13 @@ var flip=new UI.Button("Flip-Horizontal").onClick(function(){
 		bone.rotation.y*=-1;
 		bone.rotation.z*=-1;
 		ap.getSignal("boneRotationChanged").dispatch(index);
+		if(ap.ikControler.logging){
+			console.log("Sidebar.IkControl dispatch boneRotationChanged",index);
+		}
 		ap.getSignal("boneRotationFinished").dispatch(index);
+		if(ap.ikControler.logging){
+			console.log("Sidebar.IkControl dispatch boneRotationFinished",index);
+		}
 	});
 	
 	ap.ikControler.resetAllIkTargets();
