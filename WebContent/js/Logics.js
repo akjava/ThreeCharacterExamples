@@ -64,8 +64,8 @@ var Logics={
 						ap.translateControler.onTransformChanged(target);
 					});
 					
-					//mbl3d specific & somehow ik rotate target index changed from 0 to 1;
-					ap.signals.boneRotationChanged.add(function(index){
+					//TODO support all bone
+					ap.getSignal("boneRotationChanged").add(function(index){
 						if(index==0){
 							ap.signals.boneTranslateChanged.dispatch(index);
 						}

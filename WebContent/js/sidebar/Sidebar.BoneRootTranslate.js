@@ -46,8 +46,14 @@ Sidebar.BoneRootTranslate=function(ap){
 		
 		ap.signals.boneTranslateChanged.remove(onTranslateChanged);
 		ap.signals.boneTranslateChanged.dispatch(0);
+		if(ap.translateControler.logging){
+			console.log("Sidebar.BoneRootTranslate dispatch boneTranslateChanged");
+		}
 		ap.signals.boneTranslateChanged.add(onTranslateChanged);
 		ap.getSignal("boneTranslateFinished").dispatch(0);
+		if(ap.translateControler.logging){
+			console.log("Sidebar.BoneRootTranslate dispatch boneTranslateFinished");
+		}
 	}
 
 	var boneMoveX=new UI.NumberPlusMinus("X",-999,999,1,scope.boneMoveX,function(v){
@@ -55,7 +61,7 @@ Sidebar.BoneRootTranslate=function(ap){
 		translate();
 	},[0.1,1,10]);
 	boneMoveX.text.setWidth("12px");
-	boneMoveX.number.setWidth("30px");
+	boneMoveX.number.setWidth("36px");
 	panel.add(boneMoveX);
 	
 	
@@ -65,7 +71,7 @@ Sidebar.BoneRootTranslate=function(ap){
 		translate();
 	},[0.1,1,10]);
 	boneMoveY.text.setWidth("12px");
-	boneMoveY.number.setWidth("30px");
+	boneMoveY.number.setWidth("36px");
 	panel.add(boneMoveY);
 	
 	var boneMoveZ=new UI.NumberPlusMinus("Z",-999,999,1,scope.boneMoveX,function(v){
@@ -74,7 +80,7 @@ Sidebar.BoneRootTranslate=function(ap){
 		translate();
 	},[0.1,1,10]);
 	boneMoveZ.text.setWidth("12px");
-	boneMoveZ.number.setWidth("30px");
+	boneMoveZ.number.setWidth("36px");
 	panel.add(boneMoveZ);
 	
 	var quaternion=new THREE.Quaternion();
@@ -84,7 +90,13 @@ Sidebar.BoneRootTranslate=function(ap){
 		BoneUtils.resetBone(ap.skinnedMesh,0);
 		root.quaternion.copy(quaternion);
 		ap.getSignal("boneTranslateChanged").dispatch(0);
+		if(ap.translateControler.logging){
+			console.log("Sidebar.BoneRootTranslate dispatch boneTranslateChanged");
+		}
 		ap.getSignal("boneTranslateFinished").dispatch(0);
+		if(ap.translateControler.logging){
+			console.log("Sidebar.BoneRootTranslate dispatch boneTranslateFinished");
+		}
 	});
 	
 	panel.add(resetRow);
