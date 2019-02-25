@@ -22,8 +22,7 @@ var Application = function () {
 	
 	/* .glb file with morphtarget too large,still I dont know how to working draco to morphtarget.*/
 	this.defaultModelUrl="../../../dataset/mbl3d/models/anime2_female.fbx";
-	this.defaultModelUrl="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
-	this.defaultModelUrl="../../../dataset/mbl3d/models/tmp.fbx";
+	
 	this.modelUrl=this.defaultModelUrl;
 	this.skinnedMesh=null;
 

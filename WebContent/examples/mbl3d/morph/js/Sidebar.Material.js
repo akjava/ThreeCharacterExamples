@@ -1,4 +1,4 @@
-Sidebar.MaterialType = function ( application ) {
+Sidebar.Material = function ( application ) {
 	var container=new UI.Panel();
 	container.setId( 'material' );
 	

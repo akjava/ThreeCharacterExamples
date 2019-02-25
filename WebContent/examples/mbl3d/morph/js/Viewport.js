@@ -93,6 +93,7 @@ var Viewport = function ( application ) {
 			}
 			
 			application.skinnedMesh=skinnedMesh;
+			skinnedMesh.scale.set(100,100,100);
 			application.scene.add(skinnedMesh);
 			
 			skinnedMesh.castShadow = true;

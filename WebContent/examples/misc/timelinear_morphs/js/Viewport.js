@@ -99,6 +99,7 @@ var Viewport = function ( application ) {
 				}
 				skinnedMesh=BoneUtils.convertToZeroRotatedBoneMesh(skinnedMesh);
 				application.skinnedMesh=skinnedMesh;
+				skinnedMesh.scale.set(100,100,100);
 				application.scene.add(skinnedMesh);
 				
 				skinnedMesh.castShadow = true;

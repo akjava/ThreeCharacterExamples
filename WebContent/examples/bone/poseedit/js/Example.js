@@ -11,7 +11,7 @@ Example=function(application){
 	var url="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
-
+	ap.fingerPresetsControler=new FingerPresetsControler(ap,new FingerPresets());
 
 	Logics.loadTextureAtOnce(ap,"../../../dataset/mbl3d/texture/ao.jpg","aoMap");
 	

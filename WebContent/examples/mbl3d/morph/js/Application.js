@@ -43,6 +43,7 @@ var Application = function () {
 	
 	this.drawOutline=true;
 	this.signals = {
+			hairModelLoaded: new Signal(),
 			windowResize: new Signal(),
 			loadingModelStarted:new Signal(),
 			loadingModelFinished:new Signal(),

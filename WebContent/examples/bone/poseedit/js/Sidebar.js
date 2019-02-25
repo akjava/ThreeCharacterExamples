@@ -62,6 +62,9 @@ var Sidebar = function ( application ) {
 	ik.add(new IkSolveRow(ap));
 	ik.add(new Sidebar.IkReset(ap));
 	
+	var finger=tab.addItem("Finger");
+	finger.add(new Sidebar.RotateFingers(ap));
+	
 	
 	
 	return container;
