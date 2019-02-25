@@ -32,16 +32,18 @@ Sidebar.ImportPose=function(ap){
 		//translateControler updatePosition
 	}
 	this.mixer=null;
+	ap.signals.loadingModelFinished.add(function(mesh){
+		if(scope.mixer!=null){
+			scope.mixer.stopAllAction();
+		}
+		scope.mixer=new THREE.AnimationMixer(mesh);
+		if(container.logging){
+			console.log("sidebar-importPose create new mixer");
+		}
+	});
 	
 	var scope=this;
 	fileInput.onChange(function(fileName,text){
-		if(scope.mixer==null){
-			if(container.logging){
-				console.log("sidebar-importPose initialize own mixer");
-			}
-			scope.mixer=new THREE.AnimationMixer(ap.skinnedMesh);
-			
-		}
 		var mixer=scope.mixer;
 		mixer.stopAllAction();
 		AnimeUtils.resetPose(ap.skinnedMesh);
