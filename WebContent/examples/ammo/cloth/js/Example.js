@@ -1,4 +1,7 @@
 Example=function(application){
+	try{
+		
+	
 	var ap=application;
 	ap.camera.position.set( 0, -10, 20 );
 	ap.controls.target.set(0,-10,0);
@@ -78,7 +81,9 @@ Example=function(application){
 
 
 	
-	
+	}catch(e){
+		console.error(e);
+	}
 }
 
 Example.newBall=function(application){
@@ -260,6 +265,6 @@ Example.connect=function(application,bm1,bm2){
 	dof.setAngularUpperLimit(application.ammoControler.makeTemporaryVector3(application.angularLimit, application.angularLimit, application.angularLimit));
 	
 	
-	
+
 	return cm;
 }

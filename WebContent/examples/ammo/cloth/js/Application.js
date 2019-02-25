@@ -75,7 +75,7 @@ var Application = function () {
 	
 	var Signal = signals.Signal;
 
-	this.defaultTextureUrl="../../../dataset/patterns/circuit_pattern.png";
+	this.defaultTextureUrl="../../../dataset/texture/patterns/circuit_pattern.png";
 	
 	this.signals = {
 			windowResize: new Signal(),
