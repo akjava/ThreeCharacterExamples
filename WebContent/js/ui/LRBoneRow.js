@@ -41,6 +41,7 @@ LRBoneRow=function(ap){
 		var rot=opposite.rotation;
 		bone.rotation.copy(BoneUtils.flipHorizontalRotation(opposite.rotation));
 		ap.signals.boneRotationChanged.dispatch(index);
+		//not call boneRotationFinished(reset ik) for option
 	});
 	buttonRow.add(copyFrom);
 	copyFrom.setDisabled(true);
@@ -56,9 +57,21 @@ LRBoneRow=function(ap){
 		
 		ap.signals.boneRotationChanged.dispatch(index);
 		ap.signals.boneRotationChanged.dispatch(oppositeIndex);
+		//not call boneRotationFinished(reset ik) for option
 	});
 	buttonRow.add(swap);
 	swap.setDisabled(true);
+	
+	var flip=new UI.Button("Flip-Horizontal").onClick(function(){
+		var index=scope.boneSelectedIndex;
+		var bone=getSelectedBone(index);
+		bone.rotation.y*=-1;
+		bone.rotation.z*=-1;
+		
+		ap.signals.boneRotationChanged.dispatch(index);
+		//not call boneRotationFinished(reset ik) for option
+	});
+	buttonRow.add(flip);
 	
 	ap.signals.boneSelectionChanged.add(function(index){
 		scope.boneSelectedIndex=index;

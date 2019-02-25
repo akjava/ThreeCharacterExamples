@@ -71,7 +71,7 @@ function getOppositedBone(bone){
 }
 
 var buttons=new UI.ButtonRow("Copy from Opposite",function(){
-	var indices=ap.ikControler.iks[scope.selectedIkName];
+	var indices=ap.ikControler.getEffectedBoneIndices(scope.selectedIkName);
 	
 	var boneList=ap.ikControler.getBoneList();
 	indices.forEach(function(index){
@@ -85,7 +85,7 @@ var buttons=new UI.ButtonRow("Copy from Opposite",function(){
 				ap.signals.boneRotationChanged.dispatch(index);
 		}
 	});
-	ap.signals.poseChanged.dispatch();
+	ap.ikControler.resetAllIkTargets();
 });
 buttons.button.setDisabled(true);
 
@@ -104,11 +104,28 @@ var swap=new UI.Button("swap").onClick(function(){
 			ap.getSignal("boneRotationFinished").dispatch(index);
 			ap.signals.boneRotationFinished.dispatch(oppositeIndex);
 		}
+		
 		ap.ikControler.resetAllIkTargets();
 	});
 });
 buttons.add(swap);
 swap.setDisabled(true);
+
+var flip=new UI.Button("Flip-Horizontal").onClick(function(){
+	var indices=ap.ikControler.getEffectedBoneIndices(scope.selectedIkName);
+	
+	var boneList=ap.ikControler.getBoneList();
+	indices.forEach(function(index){
+		var bone=boneList[index];
+		bone.rotation.y*=-1;
+		bone.rotation.z*=-1;
+		ap.getSignal("boneRotationChanged").dispatch(index);
+		ap.getSignal("boneRotationFinished").dispatch(index);
+	});
+	
+	ap.ikControler.resetAllIkTargets();
+});
+buttons.add(flip);
 
 titlePanel.add(buttons);
 
