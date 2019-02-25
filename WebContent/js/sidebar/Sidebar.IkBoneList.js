@@ -25,7 +25,7 @@ Sidebar.IkBoneList=function(ap){
 			});
 		}
 	
-	},undefined,0);
+	},undefined,-100);
 	var boneListButtons=[];
 	var ikBoneList=new UI.TitlePanel("Ik Bone List");
 

@@ -311,9 +311,8 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 	
 	function onNotSelected(){
 		scope.setIkTarget(null);
-		if(ap.signals.ikSelectionChanged){
-			ap.signals.ikSelectionChanged.dispatch(null);
-		}
+		ap.getSignal("ikSelectionChanged").dispatch(null);
+		scope.resetAllIkTargets();//should add signal?
 	}
 	
 	if(target==null){
@@ -323,9 +322,7 @@ IkControler.prototype.onTransformSelectionChanged=function(target){
 		this.setIkTarget(target);
 		ap.transformControls.attach(target);
 		
-		if(ap.signals.ikSelectionChanged){
-			ap.signals.ikSelectionChanged.dispatch(target.ikName);
-		}
+		ap.getSignal("ikSelectionChanged").dispatch(this.getIkNameFromTarget(target));
 	}else{//other
 		onNotSelected();
 	}
