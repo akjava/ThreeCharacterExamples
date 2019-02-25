@@ -100,9 +100,14 @@ IkControler.prototype.resetIkSettings=function(){
 	var list=this.boneAttachControler.containerList;
 	this.ikSettings.endSites.forEach(function(endsite){
 		var index=endsite.userData.endSiteIndex;
+		var parentIndex=endsite.userData.endSiteParentIndex;
 		list[index].add(endsite);
 		list[index].add(endsite.userData.joint);
 		list[index].userData.endsite=endsite;
+		
+		var diff=list[index].position.clone().sub(list[parentIndex].position);
+		diff.setLength(10);
+		endsite.position.copy(diff);
 	});
 }
 
@@ -220,11 +225,11 @@ IkControler.prototype.enableEndSite=function(object){
 
 IkControler.prototype.resetIkTargetPosition=function(name){
 	var target=this.ikTargets[name];
-	var indices=this.iks[name];
+	/*var indices=this.iks[name];
 
 	
 	var index=indices[indices.length-1];
-	var lastMesh=this.boneAttachControler.containerList[index];
+	var lastMesh=this.boneAttachControler.containerList[index];*/
 	
 	var position=this.getLastPosition(name);
 	
@@ -258,6 +263,8 @@ IkControler.prototype.setEndSiteEnabled=function(name,enabled){
 	lastMesh.userData.endsite.userData.enabled=enabled;
 	lastMesh.userData.endsite.material.visible=enabled;
 	lastMesh.userData.endsite.userData.joint.material.visible=enabled;
+	
+	this.resetIkTargetPosition(name);
 }
 IkControler.prototype.setEndSiteVisible=function(name,visible){
 
@@ -481,11 +488,17 @@ IkControler.prototype.solveIk=function(forceUpdate){
 	
 	
 	var ikIndicesLength=scope.enableEndSite(lastMesh)?this.ikIndices.length:this.ikIndices.length-1;
+	
 	for(var i=0;i<ikIndicesLength;i++){
 		var ikBoneIndex=this.ikIndices[i];
+		
 		if(this.ikBoneSelectedOnly && ikBoneIndex!=this.boneSelectedIndex){
+			if(this.logging){
+				console.log("ik ikBoneSelectedOnly & skipped",ikBoneIndex);
+			}
 			continue;
 		}
+		
 		
 		var lastJointPos=getEndSitePos(lastMesh);
 		
@@ -496,6 +509,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		var jointPos=joint.position;
 		
 		if(this.boneLocked[name]){
+			if(this.logging){
+				console.log("ik bonelocked & skipped",name);
+			}
 			continue;
 		}
 		
@@ -519,6 +535,10 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		}
 		
 		var maxAngle=this.maxAngle*this.getBoneRatio(bone.name);
+		
+		if(this.logging){
+			console.log("ik maxAngle",name,maxAngle);
+		}
 		
 		var newQ=IkUtils.stepCalculate2(inverseQ,lastJointPos,jointPos,targetPos,maxAngle);
 		
@@ -598,6 +618,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 				z+=Math.PI*2;
 			}
 		}else{
+			if(this.logging){
+				console.log("ik not limited",name,euler.x.toFixed(2),euler.y.toFixed(2),euler.z.toFixed(2));
+			}
 			x=x+euler.x;
 			y=y+euler.y;
 			z=z+euler.z;
