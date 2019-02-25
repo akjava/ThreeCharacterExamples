@@ -115,8 +115,8 @@ Sidebar.BoneRotate = function ( application ) {
 		ap.selectedBone.updateMatrixWorld(true);
 		
 		var index=Number(boneSelect.getValue());
-		ap.signals.boneRotationChanged.dispatch(index);
-		ap.signals.boneRotationFinished.dispatch(index);
+		ap.getSignal("boneRotationChanged").dispatch(index);
+		ap.getSignal("boneRotationFinished").dispatch(index);
 		
 	};
 
@@ -155,8 +155,8 @@ Sidebar.BoneRotate = function ( application ) {
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		for(var i=0;i<boneList.length;i++){
 			boneList[i].rotation.set(0,0,0);
-			ap.signals.boneRotationChanged.dispatch(i);
-			ap.signals.boneRotationFinished.dispatch(i);
+			ap.getSignal("boneRotationChanged").dispatch(i);
+			ap.getSignal("boneRotationFinished").dispatch(i);
 		}
 		
 		//for something TODO compatible

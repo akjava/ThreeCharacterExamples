@@ -14,12 +14,12 @@ var Sidebar = function ( application ) {
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.materialChangedForTextureMaps(ap);
 	
-	var sub=tab.addItem("Sub");
-	sub.add(new Sidebar.CameraControler(ap));
-	sub.add(new Sidebar.Hair(ap));
-	sub.add(new Sidebar.ShadowLight(ap));
-	sub.add(new Sidebar.MaterialType(ap));
-	sub.add(new Sidebar.OutlineEffect(ap));
+	var sub2=tab.addItem("Sub2");
+	sub2.add(new Sidebar.CameraControler(ap));
+	sub2.add(new Sidebar.Hair(ap));
+	sub2.add(new Sidebar.ShadowLight(ap));
+	sub2.add(new Sidebar.MaterialType(ap));
+	sub2.add(new Sidebar.OutlineEffect(ap));
 	Logics.loadingHairFinished(ap);
 	
 	//tab.select("Sub");

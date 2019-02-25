@@ -1,6 +1,10 @@
 Sidebar.IkBasic=function(ap){
 
 	var ikPanel=new UI.TitlePanel("Ik Basic");
+	
+	if(ap.ikControler==null){
+		ap.ikControler=new IkControler(undefined,ap);
+	}
 
 	var enabled=new UI.CheckboxRow("Enabled",true,function(v){
 		var values=ap.ikControler.getIkTargetsValue();

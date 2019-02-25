@@ -1,59 +1,19 @@
 Example=function(application){
 	var ap=application;
 	var scope=this;
-	var scale=100;
+	ap.objects=[];//TODO
 	
-	ap.camera.position.set( 0, 1*scale, 2.5*scale );
-	ap.controls.target.set(0,1*scale,0);
+	//default camera
+	ap.camera.position.set( 0, 100, 250 );
+	ap.controls.target.set(0,100,0);
 	ap.controls.update();
 	
-	//var url="../../../dataset/mbl3d/models/anime2_nomorph.glb";
-	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
-	
-	ap.defaultTextureUrl="../../../dataset/mbl3d/texture/m_brown.png";
-	ap.textureUrl=ap.defaultTextureUrl;
-	
-	var material=new THREE.MeshPhongMaterial({alphaTest:0.6,skinning:true,transparent:true,opacity:1});
-	
-	//handle texture
-	ap.signals.loadingTextureStarted.add (function () {
-		if(ap.textureUrl!=null){
-			ap.texture=new THREE.TextureLoader().load(ap.textureUrl);
-			ap.texture.flipY = true;//FBX
-			ap.texture.minFilter=THREE.LinearFilter;
-		}else{
-			ap.texture=null;
-		}
-	} );
-	
-	ap.signals.loadingTextureFinished.add (function () {
-		ap.skinnedMesh.material.map=ap.texture;
-		ap.skinnedMesh.material.needsUpdate=true;
-	} );
-	
+	var url="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
+	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
-	var lastEuler=new THREE.Euler();
-	ap.signals.transformChanged.add(function(){
-		//console.log(ap.transformControls.axis);//null,X,Y,Z
-	});
 
-	
-	var geo = new THREE.EdgesGeometry( new THREE.BoxGeometry(5,5,5) ); // or WireframeGeometry( geometry )
 
-	var mat = new THREE.LineBasicMaterial( { color: 0xaaaaaa, linewidth: 2,transparent:true,opacity:1.0,depthTest:true,visible:false } );
-
-	this.wireframe = new THREE.LineSegments( geo, mat );
-
-	ap.scene.add( this.wireframe );
+	Logics.loadTextureAtOnce(ap,"../../../dataset/mbl3d/texture/ao.jpg","aoMap");
 	
-	var mbl3dPoseEditor=new Mbl3dPoseEditor(ap,scale);
-	mbl3dPoseEditor.loadMesh(url,material);
-	
-
-	
-	
-
-	
-	
-
+	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }

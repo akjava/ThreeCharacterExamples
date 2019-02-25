@@ -4,136 +4,61 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Pose Edit"));
 	
+	var tab=new UI.Tab(ap);
+	container.add(tab);
 	
-	ap.ikControler.maxAngle=5;//change because of ikratio
+	var main=tab.addItem("Main");
+	main.add(new Sidebar.ControlerCheck(ap));
 	
-    var ikPanel=new Sidebar.IkLBasic(application);
-    ikPanel.add(new Sidebar.IkSolve(ap));
-    
-	var exportPanel=new Sidebar.Export(ap);
-	var importPanel=new Sidebar.Import(ap);
-	var backgroundImagePanel=new BackgroundImagePanel(ap);
-	
-	
-	var rootTranslate=new Sidebar.RootTranslate(ap);
-	var editPanel=new BoneEditPanel2(ap);
-	editPanel.buttons.setDisplay("none");
-	
-	var lRButtonRow=Sidebar.LRButtonRow(ap);
-	editPanel.add(lRButtonRow);
-	
-	var ikReset=new Sidebar.IkReset(ap);
-	var IkBoneList=new Sidebar.IkBoneList(ap);
-	
-	var transparent=new Sidebar.Transparent(ap);
-	var ground=new Sidebar.Ground(ap);
-	
-	var tabs = new UI.Div();
-	tabs.setId( 'tabs' );
-	
-	container.add( tabs );
-
-	function onClick( event ) {
-
-		select( event.target.textContent );
-
-	}
-	
-var visiblePanel=new UI.Panel();
-var visibleTransform=new UI.CheckboxRow("Visible transform controler",true,function(v){
-	ap.translateControler.translateControls["root"].material.visible=v;
-	ap.rotatationControler.setVisible(v);
-});
-visiblePanel.add(visibleTransform);
-
-var poseTab = new UI.Text( 'Pose' ).onClick( onClick );
-tabs.add( poseTab);
-var pose= new UI.Span().add(
-		visiblePanel,rootTranslate,editPanel,ikReset,IkBoneList,ground
-	);
-container.add( pose);
-
-var settingsTab = new UI.Text( 'Settings' ).onClick( onClick );
-tabs.add( settingsTab);
-var settings= new UI.Span().add(
-		transparent,new Sidebar.Texture(ap)
-	);
-container.add( settings);
-
-var ioTab = new UI.Text( 'IO' ).onClick( onClick );
-tabs.add( ioTab);
-var io= new UI.Span().add(
-		exportPanel,importPanel,backgroundImagePanel
-	);
-container.add( io);
-
-var ikTab = new UI.Text( 'Ik' ).onClick( onClick );
-tabs.add( ikTab);
-
-var ik= new UI.Span().add(
-		ikPanel,new Sidebar.Iks(ap),new Sidebar.IkRatio(ap)
-	);
-container.add( ik);
-
-function select( section ) {
-	//move here
-	poseTab.setClass( '' );
-	pose.setDisplay( 'none' );
-	settingsTab.setClass( '' );
-	settings.setDisplay( 'none' );
-	ioTab.setClass( '' );
-	io.setDisplay( 'none' );
-	ikTab.setClass( '' );
-	ik.setDisplay( 'none' );
-	switch ( section ) {
-
-
-
-	case 'Pose':
-					poseTab.setClass( 'selected' );
-					pose.setDisplay( '' );
-					break;
-	
-
-	case 'Settings':
-					settingsTab.setClass( 'selected' );
-					settings.setDisplay( '' );
-					break;
-	
-
-	case 'IO':
-					ioTab.setClass( 'selected' );
-					io.setDisplay( '' );
-					break;
-	
-
-	case 'Ik':
-					ikTab.setClass( 'selected' );
-					ik.setDisplay( '' );
-					break;
-	}
-	//
-	}
-select('Pose');
+	main.add(new Sidebar.MeshTransform(ap));
+	Logics.loadingModelFinishedForMeshTransform(ap);
+	main.add(new Sidebar.BoneRootTranslate(ap));
+	var boneRotate=new Sidebar.BoneRotate(ap);
+	boneRotate.add(new LRBoneRow(ap));
+	main.add(boneRotate);
+	main.add(new Sidebar.IkBoneList(ap));
+	 
 	
 	
-
-    
-
-
-
+	var sub1=tab.addItem("Sub1");
+	sub1.add(new Sidebar.Model(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.loadingModelFinishedForTranslateControler(ap);
+	Logics.loadingModelFinishedForRotationControler(ap);
+	Logics.loadingModelFinishedForIkControler(ap);
+	Logics.initializeAmmo(ap);
+	Logics.loadingModelFinishedForBreastControler(ap);
+	
+	
+	sub1.add(new Sidebar.TextureMaps(ap));
+	Logics.materialChangedForTextureMaps(ap);
+	
 	
 	
 
 	
-
+	sub1.add(new Sidebar.DoubleClipPlayer(ap));
 	
+	var sub2=tab.addItem("Sub2");
+	sub2.add(new Sidebar.CameraControler(ap));
+	sub2.add(new Sidebar.Hair(ap));
+	sub2.add(new Sidebar.ShadowLight(ap));
+	sub2.add(new Sidebar.MaterialType(ap));
+	sub2.add(new Sidebar.OutlineEffect(ap));
+	Logics.loadingHairFinished(ap);
 	
-
+	var sub3=tab.addItem("Sub3");
+	sub3.add(new Sidebar.Ground(ap));
+	//dataset.add(new Sidebar.BackgroundVideo(ap));
+	sub3.add(new Sidebar.ImportPose(ap));
+	sub3.add(new Sidebar.ExportPose(ap));
 	
-
+	var ik=tab.addItem("Ik");
+	ik.add(new Sidebar.IkControl(ap));
+	ik.add(new Sidebar.IkBasic(ap));
+	ik.add(new IkSolveRow(ap));
+	ik.add(new Sidebar.IkReset(ap));
 	
-
 	
 	
 	return container;

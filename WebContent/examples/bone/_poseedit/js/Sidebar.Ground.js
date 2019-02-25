@@ -57,7 +57,6 @@ Sidebar.Ground=function(ap){
 		
 		var v=Math.abs(box.min.y);
 		v*=2;
-		console.log(v);
 		groundMargin.setValue(v);//modifer
 		scope.margin=v;
 	});
