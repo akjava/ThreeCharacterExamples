@@ -80,6 +80,14 @@ var Sidebar = function ( application ) {
 	main.add(ab);
 	var timeRow=new UI.NumberButtons("time",0.01,10,1,scope.time,function(v){scope.time=v;updateABClip();},[0.1,0.5,1,5]);
 	ab.add(timeRow);
+	
+	var meshCheck=new UI.CheckboxRow("Mesh Animation",scope.meshAnimation,function(v){scope.meshAnimation=v;updateABClip();});
+	ab.add(meshCheck);
+	
+	var abaCheck=new UI.CheckboxRow("A-B-A Animation",scope.abaAnimation,function(v){scope.abaAnimation=v;updateABClip();});
+	ab.add(abaCheck);
+	
+	
 	var player=new ClipPlayerRow(ap);
 	ab.add(player);
 	
@@ -97,6 +105,9 @@ var Sidebar = function ( application ) {
 	sub.add(new Sidebar.OutlineEffect(ap));
 	Logics.loadingHairFinished(ap);
 	
+	
+	Logics.initializeAmmo(ap);
+	Logics.loadingModelFinishedForBreastControler(ap);
 	//tab.select("Sub");
 	
 	return container;
