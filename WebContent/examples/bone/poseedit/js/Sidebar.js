@@ -44,10 +44,13 @@ var Sidebar = function ( application ) {
 	sub2.add(new Sidebar.Hair(ap));
 	sub2.add(new Sidebar.ShadowLight(ap));
 	sub2.add(new Sidebar.MaterialType(ap));
+	sub2.add(new Sidebar.Transparent(ap));
+	
 	sub2.add(new Sidebar.OutlineEffect(ap));
 	Logics.loadingHairFinished(ap);
 	
 	var sub3=tab.addItem("Sub3");
+	sub3.add(new Sidebar.BackgroundImage(ap));
 	sub3.add(new Sidebar.Ground(ap));
 	//dataset.add(new Sidebar.BackgroundVideo(ap));
 	sub3.add(new Sidebar.ImportPose(ap));

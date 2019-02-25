@@ -282,16 +282,16 @@ var Logics={
 		},
 		materialChangedForSimple:function(ap){
 			ap.signals.materialChanged.add(function(){
-				var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,map:ap.texture,transparent:true,alphaTest:0.6});
+				var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,map:ap.texture,transparent:true,alphaTest:0.2});
 				ap.skinnedMesh.material=material;
 			});
 		},
 		materialChangedForTextureMaps:function(ap){
 			ap.signals.materialChanged.add(function(){
 				
-				//var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,transparent:true,alphaTest:0.6});
+				//var material=new THREE.MeshPhongMaterial({skinning:true,morphTargets:true,transparent:true,alphaTest:0.2});
 				 var material = new window['THREE'][application.materialType](
-						 {skinning: true,morphTargets:true ,transparent:true,alphaTest:0.6,wireframe:application.materialWireframe} 
+						 {skinning: true,morphTargets:true ,transparent:true,alphaTest:0.2,wireframe:application.materialWireframe} 
 						 );
 				
 				material.color.set(ap.color);
