@@ -27,6 +27,9 @@ LRBoneRow=function(ap){
 		}
 		var index=boneList.indexOf(bone);
 		if(index!=-1){
+			if(ap.rotationControler.logging){
+				console.log("LRBoneRow dispatch boneSelectionChanged",index);
+			}
 			ap.signals.boneSelectionChanged.dispatch(index);
 		}
 		
@@ -41,6 +44,9 @@ LRBoneRow=function(ap){
 		var rot=opposite.rotation;
 		bone.rotation.copy(BoneUtils.flipHorizontalRotation(opposite.rotation));
 		ap.signals.boneRotationChanged.dispatch(index);
+		if(ap.rotationControler.logging){
+			console.log("LRBoneRow dispatch boneRotationChanged",index);
+		}
 		//not call boneRotationFinished(reset ik) for option
 	});
 	buttonRow.add(copyFrom);
@@ -56,7 +62,13 @@ LRBoneRow=function(ap){
 		BoneUtils.swapHorizontalBone(bone,opposite);
 		
 		ap.signals.boneRotationChanged.dispatch(index);
+		if(ap.rotationControler.logging){
+			console.log("LRBoneRow dispatch boneRotationChanged",index);
+		}
 		ap.signals.boneRotationChanged.dispatch(oppositeIndex);
+		if(ap.rotationControler.logging){
+			console.log("LRBoneRow dispatch boneRotationChanged",index);
+		}
 		//not call boneRotationFinished(reset ik) for option
 	});
 	buttonRow.add(swap);
@@ -69,6 +81,9 @@ LRBoneRow=function(ap){
 		bone.rotation.z*=-1;
 		
 		ap.signals.boneRotationChanged.dispatch(index);
+		if(ap.rotationControler.logging){
+			console.log("LRBoneRow dispatch boneRotationChanged",index);
+		}
 		//not call boneRotationFinished(reset ik) for option
 	});
 	buttonRow.add(flip);

@@ -2,39 +2,51 @@
 <html lang="en">
 	<head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>Bone Rotation Controle</title>
+		<title>Bone Rotate Control</title>
 	</head>
 	<body ontouchstart="">
 	<link href="../../css/shared.css" rel="stylesheet" />
 	<link href="css/main.css" rel="stylesheet" />
-	<script src="../../libs/three.js"></script>
-	<script src="../../libs/ui.js"></script>
-	<script src="../../libs/ui.custom.js"></script>
-	<script src="../../libs/OrbitControls.js"></script>
-	<script src="../../libs/signals.min.js"></script>
-	<script src="../../libs/inflate.min.js"></script>
-	<script src="../../libs/GLTFLoader.js"></script>
-	<script src="../../libs/BoneUtils.js"></script>
-	<script src="../../libs/AppUtils.js"></script>
-	<script src="../../libs/Panels.js"></script>
-	<script src="../../libs/AnimeUtils.js"></script>
-	<script src="../../libs/Mbl3dUtils.js"></script>
-	<script src="../../libs/BoneAttachControler.js"></script>
-	<script src="../../libs/inflate.min.js"></script>
-	<script src="../../libs/FBXLoader.js"></script>
-	<script src="../../libs/IkUtils.js"></script>
-	<script src="../../libs/TransformControls.js"></script>
-	<script src="../rotatelock/js/RotatationControler.js"></script>
-		
-	<script src="js/Application.js"></script>
-	<script src="js/Viewport.js"></script>
-	<script src="js/BoneEditPanel2.js"></script>
+	<script src="../../../libs/three.js"></script>
+	<script src="../../../libs/ui.js"></script>
+	<script src="../../../libs/OrbitControls.js"></script>
+	<script src="../../../libs/signals.min.js"></script>
+	<script src="../../../libs/DRACOLoader.js"></script>
+	<script src="../../../libs/GLTFLoader.js"></script>
+	<script src="../../../libs/inflate.min.js"></script>
+	<script src="../../../libs/FBXLoader.js"></script>
+	<script src="../../../libs/ammo.js"></script>
+	<script src="../../../libs/TransformControls.js"></script>
+	
+	<!-- my jslib -->
+	<script src="../../../js/ui.custom.js"></script>
+	<script src="../../../js/AnimeUtils.js"></script>
+	<script src="../../../js/BoneUtils.js"></script>
+	<script src="../../../js/BoneAttachControler.js"></script>
+	<script src="../../../js/Mbl3dUtils.js"></script>
+	<script src="../../../js/AppUtils.js"></script>
+	<script src="../../../js/Logics.js"></script>
+	<script src="../../../js/RotationControler.js"></script>
+	
+	<script src="../../../js/application/MinApplication.js"></script>
+	<script src="../../../js/core/TransformCore.js"></script>
+	<script src="js/Info.js"></script>
 	<script src="js/Sidebar.js"></script>
-	<script src="js/Sidebar.Ik.js"></script>
-	<script src="../posesave/js/Sidebar.Import.js"></script>
-	<script src="../posesave/js/Sidebar.Export.js"></script>
-	<script src="js/Viewport.Info.js"></script>
+	
+	<!-- sidebars -->
+	<script src="../../../js/sidebar/Sidebar.BoneRotate.js"></script>
+	<script src="../../../js/sidebar/Sidebar.MeshRotate.js"></script>
+	<script src="../../../js/sidebar/Sidebar.SimpleLight.js"></script>
+	<script src="../../../js/sidebar/Sidebar.ClipPlayer.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Model.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Hair.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Texture.js"></script>
+	<script src="../../../js/ui/LoadClipRow.js"></script>
+	<script src="../../../js/ui/ClipPlayerRow.js"></script>
+	<script src="../../../js/ui/LRBoneRow.js"></script>
+	<script src="../../../js/ui/AbsoluteRotateDiv.js"></script>
 	<script src="js/Example.js"></script>
+	
 	<script>
 	window.URL = window.URL || window.webkitURL;
 	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
@@ -42,17 +54,16 @@
 		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 	};
 	
-	var application = new Application();
+	var application = new MinApplication();
 	
-	var viewport = new Viewport( application );
-	document.body.appendChild( viewport.dom );
+	var core = new TransformCore( application );
+	document.body.appendChild( core.dom );
 	
-	var info=new Viewport.Info(application);
+	var info=new Info(application);
 	document.body.appendChild( info.dom );
 	
 	var sidebar = new Sidebar( application );
 	document.body.appendChild( sidebar.dom );
-	
 	
 	function onWindowResize( event ) {
 

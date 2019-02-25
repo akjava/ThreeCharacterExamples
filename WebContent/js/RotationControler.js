@@ -20,10 +20,21 @@ var RotationControler=function(ap,boneAttachControler){
 	this.objects=[];
 	
 	this._lastQuaternion=new THREE.Quaternion();
+	
+	this.logging=false;
 }
 RotationControler.prototype.initialize=function(boneFilter){
 	var scope=this;
 	var ap=this.ap;
+	
+	if(ap.objects==undefined){
+		ap.objects=[];
+		if(scope.logging){
+			console.log("ap.objects initialized from RotationControler");
+		}
+		
+	}
+	
 	var e=new THREE.Euler();
 	boneFilter=boneFilter!==undefined?boneFilter:function(){return true};
 	var index=0;
@@ -39,6 +50,10 @@ RotationControler.prototype.initialize=function(boneFilter){
 			sphere.userData.boneIndex=index;
 			sphere.quaternion.copy(boneList[index].quaternion);
 			var cbone=index;
+			
+			if(scope.logging){
+				console.log("controler created",sphere.name);
+			}
 			
 			sphere.quaternion.onChange(function(){
 				var euler=e.setFromQuaternion(sphere.quaternion,bone.rotation.order);
@@ -61,6 +76,7 @@ RotationControler.prototype.initialize=function(boneFilter){
 				rotation.copy(euler);
 				ap.signals.boneRotationChanged.dispatch(cbone);
 				
+				
 			});
 			ap.objects.push(sphere);
 			scope.objects.push(sphere);
@@ -72,6 +88,9 @@ RotationControler.prototype.initialize=function(boneFilter){
 RotationControler.prototype.dispose=function(){
 	var ap=this.ap;
 	ap.objects=AppUtils.removeAllFromArray(ap.objects,this.objects);
+	if(scope.logging){
+		console.log("RotationControler disposed & remove all object from ap.objects");
+	}
 };
 
 RotationControler.prototype.onTransformSelectionChanged=function(target){
@@ -79,6 +98,9 @@ RotationControler.prototype.onTransformSelectionChanged=function(target){
 	var scope=this;
 	if(target==null){
 		this.wireframe.material.visible=false;
+		if(scope.logging){
+			console.log("RotationControler target is null & hide selected indicator");
+		}
 	}else if(target.userData.transformSelectionType=="BoneRotation" && this._enabled){
 		
 		ap.transformControls.setMode( "rotate" );
@@ -87,12 +109,23 @@ RotationControler.prototype.onTransformSelectionChanged=function(target){
 		this.boneIndex=boneIndex;
 		ap.signals.boneSelectionChanged.dispatch(boneIndex);
 		
+		if(scope.logging){
+			console.log("RotationControler dispatch boneSelectionChanged",boneIndex);
+		}
+		
 		this.refreshSphere();
 		
 		this.wireframe.position.copy(scope.boneAttachControler.containerList[boneIndex].position);
 		this.wireframe.material.visible=true;
+		
+		if(scope.logging){
+			console.log("RotationControler onTransformSelectionChanged");
+		}
 	}else{//other
 		this.wireframe.material.visible=false;
+		if(scope.logging){
+			console.log("RotationControler target is not own & hide selected indicator");
+		}
 	}
 }
 RotationControler.prototype.onTransformStarted=function(target){
@@ -105,6 +138,10 @@ RotationControler.prototype.onTransformStarted=function(target){
 		
 		this.wireframe.material.color.set(0xffffff);
 		this.refreshSphere();
+		
+		if(this.logging){
+			console.log("RotationControler onTransformStarted",index);
+		}
 	}
 }
 /*
@@ -124,8 +161,16 @@ if(target!=null && target.userData.transformSelectionType=="BoneRotation"){
 	var index=boneIndex=target.userData.boneIndex;;
 	var bone=this.boneAttachControler.boneList[index];
 	
+	if(this.logging){
+		console.log("RotationControler onTransformFinished",index);
+	}
+	
 	if(!this._lastQuaternion.equals(bone.quaternion)){
 		var boneIndex=target.userData.boneIndex;
+		
+		if(this.logging){
+			console.log("RotationControler dispatch boneRotationFinished",boneIndex);
+		}
 		
 		this.ap.getSignal("boneRotationFinished").dispatch(boneIndex);
 	}

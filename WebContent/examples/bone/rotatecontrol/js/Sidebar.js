@@ -2,29 +2,29 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Bone Rotation Control"));
-	
-	var transform=new RotationPanel1(application);
-	container.add(transform);
-	
-	//catching RotationPanel1
-	ap.signals.objectRotated.add(function(){
-		var angleX=transform.getAngleX();
-		var angleY=transform.getAngleY();
-		var angleZ=transform.getAngleZ();
-		var q=BoneUtils.makeQuaternionFromXYZDegree(angleX,angleY,angleZ);
-		ap.skinnedMesh.quaternion.copy(q);
-	});
+	container.add(new UI.AppName("Bone Rotate Control"));
 	
 	
-	var exportPanel=new Sidebar.Export(ap);
-	container.add(exportPanel);
+	container.add(new Sidebar.MeshRotate(ap));
 	
-	var importPanel=new Sidebar.Import(ap);
-	container.add(importPanel);
+	var boneRotate=new Sidebar.BoneRotate(ap);
+	boneRotate.add(new LRBoneRow(ap));
+
+	container.add(boneRotate);
 	
-	var editPanel=new BoneEditPanel2(ap);
-	container.add(editPanel);
+	container.add(new Sidebar.Model(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.loadingModelFinishedForRotationControler(ap);
+	ap.signals.loadingModelFinished.add(function(){
+		ap.rotationControler.logging=true;
+	},undefined,-1);
 	
+	container.add(new Sidebar.Texture(ap));
+	Logics.materialChangedForSimple(ap);
+	
+	container.add(new Sidebar.Hair(ap));
+	Logics.loadingHairFinished(ap);
+	
+	container.add(new Sidebar.SimpleLight(ap));
 	return container;
 }
