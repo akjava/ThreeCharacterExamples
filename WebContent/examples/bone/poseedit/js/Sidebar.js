@@ -64,8 +64,23 @@ var Sidebar = function ( application ) {
 	ik.add(new Sidebar.IkReset(ap));
 	
 	var ikset=tab.addItem("IkSet");
-	ikset.add(new Sidebar.IkPresetIO(ap,false));
+	var ikratio=new UI.TitlePanel("Ik Ratio");
+	ikset.add(ikratio);
+	ikratio.add(new IkRatioRow(ap));
+	ikset.add(new Sidebar.IkRatioIO(ap));
+	
+	
+	ikset.add(new Sidebar.IkBoneLimit(ap));
+	ikset.add(new Sidebar.IkLimitImport(ap));
+	ikset.add(new Sidebar.IkLimitExport(ap));
+	
+	ikset.add(new Sidebar.IkPresetIO(ap,true));
 	Logics.transformSelectionChangedForIkPresets(ap);
+	ikset.add(new Sidebar.IkPreset(ap));
+	
+	
+	
+	
 	
 	var finger=tab.addItem("Finger");
 	finger.add(new Sidebar.RotateFingers(ap));

@@ -1,4 +1,13 @@
 Sidebar.IkPreset=function(ap){
+	
+	if(ap.ikControler==undefined){
+		console.error("initialize ap.ikControler first");
+	}
+	
+	var ikPresets=new IkPresets(ap.ikControler);
+	ap.ikControler.setPresets(ikPresets);
+	
+	
 	var title=new UI.TitlePanel("Ik Presets")
 	
 	var container=new UI.Div();

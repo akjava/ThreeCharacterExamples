@@ -749,11 +749,21 @@ UI.NumberButtons=function(label,min,max,step,value,onChange,buttonValues){
 	});
 	row.add(number);
 	
+	var bts=[];
+	
 	if(buttonValues){
 		for(var i=0;i<buttonValues.length;i++){
 			var v=buttonValues[i];
-			row.add(new UI.Button(String(v)).onClick(function(e){number.setValue(Number(e.target.innerText));update()}));
+			var bt=new UI.Button(String(v)).onClick(function(e){number.setValue(Number(e.target.innerText));update()});
+			row.add(bt);
+			bts.push(bt);
 		}
+	}
+	row.setDisabled=function(v){
+		number.setDisabled(v);
+		bts.forEach(function(bt){
+			bt.setDisabled(v);
+		})
 	}
 	
 	row.getValue=function(){

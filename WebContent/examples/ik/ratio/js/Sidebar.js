@@ -19,50 +19,12 @@ var Sidebar = function ( application ) {
 	boneRotate.add(new LRBoneRow(ap));
 	main.add(boneRotate);
 	
-	var div=new UI.Div();
-	main.add(div);
-	
-	var bone=null;
-	var ratio=new UI.NumberButtons("Ratio",0,1,0.1,1,function(v){
-		ap.ikControler.setBoneRatio(bone.name,v);
-	},[0.01,0.1,0.5,1]);
-	div.add(ratio);
-	
-	ap.getSignal("boneSelectionChanged").add(function(index){
-		if(index==undefined){
-			return;
-		}
-		bone=BoneUtils.getBoneList(ap.skinnedMesh)[index];
-			
-		var v=ap.ikControler.getBoneRatio(bone.name);
-		ratio.setValue(v);
-	});
+
+	main.add(new IkRatioRow(ap));
 	
 	
+	main.add(new Sidebar.IkRatioIO(ap));
 	
-	var titlePanel=new UI.TitlePanel("IkRatio Load & Export");
-	main.add(titlePanel);
-	
-	
-	var jsonList=new ListLoadJsonDiv("../../../dataset/mbl3d/ikratio/",
-			["","lowerarm1.json","lowerarm2.json","clavicle1.json","clavicle2.json","upperarm.json"],function(json){
-		
-		if(json==null){
-			ap.ikControler.clearBoneRatio();
-			console.log(ap.ikControler.ikBoneRatio);
-		}else{
-			ap.ikControler.setBoneRatioFromJson(json);
-			console.log(ap.ikControler.ikBoneRatio);
-		}
-		
-	});
-	titlePanel.add(jsonList);
-	
-	
-	var exportDiv=new ExportJsonDiv(ap,function(fileName){
-		return ap.ikControler.getBoneRatioAsJson();
-	});
-	titlePanel.add(exportDiv);
 	
 
 	

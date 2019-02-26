@@ -47,7 +47,10 @@ var TransformCore = function ( application ) {
 	
 	ap.onRender=render;
 	
-	
+	ap.boneSelectedIndex=0;
+	ap.getSignal("boneSelectionChanged").add(function(index){
+		ap.boneSelectedIndex=index;
+	});
 	var root=new THREE.Group();
 	ap.root=root;
 	ap.scene.add(root);

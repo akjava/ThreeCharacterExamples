@@ -31,8 +31,7 @@ var Sidebar = function ( application ) {
 
 	
 	main.add(new Sidebar.IkPreset(ap));
-	var ikPresets=new IkPresets(ap.ikControler);
-	ap.ikControler.setPresets(ikPresets);
+	
 	ap.ikControler.logging=true;
 	
 
