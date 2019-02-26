@@ -31,7 +31,8 @@ IkPresets.prototype.getObjectContainer=function(){
 }
 
 IkPresets.prototype.dispose=function(){
-	console.log("IkPresets dispose");
+	if(this.ikControler.logging)
+		console.log("IkPresets dispose");
 	this.clearAll();
 }
 IkPresets.prototype.clearAll=function(){
@@ -69,7 +70,8 @@ IkPresets.prototype.updateVisibleAll=function(){
 		
 		var visible=name==selection?true:false;
 		scope.setVisible(name,visible);
-		console.log("IkPresets visible",name ,visible);
+		if(scope.ikControler.logging)
+			console.log("IkPresets visible",name ,visible);
 	});
 	
 }
@@ -95,7 +97,8 @@ IkPresets.prototype.getIkPresetRotations=function(ikName){
 	return this.presets[ikName];
 }
 IkPresets.prototype.removeIkPresetRotation=function(ikName,ikPresetRotation){
-	console.log("IkPresets removeIkPresetRotation",ikName,ikPresetRotation);
+	if(this.ikControler.logging)
+		console.log("IkPresets removeIkPresetRotation",ikName,ikPresetRotation);
 	var object3d=ikPresetRotation.object;
 	this._removeObject3d(object3d);
 	

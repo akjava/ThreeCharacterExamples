@@ -342,6 +342,24 @@ var Logics={
 				}
 			});
 			
+		},transformSelectionChangedForIkPresets:function(ap){
+			ap.signals.transformSelectionChanged.add(function(target){
+				if(!ap.ikControler.getPresets()){
+					return;
+				}
+				
+				if(target!=null && target.userData.transformSelectionType=="IkPreset"){
+					target.userData.IkPresetOnClick(target);
+					
+					var ikName=target.userData.IkPresetIkName;
+					var newTarget=ap.ikControler.getIkTargetFromName(ikName);
+					
+					//after bone changed reselect  ik
+					ap.signals.transformSelectionChanged.dispatch(newTarget);
+				}
+				
+				ap.ikControler.getPresets().updateVisibleAll();
+			},undefined,-1);//after ikcontroler
 		}
 		
 		

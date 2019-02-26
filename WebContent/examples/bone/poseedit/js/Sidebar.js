@@ -58,9 +58,14 @@ var Sidebar = function ( application ) {
 	
 	var ik=tab.addItem("Ik");
 	ik.add(new Sidebar.IkControl(ap));
+	ik.add(new IkRotateRow(ap));
 	ik.add(new Sidebar.IkBasic(ap));
 	ik.add(new IkSolveRow(ap));
 	ik.add(new Sidebar.IkReset(ap));
+	
+	var ikset=tab.addItem("IkSet");
+	ikset.add(new Sidebar.IkPresetIO(ap,false));
+	Logics.transformSelectionChangedForIkPresets(ap);
 	
 	var finger=tab.addItem("Finger");
 	finger.add(new Sidebar.RotateFingers(ap));
