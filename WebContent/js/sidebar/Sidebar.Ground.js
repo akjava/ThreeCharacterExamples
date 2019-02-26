@@ -71,8 +71,8 @@ Sidebar.Ground=function(ap){
 		
 		
 		pos.y=pos.y-change/ap.skinnedMesh.scale.x;
-		ap.signals.boneTranslateChanged.dispatch();//for translate-controler
-		ap.signals.boneTranslateFinished.dispatch();//for ik controler
+		ap.getSignal("boneTranslateChanged").dispatch();//for translate-controler
+		ap.getSignal("boneTranslateFinished").dispatch();//for ik controler,timeliner
 		
 	});
 	titlePanel.add(buttonRow);

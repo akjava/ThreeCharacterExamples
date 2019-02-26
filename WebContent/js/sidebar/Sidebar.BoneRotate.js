@@ -43,7 +43,7 @@ Sidebar.BoneRotate = function ( application ) {
 	boneSelect.onChange(function(){
 		var index=parseInt(boneSelect.getValue());
 		ap.signals.boneSelectionChanged.dispatch(index);
-		if(ap.rotationControler.logging){
+		if(ap.rotationControler && ap.rotationControler.logging){
 			console.log("Sidebar.BoneRotate dispatch boneSelectionChanged",index);
 		}
 	});
@@ -75,7 +75,7 @@ Sidebar.BoneRotate = function ( application ) {
 			ap.currentBoneMatrix=BoneUtils.makeEmptyBoneMatrix(boneList);
 		}
 		
-	});
+	},undefined,52);
 	
 	function updateRotation(index){
 		var boneList=BoneUtils.getBoneList(scope.mesh);
@@ -119,11 +119,11 @@ Sidebar.BoneRotate = function ( application ) {
 		
 		var index=Number(boneSelect.getValue());
 		ap.getSignal("boneRotationChanged").dispatch(index);
-		if(ap.rotationControler.logging){
+		if(ap.rotationControler && ap.rotationControler.logging){
 			console.log("Sidebar.BoneRotate dispatch boneRotationChanged",index);
 		}
 		ap.getSignal("boneRotationFinished").dispatch(index);
-		if(ap.rotationControler.logging){
+		if(ap.rotationControler && ap.rotationControler.logging){
 			console.log("Sidebar.BoneRotate dispatch boneRotationFinished",index);
 		}
 		
@@ -165,11 +165,11 @@ Sidebar.BoneRotate = function ( application ) {
 		for(var i=0;i<boneList.length;i++){
 			boneList[i].rotation.set(0,0,0);
 			ap.getSignal("boneRotationChanged").dispatch(i);
-			if(ap.rotationControler.logging){
+			if(ap.rotationControler && ap.rotationControler.logging){
 				console.log("Sidebar.BoneRotate dispatch boneRotationChanged",i);
 			}
 			ap.getSignal("boneRotationFinished").dispatch(i);
-			if(ap.rotationControler.logging){
+			if(ap.rotationControler && ap.rotationControler.logging){
 				console.log("Sidebar.BoneRotate dispatch boneRotationFinished",i);
 			}
 		}

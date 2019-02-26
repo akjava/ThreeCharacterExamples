@@ -18,7 +18,7 @@ titlePanel.add(ikList);
 var endsite=new UI.CheckboxRow("Enable EndSite",false,function(v){
 	//update endsite;
 	ap.ikControler.setEndSiteEnabled(ikList.getValue(),v);
-	ap.signals.poseChanged.dispatch();//for reset ik position
+
 });
 titlePanel.add(endsite);
 

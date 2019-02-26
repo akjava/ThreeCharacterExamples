@@ -65,6 +65,7 @@ Sidebar.IkLimitIO=function(application){
 		span.dom.innerHTML = ''
 		var link=AppUtils.generateTextDownloadLink(jsonText,fileName,linkName,true);
 		span.dom.appendChild(link);
+		link.click();
 
 	} );
 	bt.setMarginRight("6px");

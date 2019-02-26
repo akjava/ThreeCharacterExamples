@@ -2,11 +2,15 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Preset Ik Angles"));
+	container.add(new UI.AppName("Limit Ik Bone"));
+	
+	var ikLimitIO=new Sidebar.IkLimitIO(application);
+	container.add(ikLimitIO);
 	
 	
     var ikPanel=new Sidebar.IkLBasic(application);
     container.add(ikPanel);
+	
     ikPanel.add(new Sidebar.IkSolve(ap));
 	
 	
@@ -62,58 +66,24 @@ var Sidebar = function ( application ) {
 		}
 		var name=getSelectedBoneName(index);
 		var value=ap.ikControler.boneLocked[name]!==undefined?ap.ikControler.boneLocked[name]:false;
-		
 		lockedCheck.checkbox.setValue(value);
 		lockedCheck.text.setValue(name);
 	};
 	
 	ap.signals.boneSelectionChanged.add(boneSelectionChanged);
 	
+	var limitPanel=new BoneLimitPanel(application);
+	container.add(limitPanel);
+	
 
+	
+	
 	container.add(new Sidebar.IkReset(ap));
 	
 	container.add(new Sidebar.IkBoneList(ap));
 	
-	//var editPanel=new BoneEditPanel2(ap);
-	//editPanel.buttons.setDisplay("none");
-	//container.add(editPanel);
-	
-	var bt=new UI.ButtonRow("test-clear",function(){
-		var ikPresets=ap.ikControler.getPresets();
-		
-		var json=ikPresets.toJSON();
-		
-		ikPresets.clearAll();
-		
-		ap.ikControler.setPresets(IkPresets.parse(json,ap.ikControler));
-	});
-	container.add(bt);
-	
-	var bt2=new UI.ButtonRow("test-add",function(){
-		var ikPresets=ap.ikControler.getPresets();
-		ikPresets.addRotationsFromBone("test");
-		console.log(ikPresets);
-	});
-	container.add(bt2);
-	
-	var iks=new Sidebar.IkPreset(ap);
-	container.add(iks);
-	
-	var importPanel=Sidebar.JSONImport(ap,function(json){
-		if(json==null){
-			console.error("not support reset yet,TODO init default");
-			return;
-		}
-		ap.ikControler.setPresets(IkPresets.parse(json,ap.ikControler));
-	});
-	container.add(importPanel);
-	
-	var exportPanel=Sidebar.JSONExport(ap,function(fileName){
-		var ikPresets=ap.ikControler.getPresets();
-		var json=ikPresets.toJSON();
-		return JSON.stringify(json);
-	});
-	container.add(exportPanel);
+	var ikLimitList=new Sidebar.IkLimitList(application);
+	container.add(ikLimitList);
 	
 	return container;
 }

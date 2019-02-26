@@ -53,6 +53,7 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	//endsite.position.copy(diff);
 	endsite.material.visible=false;
 	endsite.userData.endSiteIndex=indices[indices.length-1];//TODO switch to name
+	endsite.userData.endSiteParentIndex=indices[indices.length-2];//TODO switch to name
 	
 	var joint=AppUtils.lineTo(list[indices[indices.length-1]],endsite);
 	joint.material.depthTest=false;

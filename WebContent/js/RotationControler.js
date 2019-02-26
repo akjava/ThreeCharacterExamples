@@ -88,7 +88,7 @@ RotationControler.prototype.initialize=function(boneFilter){
 RotationControler.prototype.dispose=function(){
 	var ap=this.ap;
 	ap.objects=AppUtils.removeAllFromArray(ap.objects,this.objects);
-	if(scope.logging){
+	if(this.logging){
 		console.log("RotationControler disposed & remove all object from ap.objects");
 	}
 };
