@@ -1,14 +1,14 @@
 /*
 	<script src="../../../js/sidebar/Sidebar.IkLimitImport.js"></script>
 	
-	<script src="../../../js/ui/ListJsonDiv.js"></script>
+	<script src="../../../js/ui/ListLoadJsonDiv.js"></script>
 	<script src="../../../js/ui/LoadJsonRow.js"></script>
  */
 Sidebar.IkLimitImport=function(application){
 	var ap=application;
 	var container=new UI.TitlePanel("Ik Limit Import");
 	
-	var listJsonDiv=new ListJsonDiv("../../../dataset/mbl3d/iklimit/",
+	var listJsonDiv=new ListLoadJsonDiv("../../../dataset/mbl3d/iklimit/",
 			["","loose.json"],
 			function(json){
 				if(json==null){

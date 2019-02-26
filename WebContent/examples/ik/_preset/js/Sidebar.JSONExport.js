@@ -23,7 +23,7 @@ Sidebar.JSONExport=function(ap,jsonFunction,fileNameFunction){
 		var jsonText=jsonFunction(fileName);
 		var link=AppUtils.generateTextDownloadLink(jsonText,fileName,fileName,true);
 		span.dom.appendChild(link);
-
+		link.click();
 	} );
 	exportPanel.add(bt);
 	bt.setMarginRight("6px");

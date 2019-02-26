@@ -180,7 +180,11 @@ IkControler.prototype.getIkTargetsValue=function(){
 }
 
 IkControler.prototype.setPresets=function(ikPresets){
+	if(this.ikPresets){
+		this.ikPresets.dispose();
+	}
 	this.ikPresets=ikPresets;
+	ikPresets.ikControler=this;
 }
 
 IkControler.prototype.getPresets=function(){

@@ -1,8 +1,8 @@
 Sidebar.IkPreset=function(ap){
-	var container=new Sidebar.Iks(ap);
+	var title=new UI.TitlePanel("Ik Presets")
 	
-	var subtitle=new UI.Subtitle("Ik Preset");
-	container.add(subtitle);
+	var container=new UI.Div();
+	title.add(container);
 	
 	var inputRow=new UI.InputRow("name","",function(){
 		
@@ -95,8 +95,10 @@ Sidebar.IkPreset=function(ap){
 			button.setTextContent("Add");
 		
 			var rots=ap.ikControler.getPresets().getIkPresetRotations(ikName);
+			
 			var options=ikPresetRotationsToOptions(rots);
 			presetList.setOptions(options);
+			//console.log("update options",options);
 		
 	}
 	
@@ -136,5 +138,5 @@ Sidebar.IkPreset=function(ap){
 		updateOptions(ikName);
 	});
 	buttonRow.add(newBt);
-	return container;
+	return title;
 }

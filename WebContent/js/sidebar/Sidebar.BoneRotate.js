@@ -1,6 +1,7 @@
 //TODO replace BoneEditPanel ,old one has no advantage.
 //link to Ik ap.ikControler.onTransformFinished(scope.target);
-Sidebar.BoneRotate = function ( application ) {
+Sidebar.BoneRotate = function ( application ,enableSelectButton) {
+	enableSelectButton=enableSelectButton==undefined?true:enableSelectButton;
 	var ap=application;
 	var scope=this;
 	this.mesh=null;
@@ -11,6 +12,7 @@ Sidebar.BoneRotate = function ( application ) {
 	
 	var container=new UI.TitlePanel("Bone Rotate");
 	
+	if(enableSelectButton){
 	var bt=new UI.ButtonRow("Select Bone Rotate",function(){
 		var index=Number(boneSelect.getValue());
 		var bone=BoneUtils.getBoneList(scope.mesh);
@@ -18,6 +20,7 @@ Sidebar.BoneRotate = function ( application ) {
 		ap.getSignal("transformSelectionChanged").dispatch(target);
 	});
 	container.add(bt);
+	}
 	
 	
 	var selectRow=new UI.Row();

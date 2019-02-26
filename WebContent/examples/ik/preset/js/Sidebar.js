@@ -2,118 +2,93 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Preset Ik Angles"));
+	container.add(new UI.AppName("Ik Preset"));
 	
+	var tab=new UI.Tab(ap);
+	container.add(tab);
+	var main=tab.addItem("Main");
 	
-    var ikPanel=new Sidebar.IkLBasic(application);
-    container.add(ikPanel);
-    ikPanel.add(new Sidebar.IkSolve(ap));
+	main.add(new Sidebar.IkControl(ap));
+	main.add(new IkRotateRow(ap));
+	main.add(new Sidebar.IkBasic(ap));
+	main.add(new IkSolveRow(ap));
+	main.add(new Sidebar.IkReset(ap));
 	
-	
-	
-	
-	var lockPanel=new UI.TitlePanel("Lock Ik All Bone Rotation");
-	container.add(lockPanel);
-	var lockRow=new UI.Row();
-	lockPanel.add(lockRow);
-	var ikLockX=new UI.CheckboxText("X",ap.ikControler.ikLockX,function(v){
-		ap.ikControler.ikLockX=v;
-	});
-	lockRow.add(ikLockX);
-	var ikLockY=new UI.CheckboxText("Y",ap.ikControler.ikLockY,function(v){
-		ap.ikControler.ikLockY=v;
-	});
-	lockRow.add(ikLockY);
-	var ikLockZ=new UI.CheckboxText("Z",ap.ikControler.ikLockZ,function(v){
-		ap.ikControler.ikLockZ=v;
-	});
-	lockRow.add(ikLockZ);
-	
-	
-	var boneIkEnabledPanel=new UI.TitlePanel("Bone Ik Enabled Any or Selected");
-	container.add(boneIkEnabledPanel);
-
-	var selectedOnlyCheck=new UI.SwitchRow("Only Selected Bone","Any Bone",ap.ikControler.ikBoneSelectedOnly,function(v){
-		ap.ikControler.ikBoneSelectedOnly=v;
-	});
-	boneIkEnabledPanel.add(selectedOnlyCheck);
+	main.add(new Sidebar.IkBoneList(ap));
+	var boneRotate=new Sidebar.BoneRotate(ap,false);
+	boneRotate.add(new LRBoneRow(ap));
+	main.add(boneRotate);
 	
 	
 	
-	var lockBonePanel=new UI.TitlePanel("Lock Individual Bone Rotation");
-	container.add(lockBonePanel);
 	
-	function getSelectedBoneName(index){
-		return BoneUtils.getBoneList(ap.skinnedMesh)[index].name;
-	}
+	var titlePanel=new UI.TitlePanel("IkPreset Load & Export");
+	main.add(titlePanel);
 	
 	
-	
-	//TODO switch and color
-	var lockedCheck=new UI.CheckboxRow("",false,function(v){
-		var name=getSelectedBoneName();
-		ap.ikControler.boneLocked[name]=v;
-	});
-	lockBonePanel.add(lockedCheck);
-	
-	var boneSelectionChanged=function(index){
-		if(index==undefined){
-			return;
-		}
-		var name=getSelectedBoneName(index);
-		var value=ap.ikControler.boneLocked[name]!==undefined?ap.ikControler.boneLocked[name]:false;
-		
-		lockedCheck.checkbox.setValue(value);
-		lockedCheck.text.setValue(name);
-	};
-	
-	ap.signals.boneSelectionChanged.add(boneSelectionChanged);
-	
-
-	container.add(new Sidebar.IkReset(ap));
-	
-	container.add(new Sidebar.IkBoneList(ap));
-	
-	//var editPanel=new BoneEditPanel2(ap);
-	//editPanel.buttons.setDisplay("none");
-	//container.add(editPanel);
-	
-	var bt=new UI.ButtonRow("test-clear",function(){
-		var ikPresets=ap.ikControler.getPresets();
-		
-		var json=ikPresets.toJSON();
-		
-		ikPresets.clearAll();
-		
-		ap.ikControler.setPresets(IkPresets.parse(json,ap.ikControler));
-	});
-	container.add(bt);
-	
-	var bt2=new UI.ButtonRow("test-add",function(){
-		var ikPresets=ap.ikControler.getPresets();
-		ikPresets.addRotationsFromBone("test");
-		console.log(ikPresets);
-	});
-	container.add(bt2);
-	
-	var iks=new Sidebar.IkPreset(ap);
-	container.add(iks);
-	
-	var importPanel=Sidebar.JSONImport(ap,function(json){
+	var jsonList=new ListLoadJsonDiv("../../../dataset/mbl3d/preset/",
+			["","simple.json"],function(json){
+		console.log(json);
 		if(json==null){
-			console.error("not support reset yet,TODO init default");
-			return;
+			ap.ikControler.setPresets(new IkPresets(ap.ikControler));
+		}else{
+			var presets=IkPresets.parse(json,ap.ikControler);
+			console.log(presets);
+			ap.ikControler.setPresets(presets);
 		}
-		ap.ikControler.setPresets(IkPresets.parse(json,ap.ikControler));
+		
+		ap.signals.transformSelectionChanged.dispatch(null);//refresh table
 	});
-	container.add(importPanel);
+	titlePanel.add(jsonList);
 	
-	var exportPanel=Sidebar.JSONExport(ap,function(fileName){
+	
+	var exportDiv=new ExportJsonDiv(ap,function(fileName){
 		var ikPresets=ap.ikControler.getPresets();
 		var json=ikPresets.toJSON();
 		return JSON.stringify(json);
 	});
-	container.add(exportPanel);
+	titlePanel.add(exportDiv);
 	
+	main.add(new Sidebar.IkPreset(ap));
+	var ikPresets=new IkPresets(ap.ikControler);
+	ap.ikControler.setPresets(ikPresets);
+	console.log(ap.ikControler);
+	
+	ap.signals.transformSelectionChanged.add(function(target){
+		if(target!=null && target.userData.transformSelectionType=="IkPreset"){
+			target.userData.IkPresetOnClick(target);
+			
+			var ikName=target.userData.IkPresetIkName;
+			var newTarget=ap.ikControler.getIkTargetFromName(ikName);
+			
+			//after bone changed reselect  ik
+			ap.signals.transformSelectionChanged.dispatch(newTarget);
+		}
+		
+		ap.ikControler.getPresets().updateVisibleAll();
+	},undefined,-1);//after ikcontroler
+	
+
+	
+	
+	var sub=tab.addItem("Sub");
+	sub.add(new Sidebar.IkLock(ap));
+	
+	
+	var sub2=tab.addItem("Sub2");
+	
+	sub2.add(new Sidebar.MeshRotate(ap));
+	sub2.add(new Sidebar.Model(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.loadingModelFinishedForIkControler(ap);
+	
+	
+	sub2.add(new Sidebar.Texture(ap));
+	Logics.materialChangedForSimple(ap);
+
+	sub2.add(new Sidebar.Hair(ap));
+	Logics.loadingHairFinished(ap);
+	
+	sub2.add(new Sidebar.SimpleLight(ap));
 	return container;
 }

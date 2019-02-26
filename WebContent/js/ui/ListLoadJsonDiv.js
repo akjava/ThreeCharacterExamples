@@ -5,7 +5,7 @@
 /*
  * maybe itemList first item empty(null) is better.
  */
-var ListJsonDiv=function(baseDir,itemList,onLoad,onReset,accepts){
+var ListLoadJsonDiv=function(baseDir,itemList,onLoad,onReset,accepts){
 	onReset=onReset==undefined?onLoad:onReset;
 	var div=new UI.Div();
 	
