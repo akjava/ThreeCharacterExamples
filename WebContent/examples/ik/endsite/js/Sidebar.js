@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Ik Control"));
+	container.add(new UI.AppName("End Site"));
 	
 	
 	container.add(new Sidebar.MeshRotate(ap));
