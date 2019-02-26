@@ -1,9 +1,9 @@
 Sidebar.IkBoneLimit=function(application){
 	var ap=application;
 	var scope=this;
-	var container=new UI.TitlePanel("Limit Ik Rotation");
+	var container=new UI.TitlePanel("Ik Bone Limit Rotation");
 	
-	var ikLimitkRotationEnabled=new UI.SwitchRow("Enabled","Disabled",ap.ikControler.ikLimitkRotationEnabled,function(v){
+	var ikLimitkRotationEnabled=new UI.SwitchRow("Limit Enabled","Limit Disabled",ap.ikControler.ikLimitkRotationEnabled,function(v){
 		ap.ikControler.ikLimitkRotationEnabled=v;
 	});
 	container.add(ikLimitkRotationEnabled);
@@ -35,6 +35,18 @@ Sidebar.IkBoneLimit=function(application){
 		maxAngleX.setValue(max.x);
 		maxAngleY.setValue(max.y);
 		maxAngleZ.setValue(max.z);
+		
+		
+		var rmin=ap.ikControler.ikDefaultLimitMin[name]?ap.ikControler.ikDefaultLimitMin[name]:{x:-180,y:-180,z:-180};
+		var rmax=ap.ikControler.ikDefaultLimitMax[name]?ap.ikControler.ikDefaultLimitMax[name]:{x:180,y:180,z:180};
+		
+		minAngleX.setResetValue(rmin.x);
+		minAngleY.setResetValue(rmin.y);
+		minAngleZ.setResetValue(rmin.z);
+		
+		maxAngleX.setResetValue(rmax.x);
+		maxAngleY.setResetValue(rmax.y);
+		maxAngleZ.setResetValue(rmax.z);
 		
 	}
 	boneSelect.onChange(function(){

@@ -9,20 +9,24 @@ var Sidebar = function ( application ) {
 	var main=tab.addItem("Main");
 	
 	main.add(new Sidebar.IkControl(ap));
+	main.add(new IkRotateRow(ap));
 	main.add(new Sidebar.IkBasic(ap));
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));
 	
 	main.add(new Sidebar.IkBoneLimit(ap));
+	
+	main.add(new Sidebar.IkLimitImport(ap));
+	
 	main.add(new Sidebar.IkBoneList(ap));
 	var boneRotate=new Sidebar.BoneRotate(ap);
+	boneRotate.add(new LRBoneRow(ap));
 	main.add(boneRotate);
 	
 	var sub=tab.addItem("Sub");
 	sub.add(new Sidebar.IkLimitList(ap));
 	sub.add(new Sidebar.IkLock(ap));
 	sub.add(new Sidebar.IkLimitExport(ap));
-	sub.add(new Sidebar.IkLimitImport(ap));
 	
 	
 	var sub2=tab.addItem("Sub2");

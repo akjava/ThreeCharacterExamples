@@ -97,6 +97,7 @@ IkControler.prototype.setBoneAttachControler=function(boneAttachControler){
 	this.resetAllIkTargets();
 }
 IkControler.prototype.resetIkSettings=function(){
+	var scope=this;
 	var list=this.boneAttachControler.containerList;
 	this.ikSettings.endSites.forEach(function(endsite){
 		var index=endsite.userData.endSiteIndex;
@@ -104,6 +105,11 @@ IkControler.prototype.resetIkSettings=function(){
 		list[index].add(endsite);
 		list[index].add(endsite.userData.joint);
 		list[index].userData.endsite=endsite;
+		
+		if(scope.logging){
+			console.log("endsite position recalucurate",index);
+		}
+		
 		
 		var diff=list[index].position.clone().sub(list[parentIndex].position);
 		diff.setLength(10);

@@ -619,7 +619,7 @@ UI.Select2Row=function(label,options,onChange,current){
 
 UI.List=function(values,onChange,current){
 	
-	
+	onChange=onChange==undefined?function(){}:onChange;
 	
 	
 	
@@ -768,6 +768,7 @@ UI.NumberButtons=function(label,min,max,step,value,onChange,buttonValues){
 UI.NumberPlusMinus=function(label,min,max,step,value,onChange,buttonValues,resetValue){
 	resetValue=resetValue!==undefined?resetValue:0;
 	var row=new UI.Row();
+	row.resetValue=resetValue;
 	var text=new UI.Text(label).setWidth('80px');
 	row.add(text);
 	row.text=text;
@@ -802,7 +803,7 @@ UI.NumberPlusMinus=function(label,min,max,step,value,onChange,buttonValues,reset
 		}
 	}
 	
-	row.add(new UI.Button("reset").setFontSize("6px").onClick(function(e){number.setValue(resetValue);update()}));
+	row.add(new UI.Button("reset").setFontSize("6px").onClick(function(e){number.setValue(row.resetValue);update()}));
 	
 	row.getValue=function(){
 		return number.getValue();
@@ -810,6 +811,9 @@ UI.NumberPlusMinus=function(label,min,max,step,value,onChange,buttonValues,reset
 	
 	row.setValue=function(v){
 		return number.setValue(v);
+	}
+	row.setResetValue=function(v){
+		row.resetValue=v;
 	}
 	return row;
 }
