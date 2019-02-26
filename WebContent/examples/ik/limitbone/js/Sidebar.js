@@ -25,7 +25,7 @@ var Sidebar = function ( application ) {
 	
 	var sub=tab.addItem("Sub");
 	sub.add(new Sidebar.IkLimitList(ap));
-	sub.add(new Sidebar.IkLock(ap));
+	
 	sub.add(new Sidebar.IkLimitExport(ap));
 	
 	

@@ -199,6 +199,20 @@ IkControler.prototype.getIndices=function(name){
 	return this.iks[name];
 }
 
+
+IkControler.prototype.getBoneRatioAsJson=function(){
+	var jsonText=JSON.stringify(this.ikBoneRatio);
+	return jsonText;
+}
+
+IkControler.prototype.setBoneRatioFromJson=function(json){
+	this.ikBoneRatio=json;
+}
+
+IkControler.prototype.clearBoneRatio=function(){
+	this.ikBoneRatio={};
+}
+
 IkControler.prototype.setBoneRatio=function(name,ratio){
 	this.ikBoneRatio[name]=ratio;
 }

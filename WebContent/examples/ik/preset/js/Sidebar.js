@@ -71,11 +71,9 @@ var Sidebar = function ( application ) {
 
 	
 	
-	var sub=tab.addItem("Sub");
-	sub.add(new Sidebar.IkLock(ap));
 	
 	
-	var sub2=tab.addItem("Sub2");
+	var sub2=tab.addItem("Sub");
 	
 	sub2.add(new Sidebar.MeshRotate(ap));
 	sub2.add(new Sidebar.Model(ap));
