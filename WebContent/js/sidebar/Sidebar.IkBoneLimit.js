@@ -2,7 +2,7 @@ Sidebar.IkBoneLimit=function(application){
 	var ap=application;
 	var scope=this;
 	var container=new UI.TitlePanel("Ik Bone Limit Rotation");
-	
+	container.logging=false;
 	var ikLimitkRotationEnabled=new UI.SwitchRow("Limit Enabled","Limit Disabled",ap.ikControler.ikLimitkRotationEnabled,function(v){
 		ap.ikControler.ikLimitkRotationEnabled=v;
 	});
@@ -36,6 +36,8 @@ Sidebar.IkBoneLimit=function(application){
 		maxAngleY.setValue(max.y);
 		maxAngleZ.setValue(max.z);
 		
+		//set reset value
+		//TODO check ikcontroler exist
 		
 		var rmin=ap.ikControler.ikDefaultLimitMin[name]?ap.ikControler.ikDefaultLimitMin[name]:{x:-180,y:-180,z:-180};
 		var rmax=ap.ikControler.ikDefaultLimitMax[name]?ap.ikControler.ikDefaultLimitMax[name]:{x:180,y:180,z:180};
@@ -65,7 +67,8 @@ Sidebar.IkBoneLimit=function(application){
 	
 	
 	ap.getSignal("boneLimitLoaded").add(function(newMinRotation,newMaxRotation){
-		//console.log("boneLimitLoaded",newMinRotation,newMaxRotation);
+		if(container.logging)
+			console.log("Sidebar.IkBoneLimit boneLimitLoaded",newMinRotation,newMaxRotation);
 		scope.minRotation=newMinRotation;
 		scope.maxRotation=newMaxRotation;
 		onBoneSelectionChanged();
@@ -82,6 +85,9 @@ Sidebar.IkBoneLimit=function(application){
 	
 	
 	ap.getSignal("loadingModelFinished").add(function(mesh){
+		if(container.logging)
+			console.log("ik initialized",ap.ikControler.isInitialized());
+		
 		scope.mesh=mesh;
 		var op=BoneUtils.getBoneNameOptions(mesh);
 		//var options=Mbl3dUtils.convertOptionsToMbl3d(op);
@@ -91,27 +97,7 @@ Sidebar.IkBoneLimit=function(application){
 		boneSelect.setValue(Object.values(options)[0]);
 		var boneList=BoneUtils.getBoneList(mesh);
 		
-		//warning only work before boneLimitLoaded
-		if(scope.minRotation==null || scope.maxRotation==null){
-			//console.error("need boneLimitLoaded before skinnedMeshChanged");
-		}
 		
-		AppUtils.clearObject(scope.minRotation);
-		//console.log("skinnedMeshChanged",scope.minRotation);
-		boneList.forEach(function(bone){
-			scope.minRotation[bone.name]={};
-			scope.minRotation[bone.name].x=-180;
-			scope.minRotation[bone.name].y=-180;
-			scope.minRotation[bone.name].z=-180;
-		});
-		
-		AppUtils.clearObject(scope.maxRotation);
-		boneList.forEach(function(bone){
-			scope.maxRotation[bone.name]={};
-			scope.maxRotation[bone.name].x=180;
-			scope.maxRotation[bone.name].y=180;
-			scope.maxRotation[bone.name].z=180;
-		});
 		
 		
 		ap.signals.boneSelectionChanged.dispatch(boneSelect.getValue());

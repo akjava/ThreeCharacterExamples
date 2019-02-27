@@ -10,5 +10,6 @@ Example=function(application){
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	
+	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }

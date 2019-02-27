@@ -177,6 +177,7 @@ var Logics={
 				
 				ap.ikControler.setBoneAttachControler(ap.boneAttachControler);
 				//reference boneAttachControler
+				
 				ap.ikControler.setEndSiteEnabled("Head",true);
 				ap.ikControler.setEndSiteEnabled("LeftArm",true);
 				ap.ikControler.setEndSiteEnabled("RightArm",true);

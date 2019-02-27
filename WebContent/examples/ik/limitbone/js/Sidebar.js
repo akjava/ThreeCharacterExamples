@@ -14,7 +14,9 @@ var Sidebar = function ( application ) {
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));
 	
-	main.add(new Sidebar.IkBoneLimit(ap));
+	var boneLimit=new Sidebar.IkBoneLimit(ap);
+	boneLimit.logging=true;
+	main.add(boneLimit);
 	
 	main.add(new Sidebar.IkLimitImport(ap));
 	
