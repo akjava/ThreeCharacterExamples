@@ -9,9 +9,9 @@ var Sidebar = function ( application ) {
 	
 	var main=tab.addItem("Main");
 	main.add(new Sidebar.ControlerCheck(ap));
+	main.add(new Sidebar.Ground(ap));
 	
-	main.add(new Sidebar.MeshTransform(ap));
-	Logics.loadingModelFinishedForMeshTransform(ap);
+	
 	main.add(new Sidebar.BoneRootTranslate(ap));
 	var boneRotate=new Sidebar.BoneRotate(ap);
 	boneRotate.add(new LRBoneRow(ap));
@@ -23,7 +23,7 @@ var Sidebar = function ( application ) {
 	 
 	
 	
-	var sub1=tab.addItem("Sub1");
+	var sub1=tab.addItem("Sub");
 	sub1.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.loadingModelFinishedForTranslateControler(ap);
@@ -52,12 +52,17 @@ var Sidebar = function ( application ) {
 	sub2.add(new Sidebar.OutlineEffect(ap));
 	Logics.loadingHairFinished(ap);
 	
-	var sub3=tab.addItem("Sub3");
-	sub3.add(new Sidebar.BackgroundImage(ap));
-	sub3.add(new Sidebar.Ground(ap));
+	var importTab=tab.addItem("Import");
+	importTab.add(new Sidebar.BackgroundImage(ap));
+	
 	//dataset.add(new Sidebar.BackgroundVideo(ap));
-	sub3.add(new Sidebar.ImportPose(ap));
-	sub3.add(new Sidebar.ExportPose(ap));
+	importTab.add(new Sidebar.ImportPose(ap));
+	
+	var exportTab=tab.addItem("Export");
+	exportTab.add(new Sidebar.ExportPose(ap));
+	
+	var finger=tab.addItem("Finger");
+	finger.add(new Sidebar.RotateFingers(ap));
 	
 	var ik=tab.addItem("Ik");
 	ik.add(new Sidebar.IkControl(ap));
@@ -83,12 +88,14 @@ var Sidebar = function ( application ) {
 	Logics.transformSelectionChangedForIkPresets(ap);
 	ikset.add(new Sidebar.IkPreset(ap));
 	
+	var mesh=tab.addItem("Mesh");
+	mesh.add(new Sidebar.MeshTransform(ap));
+	Logics.loadingModelFinishedForMeshTransform(ap);
 	
 	
 	
 	
-	var finger=tab.addItem("Finger");
-	finger.add(new Sidebar.RotateFingers(ap));
+	
 	
 	
 	
