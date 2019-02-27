@@ -78,6 +78,9 @@ IkPresets.prototype.updateVisibleAll=function(){
 }
 
 IkPresets.prototype.updateAll=function(){
+	if(this.ikControler.logging)
+		console.log("IkPresets updateAll");
+	
 	if(!this.ikControler){
 		console.log("updateAll:no ikControler");
 		return;
@@ -123,6 +126,8 @@ IkPresets.prototype._removeObject3d=function(object3d){
 }
 
 IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onClick){
+	if(this.ikControler.logging)
+		console.log("IkPresets updateIkPresetRotation",ikName,ikPresetRotation);
 	//update object3d
 	var scope=this;
 	

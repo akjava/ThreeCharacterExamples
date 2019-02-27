@@ -7,6 +7,10 @@ Sidebar.IkPreset=function(ap){
 	var ikPresets=new IkPresets(ap.ikControler);
 	ap.ikControler.setPresets(ikPresets);
 	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		ap.ikControler.ikPresets.updateAll();
+	});
+	
 	
 	var title=new UI.TitlePanel("Ik Presets")
 	

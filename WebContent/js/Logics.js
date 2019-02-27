@@ -344,6 +344,7 @@ var Logics={
 			});
 			
 		},transformSelectionChangedForIkPresets:function(ap){
+			
 			ap.signals.transformSelectionChanged.add(function(target){
 				if(!ap.ikControler.getPresets()){
 					return;
