@@ -5,7 +5,7 @@ Sidebar.RotateArmX=function(ap){
 	ap.rotateArmXAngle_R=0;
 	
 
-	ap.rotateArmXMin=-150;
+	ap.rotateArmXMin=-160;
 	ap.rotateArmXMax=90;
 	
 	ap.rotateArmLowerArmRatio=0.5;//TODO make UI
@@ -59,7 +59,7 @@ Sidebar.RotateArmX=function(ap){
 	var leftArm=new UI.NumberButtons("Left",ap.rotateArmXMin,ap.rotateArmXMax,10,0,function(v){
 		ap.rotateArmXAngle_L=v;
 		ap.signals.applyRotateX.dispatch("LeftArm");
-	},[-150,-90,0,90]);
+	},[ap.rotateArmXMin,-90,0,ap.rotateArmXMax]);
 	panel.add(leftArm);
 	
 	var row1=new UI.Row();
@@ -87,7 +87,7 @@ Sidebar.RotateArmX=function(ap){
 	var rightArm=new UI.NumberButtons("Right",ap.rotateArmXMin,ap.rotateArmXMax,10,0,function(v){
 		ap.rotateArmXAngle_R=v;
 		ap.signals.applyRotateX.dispatch("RightArm");
-	},[-150,-90,0,90]);
+	},[ap.rotateArmXMin,-90,0,ap.rotateArmXMax]);
 	panel.add(rightArm);
 	
 	var row2=new UI.Row();
@@ -112,6 +112,17 @@ Sidebar.RotateArmX=function(ap){
 		ap.signals.applyRotateX.dispatch("RightArm");
 	}));
 	panel.add(row2);
+	
+	panel.add(new UI.Subtitle("Upperarm"));
+	var upper=new UI.NumberButtons("L",-90,30,10,0,function(v){
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var arm=BoneUtils.findBoneByEndsName(boneList,"upperarm_L");
+		var index=boneList.indexOf(arm);
+		arm.rotation.x=THREE.Math.degToRad(v);
+		ap.getSignal("boneRotationChanged").dispatch(index);
+		ap.getSignal("boneRotationFinished").dispatch(index);
+	},[-90,-45,0,30]);
+	panel.add(upper);
 	
 	return panel;
 }

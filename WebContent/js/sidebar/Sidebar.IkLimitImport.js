@@ -45,7 +45,7 @@ Sidebar.IkLimitImport=function(application){
 	
 	
 	var listJsonDiv=new ListLoadJsonDiv("../../../dataset/mbl3d/iklimit/",
-			["","loose.json","rotatex.json","hand.json"],
+			["","loose.json","rotatex.json","hand.json","norotatex.json"],
 			function(json){
 				if(json==null){
 					mergeIkLimit({},{});
