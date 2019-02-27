@@ -6,7 +6,30 @@ Sidebar.IkLimitExport=function(application){
 	var linkName=fileName;
 	
 	function makeJsonText(){
-		var json={ikLimitMin:ap.ikControler.ikLimitMin,ikLimitMax:ap.ikControler.ikLimitMax};
+		var diffMin={};
+		Object.keys(ap.ikControler.ikLimitMin).forEach(function(key){
+			var cmin=ap.ikControler.ikLimitMin[key];
+			var def=ap.ikControler.ikDefaultLimitMin[key];
+			if(def==undefined){
+				def={x:-180,y:-180,z:-180};
+			}
+			if(cmin.x!=def.x||cmin.y!=def.y||cmin.z!=def.z){
+				diffMin[key]=cmin;
+			}
+		});
+		var diffMax={};
+		Object.keys(ap.ikControler.ikLimitMax).forEach(function(key){
+			var cmax=ap.ikControler.ikLimitMax[key];
+			var def=ap.ikControler.ikDefaultLimitMax[key];
+			if(def==undefined){
+				def={x:180,y:180,z:180};
+			}
+			if(cmax.x!=def.x||cmax.y!=def.y||cmax.z!=def.z){
+				diffMax[key]=cmax;
+			}
+		});
+		
+		var json={ikLimitMin:diffMin,ikLimitMax:diffMax};
 		var jsonText=JSON.stringify(json);
 		return jsonText;
 	}
