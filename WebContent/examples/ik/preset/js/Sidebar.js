@@ -57,5 +57,9 @@ var Sidebar = function ( application ) {
 	Logics.loadingHairFinished(ap);
 	
 	sub2.add(new Sidebar.SimpleLight(ap));
+	
+	var debug=tab.addItem("Debug");
+	debug.add(new Sidebar.Debug(ap));
+	
 	return container;
 }

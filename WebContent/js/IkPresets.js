@@ -41,7 +41,8 @@ IkPresets.prototype.clearAll=function(){
 	keys.forEach(function(key){
 		var array=scope.getIkPresetRotations(key);
 		if(array){
-			array.forEach(function(preRot){
+			var array2=array.concat();//removeIkPresetRotation use slice,which break loop
+			array2.forEach(function(preRot){
 				scope.removeIkPresetRotation(key,preRot);
 			})
 		}
@@ -184,7 +185,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			
 			
 			
-			box.name=name;
+			box.name="ikpreset-"+name+"-"+bone.name;
 			box.renderOrder = 1;
 			box.position.copy(diff);
 			parentMesh.add(box);
