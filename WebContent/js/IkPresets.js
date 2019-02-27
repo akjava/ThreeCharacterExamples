@@ -49,6 +49,9 @@ IkPresets.prototype.clearAll=function(){
 	});
 }
 IkPresets.prototype.setVisible=function(ikName,value){
+	if(ikName==null){
+		return;
+	}
 	var scope=this;
 		var array=scope.getIkPresetRotations(ikName);
 		if(array){
@@ -72,7 +75,7 @@ IkPresets.prototype.updateVisibleAll=function(){
 		var visible=name==selection?true:false;
 		scope.setVisible(name,visible);
 		if(scope.ikControler.logging)
-			console.log("IkPresets visible",name ,visible);
+			console.log("Update IkPresets visible",name ,visible);
 	});
 	
 }

@@ -359,7 +359,9 @@ var Logics={
 					//after bone changed reselect  ik
 					ap.signals.transformSelectionChanged.dispatch(newTarget);
 				}
-				
+				if(ap.ikControler.logging){
+					console.log("IkPresets.updateVisibleAll() on transformSelectionChanged<-1>")
+				}
 				ap.ikControler.getPresets().updateVisibleAll();
 			},undefined,-1);//after ikcontroler
 		}

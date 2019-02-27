@@ -151,5 +151,24 @@ Sidebar.IkPreset=function(ap){
 		updateOptions(ikName);
 	});
 	buttonRow.add(newBt);
+	
+	var visible=true;
+	var visibleBt=new UI.CheckboxText("Visible",true,function(v){
+		var preset=ap.ikControler.getPresets();
+		visible=v;
+		preset.setVisible(ap.ikControler.getSelectedIkName(),v);
+	});
+	
+	ap.signals.transformSelectionChanged.add(function(v){
+		var preset=ap.ikControler.getPresets();
+		if(ap.ikControler.logging){
+			console.log("Sidebar.IkPreset overwrite visible",ap.ikControler.getSelectedIkName(),visible);
+		}
+		preset.setVisible(ap.ikControler.getSelectedIkName(),visible);
+	},undefined,-2);
+	
+	
+	visibleBt.text.setWidth("40px");
+	buttonRow.add(visibleBt);
 	return title;
 }
