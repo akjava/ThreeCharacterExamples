@@ -9,7 +9,7 @@ Sidebar.IkLimitImport=function(application){
 	var container=new UI.TitlePanel("Ik Limit Import");
 	
 	var listJsonDiv=new ListLoadJsonDiv("../../../dataset/mbl3d/iklimit/",
-			["","loose.json"],
+			["","loose.json","rotatex.json"],
 			function(json){
 				if(json==null){
 					ap.ikControler.ikLimitMin={};
