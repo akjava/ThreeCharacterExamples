@@ -119,7 +119,7 @@ var TransformCore = function ( application ) {
 	//handle event
 
 	ap.transformControlsTarget=null;
-	var lastHandleClick=-1;
+	var lastSelection=null;
 	function handleClick() {
 
 		if ( onDownPosition.distanceTo( onUpPosition ) === 0 ) {
@@ -127,14 +127,29 @@ var TransformCore = function ( application ) {
 			var intersects = getIntersects( onUpPosition, ap.objects );
 
 			if ( intersects.length > 0 ) {
-				var index=0;
-				if(lastHandleClick+1<intersects.length){
-					index=lastHandleClick+1;
-					lastHandleClick=index;
-				}else{
-					lastHandleClick=-1;
+				var index=-1;
+				var visibles=[];
+				for(var i=0;i<intersects.length;i++){
+					if(intersects[i].object.material && intersects[i].object.material.visible){
+						visibles.push(intersects[i]);
+					}
 				}
-				var object = intersects[index ].object;
+				
+				var index=0;
+				if(visibles.length==1){
+					lastSelection=null;
+				}else{
+					if(visibles[0].object==lastSelection){
+						index=1;
+						lastSelection=visibles[1].object;
+					}else{
+						lastSelection=visibles[0].object;
+					}
+					
+				}
+				
+				
+				var object = visibles[index ].object;
 
 				ap.signals.transformSelectionChanged.dispatch(object);
 				
