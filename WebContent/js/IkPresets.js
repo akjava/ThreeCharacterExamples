@@ -183,7 +183,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			var diff=pos.clone().sub(parentPos);
 			var needLineToParent=true;
 			
-			box=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({visible:false,color:0x000088,depthTest:false,transparent:true,opacity:.5}));
+			box=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({visible:false,color:0x000088,depthTest:false,transparent:true,opacity:.5}));
 			
 			if(parentMesh==null){
 				parentMesh=ikControler.boneAttachControler.containerList[parentIndex];

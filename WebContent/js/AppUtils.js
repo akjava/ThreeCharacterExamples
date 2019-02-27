@@ -207,7 +207,7 @@ var AppUtils={
 			var geo = new THREE.Geometry();
 			geo.vertices.push( new THREE.Vector3(  ));
 			geo.vertices.push( mesh2.position.clone());
-			var material=new THREE.LineBasicMaterial({color:0xcccccc});
+			var material=new THREE.LineBasicMaterial({color:0xaaaacc});
 			
 			var joint = new THREE.Line( geo,material);
 			mesh1.add(joint);

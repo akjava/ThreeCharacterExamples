@@ -16,6 +16,9 @@ var Sidebar = function ( application ) {
 	var boneRotate=new Sidebar.BoneRotate(ap);
 	boneRotate.add(new LRBoneRow(ap));
 	main.add(boneRotate);
+	var limitInfo=new IkBoneLimitInfoDiv(ap);
+	boneRotate.add(limitInfo);
+	
 	main.add(new Sidebar.IkBoneList(ap));
 	 
 	
@@ -62,6 +65,8 @@ var Sidebar = function ( application ) {
 	ik.add(new Sidebar.IkBasic(ap));
 	ik.add(new IkSolveRow(ap));
 	ik.add(new Sidebar.IkReset(ap));
+	ik.add(new Sidebar.IkLock(ap));
+	
 	
 	var ikset=tab.addItem("IkSet");
 	var ikratio=new UI.TitlePanel("Ik Ratio");
