@@ -8,7 +8,7 @@ Sidebar.Model = function ( application ) {
 	this.modelBase="../../../dataset/mbl3d/models/";
 
 	//TODO arg
-	var itemList=["anime2_female.fbx","anime1_female.fbx","anime1_male.fbx","anime2_male.fbx","anime2_modifybreast.fbx","anime2_nomorph.glb"];
+	var itemList=["anime2_female.fbx","anime2_female_smallarm.fbx","anime1_female.fbx","anime1_male.fbx","anime2_male.fbx","anime2_modifybreast.fbx","anime2_nomorph.glb"];
 	application.defaultModelUrl=scope.modelBase+itemList[0];
 	application.modelUrl=application.defaultModelUrl;
 	
