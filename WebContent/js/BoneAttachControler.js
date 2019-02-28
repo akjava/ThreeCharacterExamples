@@ -1,6 +1,6 @@
 /*
- * seems somttime  work with BoneUtils.convertToZeroRotatedBoneMesh() mesh,
- * however angle still broken.
+ * BoneUtils.convertToZeroRotatedBoneMesh() mesh,
+ * 
  */
 var BoneAttachControler=function(skinnedMesh,param){
 	param=param!==undefined?param: {color: 0x880000,boxSize:2};

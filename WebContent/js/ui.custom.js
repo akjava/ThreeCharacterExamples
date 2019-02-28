@@ -105,6 +105,9 @@ UI.BlobFile = function ( accepts) {
 	} );
 	form.appendChild( input );
 
+	this.reset=function(){
+		this.name.textContent="";
+	};
 
 	var name = document.createElement( 'input' );
 	name.disabled = true;

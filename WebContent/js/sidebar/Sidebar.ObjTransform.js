@@ -1,38 +1,39 @@
-Sidebar.MeshTransform=function(ap,enableSelectButton){
-	enableSelectButton=enableSelectButton==undefined?true:enableSelectButton;
+Sidebar.ObjTransform=function(ap){
 	var scope=this;
-	var panel=new UI.TitlePanel("Mesh Transform");
-	this.boneMoveX=0;
-	this.boneMoveY=0;
+	var panel=new UI.TitlePanel("Obj Transform");
+	this.boneMoveX=-5;
+	this.boneMoveY=-3;
 	this.boneMoveZ=0;
-	this.boneAngleX=0;
+	this.boneAngleX=90;
 	this.boneAngleY=0;
 	this.boneAngleZ=0;
+	this.scaleX=10;
+	this.scaleY=10;
+	this.scaleZ=10;
 	
 	panel.add(new UI.Subtitle("Translate"));
 	
-	if(enableSelectButton){
-		var bt=new UI.ButtonRow("Select Mesh",function(){
-			ap.skinnedMesh.userData.transformMode="translate";
-			ap.getSignal("transformSelectionChanged").dispatch(ap.skinnedMesh);
-		});
-		panel.add(bt);
-	}
+	this.targetMesh=null;
 	
+	ap.getSignal("objTransformTargetChanged").add(function(mesh){
+		console.log(mesh);
+		scope.targetMesh=mesh;
+		
+		translate();
+		rotate();
+		scaled();
+		
+	});
 	
-	
-	
-	
-	
-	var onSkinnedMeshTransformed=function(){
+	var onTransformed=function(){
 		update();
 	}
-	ap.getSignal("poseChanged").add(onSkinnedMeshTransformed);
-	
-	ap.getSignal("meshTransformChanged").add(onSkinnedMeshTransformed);
 	
 	function update(){
-		var pos=ap.skinnedMesh.position;
+		if(scope.targetMesh==null){
+			return;
+		}
+		var pos=scope.targetMesh.position;
 		
 		scope.boneMoveX=pos.x;
 		scope.boneMoveY=pos.y;
@@ -42,7 +43,7 @@ Sidebar.MeshTransform=function(ap,enableSelectButton){
 		boneMoveY.setValue(pos.y);
 		boneMoveZ.setValue(pos.z);
 		
-		var rot=ap.skinnedMesh.rotation;
+		var rot=scope.targetMesh.rotation;
 		var rx=THREE.Math.radToDeg(rot.x);
 		var ry=THREE.Math.radToDeg(rot.y);
 		var rz=THREE.Math.radToDeg(rot.z);
@@ -57,18 +58,12 @@ Sidebar.MeshTransform=function(ap,enableSelectButton){
 	}
 	
 	function translate(){
-		var pos=ap.skinnedMesh.position;
-		pos.set(scope.boneMoveX,scope.boneMoveY,scope.boneMoveZ);
-		ap.skinnedMesh.updateMatrixWorld(true);
-		
-		if(ap.objectTransformControler && ap.objectTransformControler.logging){
-			console.log("sidebar dispatch meshTransformChanged,meshTransformFinished (translate)");
+		if(scope.targetMesh==null){
+			return;
 		}
+		var pos=scope.targetMesh.position;
+		pos.set(scope.boneMoveX,scope.boneMoveY,scope.boneMoveZ);
 		
-		ap.signals.meshTransformChanged.remove(onSkinnedMeshTransformed);
-		ap.signals.meshTransformChanged.dispatch("translate",ap.skinnedMesh);
-		ap.signals.meshTransformChanged.add(onSkinnedMeshTransformed);
-		ap.getSignal("meshTransformFinished").dispatch("translate");
 	}
 
 	var boneMoveX=new UI.NumberPlusMinus("X",-500,500,1,scope.boneMoveX,function(v){
@@ -100,31 +95,16 @@ Sidebar.MeshTransform=function(ap,enableSelectButton){
 	
 	//rotate
 	panel.add(new UI.Subtitle("Rotate"));
-	
-	if(enableSelectButton){
-	var bt=new UI.ButtonRow("Select Mesh",function(){
-		ap.skinnedMesh.userData.transformMode="rotate";
-		ap.signals.transformSelectionChanged.dispatch(ap.skinnedMesh);
-	});
-	panel.add(bt);
-	}
-	
 	function rotate(){
-		var rotation=ap.skinnedMesh.rotation;
+		if(scope.targetMesh==null){
+			return;
+		}
+		var rotation=scope.targetMesh.rotation;
 		var x=THREE.Math.degToRad(scope.boneAngleX);
 		var y=THREE.Math.degToRad(scope.boneAngleY);
 		var z=THREE.Math.degToRad(scope.boneAngleZ);
 		rotation.set(x,y,z);
-		ap.skinnedMesh.updateMatrixWorld(true);
 		
-		if(ap.objectTransformControler && ap.objectTransformControler.logging){
-			console.log("sidebar dispatch meshTransformChanged,meshTransformFinished (rotate)");
-		}
-		
-		ap.signals.meshTransformChanged.remove(onSkinnedMeshTransformed);
-		ap.signals.meshTransformChanged.dispatch("rotate",ap.skinnedMesh);
-		ap.signals.meshTransformChanged.add(onSkinnedMeshTransformed);
-		ap.getSignal("meshTransformFinished").dispatch("rotate");
 	}
 	
 	var boneAngleX=new UI.NumberPlusMinus("X",-180,180,10,scope.boneAngleX,function(v){
@@ -148,10 +128,30 @@ Sidebar.MeshTransform=function(ap,enableSelectButton){
 	boneAngleZ.text.setWidth("15px");
 	panel.add(boneAngleZ);
 	
-
-	ap.signals.loadingModelFinished.add(function(mesh){
-		update();
-	});
+	function scaled(){
+		if(scope.targetMesh==null){
+			return;
+		}
+		var scale=scope.targetMesh.scale;
+		scale.set(scope.scaleX,scope.scaleY,scope.scaleZ);
+		
+	}
+	panel.add(new UI.Subtitle("Scale"));
+	var scaleX=new UI.NumberButtons("X",0,200,10,scope.scaleX,function(v){
+		scope.scaleX=v;
+		scaled();
+	},[0.1,1,10,100]);
+	panel.add(scaleX);
+	var scaleY=new UI.NumberButtons("Y",0,200,10,scope.scaleY,function(v){
+		scope.scaleY=v;
+		scaled();
+	},[0.1,1,10,100]);
+	panel.add(scaleY);
+	var scaleZ=new UI.NumberButtons("Z",0,200,10,scope.scaleZ,function(v){
+		scope.scaleZ=v;
+		scaled();
+	},[0.1,1,10,100]);
+	panel.add(scaleZ);
 	
 	return panel;
 }
