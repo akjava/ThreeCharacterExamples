@@ -1,5 +1,6 @@
 var BoneUtils={
 		logging:false,
+		orders:["XYZ","XZY","YXZ","YZX","ZXY","ZYX"],
 		/*
 		 * dont forget set parent
 		 */

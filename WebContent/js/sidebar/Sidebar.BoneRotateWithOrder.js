@@ -101,7 +101,7 @@ Sidebar.BoneRotateWithOrder = function ( application ) {
 
 	container.add(new UI.SubtitleRow("Rotation"));
 	
-	var orders=["XYZ","YXZ","ZXY","ZYX","YZX","XZY"];
+	var orders=BoneUtils.orders;
 	
 	var orderList=new UI.ListRow("Order",orders,function(){
 		rotate();
