@@ -13,7 +13,7 @@ Example=function(application){
 
 	ap.fingerPresetsControler=new FingerPresetsControler(ap,new FingerPresets());
 
-	Logics.loadTextureAtOnce(ap,"../../../dataset/mbl3d/texture/ao.jpg","aoMap");
+	Logics.loadTextureAtOnce(ap,"../../../dataset/mbl3d/texture/aogaus5.jpg","aoMap");
 	
 	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }
