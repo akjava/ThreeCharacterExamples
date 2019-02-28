@@ -88,10 +88,12 @@ var Sidebar = function ( application ) {
 	Logics.transformSelectionChangedForIkPresets(ap);
 	ikset.add(new Sidebar.IkPreset(ap));
 	
-	var mesh=tab.addItem("Mesh");
-	mesh.add(new Sidebar.MeshTransform(ap));
+	var misc=tab.addItem("Misc");
+	misc.add(new Sidebar.MeshTransform(ap));
 	Logics.loadingModelFinishedForMeshTransform(ap);
 	
+	misc.add(new Sidebar.RotateArmX(ap));
+	misc.add(new Sidebar.RotateArmXTwist(ap));
 	
 	
 	
