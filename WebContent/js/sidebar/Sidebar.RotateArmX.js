@@ -127,7 +127,22 @@ Sidebar.RotateArmX=function(ap){
 		arm.rotation.x=THREE.Math.degToRad(v);
 		ap.getSignal("boneRotationChanged").dispatch(index);
 		ap.getSignal("boneRotationFinished").dispatch(index);
+		
+		if(ap.applyTwistUpperarmX){
+			var twistName=Mbl3dUtils.convertToTwistBoneName(arm.name);
+			var rad=THREE.Math.degToRad(-v*ap.applyTwistUpperarmXRatio);
+			var twistBone=BoneUtils.findBoneByEndsName(boneList,twistName);
+			twistBone.rotation.x=rad;
+			var twistIndex=boneList.indexOf(twistBone);
+			ap.getSignal("boneRotationChanged").dispatch(twistIndex);
+			ap.getSignal("boneRotationFinished").dispatch(twistIndex);
+		}
 	}
+	
+	if(!ap.applyTwistUpperarmX)
+		ap.applyTwistUpperarmX=true;
+	if(!ap.applyTwistUpperarmXRatio)
+		ap.applyTwistUpperarmXRatio=0.5;	
 	
 	panel.add(new UI.Subtitle("Upperarm"));
 	var upper=new UI.NumberButtons("Left",-90,30,10,0,function(v){

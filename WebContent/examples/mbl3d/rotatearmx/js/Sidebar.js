@@ -8,11 +8,14 @@ var Sidebar = function ( application ) {
 	container.add(tab);
 	var main=tab.addItem("main");
 	main.add(new Sidebar.RotateArmX(ap));
+	main.add(new Sidebar.RotateArmXTwist(ap));
+	
 	main.add(new Sidebar.MeshRotate(ap));
 	main.add(new Sidebar.IkControl(ap));
 	main.add(new Sidebar.IkBasic(ap));
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));
+	
 	
 	var sub=tab.addItem("Sub");
 	sub.add(new Sidebar.Model(ap));
