@@ -4,25 +4,28 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Rotate Arm X"));
 	
+	var tab=new UI.Tab(ap);
+	container.add(tab);
+	var main=tab.addItem("main");
+	main.add(new Sidebar.RotateArmX(ap));
+	main.add(new Sidebar.MeshRotate(ap));
+	main.add(new Sidebar.IkControl(ap));
+	main.add(new Sidebar.IkBasic(ap));
+	main.add(new IkSolveRow(ap));
+	main.add(new Sidebar.IkReset(ap));
 	
-	container.add(new Sidebar.RotateArmX(ap));
-	container.add(new Sidebar.MeshRotate(ap));
-	container.add(new Sidebar.IkControl(ap));
-	container.add(new Sidebar.IkBasic(ap));
-	container.add(new IkSolveRow(ap));
-	container.add(new Sidebar.IkReset(ap));
-	
-	container.add(new Sidebar.Model(ap));
+	var sub=tab.addItem("Sub");
+	sub.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.loadingModelFinishedForIkControler(ap);
 	
 	
-	container.add(new Sidebar.Texture(ap));
+	sub.add(new Sidebar.Texture(ap));
 	Logics.materialChangedForSimple(ap);
 	
-	container.add(new Sidebar.Hair(ap));
+	sub.add(new Sidebar.Hair(ap));
 	Logics.loadingHairFinished(ap);
 	
-	container.add(new Sidebar.SimpleLight(ap));
+	sub.add(new Sidebar.SimpleLight(ap));
 	return container;
 }

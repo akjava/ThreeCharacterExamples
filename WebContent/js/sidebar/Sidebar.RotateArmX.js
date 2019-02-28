@@ -59,8 +59,11 @@ Sidebar.RotateArmX=function(ap){
 	var leftArm=new UI.NumberButtons("Left",ap.rotateArmXMin,ap.rotateArmXMax,10,0,function(v){
 		ap.rotateArmXAngle_L=v;
 		ap.signals.applyRotateX.dispatch("LeftArm");
-	},[ap.rotateArmXMin,-90,0,ap.rotateArmXMax]);
+	},[ap.rotateArmXMin,-90,-45,0,45,ap.rotateArmXMax]);
+	leftArm.text.setWidth("40px");
+	leftArm.number.setWidth("40px");
 	panel.add(leftArm);
+	
 	
 	var row1=new UI.Row();
 	row1.setTextAlign("Right");
@@ -87,7 +90,9 @@ Sidebar.RotateArmX=function(ap){
 	var rightArm=new UI.NumberButtons("Right",ap.rotateArmXMin,ap.rotateArmXMax,10,0,function(v){
 		ap.rotateArmXAngle_R=v;
 		ap.signals.applyRotateX.dispatch("RightArm");
-	},[ap.rotateArmXMin,-90,0,ap.rotateArmXMax]);
+	},[ap.rotateArmXMin,-90,-45,0,45,ap.rotateArmXMax]);
+	rightArm.text.setWidth("40px");
+	rightArm.number.setWidth("40px");
 	panel.add(rightArm);
 	
 	var row2=new UI.Row();
@@ -113,16 +118,29 @@ Sidebar.RotateArmX=function(ap){
 	}));
 	panel.add(row2);
 	
-	panel.add(new UI.Subtitle("Upperarm"));
-	var upper=new UI.NumberButtons("L",-90,30,10,0,function(v){
+	function updateUpperArm(v,lr){
+		var end=lr?"L":"R";
+		
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
-		var arm=BoneUtils.findBoneByEndsName(boneList,"upperarm_L");
+		var arm=BoneUtils.findBoneByEndsName(boneList,"upperarm_"+end);
 		var index=boneList.indexOf(arm);
 		arm.rotation.x=THREE.Math.degToRad(v);
 		ap.getSignal("boneRotationChanged").dispatch(index);
 		ap.getSignal("boneRotationFinished").dispatch(index);
-	},[-90,-45,0,30]);
+	}
+	
+	panel.add(new UI.Subtitle("Upperarm"));
+	var upper=new UI.NumberButtons("Left",-90,30,10,0,function(v){
+		updateUpperArm(v,true);
+	},[-90,-60,-30,0,30]);
+	upper.text.setWidth("50px");
 	panel.add(upper);
+	var upperR=new UI.NumberButtons("Right",-90,30,10,0,function(v){
+		updateUpperArm(v,false);
+	},[-90,-60,-30,0,30]);
+	upperR.text.setWidth("50px");
+	panel.add(upperR);
+	
 	
 	return panel;
 }
