@@ -652,10 +652,11 @@ UI.List=function(values,onChange,current){
 	return select;
 }
 
-UI.NumberRow=function(label,min,max,step,value,onChange){
-	var row=new UI.Row();
+UI.NumberWidget=function(parent,label,min,max,step,value,onChange){
+	var row=parent
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
+	row.text=text;
 	
 	var number=new UI.Number().setWidth('60px');
 	number.min=min;
@@ -682,6 +683,13 @@ UI.NumberRow=function(label,min,max,step,value,onChange){
 	}
 	
 	return row;
+}
+UI.NumberSpan=function(label,min,max,step,value,onChange){
+	return new UI.NumberWidget(new UI.Span(),label,min,max,step,value,onChange);
+}
+
+UI.NumberRow=function(label,min,max,step,value,onChange){
+	return new UI.NumberWidget(new UI.Row(),label,min,max,step,value,onChange);
 }
 
 UI.IntegerRow=function(label,min,max,step,value,onChange){
@@ -979,11 +987,18 @@ UI.SubtitleRow=function(label){
 	return new UI.Row().add(new UI.Text(label).setClass("subtitle"));
 }
 
-UI.ButtonRow=function(label,onclick){
+UI.ButtonWidget=function(parent,label,onclick){
 	var bt=new UI.Button(label).onClick(onclick);
-	var row= new UI.Row().add(bt);
+	var row= parent.add(bt);
 	row.button=bt;
 	return row;
+};
+
+UI.ButtonRow=function(label,onclick){
+	return new UI.ButtonWidget(new UI.Row(),label,onclick);
+};
+UI.ButtonSpan=function(label,onclick){
+	return new UI.ButtonWidget(new UI.Span(),label,onclick);
 };
 
 //TODO

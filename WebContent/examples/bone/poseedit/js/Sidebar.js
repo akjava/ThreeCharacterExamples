@@ -20,7 +20,7 @@ var Sidebar = function ( application ) {
 	boneRotate.add(limitInfo);
 	
 	main.add(new Sidebar.IkBoneList(ap));
-	 
+	main.add(new Sidebar.RotateArmX(ap));
 	
 	
 	var sub1=tab.addItem("Sub");
@@ -94,7 +94,7 @@ var Sidebar = function ( application ) {
 	
 	misc.add(new Sidebar.RotateArmX(ap));
 	misc.add(new Sidebar.RotateArmXTwist(ap));
-	
+	misc.add(new Sidebar.Debug(ap));
 	
 	
 	

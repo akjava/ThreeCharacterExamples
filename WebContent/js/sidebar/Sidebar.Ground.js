@@ -6,6 +6,8 @@ Sidebar.Ground=function(ap){
 		mesh.material.visible=v;
 		grid.material.visible=v;
 	});
+	visibleRow.text.setWidth("40px");
+	visibleRow.checkbox.setWidth("20px");
 	titlePanel.add(visibleRow);
 	
 	var scene=ap.scene;
@@ -21,10 +23,12 @@ Sidebar.Ground=function(ap){
 	scene.add( grid );
 	
 	
-	var groundMargin=new UI.NumberRow("Margin",0,10,1,this.margin,function(v){
+	var groundMargin=new UI.NumberSpan("Margin",0,10,1,this.margin,function(v){
 		scope.margin=v;
 	});
-	titlePanel.add(groundMargin);
+	groundMargin.text.setWidth("60px");
+	groundMargin.number.setWidth("30px");
+	visibleRow.add(groundMargin);
 	
 	var over=0xffff00;
 	var near=0xe59400;
@@ -61,7 +65,7 @@ Sidebar.Ground=function(ap){
 		scope.margin=v;
 	});
 	
-	var buttonRow=new UI.ButtonRow("Land to Ground",function(){
+	var buttonRow=new UI.ButtonSpan("Land to Ground",function(){
 		ap.ikControler.boneAttachControler.computeBoundingBox();
 		var box=ap.ikControler.boneAttachControler.boundingBox;
 		var min=box.min.y;
@@ -75,7 +79,7 @@ Sidebar.Ground=function(ap){
 		ap.getSignal("boneTranslateFinished").dispatch();//for ik controler,timeliner
 		
 	});
-	titlePanel.add(buttonRow);
+	visibleRow.add(buttonRow);
 	
 	return titlePanel;
 }

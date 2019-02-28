@@ -108,7 +108,7 @@ Sidebar.TextureMaps=function(ap){
 	
 	titlePanel.add(new UI.Subtitle("Ambient Occlusion"));
 	var ao=new ListTextureDiv(ap,
-			["","ao.jpg"]
+			["","ao.jpg","aogaus2.jpg","aogaus5.jpg","aogaus10.jpg"]
 			,"aoMap"
 			);
 	titlePanel.add(ao);

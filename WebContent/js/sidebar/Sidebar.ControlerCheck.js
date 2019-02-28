@@ -53,5 +53,12 @@ Sidebar.ControlerCheck=function(ap){
 	});
 	titlePanel.add(breast);
 	
+	ap.signals.loadingModelFinished.add(function(){
+		//TODO keep last value
+		
+		setValue(true);
+		
+	},undefined,-100);//later
+	
 	return titlePanel;
 }
