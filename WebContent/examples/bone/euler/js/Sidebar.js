@@ -8,6 +8,7 @@ var Sidebar = function ( application ) {
 	
 	container.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.loadingModelFinishedForIkControler(ap);
 	
 	container.add(new Sidebar.Texture(ap));
 	Logics.materialChangedForSimple(ap);

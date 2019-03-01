@@ -17,6 +17,11 @@ var Info = function ( application ) {
 	
 	signals.rendered.add( update );
 
+	var boneName=new UI.Text( '' ).setMarginLeft( '6px' );
+	var boneOrder=new UI.Text( '' ).setMarginLeft( '6px' );
+	container.add(new UI.Text("Name:"),boneName,new UI.Break());
+	container.add(new UI.Text("Order:"),boneOrder,new UI.Break());
+	
 	var texts={};
 	var orders=BoneUtils.orders;
 	orders.forEach(function(order){
@@ -41,6 +46,8 @@ var Info = function ( application ) {
 			return;
 		}
 		var bone=BoneUtils.getBoneList(ap.skinnedMesh)[boneIndex];
+		boneName.setValue(bone.name);
+		boneOrder.setValue(bone.rotation.order);
 		var orders=BoneUtils.orders;
 		var q=bone.quaternion;
 		orders.forEach(function(order){

@@ -4,7 +4,7 @@ Sidebar.IkRatioIO=function(ap){
 	
 	
 	var jsonList=new ListLoadJsonDiv("../../../dataset/mbl3d/ikratio/",
-			["","lowerarm1.json","lowerarm2.json","clavicle1.json","clavicle2.json","upperarm.json"],function(json){
+			["","lowerarm1.json","lowerarm2.json","clavicle1.json","clavicle2.json","upperarm.json","hand1.jspn","hand2.json"],function(json){
 		
 		if(json==null){
 			ap.ikControler.clearBoneRatio();

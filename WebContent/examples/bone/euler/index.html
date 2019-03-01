@@ -16,7 +16,7 @@
 	<script src="../../../libs/inflate.min.js"></script>
 	<script src="../../../libs/FBXLoader.js"></script>
 	<script src="../../../libs/ammo.js"></script>
-
+	<script src="../../../libs/TransformControls.js"></script>
 	
 	<!-- my jslib -->
 	<script src="../../../js/ui.custom.js"></script>
@@ -27,9 +27,13 @@
 	<script src="../../../js/AppUtils.js"></script>
 	<script src="../../../js/Logics.js"></script>
 	
+		<script src="../../../js/IkUtils.js"></script>
+	<script src="../../../js/IkControler.js"></script>
+	<script src="../../../js/ik/Mbl3dIk.js"></script>
+	
 	
 	<script src="../../../js/application/MinApplication.js"></script>
-	<script src="../../../js/core/BasicCore.js"></script>
+	<script src="../../../js/core/TransformCore.js"></script>
 	<script src="js/Info.js"></script>
 	<script src="js/Sidebar.js"></script>
 	
@@ -54,7 +58,7 @@
 	
 	var application = new MinApplication();
 	
-	var core = new BasicCore( application );
+	var core = new TransformCore( application );
 	document.body.appendChild( core.dom );
 	
 	var info=new Info(application);

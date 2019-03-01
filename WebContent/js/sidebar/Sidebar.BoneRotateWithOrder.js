@@ -99,7 +99,6 @@ Sidebar.BoneRotateWithOrder = function ( application ) {
 	};
 	
 
-	container.add(new UI.SubtitleRow("Rotation"));
 	
 	var orders=BoneUtils.orders;
 	
