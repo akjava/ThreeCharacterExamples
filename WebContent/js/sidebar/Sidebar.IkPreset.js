@@ -165,6 +165,15 @@ Sidebar.IkPreset=function(ap){
 		visible=v;
 		preset.setVisible(ap.ikControler.getSelectedIkName(),v);
 	});
+	visibleBt.text.setWidth("40px");
+	buttonRow.add(visibleBt);
+	
+	ap.ikPresetsCopyOrder=true;
+	var copyOrder=new UI.CheckboxText("Order",ap.ikPresetsCopyOrder,function(v){
+		ap.ikPresetsCopyOrder=v;
+	});
+	copyOrder.text.setWidth("40px");
+	buttonRow.add(copyOrder);
 	
 	ap.signals.transformSelectionChanged.add(function(v){
 		var preset=ap.ikControler.getPresets();
@@ -175,7 +184,6 @@ Sidebar.IkPreset=function(ap){
 	},undefined,-2);
 	
 	
-	visibleBt.text.setWidth("40px");
-	buttonRow.add(visibleBt);
+	
 	return title;
 }

@@ -15,7 +15,7 @@ Sidebar.IkPresetIO=function(ap,enableExport){
 	
 	
 	var jsonList=new ListLoadJsonDiv("../../../dataset/mbl3d/ikpreset/",
-			["","simple.json","touch.json","front.json"],function(json){
+			["","order.json","simple.json","touch.json"],function(json){
 		
 		if(json==null){
 			ap.ikControler.setPresets(new IkPresets(ap.ikControler));
