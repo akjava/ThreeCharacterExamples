@@ -1,5 +1,3 @@
-//TODO replace BoneEditPanel ,old one has no advantage.
-//link to Ik ap.ikControler.onTransformFinished(scope.target);
 Sidebar.BoneRotate = function ( application ,enableSelectButton) {
 	enableSelectButton=enableSelectButton==undefined?true:enableSelectButton;
 	var ap=application;

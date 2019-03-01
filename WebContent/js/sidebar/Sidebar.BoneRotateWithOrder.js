@@ -1,7 +1,5 @@
-
-//link to Ik ap.ikControler.onTransformFinished(scope.target);
-//has euler order,ignore bone rotation order
-Sidebar.BoneRotateWithOrder = function ( application ) {
+Sidebar.BoneRotateWithOrder = function ( application ,enableSelectButton) {
+	enableSelectButton=enableSelectButton==undefined?true:enableSelectButton;
 	var ap=application;
 	var scope=this;
 	this.mesh=null;
@@ -12,6 +10,15 @@ Sidebar.BoneRotateWithOrder = function ( application ) {
 	var boneList=null;
 	
 	var container=new UI.TitlePanel("Bone Rotate with Order");
+	if(enableSelectButton){
+		var bt=new UI.ButtonRow("Select Bone Rotate",function(){
+			var index=Number(boneSelect.getValue());
+			var bone=BoneUtils.getBoneList(scope.mesh);
+			var target=ap.rotationControler.rotationControls[bone[index].name];
+			ap.getSignal("transformSelectionChanged").dispatch(target);
+		});
+		container.add(bt);
+		}
 	
 	var selectRow=new UI.Row();
 	container.add(selectRow);
@@ -139,13 +146,25 @@ Sidebar.BoneRotateWithOrder = function ( application ) {
 	
 	var p1=new UI.Row();
 	var bt=new UI.Button("Reset All Bone To 0").onClick( function () {
-		scope.mesh.skeleton.pose();
+		//scope.mesh.skeleton.pose();
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		for(var i=0;i<boneList.length;i++){
+			boneList[i].rotation.set(0,0,0);
+			ap.getSignal("boneRotationChanged").dispatch(i);
+			if(ap.rotationControler && ap.rotationControler.logging){
+				console.log("Sidebar.BoneRotate dispatch boneRotationChanged",i);
+			}
+			ap.getSignal("boneRotationFinished").dispatch(i);
+			if(ap.rotationControler && ap.rotationControler.logging){
+				console.log("Sidebar.BoneRotate dispatch boneRotationFinished",i);
+			}
+		}
+		
+		//for something TODO compatible
 		Object.keys(ap.currentBoneMatrix).forEach(function(key){
 			ap.currentBoneMatrix[key].translate.set(0,0,0);
 			ap.currentBoneMatrix[key].rotation.set(0,0,0);
 		});
-
-		
 		
 		onBoneSelectionChanged();
 	});
