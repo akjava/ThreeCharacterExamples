@@ -4,7 +4,9 @@ Sidebar.Transparent=function(ap){
 		ap.skinnedMesh.material.transparent=v;
 		if(!v){
 			opacity.setDisabled(true);
+			alphaTest.setDisabled(true);
 		}else{
+			opacity.setDisabled(false);
 			alphaTest.setDisabled(false);
 		}
 	});
