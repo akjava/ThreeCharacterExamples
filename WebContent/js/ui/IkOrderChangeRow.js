@@ -1,6 +1,7 @@
 var IkOrderChangeRow=function(ap){
 	var row=new UI.Row();
-	var logging=true;
+	
+	row.logging=false;
 	var selectedIkName=null;
 	ap.getSignal("ikSelectionChanged").add(function(name){
 		selectedIkName=name;
@@ -32,7 +33,7 @@ var IkOrderChangeRow=function(ap){
 			}
 		
 			bone.rotation.order=order;//for smooth continue ik
-			if(logging){
+			if(row.logging){
 				console.log("change order ",bone.name,order);
 			}
 		});
@@ -49,7 +50,7 @@ var IkOrderChangeRow=function(ap){
 			euler.setFromQuaternion(bone.quaternion);
 			bone.rotation.copy(euler);
 			ap.getSignal("boneRotationChanged").dispatch(index);
-			if(logging){
+			if(row.logging){
 				console.log("recover order ",bone.name,order);
 			}
 		});
