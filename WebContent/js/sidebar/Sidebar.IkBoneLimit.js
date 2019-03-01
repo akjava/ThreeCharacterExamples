@@ -95,15 +95,12 @@ Sidebar.IkBoneLimit=function(application){
 		
 		boneSelect.setOptions(options);
 		boneSelect.setValue(Object.values(options)[0]);
-		var boneList=BoneUtils.getBoneList(mesh);
-		
-		
-		
-		
-		ap.signals.boneSelectionChanged.dispatch(boneSelect.getValue());
-		
-		
+		var boneList=BoneUtils.getBoneList(mesh);	
 	},undefined,51);//call before than ik initialized
+	
+	ap.getSignal("loadingModelFinished").add(function(mesh){
+		ap.signals.boneSelectionChanged.dispatch(boneSelect.getValue());
+	});
 
 	
 	var minRotation=new UI.SubtitleRow("Min Rotation");

@@ -1,12 +1,12 @@
-Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
+Sidebar.BoneRotate = function ( application ,enableSelectButton) {
 	enableSelectButton=enableSelectButton==undefined?true:enableSelectButton;
-	enableOrder=enableOrder==undefined?false:enableOrder;
 	var ap=application;
 	var scope=this;
 	this.mesh=null;
-	this.selectedBone=null;
-
-	function log(message,option1){
+	
+	this.autoUpdate=true;
+	
+	function logging(message,option1){
 		if(ap.rotationControler && ap.rotationControler.logging){
 			console.log(message,option1);
 		}
@@ -34,12 +34,10 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	function onBoneSelectionChanged(){
 		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
 		
-		scope.selectedBone=bone;//TODO move to  local
+		ap.selectedBone=bone;//TODO move to  local
 		
-		var name=bone.name;
-		var euler=bone.rotation;
-		
-		orderList.setValue(euler.order);
+		var name=ap.selectedBone.name;
+		var euler=ap.currentBoneMatrix[name].rotation;
 		
 		var x=THREE.Math.radToDeg(euler.x).toFixed(2);
 		var y=THREE.Math.radToDeg(euler.y).toFixed(2);
@@ -51,7 +49,9 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	boneSelect.onChange(function(){
 		var index=parseInt(boneSelect.getValue());
 		ap.signals.boneSelectionChanged.dispatch(index);
-		log("Sidebar.BoneRotate dispatch boneSelectionChanged",index);
+		if(ap.rotationControler && ap.rotationControler.logging){
+			console.log("Sidebar.BoneRotate dispatch boneSelectionChanged",index);
+		}
 	});
 	
 	ap.getSignal("boneSelectionChanged").add(function(index){
@@ -68,18 +68,28 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 		boneSelect.setOptions(options);
 		boneSelect.setValue(Object.values(options)[0]);
 		
-		scope.selectedBone=ap.skinnedMesh.skeleton.bones[0];	
+		ap.selectedBone=ap.skinnedMesh.skeleton.bones[0];
+		
+		if(ap.defaultBoneMatrix==undefined){
+			var boneList=BoneUtils.getBoneList(mesh);
+			ap.defaultBoneMatrix=BoneUtils.storeDefaultBoneMatrix(boneList);
+			}
+		
+		if(ap.currentBoneMatrix==undefined){
+			
+			var boneList=BoneUtils.getBoneList(mesh);
+			ap.currentBoneMatrix=BoneUtils.makeEmptyBoneMatrix(boneList);
+		}
+		
 	},undefined,52);
-	
-	ap.signals.loadingModelFinished.add(function(mesh){
-		ap.signals.boneSelectionChanged.dispatch(0);
-	});
+	//TODO dispatch
 	
 	function updateRotation(index){
 		var boneList=BoneUtils.getBoneList(scope.mesh);
 		var name=boneList[index].name;
 		
-		
+		//TODO minus from default-matrix
+		ap.currentBoneMatrix[name].rotation.copy(boneList[index].rotation);
 		
 		if(index==parseInt(boneSelect.getValue())){
 			onBoneSelectionChanged();
@@ -98,57 +108,59 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	});
 	
 	function rotate(){
-		//var name=Mbl3dUtils.shortenMbl3dBoneName(scope.selectedBone.name);
-		var bone=scope.selectedBone;
-		var name=bone.name;
+		//var name=Mbl3dUtils.shortenMbl3dBoneName(ap.selectedBone.name);
+		var name=(ap.selectedBone.name);
 		var rx=boneAngleX.getValue();
 		var ry=boneAngleY.getValue();
 		var rz=boneAngleZ.getValue();
 		
 		
-		
-		
-		var x=THREE.Math.degToRad(rx);
-		var y=THREE.Math.degToRad(ry);
-		var z=THREE.Math.degToRad(rz);
-		
-		bone.rotation.set(x,y,z,orderList.getValue());
+		var order=ap.selectedBone.rotation.order;
+		ap.currentBoneMatrix[name].rotation.x=THREE.Math.degToRad(rx);
+		ap.currentBoneMatrix[name].rotation.y=THREE.Math.degToRad(ry);
+		ap.currentBoneMatrix[name].rotation.z=THREE.Math.degToRad(rz);
+		var q=BoneUtils.makeQuaternionFromXYZDegree(rx,ry,rz,ap.defaultBoneMatrix[name].rotation,order);
+		ap.selectedBone.quaternion.copy(q);
+
+		ap.selectedBone.updateMatrixWorld(true);
 		
 		var index=Number(boneSelect.getValue());
 		ap.getSignal("boneRotationChanged").dispatch(index);
+		if(ap.rotationControler && ap.rotationControler.logging){
+			console.log("Sidebar.BoneRotate dispatch boneRotationChanged",index);
+		}
 		ap.getSignal("boneRotationFinished").dispatch(index);
-		log("Sidebar.BoneRotate dispatch boneRotationChanged",index);
-		log("Sidebar.BoneRotate dispatch boneRotationFinished",index);
-		
+		if(ap.rotationControler && ap.rotationControler.logging){
+			console.log("Sidebar.BoneRotate dispatch boneRotationFinished",index);
+		}
 		
 	};
 
-	var orders=BoneUtils.orders;
 	
-	var orderList=new UI.ListRow("Order",orders,function(){
-		rotate();
-	},"XYZ");
-	
-	if(enableOrder)
-		container.add(orderList);
 	
 	var boneAngleX=new UI.NumberPlusMinus("X",-180,180,10,scope.boneAngleX,function(v){
 		scope.boneAngleX=v;
-		rotate();
+		if(scope.autoUpdate){
+			rotate();
+			}
 	},[1,5,15]);
 	boneAngleX.text.setWidth("15px");
 	container.add(boneAngleX);
 	
 	var boneAngleY=new UI.NumberPlusMinus("Y",-180,180,10,scope.boneAngleY,function(v){
 		scope.boneAngleY=v;
-		rotate();
+		if(scope.autoUpdate){
+			rotate();
+			}
 	},[1,5,15]);
 	boneAngleY.text.setWidth("15px");
 	container.add(boneAngleY);
 	
 	var boneAngleZ=new UI.NumberPlusMinus("Z",-180,180,10,scope.boneAngleZ,function(v){
 		scope.boneAngleZ=v;
-		rotate();
+		if(scope.autoUpdate){
+			rotate();
+			}
 	},[1,5,15]);
 	boneAngleZ.text.setWidth("15px");
 	container.add(boneAngleZ);
@@ -160,13 +172,20 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 		for(var i=0;i<boneList.length;i++){
 			boneList[i].rotation.set(0,0,0);
 			ap.getSignal("boneRotationChanged").dispatch(i);
-			log("Sidebar.BoneRotate dispatch boneRotationChanged",i);
-			
+			if(ap.rotationControler && ap.rotationControler.logging){
+				console.log("Sidebar.BoneRotate dispatch boneRotationChanged",i);
+			}
 			ap.getSignal("boneRotationFinished").dispatch(i);
-			log("Sidebar.BoneRotate dispatch boneRotationFinished",i);
+			if(ap.rotationControler && ap.rotationControler.logging){
+				console.log("Sidebar.BoneRotate dispatch boneRotationFinished",i);
+			}
 		}
 		
-		
+		//for something TODO compatible
+		Object.keys(ap.currentBoneMatrix).forEach(function(key){
+			ap.currentBoneMatrix[key].translate.set(0,0,0);
+			ap.currentBoneMatrix[key].rotation.set(0,0,0);
+		});
 		
 		onBoneSelectionChanged();
 	});

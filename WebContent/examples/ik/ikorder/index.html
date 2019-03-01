@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Ik Bone Order</title>
+	</head>
+	<body ontouchstart="">
+	<link href="../../css/shared.css" rel="stylesheet" />
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="../../../libs/three.js"></script>
+	<script src="../../../libs/ui.js"></script>
+	<script src="../../../libs/OrbitControls.js"></script>
+	<script src="../../../libs/signals.min.js"></script>
+	<script src="../../../libs/DRACOLoader.js"></script>
+	<script src="../../../libs/GLTFLoader.js"></script>
+	<script src="../../../libs/inflate.min.js"></script>
+	<script src="../../../libs/FBXLoader.js"></script>
+	<script src="../../../libs/ammo.js"></script>
+	<script src="../../../libs/TransformControls.js"></script>
+	
+	<!-- my jslib -->
+	<script src="../../../js/ui.custom.js"></script>
+	<script src="../../../js/AnimeUtils.js"></script>
+	<script src="../../../js/BoneUtils.js"></script>
+	<script src="../../../js/BoneAttachControler.js"></script>
+	<script src="../../../js/Mbl3dUtils.js"></script>
+	<script src="../../../js/AppUtils.js"></script>
+	<script src="../../../js/Logics.js"></script>
+	<script src="../../../js/IkUtils.js"></script>
+	<script src="../../../js/IkPresets.js"></script>
+	<script src="../../../js/IkControler.js"></script>
+	<script src="../../../js/ik/Mbl3dIk.js"></script>
+	
+	<script src="../../../js/application/MinApplication.js"></script>
+	<script src="../../../js/core/TransformCore.js"></script>
+	<script src="js/Info.js"></script>
+	<script src="js/Sidebar.js"></script>
+	
+	<!-- sidebars -->
+	
+	<script src="../../../js/sidebar/Sidebar.Debug.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkPresetIO.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkPreset.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkLimitExport.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkLimitImport.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkLimitList.js"></script>
+	<script src="../../../js/sidebar/Sidebar.BoneRotate.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkBoneList.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkBoneLimit.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkLock.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkControl.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkReset.js"></script>
+	<script src="../../../js/sidebar/Sidebar.IkBasic.js"></script>
+	<script src="../../../js/sidebar/Sidebar.BoneRootTranslate.js"></script>
+	<script src="../../../js/sidebar/Sidebar.MeshRotate.js"></script>
+	<script src="../../../js/sidebar/Sidebar.SimpleLight.js"></script>
+	<script src="../../../js/sidebar/Sidebar.ClipPlayer.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Model.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Hair.js"></script>
+	<script src="../../../js/sidebar/Sidebar.Texture.js"></script>
+	
+	
+	<script src="../../../js/ui/ExportJsonDiv.js"></script>
+
+	<script src="../../../js/ui/LoadJsonRow.js"></script>
+	<script src="../../../js/ui/IkRotateRow.js"></script>
+	<script src="../../../js/ui/IkSolveRow.js"></script>
+	<script src="../../../js/ui/LRBoneRow.js"></script>
+	<script src="../../../js/ui/AbsoluteRotateDiv.js"></script>
+	<script src="../../../js/ui/ListLoadJsonDiv.js"></script>
+	<script src="../../../js/ui/LoadJsonRow.js"></script>
+	
+	<script src="js/Example.js"></script>
+	
+	<script>
+	window.URL = window.URL || window.webkitURL;
+	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	Number.prototype.format = function (){
+		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	};
+	
+	var application = new MinApplication();
+	
+	var core = new TransformCore( application );
+	document.body.appendChild( core.dom );
+	
+	var info=new Info(application);
+	document.body.appendChild( info.dom );
+	
+	var sidebar = new Sidebar( application );
+	document.body.appendChild( sidebar.dom );
+	
+	function onWindowResize( event ) {
+
+		application.signals.windowResize.dispatch();
+
+	}
+
+	window.addEventListener( 'resize', onWindowResize, false );
+
+	onWindowResize();
+	
+	application.example=new Example(application);
+	</script>
+	</body>
+</html>

@@ -13,7 +13,7 @@ var Sidebar = function ( application ) {
 	
 	
 	main.add(new Sidebar.BoneRootTranslate(ap));
-	var boneRotate=new Sidebar.BoneRotate(ap);
+	var boneRotate=new Sidebar.BoneRotate(ap,true,true);
 	boneRotate.add(new LRBoneRow(ap));
 	main.add(boneRotate);
 	var limitInfo=new IkBoneLimitInfoDiv(ap);

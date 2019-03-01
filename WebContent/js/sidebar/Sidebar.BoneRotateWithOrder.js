@@ -26,9 +26,12 @@ Sidebar.BoneRotateWithOrder = function ( application ,enableSelectButton) {
 	selectRow.add(boneSelect);
 	
 	function onBoneSelectionChanged(){
-		var bone=boneList[parseInt(boneSelect.getValue())];
 		
-		scope.selectedBone=bone;
+		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
+		
+		console.log("onBoneSelectionChanged",bone.name);
+		
+		ap.selectedBone=bone;//TODO move to  local
 		
 		var euler=bone.rotation;
 		
@@ -61,12 +64,16 @@ Sidebar.BoneRotateWithOrder = function ( application ,enableSelectButton) {
 		
 		scope.selectedBone=ap.skinnedMesh.skeleton.bones[0];
 		boneList=BoneUtils.getBoneList(mesh);
-		ap.signals.boneSelectionChanged.dispatch(0);
 		
+		
+		//for logging
 		boneList.forEach(function(bone){
 			console.log(bone.name,bone.rotation.order);
 		});
 		
+	},undefined,52);
+	ap.signals.loadingModelFinished.add(function(mesh){
+		ap.signals.boneSelectionChanged.dispatch(0);
 	});
 	
 	function updateRotation(index){
