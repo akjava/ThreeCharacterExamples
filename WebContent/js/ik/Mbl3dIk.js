@@ -131,11 +131,11 @@ Mbl3dIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 			this.limitBone(boneList,"upperarm_L",-45,-75,-85,25,45,45);
 			this.limitBone(boneList,"clavicle_L",0,0,0,0,15,45);
 			
-			this.limitBone(boneList,"head",-15,-15,-15,15,15,15);
-			this.limitBone(boneList,"spine01",-15,-45,-45,15,45,45);
-			this.limitBone(boneList,"spine02",-45,-45,-45,45,45,45);
-			this.limitBone(boneList,"spine03",-45,-45,-45,45,45,45);
-			this.limitBone(boneList,"neck",-45,-45,-45,45,45,45);
+			this.limitBone(boneList,"head",-15,-15,-20,15,15,20);
+			this.limitBone(boneList,"spine01",-15,-45,-30,15,45,30);
+			this.limitBone(boneList,"spine02",-45,-45,-30,45,45,30);
+			this.limitBone(boneList,"spine03",-45,-45,-30,45,45,30);
+			this.limitBone(boneList,"neck",-45,-45,-10,45,45,10);
 			this.limitBone(boneList,"pelvis",-180,-180,-180,180,180,180);
 			this.limitBone(boneList,"root",-180,-180,-180,180,180,180);
 			
