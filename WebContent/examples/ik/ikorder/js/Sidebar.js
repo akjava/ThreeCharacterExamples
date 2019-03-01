@@ -10,13 +10,17 @@ var Sidebar = function ( application ) {
 	
 	main.add(new Sidebar.IkControl(ap));
 	main.add(new IkRotateRow(ap));
+	main.add(new IkOrderChangeRow(ap));
+	
 	main.add(new Sidebar.IkBasic(ap));
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));
 	
 	main.add(new Sidebar.IkBoneList(ap));
-	var boneRotate=new Sidebar.BoneRotate(ap,false);
+	var boneRotate=new Sidebar.BoneRotate(ap,false,true);
 	boneRotate.add(new LRBoneRow(ap));
+	
+	
 	main.add(boneRotate);
 	
 	
