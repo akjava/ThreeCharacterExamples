@@ -150,7 +150,9 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 				var bone=boneList[index];
 				
 				var rotation=presetRotations[i]; //presetRotations has not order;
-				bone.rotation.set(rotation.x,rotation.y,rotation.z);
+				//bone.rotation.set(rotation.x,rotation.y,rotation.z); //in future support change order
+				bone.quaternion.setFromEuler(rotation);
+				
 				ap.signals.boneRotationChanged.dispatch(index);
 			}
 			ap.ikControler.resetAllIkTargets();
@@ -217,7 +219,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 			
 			
 			var rad=rotations[i];
-			box.rotation.set(rad.x,rad.y,rad.z,bone.rotation.order);
+			box.rotation.set(rad.x,rad.y,rad.z,rad.order);
 			
 			if(needLineToParent){
 				var line=AppUtils.lineTo(parentMesh,box);
@@ -305,6 +307,9 @@ IkPresets.parseIkPresetRotations=function(json){
 	var rotations=[];
 	
 	json.rotations.forEach(function(rotation){
+		if(rotation.length<4){
+			console.log("IkPresets possible invalid euler");
+		}
 		var euler=new THREE.Euler().fromArray(rotation);
 		rotations.push(euler);
 	});
@@ -321,7 +326,7 @@ var IkPresetRotation=function(name,rotations){
 IkPresetRotation.prototype.toJSON=function(){
 	var rots=[];
 	this.rotations.forEach(function(euler){
-		rots.push(euler.toVector3().toArray());
+		rots.push(euler.toArray());
 	})
 	var json={name:this.name,
 			rotations:rots,

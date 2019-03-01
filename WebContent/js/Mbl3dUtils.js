@@ -162,7 +162,9 @@ var Mbl3dUtils={
 				lrs.forEach(function(lr){
 					var boneName=name+lr;
 					var index=BoneUtils.findBoneIndexByEndsName(bones,boneName);
-					bones[index].rotation.order="YZX";
+					//X is last for simple rotation
+					//bones[index].rotation.order="YZX";
+					bones[index].rotation.order="ZYX";//better arm close body
 				});
 			});
 		}

@@ -4,6 +4,10 @@ Sidebar.Debug=function(ap){
 		console.log(ap);
 	});
 	container.add(btRow);
+	var btRow=new UI.ButtonRow("Print Mesh",function(){
+		console.log(ap.skinnedMesh);
+	});
+	container.add(btRow);
 	var btRow=new UI.ButtonRow("Print ap.objects",function(){
 		var len=ap.objects.length;
 		console.log("ap.objects",len,ap.objects);

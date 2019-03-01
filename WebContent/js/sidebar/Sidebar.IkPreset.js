@@ -67,6 +67,9 @@ Sidebar.IkPreset=function(ap){
 			inputRow.input.setValue("");
 		}
 	});
+	presetList.onDblClick(function(){
+		onExec();
+	});
 	//sort
 	presetList.setMultiple(true);
 	container.add(presetList);
@@ -117,7 +120,7 @@ Sidebar.IkPreset=function(ap){
 	
 	ap.signals.ikSelectionChanged.add(updateOptions);
 	
-	var buttonRow=new UI.ButtonRow("Exec",function(){
+	function onExec(){
 		var ikName=ap.ikControler.getSelectedIkName();
 		var rots=ap.ikControler.getPresets().getIkPresetRotations(ikName);
 		var selected=presetList.getValue();
@@ -128,6 +131,10 @@ Sidebar.IkPreset=function(ap){
 		}else{
 			console.error("Exec this has not object,");
 		}
+	}
+	
+	var buttonRow=new UI.ButtonRow("Exec",function(){
+		onExec();
 	});
 	container.add(buttonRow);
 	var newBt=new UI.Button("New").onClick(function(){
