@@ -68,6 +68,9 @@ BoneAttachControler.prototype.dispose=function(){
 BoneAttachControler.prototype.getBoneList=function(){
 	return this.boneList;
 }
+BoneAttachControler.prototype.clonePositionAt=function(index){
+	return this.containerList[index].position.clone();
+}
 BoneAttachControler.prototype.getContainerList=function(){
 	return this.containerList;
 }
