@@ -2,20 +2,10 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Physics Breast Bone Animation1"));
+	container.add(new UI.AppName("Physics Breast Bone Animation"));
 	
-	container.add(new Sidebar.MeshTransform(ap,false));
-	
-	
-	ap.damping=100;
-	ap.stiffness=1000;
-	ap.meshTransparent=1;
-	ap.bothBreast=false;
-	ap.moveSameDirection=true;
-	ap.visibleAmmo=true;
-	ap.bodyDamping=0.1;
-	
-	
+	var animePanel=new BoneRotateAnimationPanel(application,{duration:10});
+	container.add(animePanel);
 	
 	var control=new UI.TitlePanel("Body");
 	container.add(control);
@@ -35,7 +25,8 @@ var Sidebar = function ( application ) {
 	control.add(moveSameDirection);
 	
 	var visibleAmmo=new UI.CheckboxRow("Visible Ammo",application.visibleAmmo,function(v){
-		ap.ammoControler.setVisibleAll(v);
+		application.visibleAmmo=v;
+		application.signals.visibleAmmoChanged.dispatch();
 	});
 	control.add(visibleAmmo);
 	
@@ -69,19 +60,5 @@ var Sidebar = function ( application ) {
 	});
 	container.add(test);
 	
-	
-	container.add(new Sidebar.Model(ap));
-	Logics.loadingModelFinishedForBoneAttachControler(ap);
-	Logics.initializeAmmo(ap);
-	
-	
-	container.add(new Sidebar.Texture(ap));
-	Logics.materialChangedForSimple(ap);
-	
-	container.add(new Sidebar.Hair(ap));
-	Logics.loadingHairFinished(ap);
-	
-	container.add(new Sidebar.ClipPlayer(ap));
-	container.add(new Sidebar.SimpleLight(ap));
 	return container;
 }

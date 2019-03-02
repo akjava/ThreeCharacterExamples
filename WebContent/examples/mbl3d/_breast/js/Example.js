@@ -1,51 +1,74 @@
+/*
+ * 
+ * somehow not good at mesh rotation.
+ * 
+ */
 Example=function(application){
 	var ap=application;
 	
-	//default camera
 	ap.camera.position.set( 0, 100, 250 );
 	ap.controls.target.set(0,100,0);
 	ap.controls.update();
 	
-	var url="../../../dataset/mbl3d/models/anime2_female_modifybreast.fbx";
-	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
-
-	ap.clock=new THREE.Clock();
+	AppUtils.decoderPath="../../libs/draco/gltf/";
+	var url="../../../dataset/mbl3d/models/anime2_nomorph_draco.glb";
 	
+	var textureUrl="../../../dataset/mbl3d/texture/m_brown.png";
+	//var textureUrl="../models/m_brown.png";
+	
+	var texture=Mbl3dUtils.loadTexture(textureUrl);
+	var material=new THREE.MeshPhongMaterial({color:0x888888,skinning:true,morphTargets:true,map:texture,transparent:true,opacity:ap.meshTransparent,alphaTest:0.2});
+	
+	ap.signals.meshTransparentChanged.add(function(){
+		material.opacity=ap.meshTransparent;
+		if(ap.meshTransparent==1){
+			material.transparent=false;
+		}else{
+			material.transparent=true;
+		}
+	});
+
 
 	
 	var ammoContainer=null;
-	var sprine03Box=null;
-	var breastBox=null;
-	
-	
-	function dispose(){
-		 function destroy(box){
-			 
-			 
-			if(box.getMesh().userData.constraint)
-				ap.ammoControler.destroyConstraintAndLine(box.getMesh().userData.constraint);
-			 ap.ammoControler.destroyBodyAndMesh(box);
-			 
-			 
-		 }
-		 
-		 if(breastBox!=null){
-			 destroy(breastBox);
-			 destroy(sprine03Box);
-			 breastBox=null;
-			 sprine03Box=null;
-		 }
-	}
-	
-	ap.signals.loadingModelFinished.add(function(mesh){
-		if(ap.mixer!=undefined){
-			ap.mixer.stopAllAction();
+	var sprine03Box;
+	var breastR,breastL;
+	var convertToZeroRotatedBoneMesh=true;
+	AppUtils.loadGltfMesh(url,function(mesh){
+		if(convertToZeroRotatedBoneMesh){
+			mesh=BoneUtils.convertToZeroRotatedBoneMesh(mesh);
 		}
 		
-		dispose();
+		
+		var container=new THREE.Group();
+		
+		ap.scene.add(container);
+		this.container=container;
+		
+		console.log("loadGltfMesh:",url);
+		mesh.scale.set(100,100,100);
+		mesh.material=material;
+		container.add(mesh);
+		ap.skinnedMesh=mesh;
+		ap.container=container;
 		
 		ap.mixer=new THREE.AnimationMixer(mesh);
+		ap.clock=new THREE.Clock();
 		
+		mesh.updateMatrixWorld(true);
+		ap.defaultBoneMatrix=BoneUtils.storeDefaultBoneMatrix(BoneUtils.getBoneList(mesh));
+		
+		ap.signals.skinnedMeshChanged.dispatch(mesh);
+		
+		
+		//attacher
+		ap.attachControler=new BoneAttachControler(mesh,{color:0x880000,boxSize:5});
+		
+		//ap.attachControler.setVisible(true);
+		ap.attachControler.update();
+		this.container.add(ap.attachControler.object3d);
+		
+		//attach
 		var boneList=BoneUtils.getBoneList(mesh);
 		var sprine03=BoneUtils.findBoneIndexByEndsName(boneList,"spine03");
 		
@@ -53,13 +76,30 @@ Example=function(application){
 		breastR=BoneUtils.findBoneIndexByEndsName(boneList,"breast_R");
 		breastL=BoneUtils.findBoneIndexByEndsName(boneList,"breast_L");
 		
-		ammoContainer=ap.boneAttachControler.getContainerByBoneIndex(sprine03);
+		
+		ammoContainer=ap.attachControler.getContainerByBoneIndex(sprine03);
+		//add ammo
+		var world=AmmoUtils.initWorld();
+		var ammoControler=new AmmoControler(container,world);
+		
+		application.ammoControler=ammoControler;
+		application.signals.visibleAmmoChanged.add(function(){
+			application.ammoControler.setVisibleAll(application.visibleAmmo);
+		});
 		
 		 var p=ammoContainer.position;
 		 sprine03Box=ap.ammoControler.createBox(new THREE.Vector3(80, 80, 5), 0, p.x,p.y,p.z, 
 					new THREE.MeshPhongMaterial({color:0x008800})
 							);
 		 ap.sprineBox=sprine03Box;
+
+
+		 
+		 //sprine03Box.getMesh().matrixAutoUpdate=false;
+		/* AmmoUtils.setAngularFactor(sprine03Box.getBody(),1,1,1);
+		 AmmoUtils.setLinearFactor(sprine03Box.getBody(),1,1,1);
+		 sprine03Box.getBody().setActivationState(AmmoUtils.DISABLE_DEACTIVATION);*/
+		 
 		 
 		 var diff=new THREE.Vector3(0,5,20);
 		 
@@ -67,11 +107,12 @@ Example=function(application){
 		 resetBox.position.copy(diff);
 		 ammoContainer.add(resetBox);
 		 ap.resetBox=resetBox;
-		
-		 breastBox=ap.ammoControler.createSphere(6, .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
-					// var breastBox=ap.ammoControler.createBox(new THREE.Vector3(8, 8, 8), .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
-								new THREE.MeshPhongMaterial({color:0x000088})
-					 );
+		 
+		 
+		 var breastBox=ap.ammoControler.createSphere(6, .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
+		// var breastBox=ap.ammoControler.createBox(new THREE.Vector3(8, 8, 8), .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
+					new THREE.MeshPhongMaterial({color:0x000088})
+		 );
 		 ap.breastBox=breastBox;
 
 		 
@@ -88,8 +129,6 @@ Example=function(application){
 		AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.negate());
 		var constraint=application.ammoControler.createGeneric6DofSpringConstraint(
 				breastBox,sprine03Box, frameInA,frameInB,false,true);
-		
-		breastBox.getMesh().userData.constraint=constraint;
 		
 		var dof=constraint.constraint;
 		
@@ -108,14 +147,18 @@ Example=function(application){
 		dof.setAngularLowerLimit(application.ammoControler.makeTemporaryVector3(-rlimit, -rlimit,-rlimit));
 		dof.setAngularUpperLimit(application.ammoControler.makeTemporaryVector3(rlimit, rlimit, rlimit));
 	
-		ap.getSignal("springChanged").add(function(){
+		ap.signals.springChanged.add(function(){
 			AmmoUtils.seteAllStiffness(dof,application.stiffness);
 			AmmoUtils.seteAllDamping(dof,application.damping);
 			breastBox.getBody().setDamping(application.bodyDamping,application.bodyDamping);
 		});
-	},-1);
+		
+		
+		//AmmoUtils.setLinearVelocity(breastBox.getBody(),new THREE.Vector3(5,5,5));
+
+		
+	});
 	
-	var euler=new THREE.Euler();
 	var pq=new THREE.Quaternion();
 	ap.signals.rendered.add(function(){
 		
@@ -127,6 +170,7 @@ Example=function(application){
 			
 			var delta = ap.clock.getDelta();
 			ap.mixer.update(delta);
+			ap.attachControler.update();
 			
 			//sync parent
 			//sprine03Box.getMesh().quaternion.copy(sprine03Box.getMesh().parent.quaternion);
@@ -150,7 +194,7 @@ Example=function(application){
 			
 			//brest-bone update
 			var name=ap.skinnedMesh.skeleton.bones[breastR].name;
-			
+			var euler=ap.defaultBoneMatrix[name].rotation;
 			var rotate=ap.breastBox.getMesh().rotation;
 			var order=ap.breastBox.getMesh().rotation.order;
 			//console.log(euler);
@@ -170,7 +214,7 @@ Example=function(application){
 			if(ap.bothBreast){
 				var opposite=ap.moveSameDirection?1:-1;//if opposite -1
 				var name=ap.skinnedMesh.skeleton.bones[breastL].name;
-				
+				var euler=ap.defaultBoneMatrix[name].rotation;
 				var rotate=ap.breastBox.getMesh().rotation;
 				ap.skinnedMesh.skeleton.bones[breastL].quaternion.copy(BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y*opposite,rotate.z,euler));
 			}
@@ -205,6 +249,4 @@ Example=function(application){
 			
 		}
 	})
-	
-	ap.signals.loadingModelStarted.dispatch(ap.modelUrl);
 }
