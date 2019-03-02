@@ -66,7 +66,7 @@ BreastControler.prototype.setEnabled=function(v){
 
 BreastControler.prototype._destroyBreast=function(){
 	var scope=this;
-	 function destory(box){
+	 function destroy(box){
 		 if( box.getMesh().userData.resetBox.parent!=null)//possible parent disposed
 			 box.getMesh().userData.resetBox.parent.remove(box.getMesh().userData.resetBox);
 		 
@@ -79,8 +79,8 @@ BreastControler.prototype._destroyBreast=function(){
 	 }
 	 
 	 if(this.breastBoxR!=null){
-		 destory(this.breastBoxR);
-		 destory(this.breastBoxL);
+		 destroy(this.breastBoxR);
+		 destroy(this.breastBoxL);
 		 this.breastBoxR=null;
 		 this.breastBoxL=null;
 	 }
