@@ -562,6 +562,11 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		
 		var maxAngle=this.maxAngle*this.getBoneRatio(bone.name);
 		
+		/*not good at
+		 * if(!this.ikLimitkRotationEnabled){
+			maxAngle=0;
+		}*/
+		
 		if(this.logging){
 			console.log("ik maxAngle",name,maxAngle);
 		}
@@ -653,6 +658,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		}
 		
 		bone.rotation.set(x,y,z);
+		
+		//bone.quaternion.multiply(newQ); //somehow not stable
+		
 		this.boneAttachControler.update();
 		
 		
