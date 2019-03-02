@@ -91,9 +91,7 @@ var ClipPlayerRow=function(ap,getClipFunction){
 	
 	ap.signals.loadingModelFinished.add(function(){
 		stop();
-		
 		Logics.disposeSkinnedMeshMixer(ap);
-			
 	})
 	
 	//Support update duration when clip updated

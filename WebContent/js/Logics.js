@@ -25,6 +25,11 @@ var Logics={
 			}
 		},
 		initializeSkinnedMeshMixer:function(ap){
+			
+			if(ap.mixer){
+				return;
+			}
+			
 			var updateMixer=function (){
 				var delta = ap.clock.getDelta();
 				ap.mixer.update(delta);
@@ -190,7 +195,7 @@ var Logics={
 		},
 		loadingModelFinishedForBreastControler:function(ap){
 			ap.signals.loadingModelFinished.add(function(mesh){
-				if(ap.breastControler==undefined){
+				if(!ap.breastControler){
 					ap.breastControler=new BreastControler();
 				}else{
 					ap.breastControler.dispose();

@@ -19,7 +19,7 @@ var BreastControler=function(){
 	this.breastPosZ=6;
 	
 	this.damping=1;
-	this.stiffness=100;
+	this.stiffness=250;
 	this.bodyDamping=0.75;
 	
 	this.autoResetPosition=true;
@@ -118,7 +118,7 @@ BreastControler.prototype.update=function(){
 		return;
 	}
 	var scope=this;
-	if(this.autoResetPosition){
+	if(this.autoResetPosition && this.breastBoxR && this.breastBoxL){
 		function doReset(box){
 			var pos=box.getMesh().userData.breastBase.getMesh().getWorldPosition(scope._pos);
 			var distance=pos.distanceTo(box.getMesh().position);
@@ -134,6 +134,10 @@ BreastControler.prototype.update=function(){
 	}
 }
 
+
+BreastControler.prototype.updateSpringValues=function(){
+	this.setSpringValues(this.stiffness,this.damping,this.bodyDamping);
+}
 BreastControler.prototype.setSpringValues=function(stiffness,damping,bodyDamping){
 	function change(box){
 		var dof=box.getMesh().userData.dof;

@@ -1,10 +1,15 @@
 Sidebar.Breast=function(ap){
 	var panel=new UI.TitlePanel("Ammo Breast");
 	var buttonRow=new UI.ButtonRow("New Breast",function(){
-		ap.signals.newBreast.dispatch();
-		ap.signals.visibleAmmoChanged.dispatch();
+		
+		ap.breastControler.newBreast();
+		ap.ammoControler.setVisibleAll(ap.ammoVisible);
 	});
 	panel.add(buttonRow);
+	
+	if(!ap.breastControler){
+		ap.breastControler=new BreastControler();
+	}
 	
 	var breastSize=new UI.IntegerButtons("Size",0.1,10,1,ap.breastControler.breastSize,function(v){
 		ap.breastControler.breastSize=v;
@@ -57,6 +62,10 @@ Sidebar.Breast=function(ap){
 	var control=new UI.Div();
 	panel.add(control);
 	
+	function springChanged(){
+		ap.breastControler.updateSpringValues();
+	}
+	
 	var autoResetPosition=new UI.CheckboxRow("Auto Reset Position",ap.breastControler.autoResetPosition,function(v){
 		ap.breastControler.autoResetPosition=v;
 	});
@@ -64,21 +73,21 @@ Sidebar.Breast=function(ap){
 	
 	var stiffness=new UI.NumberButtons("stiffness",0,1000,100,ap.breastControler.stiffness,function(v){
 		ap.breastControler.stiffness=v;
-		application.signals.springChanged.dispatch();
+		ap.breastControler.updateSpringValues();
 	},[0,1,10,100,1000]);
 	stiffness.text.setWidth("60px");
 	control.add(stiffness);
 	
 	var damping=new UI.NumberButtons("damping",0,1000,100,ap.breastControler.damping,function(v){
 		ap.breastControler.damping=v;
-		application.signals.springChanged.dispatch();
+		ap.breastControler.updateSpringValues();
 	},[0,.1,1,10,100]);
 	damping.text.setWidth("60px");
 	control.add(damping);
 	
 	var bodyDamping=new UI.NumberButtons("bodyDamping",0,1,1,ap.breastControler.bodyDamping,function(v){
 		ap.breastControler.bodyDamping=v;
-		application.signals.springChanged.dispatch();
+		ap.breastControler.updateSpringValues();
 	},[0,.1,.5,.75,1]);
 	bodyDamping.number.setWidth("30px");
 	control.add(bodyDamping);

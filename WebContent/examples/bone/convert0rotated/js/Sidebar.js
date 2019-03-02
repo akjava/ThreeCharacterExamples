@@ -19,6 +19,7 @@ var Sidebar = function ( application ) {
 	ap.signals.loadingModelFinished.add(function(){BoneUtils.logging=false;},undefined,100);
 	
 	
+
 	
 	panel.add(new UI.Text("Need reload model.without convert 0 rot,euler order not work at fingers").setClass("description"));
 	var convertCheck=new UI.CheckboxRow("Convert 0 Rot",true,function(v){

@@ -169,8 +169,9 @@ Sidebar.BoneRotateAnimationPanel = function ( application ,param) {
 		bt1.setDisabled(true);
 		bt2.setDisabled(false);
 		
-		var mixer=application.mixer;
+		Logics.initializeSkinnedMeshMixer(ap);
 		
+		var mixer=application.mixer;
 		
 		var order=scope.boneList[scope.boneAnimationIndex].rotation.order;
 		var boneName=scope.boneList[scope.boneAnimationIndex].name;
@@ -239,11 +240,10 @@ Sidebar.BoneRotateAnimationPanel = function ( application ,param) {
 	
 	application.signals.loadingModelFinished.add(function(mesh){
 		//possible conflict
-		if(application.mixer){
-			Logics.disposeSkinnedMeshMixer(ap);
-		}
+		Logics.disposeSkinnedMeshMixer(ap);
 		
-		Logics.initializeSkinnedMeshMixer(ap);
+		
+		
 		
 		var values={};
 		for(var i=0;i<mesh.skeleton.bones.length;i++){
