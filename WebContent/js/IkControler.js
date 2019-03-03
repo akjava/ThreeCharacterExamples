@@ -585,7 +585,9 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		
 		
 		if(newQ==null){
+			if(this.logging){
 			console.log("null quaternion");
+			}
 			//maybe so small
 			continue;
 		}

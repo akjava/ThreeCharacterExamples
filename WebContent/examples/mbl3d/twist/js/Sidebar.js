@@ -2,29 +2,38 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Bone Rotation Control  with Twist"));
+	container.add(new UI.AppName("Twist"));
 	
-	//TODO later
-	var ik=new Sidebar.Ik(ap);
-	//container.add(ik);
+	var tab=new UI.Tab(ap);
+	container.add(tab);
+	var main=tab.addItem("Main");
+	main.add(new Sidebar.BoneRotate(ap));
+	main.add(new Sidebar.TwistRatio(ap));
 	
-	var exportPanel=new Sidebar.Export(ap);
-	container.add(exportPanel);
+	var sub=tab.addItem("Sub");
+	sub.add(new Sidebar.ControlerCheck(ap));
 	
-	var importPanel=new Sidebar.Import(ap);
-	container.add(importPanel);
+	sub.add(new Sidebar.Model(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.loadingModelFinishedForTranslateControler(ap);
+	Logics.loadingModelFinishedForRotationControler(ap);
+	Logics.loadingModelFinishedForIkControler(ap);
+	Logics.initializeAmmo(ap);
+	Logics.loadingModelFinishedForBreastControler(ap);
 	
-	var editPanel=new BoneEditPanel2(ap);
-	container.add(editPanel);
 	
+	sub.add(new Sidebar.Texture(ap));
+	Logics.materialChangedForSimple(ap);
 	
-	var twistPanel=new Sidebar.TwistSwitch(ap);
-	container.add(twistPanel);
-	var twistEditor=new Sidebar.TwistEditor(ap);
-	container.add(twistEditor);
+	sub.add(new Sidebar.Hair(ap));
+	Logics.loadingHairFinished(ap);
 	
-	var twistAutoupdate=new Sidebar.TwistAutoupdate(ap);
-	container.add(twistAutoupdate);
+	sub.add(new Sidebar.MeshTransform(ap));
+	Logics.loadingModelFinishedForMeshTransform(ap);
+	
+	sub.add(new Sidebar.ClipPlayer(ap));
+	sub.add(new Sidebar.SimpleLight(ap));
+	
 	
 	return container;
 }

@@ -60,7 +60,7 @@ Sidebar.TwistEditor=function(ap){
 		boneName=bone.name;
 		
 		var isTwist=Mbl3dUtils.isTwistBoneName(bone.name);
-		var hasTwist=Mbl3dUtils.isHasTwistBoneName(bone.name);
+		var hasTwist=Mbl3dUtils.hasTwistBoneName(bone.name);
 		
 		if(!isTwist && !hasTwist){
 			textRow.setDisplay("none");
@@ -91,22 +91,26 @@ Sidebar.TwistEditor=function(ap){
 		value.x=scope.xRatio;
 		value.y=scope.yRatio;
 		value.z=scope.zRatio;
+		console.log(boneName,value);
 	}
 	
 	var xRatio=new UI.NumberButtons("X",-1,1,0.1,0,function(v){
 		scope.xRatio=v;
 		update();
-	},[0,0.1,0.5,1]);
+	},[-1,-0.5,0,0.5,1]);
+	xRatio.text.setWidth("40px");
 	container.add(xRatio);
 	var yRatio=new UI.NumberButtons("Y",-1,1,0.1,0,function(v){
 		scope.yRatio=v;
 		update();
-	},[0,0.1,0.5,1]);
+	},[-1,-0.5,0,0.5,1]);
+	yRatio.text.setWidth("40px");
 	container.add(yRatio);
 	var zRatio=new UI.NumberButtons("Z",-1,1,0.1,0,function(v){
 		scope.zRatio=v;
 		update();
-	},[0,0.1,0.5,1]);
+	},[-1,-0.5,0,0.5,1]);
+	zRatio.text.setWidth("40px");
 	container.add(zRatio);
 	
 	return container;

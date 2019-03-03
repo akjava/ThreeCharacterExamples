@@ -84,7 +84,7 @@ var Mbl3dUtils={
 			}
 			
 			return false;
-		},isHasTwistBoneName:function(name){
+		},hasTwistBoneName:function(name){
 			if(Mbl3dUtils.hasTwistBoneNames==undefined){
 				Mbl3dUtils.hasTwistBoneNames=[];
 				var lr=["L","R"];
@@ -110,7 +110,7 @@ var Mbl3dUtils={
 		convertToUnTwistBoneName:function(name){
 			return name.replace("_twist_","_");
 		},convertToTwistBoneName:function(name){
-			if(!Mbl3dUtils.isHasTwistBoneName(name)){
+			if(!Mbl3dUtils.hasTwistBoneName(name)){
 				return name;
 			}
 			var name= name.replace("_R","_twist_R");

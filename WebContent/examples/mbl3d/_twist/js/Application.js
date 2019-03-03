@@ -42,8 +42,3 @@ var Application = function () {
 
 	
 };
-
-
-Application.prototype = {
-		
-}

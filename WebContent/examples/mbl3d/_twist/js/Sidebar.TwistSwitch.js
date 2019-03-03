@@ -8,7 +8,7 @@ Sidebar.TwistSwitch=function(ap){
 		var bone=ap.selectedBone;
 		
 		var isTwist=Mbl3dUtils.isTwistBoneName(bone.name);
-		var hasTwist=Mbl3dUtils.isHasTwistBoneName(bone.name);
+		var hasTwist=Mbl3dUtils.hasTwistBoneName(bone.name);
 		
 		var converted=Mbl3dUtils.convertToTwistBoneName(bone.name);
 		var backed=Mbl3dUtils.convertToUnTwistBoneName(converted);
