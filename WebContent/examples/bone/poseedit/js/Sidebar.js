@@ -94,6 +94,8 @@ var Sidebar = function ( application ) {
 	
 	misc.add(new Sidebar.RotateArmX(ap));
 	misc.add(new Sidebar.RotateArmXTwist(ap));
+	misc.add(new Sidebar.TwistRatio(ap));
+	ap.twistUpdateWhenBoneRotationChanged=true;
 	misc.add(new Sidebar.Debug(ap));
 	
 	
