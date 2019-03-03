@@ -4,26 +4,30 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("Ik Control"));
 	
+	var tab=new UI.Tab(ap);
+	container.add(tab);
+	var main=tab.addItem("Main");
+	main.add(new Sidebar.MeshRotate(ap));
+	main.add(new Sidebar.IkControl(ap));
+	main.add(new Sidebar.IkBasic(ap));
+	main.add(new IkSolveRow(ap));
+	main.add(new Sidebar.IkReset(ap));
+	main.add(new Sidebar.Debug(ap));
 	
-	container.add(new Sidebar.MeshRotate(ap));
-	container.add(new Sidebar.IkControl(ap));
-	container.add(new Sidebar.IkBasic(ap));
-	container.add(new IkSolveRow(ap));
-	container.add(new Sidebar.IkReset(ap));
-	
-	container.add(new Sidebar.Model(ap));
+	var sub=tab.addItem("Sub");
+	sub.add(new Sidebar.Model(ap));
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.loadingModelFinishedForIkControler(ap);
 	ap.signals.loadingModelFinished.add(function(){
 		ap.ikControler.logging=true;
 	},undefined,-1);
 	
-	container.add(new Sidebar.Texture(ap));
+	sub.add(new Sidebar.Texture(ap));
 	Logics.materialChangedForSimple(ap);
 	
-	container.add(new Sidebar.Hair(ap));
+	sub.add(new Sidebar.Hair(ap));
 	Logics.loadingHairFinished(ap);
 	
-	container.add(new Sidebar.SimpleLight(ap));
+	sub.add(new Sidebar.SimpleLight(ap));
 	return container;
 }

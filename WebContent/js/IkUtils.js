@@ -31,7 +31,7 @@ var IkUtils={
 		_euler:new THREE.Euler(),
 		_zero:new THREE.Quaternion(),
 		_inverce:new THREE.Matrix4(),
-		minAngle: THREE.Math.degToRad(0.01),//avoid small change vibration
+		minAngle: THREE.Math.degToRad(0.001),//avoid small change vibration
 		logging:false,
 		//Vector3(World) lastJointPos,Vector3(World) jointPos,Quaternion(Local) jointRotQ,Vector3(World) targetPos
 		/*

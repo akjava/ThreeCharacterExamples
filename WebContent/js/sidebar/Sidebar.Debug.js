@@ -13,5 +13,19 @@ Sidebar.Debug=function(ap){
 		console.log("ap.objects",len,ap.objects);
 	});
 	container.add(btRow);
+	
+	var ikcheck=new UI.Subtitle("Ik");
+	container.add(ikcheck);
+	var ikrow=new UI.Row();
+	container.add(ikrow);
+	
+	var iklogging=new UI.CheckboxText("logging",true,function(v){
+		ap.ikControler.logging=v;
+	})
+	container.add(iklogging);
+	var ikDebug=new UI.CheckboxText("debug",false,function(v){
+		ap.ikControler.debug=v;
+	})
+	container.add(ikDebug);
 	return container;
 }

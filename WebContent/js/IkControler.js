@@ -63,6 +63,8 @@ this._initialized=false;
 this._enabled=true;
 
 this._ikSolved={};
+
+this._solving=false;
 };
 
 
@@ -383,9 +385,16 @@ IkControler.prototype.onTransformChanged=function(target){
 		if(this.logging){
 			console.log("IkControler onTransformChanged");
 		}
+		if(this._solving){
+			if(this.logging){
+				console.log("IkControler still solving ignored");
+			}
+			return;
+		}
+		this._solving=true;
 		var solved=this.solveIk();
 		//_ikSolved overwrited in solveOtherIkTargets
-		
+		this._solving=false;
 		
 		
 		if(solved){
@@ -457,6 +466,7 @@ IkControler.prototype.getEffectedBoneIndices=function(name){
 
 
 IkControler.prototype.solveIk=function(forceUpdate){
+
 	if(this.logging){
 		console.log("call solveIk ",this.getIkNameFromTarget(this.ikTarget));
 	}
@@ -575,6 +585,7 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		
 		
 		if(newQ==null){
+			console.log("null quaternion");
 			//maybe so small
 			continue;
 		}
