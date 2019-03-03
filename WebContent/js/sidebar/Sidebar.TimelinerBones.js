@@ -115,7 +115,7 @@ Sidebar.TimelinerBones=function(ap){
 		var bones=BoneUtils.getBoneList(ap.skinnedMesh);
 		for(var i=0;i<bones.length;i++){
 			var name=bones[i].name;
-			if(Mbl3dUtils.isFingerBoneName(name) || Mbl3dUtils.isTwistBoneName(name)){
+			if(Mbl3dUtils.isFingerBoneName(name) ){
 				continue;
 			}
 			var info={type: THREE.QuaternionKeyframeTrack,
