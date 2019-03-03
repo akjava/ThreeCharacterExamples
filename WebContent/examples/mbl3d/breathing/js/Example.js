@@ -49,7 +49,7 @@ Example=function(application){
 		this.container=container;
 		
 		console.log("loadFbxMesh:",url);
-		mesh.scale.set(.10,.10,.10);
+		mesh.scale.set(10,10,10);
 		mesh.material=material;
 		container.add(mesh);
 
