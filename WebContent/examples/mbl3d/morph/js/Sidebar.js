@@ -1,37 +1,31 @@
 var Sidebar = function ( application ) {
+	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
+	container.add(new UI.AppName("Morph Test"));
 	
-	var div=new UI.Div();
-	div.setClass("appname");
-	container.add(div);
-	var title=new UI.Span();
-	title.dom.textContent="Test Simple Morph Animation ver 0.1";
-	div.add(title);
+	var tab=new UI.Tab();
+	container.add(tab);
+	var main=tab.addItem("Main");
+	main.add(new Sidebar.FaceCamera(ap));
+	main.add(new Sidebar.MorphTest(ap));
 	
-	var animation=new Sidebar.Animation(application);
-	container.add(animation);
 	
-	var camera=new Sidebar.Camera(application);
-	container.add(camera);
+	var sub1=tab.addItem("Sub1");
+	sub1.add(new Sidebar.Model(ap));
+	sub1.add(new Sidebar.TextureMaps(ap));
+	sub1.add(new Sidebar.DoubleClipPlayer(ap));
+	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.materialChangedForTextureMaps(ap);
 	
-	var texture=new Sidebar.Texture(application);
-	container.add(texture);
+	var sub2=tab.addItem("Sub2");
+	sub2.add(new Sidebar.Hair(ap));
+	sub2.add(new Sidebar.ShadowLight(ap));
+	sub2.add(new Sidebar.MaterialType(ap));
+	sub2.add(new Sidebar.OutlineEffect(ap));
+	Logics.loadingHairFinished(ap);
 	
-	/*
-	 * TODO support glb
-	 */
-	//var model=new Sidebar.Model(application);
-	//container.add(model);
-	
-	var hair=new Sidebar.Hair(application);
-	container.add(hair);
-	
-	var material=new Sidebar.Material(application);
-	container.add(material);
-	
-	var light=new Sidebar.BasicLightShadow(application);
-	container.add(light);
+	//tab.select("Sub");
 	
 	return container;
 }
