@@ -4,7 +4,6 @@ Sidebar.Ground=function(ap){
 	var titlePanel=new UI.TitlePanel("Ground");
 	var visibleRow=new UI.CheckboxRow("Visible",true,function(v){
 		mesh.material.visible=v;
-		grid.material.visible=v;
 	});
 	visibleRow.text.setWidth("40px");
 	visibleRow.checkbox.setWidth("20px");
@@ -14,14 +13,10 @@ Sidebar.Ground=function(ap){
 	var mesh = new THREE.Mesh( new THREE.PlaneBufferGeometry( 2000, 2000 ), new THREE.MeshPhongMaterial( { color: 0x999999, depthWrite: true } ) );
 	mesh.rotation.x = - Math.PI / 2;
 	mesh.receiveShadow = true;
-	scene.add( mesh );
+	ap.scene.add( mesh );
 	ap.groundMesh=mesh;
 
-	var grid = new THREE.GridHelper( 2000,120, 0x000000, 0x000000 );
-	grid.material.opacity = 0.7;
-	grid.material.transparent = false;
-	scene.add( grid );
-	ap.groundGrid=grid;
+
 	
 	
 	var groundMargin=new UI.NumberSpan("Margin",0,10,1,this.margin,function(v){
@@ -61,7 +56,7 @@ Sidebar.Ground=function(ap){
 		var box=ap.ikControler.boneAttachControler.boundingBox;
 		
 		var v=Math.abs(box.min.y);
-		v*=2;//magic number todo modifier
+		v*=3;//magic number todo modifier
 		groundMargin.setValue(v);//modifer
 		scope.margin=v;
 	});

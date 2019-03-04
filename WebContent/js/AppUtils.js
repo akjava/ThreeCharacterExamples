@@ -169,7 +169,13 @@ var AppUtils={
 			text=text==undefined?"":text;
 			console.log(xyz.x.toFixed(2),xyz.y.toFixed(2),xyz.z.toFixed(2),text)
 		}
-		,clearAllChildren:function(parent){
+		,clearAllThreeChildren:function(parent){
+			for(var i=parent.children.length-1;i>=0;i--){
+				var obj=parent.children[i];
+				parent.remove(obj);
+				
+			}
+		},clearAllChildren:function(parent){
 			for(var i=parent.children.length-1;i>=0;i--){
 				var obj=parent.children[i];
 				parent.removeChild(obj);

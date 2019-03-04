@@ -448,8 +448,15 @@ UI.CheckboxRow=function(label,value,onChange){
 	return row;
 }
 
+UI.SwitchSpan=function(trueLabel,falseLabel,value,onChange){
+	return new UI.SwitchWidget(new UI.Span(),trueLabel,falseLabel,value,onChange);
+}
+
 UI.SwitchRow=function(trueLabel,falseLabel,value,onChange){
-	var row=new UI.Row();
+	return new UI.SwitchWidget(new UI.Row(),trueLabel,falseLabel,value,onChange);
+}
+UI.SwitchWidget=function(row,trueLabel,falseLabel,value,onChange){
+	
 	var text=new UI.Text(value?trueLabel:falseLabel).setWidth('180px');
 	row.add(text);
 	
@@ -739,7 +746,15 @@ UI.AppName=function(text){
 }
 
 UI.NumberButtons=function(label,min,max,step,value,onChange,buttonValues){
-	var row=new UI.Row();
+	return UI.NumberButtonsWidget(new UI.Row(),label,min,max,step,value,onChange,buttonValues); 
+}
+UI.NumberButtonsSpan=function(label,min,max,step,value,onChange,buttonValues){
+	return UI.NumberButtonsWidget(new UI.Span(),label,min,max,step,value,onChange,buttonValues); 
+}
+
+
+UI.NumberButtonsWidget=function(row,label,min,max,step,value,onChange,buttonValues){
+	
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
 	row.text=text;

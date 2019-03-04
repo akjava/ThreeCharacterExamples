@@ -32,6 +32,8 @@ var Mbl3dUtils={
 			texture.flipY = flipY;
 			texture.minFilter=THREE.LinearFilter;
 			return texture;
+		},isCoreBoneName:function(name){
+			return !this.isFingerBoneName(name) && !this.isTwistBoneName(name);
 		},isFingerBoneName:function(name){
 			if(Mbl3dUtils.fingerBoneNames==undefined){
 				Mbl3dUtils.fingerBoneNames=[];
