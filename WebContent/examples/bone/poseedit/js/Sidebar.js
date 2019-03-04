@@ -93,13 +93,14 @@ var Sidebar = function ( application ) {
 	misc.add(new Sidebar.MeshTransform(ap));
 	Logics.loadingModelFinishedForMeshTransform(ap);
 	
-	misc.add(new Sidebar.RotateArmX(ap));
+	misc.add(new Sidebar.Grid(ap));
+	misc.add(new Sidebar.Guide(ap));
+	
 	misc.add(new Sidebar.RotateArmXTwist(ap));
 	ap.twistUpdateWhenBoneRotationChanged=true;
 	misc.add(new Sidebar.TwistRatio(ap));
 
-	misc.add(new Sidebar.Grid(ap));
-	misc.add(new Sidebar.Guide(ap));
+	
 	
 	sub2.add(new Sidebar.Debug(ap));
 	

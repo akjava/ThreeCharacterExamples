@@ -143,7 +143,7 @@ Sidebar.TimelinerBones=function(ap){
 		
 		//listers
 		ap.getSignal("boneTranslateFinished").add(function(index){
-			console.log("translated",index);
+			//console.log("translated",index);
 			ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
 		});
 		function onPoseChanged(){
