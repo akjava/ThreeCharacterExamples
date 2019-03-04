@@ -17,10 +17,11 @@ Sidebar.Ground=function(ap){
 	scene.add( mesh );
 	ap.groundMesh=mesh;
 
-	var grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
-	grid.material.opacity = 0.2;
-	grid.material.transparent = true;
+	var grid = new THREE.GridHelper( 2000,120, 0x000000, 0x000000 );
+	grid.material.opacity = 0.7;
+	grid.material.transparent = false;
 	scene.add( grid );
+	ap.groundGrid=grid;
 	
 	
 	var groundMargin=new UI.NumberSpan("Margin",0,10,1,this.margin,function(v){
