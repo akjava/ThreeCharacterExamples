@@ -97,9 +97,11 @@ var buttons=new UI.ButtonRow("Copy from Opposite",function(){
 			var rot=opposite.rotation;
 			bone.rotation.copy(BoneUtils.flipHorizontalRotation(opposite.rotation));
 			
-			if(ap.signals.boneRotationChanged)//Optional
+			ap.getSignal("boneRotationChanged").dispatch(index);
+			ap.getSignal("boneRotationFinished").dispatch(index);
 				
-				ap.signals.boneRotationChanged.dispatch(index);
+				
+			
 			if(ap.ikControler.logging){
 				console.log("Sidebar.IkControl dispatch boneRotationChanged",index);
 			}
