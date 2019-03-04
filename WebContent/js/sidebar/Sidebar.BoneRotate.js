@@ -31,6 +31,11 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	var boneSelect=new UI.Select2();
 	selectRow.add(boneSelect);
 	
+	
+	ap.getSignal("poseChanged").add(function(){
+		onBoneSelectionChanged();
+	});
+	
 	function onBoneSelectionChanged(){
 		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
 		

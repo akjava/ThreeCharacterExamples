@@ -25,11 +25,15 @@ Sidebar.BoneRotateWithOrder = function ( application ,enableSelectButton) {
 	var boneSelect=new UI.Select2();
 	selectRow.add(boneSelect);
 	
+	ap.getSignal("poseChanged").add(function(){
+		onBoneSelectionChanged();
+	});
+	
 	function onBoneSelectionChanged(){
 		
 		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
 		
-		console.log("onBoneSelectionChanged",bone.name);
+		//console.log("onBoneSelectionChanged",bone.name);
 		
 		ap.selectedBone=bone;//TODO move to  local
 		
