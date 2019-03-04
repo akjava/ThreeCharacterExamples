@@ -311,5 +311,104 @@ var FingerPresets=function(){
 
 	presets["scoop"]=current;
 	
+	current={};
+
+	registPreset("thumb01_L",0.00,-30.00,0.00);
+	registPreset("thumb02_L",30.00,0.00,0.00);
+	registPreset("thumb03_L",30.00,0.00,0.00);
+	registPreset("index00_L",0.00,2.00,0.00);
+	registPreset("index01_L",0.00,0.00,-65.00);
+	registPreset("index03_L",0.00,0.00,-90.00);
+	registPreset("middle01_L",0.00,0.00,-65.00);
+	registPreset("middle03_L",0.00,0.00,-90.00);
+	registPreset("ring00_L",0.00,-2.00,0.00);
+	registPreset("ring01_L",0.00,0.00,-65.00);
+	registPreset("ring03_L",0.00,0.00,-90.00);
+	registPreset("pinky00_L",0.00,-5.00,0.00);
+	registPreset("pinky01_L",0.00,0.00,-65.00);
+	registPreset("pinky03_L",0.00,0.00,-90.00);
+	
+	current={};
+	registPreset("thumb01_L",0.00,-30.00,0.00);
+	registPreset("thumb02_L",30.00,0.00,0.00);
+	registPreset("thumb03_L",60.00,0.00,-45.00);
+	registPreset("index00_L",0.00,2.00,0.00);
+	registPreset("index01_L",0.00,0.00,-15.00);
+	registPreset("index02_L",0.00,0.00,-60.00);
+	registPreset("index03_L",0.00,0.00,-90.00);
+	registPreset("middle01_L",0.00,0.00,-15.00);
+	registPreset("middle02_L",0.00,0.00,-60.00);
+	registPreset("middle03_L",0.00,0.00,-90.00);
+	registPreset("ring00_L",0.00,-2.00,0.00);
+	registPreset("ring01_L",0.00,0.00,-15.00);
+	registPreset("ring02_L",0.00,0.00,-60.00);
+	registPreset("ring03_L",0.00,0.00,-90.00);
+	registPreset("pinky00_L",0.00,-5.00,0.00);
+	registPreset("pinky01_L",0.00,0.00,-15.00);
+	registPreset("pinky02_L",0.00,0.00,-60.00);
+	registPreset("pinky03_L",0.00,0.00,-90.00);
+	presets["shakehand"]=current;
+	
+	current={};
+	registPreset("thumb01_L",15.00,-30.00,0.00);
+	registPreset("thumb02_L",30.00,0.00,0.00);
+	registPreset("thumb03_L",60.00,0.00,-45.00);
+	registPreset("index00_L",0.00,2.00,0.00);
+	registPreset("index01_L",0.00,0.00,-30.00);
+	registPreset("index02_L",0.00,0.00,-60.00);
+	registPreset("index03_L",0.00,0.00,-90.00);
+	registPreset("middle01_L",0.00,0.00,-30.00);
+	registPreset("middle02_L",0.00,0.00,-60.00);
+	registPreset("middle03_L",0.00,0.00,-90.00);
+	registPreset("ring00_L",0.00,-2.00,0.00);
+	registPreset("ring01_L",0.00,0.00,-30.00);
+	registPreset("ring02_L",0.00,0.00,-60.00);
+	registPreset("ring03_L",0.00,0.00,-90.00);
+	registPreset("pinky00_L",0.00,-5.00,0.00);
+	registPreset("pinky01_L",0.00,0.00,-20.00);
+	registPreset("pinky02_L",0.00,0.00,-60.00);
+	registPreset("pinky03_L",0.00,0.00,-90.00);
+	presets["shakehand2"]=current;
+	
+	current={};
+	registPreset("thumb01_L",-30.00,0.00,0.00);
+	registPreset("thumb02_L",0.00,30.00,0.00);
+	registPreset("thumb03_L",0.00,45.00,0.00);
+	registPreset("index00_L",0.00,2.00,0.00);
+	registPreset("index01_L",0.00,0.00,-30.00);
+	registPreset("index02_L",0.00,0.00,-60.00);
+	registPreset("index03_L",0.00,0.00,-90.00);
+	registPreset("middle01_L",0.00,0.00,-30.00);
+	registPreset("middle02_L",0.00,0.00,-60.00);
+	registPreset("middle03_L",0.00,0.00,-90.00);
+	registPreset("ring00_L",0.00,-2.00,0.00);
+	registPreset("ring01_L",0.00,0.00,-30.00);
+	registPreset("ring02_L",0.00,0.00,-60.00);
+	registPreset("ring03_L",0.00,0.00,-90.00);
+	registPreset("pinky00_L",0.00,-5.00,0.00);
+	registPreset("pinky01_L",0.00,0.00,-20.00);
+	registPreset("pinky02_L",0.00,0.00,-60.00);
+	registPreset("pinky03_L",0.00,0.00,-90.00);
+	presets["shakehand3"]=current;
+	
+	current={};
+	registPreset("thumb01_L",0.00,-30.00,0.00);
+	registPreset("thumb02_L",30.00,0.00,0.00);
+	registPreset("thumb03_L",60.00,0.00,-45.00);
+	registPreset("index00_L",0.00,2.00,0.00);
+	registPreset("index01_L",0.00,0.00,-75.00);
+	registPreset("index03_L",0.00,0.00,-90.00);
+	registPreset("middle01_L",0.00,0.00,-75.00);
+	registPreset("middle03_L",0.00,0.00,-90.00);
+	registPreset("ring00_L",0.00,-2.00,0.00);
+	registPreset("ring01_L",0.00,0.00,-65.00);
+	registPreset("ring02_L",0.00,0.00,-25.00);
+	registPreset("ring03_L",0.00,0.00,-90.00);
+	registPreset("pinky00_L",0.00,-5.00,0.00);
+	registPreset("pinky01_L",0.00,0.00,-65.00);
+	registPreset("pinky02_L",0.00,0.00,-25.00);
+	registPreset("pinky03_L",0.00,0.00,-90.00);
+	presets["holdhand"]=current;
+	
 	return presets;
 }

@@ -1,4 +1,5 @@
 var Mbl3dUtils={
+
 		convertOptionsToMbl3d:function(options){
 			var newOptions={};
 			Object.keys(options).forEach(function(key){

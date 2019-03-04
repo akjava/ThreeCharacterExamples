@@ -26,6 +26,9 @@ Sidebar.ImportPose=function(ap){
 		if(container.logging){
 			console.log("sidebar-importPose dispatch poseChanged");
 		}
+		
+		
+		
 		ap.getSignal("poseChanged").dispatch();
 		//boneAttachControler update
 		//ikControler resetAllIkTargets
@@ -74,6 +77,12 @@ Sidebar.ImportPose=function(ap){
 		mixer.uncacheClip(clip.name);
 		mixer.clipAction(clip).play();
 		mixer.update();
+		
+		
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		boneList.forEach(function(bone){
+			BoneUtils.fixRotation(bone.rotation);
+		});
 		
 		callUpdate();
 		

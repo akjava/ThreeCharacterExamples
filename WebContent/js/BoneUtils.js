@@ -1,6 +1,19 @@
 var BoneUtils={
 		logging:false,
 		orders:["XYZ","XZY","YXZ","YZX","ZXY","ZYX"],
+		d180:THREE.Math.degToRad(180),
+		fixRotation:function(rotation){
+			if(rotation.x==this.d180 && rotation.z==this.d180){
+				var r=THREE.Math.radToDeg(rotation.y);
+				if(r>0){
+					r=180-r;
+				}else{
+					r=-180-r;
+				}
+				//TODO other?
+				rotation.set(0,THREE.Math.degToRad(r),0);
+			}
+		},
 		/*
 		 * dont forget set parent
 		 */
