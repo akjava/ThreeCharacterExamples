@@ -23,8 +23,8 @@ var Sidebar = function ( application ) {
 	main.add(new Sidebar.RotateArmX(ap));
 	
 	
-	var sub1=tab.addItem("Sub");
-	sub1.add(new Sidebar.Model(ap));
+	var sub1=tab.addItem("Mat");
+	
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	Logics.loadingModelFinishedForTranslateControler(ap);
 	Logics.loadingModelFinishedForRotationControler(ap);
@@ -36,23 +36,24 @@ var Sidebar = function ( application ) {
 	sub1.add(new Sidebar.TextureMaps(ap));
 	Logics.materialChangedForTextureMaps(ap);
 	
-	
-	
+	sub1.add(new Sidebar.MaterialType(ap));
+	sub1.add(new Sidebar.OutlineEffect(ap));
 
 	
-	sub1.add(new Sidebar.DoubleClipPlayer(ap));
+	//sub1.add(new Sidebar.DoubleClipPlayer(ap));
 	
 	var sub2=tab.addItem("Sub2");
 	sub2.add(new Sidebar.CameraControler(ap));
 	sub2.add(new Sidebar.Hair(ap));
 	sub2.add(new Sidebar.ShadowLight(ap));
-	sub2.add(new Sidebar.MaterialType(ap));
+	
 	sub2.add(new Sidebar.Transparent(ap));
 	
-	sub2.add(new Sidebar.OutlineEffect(ap));
+	
 	Logics.loadingHairFinished(ap);
 	
 	var importTab=tab.addItem("Import");
+	importTab.add(new Sidebar.Model(ap));
 	importTab.add(new Sidebar.BackgroundImage(ap));
 	
 	//dataset.add(new Sidebar.BackgroundVideo(ap));
@@ -94,9 +95,13 @@ var Sidebar = function ( application ) {
 	
 	misc.add(new Sidebar.RotateArmX(ap));
 	misc.add(new Sidebar.RotateArmXTwist(ap));
-	misc.add(new Sidebar.TwistRatio(ap));
 	ap.twistUpdateWhenBoneRotationChanged=true;
-	misc.add(new Sidebar.Debug(ap));
+	misc.add(new Sidebar.TwistRatio(ap));
+
+	misc.add(new Sidebar.Grid(ap));
+	misc.add(new Sidebar.Guide(ap));
+	
+	sub2.add(new Sidebar.Debug(ap));
 	
 	
 	

@@ -38,7 +38,7 @@ Sidebar.TwistRatio=function(ap){
 		}
 	});
 	
-	if(twistUpdateWhenBoneRotationChanged==undefined)
+	if(ap.twistUpdateWhenBoneRotationChanged==undefined)
 		ap.twistUpdateWhenBoneRotationChanged=false;
 	
 	var checkChanged=new UI.CheckboxRow("Update on boneRotation",ap.twistUpdateWhenBoneRotationChanged,function(v){

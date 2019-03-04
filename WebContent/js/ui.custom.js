@@ -483,6 +483,7 @@ UI.SwitchWidget=function(row,trueLabel,falseLabel,value,onChange){
 	}
 	
 	row.setValue=function(v){
+		text.setValue(v?trueLabel:falseLabel);
 		return checkbox.setValue(v);
 	}
 	

@@ -12,6 +12,8 @@ Sidebar.ControlerCheck=function(ap){
 		if(!v){
 			ap.signals.transformSelectionChanged.dispatch(null);
 		}
+		
+		ap.getSignal("guideVisibleChanged").dispatch(v);
 	}
 	
 	var buttonRow=new UI.ButtonRow("Hide",function(){

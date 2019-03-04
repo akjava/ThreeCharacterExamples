@@ -25,11 +25,19 @@ Sidebar.Guide=function(ap){
 	});
 	row.add(addBt);
 	var hideBt=new UI.SwitchSpan("Hide Guides","Show Guides",true,function(v){
+		setVisibleGuide(v);
+	});
+	row.add(hideBt);
+	
+	function setVisibleGuide(v){
 		group.children.forEach(function(child){
 			child.material.visible=v;
 		});
+	}
+	ap.getSignal("guideVisibleChanged").add(function(v){
+		setVisibleGuide(v);
+		hideBt.setValue(v);
 	});
-	row.add(hideBt);
 	
 	
 	var btRow=new UI.ButtonRow("Sync Selected Bone Position",function(){
