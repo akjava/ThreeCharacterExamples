@@ -8,9 +8,9 @@ var BreastControler=function(){
 	this.lockY=false;
 	this.lockZ=false;
 	
-	this.allowAngleX=45;
-	this.allowAngleY=30;
-	this.allowAngleZ=90;
+	this.allowAngleX=45/2;
+	this.allowAngleY=30/2;
+	this.allowAngleZ=90/2;
 	this.breastPosZ=6;
 	
 	this.breastSize=5;
@@ -19,7 +19,7 @@ var BreastControler=function(){
 	this.breastPosZ=6;
 	
 	this.damping=1;
-	this.stiffness=250;
+	this.stiffness=1000;
 	this.bodyDamping=0.75;
 	
 	this.autoResetPosition=true;
