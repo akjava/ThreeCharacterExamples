@@ -108,6 +108,7 @@ var Sidebar = function ( application ) {
 	var misc2=tab.addItem("Misc2");
 	misc2.add(new Sidebar.Grid(ap));
 	misc2.add(new Sidebar.Guide(ap));
+	misc2.add(new Sidebar.Breast(ap));
 	
 	sub2.add(new Sidebar.Debug(ap));
 	

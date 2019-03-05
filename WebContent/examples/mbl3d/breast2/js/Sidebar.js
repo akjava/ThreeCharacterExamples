@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Load Model"));
+	container.add(new UI.AppName("Physics Breast Bone Animation2"));
 	
 	var tab=new UI.Tab(ap);
 	container.add(tab);
