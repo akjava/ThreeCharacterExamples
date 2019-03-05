@@ -23,6 +23,7 @@ var BreastControler=function(){
 	this.bodyDamping=0.75;
 	
 	this.autoResetPosition=true;
+	this.breastMass=0.1;
 	
 	this._enabled=true;
 }
@@ -187,7 +188,7 @@ BreastControler.prototype.createBreastBox=function (breastContainer,targetBone,o
 	 breastBase.syncTransform(ammoControler);
 	 
 	 var p=new THREE.Vector3().setFromMatrixPosition(breastBase.getMesh().matrixWorld);
-	 var breastBox=this.ammoControler.createSphere(this.breastSize, .1,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
+	 var breastBox=this.ammoControler.createSphere(this.breastSize, this.breastMass,p.x+ diff.x,p.y+diff.y,p.z+diff.z, 
 							new THREE.MeshPhongMaterial({color:0x000088})
 				 );
 	 

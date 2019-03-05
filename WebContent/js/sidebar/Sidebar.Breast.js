@@ -15,6 +15,10 @@ Sidebar.Breast=function(ap){
 		ap.breastControler.breastSize=v;
 	},[1,5,10]);
 	panel.add(breastSize);
+	var breastMass=new UI.NumberButtons("Mass",0.01,100,1,ap.breastControler.breastMass,function(v){
+		ap.breastControler.breastMass=v;
+	},[0.1,1,10]);
+	panel.add(breastMass);
 	var breastPosX=new UI.NumberButtons("X-Pos",0,25,10,ap.breastControler.breastPosX,function(v){
 		ap.breastControler.breastPosX=v;
 	},[0,2.5,5]);
