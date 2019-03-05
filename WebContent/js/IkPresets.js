@@ -152,7 +152,7 @@ IkPresets.prototype.updateIkPresetRotation=function(ikName,ikPresetRotation,onCl
 				var rotation=presetRotations[i]; //presetRotations has not order;
 				//bone.rotation.set(rotation.x,rotation.y,rotation.z); //in future support change order
 				
-				console.log(scope.ikControler.ap.ikPresetsCopyOrder);
+				
 				if(scope.ikControler.ap.ikPresetsCopyOrder){
 					bone.rotation.copy(rotation);//Copy order too
 				}else{

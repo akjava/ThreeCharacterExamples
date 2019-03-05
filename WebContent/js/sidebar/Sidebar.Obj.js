@@ -7,7 +7,7 @@ Sidebar.Obj = function ( application ) {
 	
 	this.objBase="../../../dataset/mbl3d/obj/";
 	this.objSelection='axe.obj';
-	var itemList=["","axe.obj","stake.obj"];
+	var itemList=["","axe.obj","stake.obj","pompom.obj"];
 	application.defaultObjUrl=null;
 	application.objUrl=application.defaultObjUrl;
 	

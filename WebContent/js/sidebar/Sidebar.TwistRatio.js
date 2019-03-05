@@ -19,8 +19,8 @@ Sidebar.TwistRatio=function(ap){
 	//init here,TODO for glb
 	ap.twistValues["lowerarm_twist_L"]={x:-0.5,y:0,z:0};
 	ap.twistValues["lowerarm_twist_R"]={x:-0.5,y:0,z:0};
-	ap.twistValues["upperarm_twist_L"]={x:-0.5,y:0,z:0};
-	ap.twistValues["upperarm_twist_R"]={x:-0.5,y:0,z:0};
+	ap.twistValues["upperarm_twist_L"]={x:-0.5,y:0.1,z:0};
+	ap.twistValues["upperarm_twist_R"]={x:-0.5,y:-0.1,z:0};
 	ap.twistValues["thigh_twist_L"]={x:0,y:-0.5,z:1.0/32};
 	ap.twistValues["thigh_twist_R"]={x:0,y:-0.5,z:1.0/32};
 	ap.twistValues["calf_twist_L"]={x:0,y:-0.5,z:0};
