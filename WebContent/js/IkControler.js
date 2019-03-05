@@ -65,6 +65,7 @@ this._enabled=true;
 this._ikSolved={};
 
 this._solving=false;
+this._mouseDown=false;
 };
 
 
@@ -385,6 +386,14 @@ IkControler.prototype.onTransformChanged=function(target){
 		if(this.logging){
 			console.log("IkControler onTransformChanged");
 		}
+		
+		if(this._mouseDown==false){
+			if(this.logging){
+				console.log("IkControler not mouse down");
+			}
+			return;
+		}
+		
 		if(this._solving){
 			if(this.logging){
 				console.log("IkControler still solving ignored");
@@ -416,6 +425,7 @@ IkControler.prototype.onTransformStarted=function(target){
 		if(this.logging){
 			console.log("IkControler onTransformStarted");
 		}
+		this._mouseDown=true;
 		
 		this._ikSolved={};//reset all
 		
@@ -432,7 +442,7 @@ if(target!=null && target.userData.transformSelectionType=="BoneIk"){
 	if(this.logging){
 		console.log("IkControler onTransformFinished");
 	}
-	
+	this._mouseDown=false;
 	
 	Object.keys(this._ikSolved).forEach(function(key){
 		if(scope._ikSolved[key]==true){

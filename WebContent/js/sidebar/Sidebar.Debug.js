@@ -19,7 +19,7 @@ Sidebar.Debug=function(ap){
 	var ikrow=new UI.Row();
 	container.add(ikrow);
 	
-	var iklogging=new UI.CheckboxText("logging",true,function(v){
+	var iklogging=new UI.CheckboxText("logging",false,function(v){
 		ap.ikControler.logging=v;
 	})
 	container.add(iklogging);
