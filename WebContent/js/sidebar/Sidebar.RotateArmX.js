@@ -145,14 +145,16 @@ Sidebar.RotateArmX=function(ap){
 		ap.applyTwistUpperarmXRatio=0.5;	
 	
 	panel.add(new UI.Subtitle("Upperarm"));
-	var upper=new UI.NumberButtons("Left",-90,30,10,0,function(v){
+	var upper=new UI.NumberButtons("Left",-90,80,10,0,function(v){
 		updateUpperArm(v,true);
-	},[-90,-60,-30,0,30]);
+	},[-90,-60,-30,0,30,60]);
 	upper.text.setWidth("50px");
+	upper.number.setWidth("40px");
 	panel.add(upper);
-	var upperR=new UI.NumberButtons("Right",-90,30,10,0,function(v){
+	var upperR=new UI.NumberButtons("Right",-90,80,10,0,function(v){
 		updateUpperArm(v,false);
-	},[-90,-60,-30,0,30]);
+	},[-90,-60,-30,0,30,60]);
+	upperR.number.setWidth("40px");
 	upperR.text.setWidth("50px");
 	panel.add(upperR);
 	
