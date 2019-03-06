@@ -97,6 +97,11 @@ var ClipPlayerRow=function(ap,getClipFunction){
 	//Support update duration when clip updated
 	var timeLabel=new UI.Text("0.00/0.00");
 	timeLabel.setMarginLeft("4px");
+	
+	ap.getSignal("clipPlayerUpdate").add(function(){
+		update();
+	})
+	
 	var update=function(){
 		if(scope.action==null){
 			return;

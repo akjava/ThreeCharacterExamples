@@ -1,4 +1,4 @@
-var AnimationToImagePanel=function(ap){
+Sidebar.AnimationToImagePanel=function(ap){
 	var scope=this;
 	this.frameIndex=0;
 	this.started=false;
@@ -10,16 +10,14 @@ var AnimationToImagePanel=function(ap){
 	this.resolution="720x406";
 	this.startIndex=0;
 	this.header="";
+	this.autoDownload=false;
 	
 	function makeDataUrl(){
-		scope.stepTime=1.0/scope.fps;
-		var step=scope.started?scope.stepTime:0;
 		scope.started=true;
 		
+		ap.getSignal("clipPlayerUpdate").dispatch();
+		defaultOnRender();
 		
-		ap.mixer.update(step);
-		ap.clipPlayerRow.update();
-		ap.renderer.render( ap.scene, ap.camera );
 		
 		var dataUrl=AppUtils.toPngDataUrl(ap.renderer);
 		
@@ -28,17 +26,20 @@ var AnimationToImagePanel=function(ap){
 		var link=AppUtils.generateBase64DownloadLink(dataUrl,"image/png",fileName,fileName,true);
 		span.dom.appendChild(link);
 		
-		
+		if(scope.autoDownload){
+			link.click();
+		}
 		
 		//switch max frame
 		link.addEventListener( 'click', function ( event ) {
-			if(scope.frameIndex==scope.maxFrame){
+			if(scope.frameIndex>=scope.maxFrame){
 				return;//finishd
 			}
 			makeDataUrl();
 		} );
 		scope.frameIndex++;
 		
+		//link.click();
 		
 	}
 	
@@ -80,7 +81,15 @@ var AnimationToImagePanel=function(ap){
 		scope.startIndex=v;
 	});
 	titlePanel.add(startIndex);
+	startIndex.text.setWidth("70px");
+	startIndex.number.setWidth("40px");
 	
+	var autodownload=new UI.CheckboxText("Auto Download",false,function(v){
+		scope.autoDownload=v;
+	});
+	autodownload.text.setWidth("120px");
+	
+	startIndex.add(autodownload);
 	
 	var row=new UI.Row();
 	titlePanel.add(row);
@@ -89,14 +98,22 @@ var AnimationToImagePanel=function(ap){
 	
 	row.add(bt);
 	
+	var defaultOnRender=null;
+	
+	var onNewUpdateMixer=function(){
+		
+		var step=scope.started?scope.stepTime:0;
+		ap.mixer.update(step);
+	};
+	
 	bt.onClick(function(){
 		//stop
 		if(scope.started){
 			skip.setDisabled(true);
-			ap.clipPlayerRow.setDisplay("");
-			ap.clipPlayerRow.stop();
+			
+			ap.getSignal("clipPlayerStopped").dispatch();
 			scope.frameIndex=scope.startIndex;
-			ap.signals.rendered.active=true;
+			//ap.signals.rendered.active=true;
 			ap.signals.windowResize.active=true;
 			scope.started=false;
 			bt.setTextContent("Start");
@@ -104,16 +121,33 @@ var AnimationToImagePanel=function(ap){
 			//span.dom.innerHTML = ''			
 			AppUtils.clearAllChildren(span.dom);
 
+			ap.onRender=defaultOnRender;
+			
+			ap.signals.rendered.add(ap.onUpdateMixer);
+			ap.signals.rendered.remove(onNewUpdateMixer);
 			
 			ap.signals.windowResize.dispatch();
 		}else{//play
 		skip.setDisabled(false);
-		ap.clipPlayerRow.stop();
-		ap.clipPlayerRow.setDisplay("none");
-		ap.clipPlayerRow.play();
-		ap.signals.rendered.active=false;
+		
+		//ap.clipPlayerRow.setDisplay("none");
+		//ap.signals.rendered.active=false;
+		
+		defaultOnRender=ap.onRender;
+		ap.onRender=function(){};
+		
 		ap.signals.windowResize.active=false;
+		ap.getSignal("clipPlayerPlayed").dispatch();
 			
+		
+		scope.stepTime=1.0/scope.fps;
+		
+		//start at
+		ap.mixer.update(scope.stepTime*scope.startIndex);
+		
+		ap.signals.rendered.remove(ap.onUpdateMixer);
+		ap.signals.rendered.add(onNewUpdateMixer);
+		defaultOnRender();
 		//change resolution
 		var wh=scope.resolution.split("x");
 		var w=wh[0];
@@ -126,7 +160,7 @@ var AnimationToImagePanel=function(ap){
 			
 		
 		
-		update();
+		ap.getSignal("clipPlayerUpdate").dispatch();
 		makeDataUrl();
 		bt.setTextContent("Stop");
 		
@@ -139,7 +173,7 @@ var AnimationToImagePanel=function(ap){
 	row.add(skip);
 	skip.onClick(function(){
 		AppUtils.clearAllChildren(span.dom);
-		if(scope.frameIndex==scope.maxFrame){
+		if(scope.frameIndex>=scope.maxFrame){
 			return;//finishd
 		}
 		makeDataUrl();

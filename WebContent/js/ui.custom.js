@@ -707,6 +707,7 @@ UI.IntegerRow=function(label,min,max,step,value,onChange){
 	var row=new UI.Row();
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
+	row.text=text;
 	
 	var number=new UI.Integer().setWidth('60px');
 	number.min=min;

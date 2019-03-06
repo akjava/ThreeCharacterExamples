@@ -15,6 +15,8 @@ var Sidebar = function ( application ) {
 	main.add(new Sidebar.TimelinerBones(ap));
 	main.add(new Sidebar.BoneRootTranslate(ap));
 	main.add(new Sidebar.BoneRotate(ap));
+	main.add(new Sidebar.TimelinerClipExport(ap));
+	
 	
 	var ik=tab.addItem("Ik");
 	ik.add(new Sidebar.IkBasic(ap));
