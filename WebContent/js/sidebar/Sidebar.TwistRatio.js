@@ -26,6 +26,16 @@ Sidebar.TwistRatio=function(ap){
 	ap.twistValues["calf_twist_L"]={x:0,y:-0.5,z:0};
 	ap.twistValues["calf_twist_R"]={x:0,y:-0.5,z:0};
 	
+	function clearTwistAll(){
+		Object.keys(ap.twistValues).forEach(function(key){
+			var list=BoneUtils.getBoneList(ap.skinnedMesh);
+			var twistIndex=BoneUtils.findBoneIndexByEndsName(list,key);
+			var twistBone=list[twistIndex];
+			twistBone.rotation.set(0,0,0);
+			ap.getSignal("boneRotationFinished").dispatch(twistIndex);
+		});
+	}
+	
 	var indexMap={};
 	ap.signals.loadingModelFinished.add(function(model){
 		var list=BoneUtils.getBoneList(model);
@@ -43,6 +53,13 @@ Sidebar.TwistRatio=function(ap){
 	
 	var checkChanged=new UI.CheckboxRow("Update on boneRotation",ap.twistUpdateWhenBoneRotationChanged,function(v){
 		ap.twistUpdateWhenBoneRotationChanged=v;
+		if(v==false){
+			clearTwistAll();
+		}else{
+			Object.keys(ap.twistValues).forEach(function(key){
+				updateBone(key);
+			});
+		}
 	});
 	container.add(checkChanged);
 	
