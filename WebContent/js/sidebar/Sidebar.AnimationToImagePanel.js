@@ -26,9 +26,7 @@ Sidebar.AnimationToImagePanel=function(ap){
 		var link=AppUtils.generateBase64DownloadLink(dataUrl,"image/png",fileName,fileName,true);
 		span.dom.appendChild(link);
 		
-		if(scope.autoDownload){
-			link.click();
-		}
+		
 		
 		//switch max frame
 		link.addEventListener( 'click', function ( event ) {
@@ -40,7 +38,9 @@ Sidebar.AnimationToImagePanel=function(ap){
 		scope.frameIndex++;
 		
 		//link.click();
-		
+		if(scope.autoDownload){
+			link.click();
+		}
 	}
 	
 	var titlePanel=new UI.TitlePanel("Animation To Image");
@@ -107,6 +107,7 @@ Sidebar.AnimationToImagePanel=function(ap){
 	};
 	
 	bt.onClick(function(){
+		
 		//stop
 		if(scope.started){
 			skip.setDisabled(true);
@@ -128,7 +129,7 @@ Sidebar.AnimationToImagePanel=function(ap){
 			
 			ap.signals.windowResize.dispatch();
 		}else{//play
-		skip.setDisabled(false);
+		
 		
 		//ap.clipPlayerRow.setDisplay("none");
 		//ap.signals.rendered.active=false;
@@ -139,6 +140,14 @@ Sidebar.AnimationToImagePanel=function(ap){
 		ap.signals.windowResize.active=false;
 		ap.getSignal("clipPlayerPlayed").dispatch();
 			
+		if(!ap.mixer){
+			console.log("not ready.maybe not clip upload");
+			ap.signals.windowResize.active=true;
+			ap.onRender=defaultOnRender;
+			return;
+		}
+		
+		skip.setDisabled(false);
 		
 		scope.stepTime=1.0/scope.fps;
 		
