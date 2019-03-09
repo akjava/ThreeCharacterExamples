@@ -6,7 +6,8 @@ Example=function(application){
 	ap.controls.target.set(0,100,0);
 	ap.controls.update();
 	
-	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
+	var url='../../../dataset/vrm/Alicia/AliciaSolid.vrm';
+	
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	
@@ -15,10 +16,18 @@ Example=function(application){
 	//ap.controls.update();
 	
 	//light
-	ap.scene.add(new THREE.AmbientLight(0x888888));
+	ap.scene.add(new THREE.AmbientLight(0xaaaaaa));
 	
+	ap.getSignal("loadingModelStarted").add(function(url){
+		VrmUtils.logging=true;
+		VrmUtils.loadVrm(ap,url);
+	});
 	
 	ap.getSignal("loadingModelFinished").add(function(model){
+		if(ap.skinnedMesh){
+			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
+			ap.skeletonHelper.parent.remove(helper);
+		}
 		ap.skinnedMesh=model;
 		ap.scene.add(model);
 		model.scale.set(100,100,100);
@@ -27,11 +36,10 @@ Example=function(application){
 		ap.scene.add(helper);
 		ap.skeletonHelper=helper;
 		helper.material.visible=false;
-						
 	});
-	VrmUtils.logging=true;
-	VrmUtils.loadVrm(ap,'../../../dataset/vrm/Alicia/AliciaSolid.vrm');
 	
 	
+	
+	ap.getSignal("loadingModelStarted").dispatch(url);
 
 }

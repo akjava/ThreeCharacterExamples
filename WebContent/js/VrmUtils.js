@@ -8,7 +8,7 @@ var VrmUtils={
 			 * 
 			 */
 			var loader = new THREE.VRMLoader();
-			loader.load( '../../../dataset/vrm/Alicia/AliciaSolid.vrm', function ( vrm ) {
+			loader.load( url, function ( vrm ) {
 				// VRMLoader doesn't support VRM Unlit extension yet so
 				// converting all materials to MeshBasicMaterial here as workaround so far.
 				vrm.scene.traverse( function ( object ) {

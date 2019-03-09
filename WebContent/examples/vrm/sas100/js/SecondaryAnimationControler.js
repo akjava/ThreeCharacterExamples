@@ -30,6 +30,10 @@ var SecondaryAnimationControler=function(ap){
 	this.boneGroups=undefined;
 	
 	this.scale=100;
+	this.minSize=0.5;//or broken
+	
+	this.maxDistanceRatio=1.1;
+	this.enableLimitDistance=true;
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
@@ -65,6 +69,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 		
 		
 		var sphere=scope.createSphereBox(hitR,isRoot?0:scope.mass,position);
+		sphere.name=boneName+"-pos";
 		spheres.push(sphere);
 		scope.allSpheres.push(sphere);
 		if(isRoot){
@@ -75,10 +80,11 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 			sphere.syncBodyToMesh=false;
 			sphere.getMesh().updateMatrixWorld(true);
 			sphere.syncTransform(scope.ammoControler);
+			sphere.isRoot=true;
 		}else{
 			sphere.syncBone=true;
-			//childSphere.targetBone=parentBone;
 			sphere.syncWorldMatrix=false;
+			sphere.syncTransform(scope.ammoControler);
 			sphere.getMesh().updateMatrixWorld(true);
 		}
 	});
@@ -100,6 +106,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 			scope.allSpheres.push(sphere2);
 			sphere2.syncBone=true;
 			sphere2.syncWorldMatrix=false;
+			sphere2.syncTransform(scope.ammoControler);
 			sphere2.getMesh().updateMatrixWorld(true);
 			isLeaf=true;
 		}
@@ -108,7 +115,9 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 			sphere1.positionTargetBone=bone;
 		}
 		
-		sphere2.name=bone.name;
+		
+		
+		sphere2.name=sphere2.name+":"+bone.name+"-rot";
 		
 		bone.userData.defaultPosition=bone.position.clone();
 		
@@ -128,28 +137,39 @@ SecondaryAnimationControler.prototype.findSphereByName=function(name){
 	return match;
 }
 
-SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,color){
-	 color=color==undefined?0x000088:color;
+SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,color,isCollid){
+	isCollid=isCollid==undefined?false:isCollid;
+	
+	color=color==undefined?0x000088:color;
 	 if(!size){
 		 console.error("need size");
 	 }
 	 if(!mass && mass!==0){
 		 console.error("need mass");
 	 }
+	 if(size<this.minSize){
+		 size=this.minSize;
+	 }
+	 var group=isCollid?2:1;
+	 var mask=isCollid?1:2;
+	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
-						new THREE.MeshPhongMaterial({color:color})
+						new THREE.MeshPhongMaterial({color:color}),group,mask
 				);
 	 return sphere;
 }
 
 SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffiness){
-
 	
 	 var box1Pos=new THREE.Vector3().setFromMatrixPosition(box1.getMesh().matrixWorld);
 	 var box2Pos=new THREE.Vector3().setFromMatrixPosition(box2.getMesh().matrixWorld);
 	 var diff=box2Pos.sub(box1Pos);
 	
-	var body=box2.getBody();
+	 box2.parent=box1;
+	 box2.maxDistance=new THREE.Vector3().distanceTo(diff)*this.maxDistanceRatio;
+	
+	 
+	 var body=box2.getBody();
 	
 	 
 	 AmmoUtils.setLinearFactor(body,1,1,1);
@@ -235,10 +255,44 @@ SecondaryAnimationControler.prototype.dispose=function(){
 	return distance;
 }*/
 
-SecondaryAnimationControler.prototype.update=function(){
-	if(!this._enabled){
-		return;
+SecondaryAnimationControler.prototype.update=function(force){
+	if(!force){
+		if(!this._enabled || !this.ap.ammoControler.isEnabled()){
+			return;
+		}
 	}
+	
+	var scope=this;
+	
+	if(this.enableLimitDistance){
+		this.allSpheres.forEach(function(sphere){
+			if(sphere.parent){
+				var parent=sphere.parent;
+				var parentPos;
+				if(parent.syncWorldMatrix){
+					parentPos=new THREE.Vector3().setFromMatrixPosition(parent.getMesh().matrixWorld);
+				}else{
+					parentPos=parent.getMesh().position;
+				}
+					 
+				
+				var distance=sphere.getMesh().position.clone().distanceTo(parentPos);
+				
+				if(distance>sphere.maxDistance){
+					//console.log("max",sphere.name);
+					var divided=distance/sphere.maxDistance;
+					var diff=sphere.getMesh().position.clone().sub(parentPos);
+					diff.divideScalar(divided).add(parentPos);
+					
+					AmmoUtils.setPosition(sphere.getBody(),diff.x,diff.y,diff.z);
+					sphere.syncTransform(scope.ap.ammoControler);
+				}
+			}
+		});
+	}
+	
+	
+	
 /*	var scope=this;
 	if(this.autoResetPosition && this.breastBoxR && this.breastBoxL){
 		function doReset(box){
@@ -329,7 +383,7 @@ SecondaryAnimationControler.prototype.newColliderGroups=function(){
 			var pos= collider.offset.clone().multiplyScalar(scope.scale);
 			var size=collider.radius*scope.scale;
 			
-			var sphere=scope.createSphereBox(size,0,pos,0x008800);
+			var sphere=scope.createSphereBox(size,0,pos,0x008800,true);
 			sphere.syncWorldMatrix=true;
 			sphere.syncBodyToMesh=false;
 			sphere.getMesh().updateMatrixWorld(true);

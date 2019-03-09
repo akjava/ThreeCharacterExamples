@@ -140,9 +140,12 @@ addBodyMesh:function(object,colliedType,colliedWith){
 }
 ,
 //double radius,double mass,double x,double y,double z,Material material
-createSphere:function(radius,mass,x,y,z,material){
+createSphere:function(radius,mass,x,y,z,material,group,mask){
+	if(!radius){
+		 console.error("createSphere:need radius");
+	}
 	var object=  AmmoBodyAndMesh.createSphere(radius, mass, x, y, z, material);
-	this.addBodyMesh(object);
+	this.addBodyMesh(object,group,mask);
 	return object;
 },
 

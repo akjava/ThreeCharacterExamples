@@ -6,7 +6,7 @@ Sidebar.SecondaryAnimation=function(ap){
 	});
 	panel.add(checkRow);
 var buttonRow=new UI.ButtonRow("Step",function(){
-		
+		ap.secondaryAnimationControler.update(true);
 		ap.ammoControler.update(1.0/60,true);
 	});
 	panel.add(buttonRow);

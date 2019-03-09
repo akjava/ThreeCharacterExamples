@@ -7,7 +7,7 @@ Sidebar.SimpleLight=function(ap){
 	var ambientColor=0x666666;
 	
 	var light1 = new THREE.DirectionalLight(color1);
-	light1.position.set(100, 100, 100);
+	light1.position.set(150, 150, 150);
 	ap.scene.add(light1);
 	
 	var lightColor=new UI.ColorRow("Light1",color1,function(v){

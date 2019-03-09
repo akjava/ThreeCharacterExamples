@@ -6,7 +6,8 @@ Example=function(application){
 	ap.controls.target.set(0,100,0);
 	ap.controls.update();
 	
-	var url="../../../dataset/mbl3d/models/anime2_female.fbx";
+	
+	var url='../../../dataset/vrm/Alicia/AliciaSolid.vrm';
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	
@@ -15,7 +16,7 @@ Example=function(application){
 	//ap.controls.update();
 	
 	//light
-	ap.scene.add(new THREE.AmbientLight(0x888888));
+	ap.scene.add(new THREE.AmbientLight(0xaaaaaa));//use basic material
 	
 	
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
@@ -28,7 +29,6 @@ Example=function(application){
 	
 	function loadingModelFinishedForSecondaryAnimationControler(ap){
 		ap.signals.loadingModelFinished.add(function(mesh){
-			
 			
 			
 			if(!ap.secondaryAnimationControler){
@@ -49,12 +49,23 @@ Example=function(application){
 		
 		ap.signals.rendered.add(function(){
 			if(ap.secondaryAnimationControler){
-				ap.ammoControler.update();
 				ap.secondaryAnimationControler.update();
+				ap.ammoControler.update();
+				
 			}
 		},undefined,-2);//call later boneAttach
 	}
+	ap.getSignal("loadingModelStarted").add(function(url){
+		VrmUtils.logging=false;
+		VrmUtils.loadVrm(ap,url);
+	});
+	
 	ap.getSignal("loadingModelFinished").add(function(model){
+		
+		if(ap.skinnedMesh){
+			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
+		}
+		
 		ap.skinnedMesh=model;
 		ap.scene.add(model);
 		model.scale.set(100,100,100);
@@ -63,6 +74,6 @@ Example=function(application){
 	},undefined,100);
 	
 	
-	VrmUtils.loadVrm(ap,'../../../dataset/vrm/Alicia/AliciaSolid.vrm');	
+	ap.getSignal("loadingModelStarted").dispatch(url);
 
 }
