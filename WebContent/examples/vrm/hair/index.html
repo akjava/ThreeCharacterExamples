@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Hair Example</title>
+	</head>
+	<body ontouchstart="">
+	<link href="../../css/shared.css" rel="stylesheet" />
+	<link href="css/main.css" rel="stylesheet" />
+	<script src="../../../libs102/three.min.js"></script>
+	<script src="../../../libs/ui.js"></script>
+	<script src="../../../libs102/OrbitControls.js"></script>
+	<script src="../../../libs102/GLTFLoader.js"></script>
+	<script src="../../../libs102/VRMLoader.js"></script>
+	<script src="../../../libs/signals.min.js"></script>
+	<script src="../../../libs/ammo.js"></script>
+
+	<!-- my jslib -->
+	<script src="../../../js/ui.custom.js"></script>
+	<script src="../../../js/AnimeUtils.js"></script>
+	<script src="../../../js/BoneUtils.js"></script>
+	<script src="../../../js/Mbl3dUtils.js"></script>
+	<script src="../../../js/AppUtils.js"></script>
+	<script src="../../../js/Logics.js"></script>
+	<script src="../../../js/BoneAttachControler.js"></script>
+	<script src="../../../js/VrmUtils.js"></script>
+	
+	<script src="../../../js/ammo/AmmoUtils.js"></script>
+	<script src="../../../js/ammo/AmmoControler.js"></script>
+	<script src="../../../js/ammo/AmmoBodyAndMesh.js"></script>
+	<script src="../../../js/ammo/AmmoBoxBodyAndMesh.js"></script>
+	<script src="../../../js/ammo/AmmoSphereBodyAndMesh.js"></script>
+	<script src="../../../js/ammo/AmmoConstraintAndLine.js"></script>
+	
+	<script src="../../../js/application/MinApplication.js"></script>
+	<script src="../../../js/core/MinCore.js"></script>
+	<script src="js/HairControler.js"></script>
+	<script src="js/Info.js"></script>
+	
+	<script src="js/Sidebar.js"></script>
+	
+	<!-- sidebars -->
+	<script src="js/Sidebar.Hair.js"></script>
+	<script src="../../../js/sidebar/Sidebar.BoneRotate.js"></script>
+	
+	<!--  custom modules -->
+	<script src="../../../js/ui/AbsoluteRotateDiv.js"></script>
+	
+	
+	<script src="js/Example.js"></script>
+	<script>
+	window.URL = window.URL || window.webkitURL;
+	window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+	Number.prototype.format = function (){
+		return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	};
+	
+	var application = new MinApplication();
+	
+	var core = new MinCore( application );
+	document.body.appendChild( core.dom );
+	
+	var info=new Info(application);
+	document.body.appendChild( info.dom );
+	
+	var sidebar = new Sidebar( application );
+	document.body.appendChild( sidebar.dom );
+	
+	function onWindowResize( event ) {
+
+		application.signals.windowResize.dispatch();
+
+	}
+
+	window.addEventListener( 'resize', onWindowResize, false );
+
+	onWindowResize();
+	
+	application.example=new Example(application);
+	</script>
+	</body>
+</html>

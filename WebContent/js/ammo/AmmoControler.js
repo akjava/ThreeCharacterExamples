@@ -38,8 +38,11 @@ AmmoControler.prototype = {
 	getMeshContainerMatrixWorldInverse:function(){
 			return this._matrixWorldInv;
 		},
-update:function(delta){
-	if(!this._enabled){
+		printCount:function(){
+			console.log("AmmoControler:","autoSyncingBodies",this.autoSyncingBodies.length,"autoSyncingConstraints",this.autoSyncingConstraints.length);
+		},
+update:function(delta,force){
+	if(!this._enabled && !force){
 		return;
 	}
 	var scope=this;
@@ -67,6 +70,9 @@ update:function(delta){
 },
 setEnabled:function(v){
 	this._enabled=v;
+},
+isEnabled:function(){
+	return this._enabled;
 },
 deleteGarbages:function(){
 	this.garbage.forEach(function(object){
@@ -153,7 +159,9 @@ destroyBodyAndMesh:function(data){
 		return;
 	}
 	if(data.getMesh()!=null){
-		this.scene.remove(data.getMesh());
+		if(data.getMesh().parent){
+			data.getMesh().parent.remove(data.getMesh());
+		}
 	}
 	
 	//remove at
@@ -270,6 +278,9 @@ setGravity:function(x,y,z){
 	this.world.setGravity(btVector3);
 }
 ,
+setVisible:function(visible){
+	this.setVisibleAll(visible);
+},
 setVisibleAll:function(visible){
 	this.autoSyncingBodies.forEach(function(object){
 		if(object.getMesh()){

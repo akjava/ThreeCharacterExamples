@@ -11,6 +11,8 @@ AmmoBodyAndMesh = function(body,mesh){
 	this.forceSyncWhenHidden=true;
 	this.disableSync=false;
 	this.syncBodyToMesh=true;//or sync mesh to body
+	
+	
 	this.syncWorldMatrix=false;
 	
 	this._matrix=new THREE.Matrix4();
@@ -22,7 +24,8 @@ AmmoBodyAndMesh = function(body,mesh){
 	this.targetBone=null;
 	this.defaultBoneRotation=null;
 	this._tmpQuaternion=null;
-	this.parentBodyAndMesh=null;
+	this.parentBodyAndMesh=null;//@deprecated
+	this.parentBone=null;
 }
 
 Object.assign( AmmoBodyAndMesh.prototype, {
@@ -41,12 +44,14 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			return;
 		}
 		
+		
+		
 		if(this.syncBodyToMesh){
 			var transform=this._transform;
 			
 			this.body.getMotionState().getWorldTransform(transform);
 			
-			if(this.syncWorldMatrix){
+			if(this.syncWorldMatrix){//TODO recheck
 				//this._position.set(transform.getOrigin().x()/this.bodyScalar, transform.getOrigin().y()/this.bodyScalar,transform.getOrigin().z()/this.bodyScalar);
 				this._position.set(transform.getOrigin().x(), transform.getOrigin().y(),transform.getOrigin().z());
 				
@@ -101,11 +106,54 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 		
 		//limited working,maybe scalling
 		if(this.syncBone && this.targetBone!=null){
+			/*
+			 * why separated here.
+			 * Case:sphere1 - sphere2 -sphere3  from bone1-bone2
+			 * sphere1(static)
+			 * sphere2(dynamic containe bone1-rot,bone2-position)
+			 * sphere3(dynamic contain bone2-rot)
+			 */
+			
+			if(this.positionTargetBone){
+				var matrixWorld=null;
+				var beforePos=this.positionTargetBone.position.clone();
+				var beforeRotq=this.positionTargetBone.quaternion.clone();
+				this.positionTargetBone.position.copy(this.positionTargetBone.userData.defaultPosition);
+				this.positionTargetBone.rotation.set(0,0,0);
+				this.positionTargetBone.updateMatrixWorld(true);
+				matrixWorld=this.positionTargetBone.matrixWorld;
+				
+				var pos=new THREE.Vector3().copy(this.getMesh().position);
+				//console.log("mesh",pos);
+				pos.applyMatrix4( new THREE.Matrix4().getInverse( matrixWorld) );
+			//	console.log("inverted",pos);
+				pos.add(this.positionTargetBone.userData.defaultPosition);
+				this.positionTargetBone.userData.needUpdatePosition=pos;
+				this.positionTargetBone.position.copy(beforePos);
+				this.positionTargetBone.quaternion.copy(beforeRotq);
+				this.positionTargetBone.updateMatrixWorld(true);
+			}
+			
+			
+			
+			
+			this.targetBone.updateMatrixWorld(true);
+			
+			
+			
 			if(this.defaultBoneRotation==null){
 				this.defaultBoneRotation=new THREE.Euler();
 			}
 			if(this._tmpQuaternion==null){
 				this._tmpQuaternion=new THREE.Quaternion();
+			}
+			
+			function printQ(q,message){
+				return;
+				var tmp=new THREE.Euler();
+				tmp.setFromQuaternion(q);
+				AppUtils.printDeg(tmp,message);
+				return tmp;
 			}
 			
 			var euler=this.defaultBoneRotation;
@@ -114,12 +162,27 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			
 			var newQ=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
 			//var newQ=this.getMesh().quaternion.clone();
+			//printQ(newQ);
+			printQ(newQ,"ammo");
+		
+			//TODO optimize
 			
-			this._tmpQuaternion.setFromRotationMatrix(this.parentBodyAndMesh.getMesh().matrixWorld).inverse();
+			var wq=this.targetBone.parent.getWorldQuaternion(new THREE.Quaternion());
+			printQ(wq,"minus-"+this.targetBone.parent.name);
+			//printQ(wq);
 			
-			newQ.multiply(this._tmpQuaternion);
+			newQ.multiply(wq.inverse());
+			printQ(newQ,"set "+this.targetBone.name);
 			
-			this.targetBone.quaternion.copy(newQ);	
+			this.targetBone.quaternion.copy(newQ);
+			
+			
+			if(this.targetBone.userData.needUpdatePosition){
+				this.targetBone.position.copy(this.targetBone.userData.needUpdatePosition);
+				this.targetBone.userData.needUpdatePosition=null;
+			}
+			
+			this.targetBone.updateMatrixWorld(true);
 		}
 		
 	},

@@ -311,6 +311,9 @@ DISABLE_SIMULATION :5
 	body.setCenterOfMassTransform(transform);
 	body.getMotionState().setWorldTransform(transform);
 }
+/*
+ * only works some situation see bonesync example
+ */
 //Bone bone,@Nullable Vector3 position,Quaternion rotation,double scaleFactor
 ,updateBone:function(bone,position,rotation,scaleFactor,tmp){
 	scaleFactor=scaleFactor!==undefined?scaleFactor:1;

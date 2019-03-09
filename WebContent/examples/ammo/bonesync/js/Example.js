@@ -9,9 +9,9 @@ Example=function(application){
 	var group=new THREE.Group();
 	ap.scene.add(group);
 	ap.group=group;
-	//group.position.set(5,5,5);
+	//group.position.set(10,5,5);
 	
-	//var xq=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), THREE.Math.degToRad(45));
+	//var xq=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), THREE.Math.degToRad(60));
 	//group.quaternion.multiply(xq);
 	//group.scale.set(0.1,0.1,0.1);
 	//group.position.set(5,5,5);
@@ -31,12 +31,12 @@ Example=function(application){
 		ap.skinnedMesh.skeleton.pose();
 		//no need [0] root
 		for(var i=0;i<bones.length;i++){
-			ap.scene.add(ap.skinnedMesh);//some trick for add different matrix object
-			ap.scene.updateMatrixWorld();//some trick
+			//ap.scene.add(ap.skinnedMesh);//some trick for add different matrix object
+			//ap.scene.updateMatrixWorld();//some trick
 			var name=bones[i].name;
 			var bm=application[name];
 			ap.ammoControler.updateBone(bones[i], bm);
-			ap.group.add(ap.skinnedMesh);//some trick
+			//ap.group.add(ap.skinnedMesh);//some trick
 		}
 	};
 	

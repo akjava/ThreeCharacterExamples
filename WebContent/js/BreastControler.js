@@ -1,3 +1,6 @@
+/*
+ * for manuellab3d
+ */
 var BreastControler=function(){
 	
 	this._pos=new THREE.Vector3();
@@ -26,6 +29,7 @@ var BreastControler=function(){
 	this.breastMass=0.1;
 	
 	this._enabled=true;
+	
 }
 
 BreastControler.prototype.initialize=function(ammoControler,boneAttachControler){

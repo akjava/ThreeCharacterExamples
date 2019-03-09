@@ -198,7 +198,16 @@ var BoneUtils={
 		getBoneList:function(skinnedMesh){
 			return skinnedMesh.skeleton.bones;
 		},
-		
+		makeBoneList:function(parent){
+			var bones={};
+			parent.traverse(function(obj){
+				if(obj.isBone){
+					bones[obj.uuid]=obj;
+				}
+			});
+			
+			return Object.values(bones);
+		},
 		//for Select id is key
 		getBoneIdOptions:function ( object ) {
 
