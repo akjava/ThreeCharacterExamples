@@ -138,6 +138,7 @@ SecondaryAnimationControler.prototype.findSphereByName=function(name){
 }
 
 SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,color,isCollid){
+	
 	isCollid=isCollid==undefined?false:isCollid;
 	
 	color=color==undefined?0x000088:color;
