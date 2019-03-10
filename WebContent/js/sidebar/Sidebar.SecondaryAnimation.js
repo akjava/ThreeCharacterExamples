@@ -91,7 +91,62 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	bodyDamping.number.setWidth("30px");
 	control.add(bodyDamping);
 	
+	function getCurrentGroup(){
+		var v=boneGroupList.getValue();
+		return ap.secondaryAnimationControler.boneGroups[v];
+	}
 
+	var boneGroupList=new UI.SelectRow("Group",{},function(v){
+		var group=null;
+		if(v){
+			group=ap.secondaryAnimationControler.boneGroups[v];
+		}
+		updateBoneGroupEditor(group);
+	});
+	panel.add(boneGroupList)
+	
+	function updateBoneGroupEditor(group){
+		boneNames.clear();
+		if(!group){
+			groupStiffness.setValue(0);
+			groupStiffness.setDisabled(true);
+			return;
+		}
+		groupStiffness.setDisabled(false);
+		
+		group.boneLinkList.forEach(function(links){
+			boneNames.add(new UI.Text(links[0]).setMarginRight("2px"));
+		});
+		groupStiffness.setValue(group.stiffiness);
+	}
+	
+	var boneNames=new UI.Row();
+	panel.add(boneNames);
+	
+	var groupStiffness=new UI.NumberButtons("stiffness",0,100,1,0,function(v){
+		getCurrentGroup().stiffiness=v;
+	},[0,0.5,1]);
+	panel.add(groupStiffness);
+	groupStiffness.text.setWidth("60px");
+	var resetBt=new UI.Button("Rest").onClick(function(){
+		var v=getCurrentGroup().defaultStiffiness;
+		groupStiffness.setValue(v);
+		getCurrentGroup().stiffiness=v;
+	});
+	resetBt.setFontSize("6px");
+	groupStiffness.add(resetBt);
+	
+	
+	
+	ap.getSignal("secondaryAnimationParsed").add(function(){
+		var options={};
+		var groups=ap.secondaryAnimationControler.boneGroups;
+		for(var i=0;i<groups.length;i++){
+			var boneName=groups[i].boneLinkList[0][0];
+			options[String(i)]=boneName+" +";
+		}
+		boneGroupList.select.setOptions(options);
+	});
 	
 	
 	return panel;

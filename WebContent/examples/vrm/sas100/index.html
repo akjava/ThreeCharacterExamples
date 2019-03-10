@@ -63,11 +63,19 @@
 	var core = new MinCore( application );
 	document.body.appendChild( core.dom );
 	
+	
 	var info=new Info(application);
 	document.body.appendChild( info.dom );
 	
 	var sidebar = new Sidebar( application );
 	document.body.appendChild( sidebar.dom );
+	
+	var modal = new UI.Modal();
+	document.body.appendChild( modal.dom );
+	
+	application.getSignal("showModal").add( function ( content ) {
+		modal.show( content );
+	} );
 	
 	function onWindowResize( event ) {
 
@@ -77,6 +85,7 @@
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
+	
 	onWindowResize();
 	
 	application.example=new Example(application);

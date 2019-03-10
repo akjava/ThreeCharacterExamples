@@ -16,7 +16,7 @@ var SecondaryAnimationControler=function(ap){
 	this.allowAngleZ=180;
 	
 	this.baseHitRadius=100;
-	this.baseStiffiness=200;
+	this.baseStiffiness=250;
 	
 	this.damping=1;
 	//this.stiffness=100;
@@ -34,6 +34,8 @@ var SecondaryAnimationControler=function(ap){
 	
 	this.maxDistanceRatio=1.1;
 	this.enableLimitDistance=true;
+	
+	this.endSiteRatio=0.5;
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
@@ -101,7 +103,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 			var parentName=bone.parent.name;
 			var parentPos=bac.getContainerByBoneName(parentName).position.clone();
 			var bonePos=bac.getContainerByBoneName(boneName).position.clone();
-			var endSitePos=bonePos.clone().sub(parentPos).add(bonePos);
+			var endSitePos=bonePos.clone().sub(parentPos).multiplyScalar(this.endSiteRatio).add(bonePos);
 			sphere2=this.createSphereBox(hitR,scope.mass,endSitePos);
 			scope.allSpheres.push(sphere2);
 			sphere2.syncBone=true;
@@ -447,13 +449,16 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 		scope.colliderGroups.push(new ColliderGroup(name,group))
 	});
 	
+	this.ap.getSignal("secondaryAnimationParsed").dispatch();
 }
 
 var BodyGroup=function(boneLinkList,raw){
 	this.boneLinkList=boneLinkList;//solved raw node-index(bone)
 	this.raw=raw;
 	this.hitRadius=raw.hitRadius;
+	this.defaultHitRadius=this.hitRadius;
 	this.stiffiness=raw.stiffiness;
+	this.defaultStiffiness=this.stiffiness;
 };
 
 var ColliderGroup=function(boneName,raw){

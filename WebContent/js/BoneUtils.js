@@ -233,6 +233,28 @@ var BoneUtils={
 
 			return options;
 
+		},//reverse for select1
+		boneListToOptions:function ( boneList,reverse ) {
+			reverse=reverse==undefined?false:reverse;
+			
+			var options={};
+			if(reverse){
+				for(var i=0;i<boneList.length;i++){
+					var bone=boneList[i];
+					options[String(i)]=bone.name;
+
+				}
+			}else{
+				for(var i=0;i<boneList.length;i++){
+					var bone=boneList[i];
+					options[bone.name]=String(i);
+
+				}
+			}
+			
+
+			return options;
+
 		},
 		makeQuaternionFromXYZDegree:function(x,y,z,defaultEuler,order){
 			return BoneUtils.makeQuaternionFromXYZRadian(THREE.Math.degToRad(x),THREE.Math.degToRad(y),THREE.Math.degToRad(z),defaultEuler,order);

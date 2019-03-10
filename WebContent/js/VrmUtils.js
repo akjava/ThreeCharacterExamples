@@ -64,16 +64,58 @@ var VrmUtils={
 						bones[i].quaternion.copy(rotq[i]);
 					}
 				},poses:poses,rotq:rotq};
-				vrm.scene.skeleton=skeleton;
 				
+				vrm.scene.skeleton=skeleton;//
+				vrm.scene.humanoidSkeleton=VrmUtils.humanoidToSkeleton(vrm);
 				if(scope.logging){
 					console.log(vrm);
 					console.log(vrm.userData.gltfExtensions);
 					console.log(vrm.parser.json.nodes);
 				}
 				
+				
+				
 				ap.vrm=vrm;
 				ap.getSignal("loadingModelFinished").dispatch(vrm.scene);
 			} );
+		},
+		humanoidToSkeleton:function(vrm){
+			var bones=[];
+			var poses=[];
+			var rotq=[];
+			var humanoid=vrm.userData.gltfExtensions.VRM.humanoid;
+			var nodes=vrm.parser.json.nodes;
+			
+			function getBoneName(index){
+				return nodes[index].name;
+			}
+			
+			var list=BoneUtils.getBoneList(vrm.scene); //vrm.scene is same as ap.skinnedMesh
+			
+			humanoid.humanBones.forEach(function(hb){
+				var name=getBoneName(hb.node);
+				var bone=BoneUtils.findBoneByEndsName(list,name);
+				if(bone==null){
+					console.error("not found",hb.bone,name,list);
+					if(name=="waist"){
+						var bone=BoneUtils.findBoneByEndsName(list,"upperbody01");
+						bones.push(bone);
+					}
+				}else{
+					bones.push(bone);
+				}
+				
+			});
+			bones.forEach(function(bone){
+				poses.push(bone.position.clone());
+				rotq.push(bone.quaternion.clone());
+			});
+			var skeleton={bones:bones,pose:function(){
+				for(var i=0;i<bones.length;i++){
+					bones[i].position.copy(poses[i]);
+					bones[i].quaternion.copy(rotq[i]);
+				}
+			},poses:poses,rotq:rotq};
+			return skeleton;
 		}
 }

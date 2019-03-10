@@ -6,6 +6,11 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	this.mesh=null;
 	this.selectedBone=null;
 
+	this.getBoneList=function(){
+		console.log("hello2");
+		return BoneUtils.getBoneList(scope.mesh);
+	}
+	
 	function log(message,option1){
 		if(ap.rotationControler && ap.rotationControler.logging){
 			console.log(message,option1);
@@ -14,11 +19,14 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	
 	
 	var container=new UI.TitlePanel("Bone Rotate");
+	container.setGetBoneList=function(f){
+		scope.getBoneList=f;
+	}
 	
 	if(enableSelectButton){
 	var bt=new UI.ButtonRow("Select Bone Rotate",function(){
 		var index=Number(boneSelect.getValue());
-		var bone=BoneUtils.getBoneList(scope.mesh);
+		var bone=scope.getBoneList();
 		var target=ap.rotationControler.rotationControls[bone[index].name];
 		ap.getSignal("transformSelectionChanged").dispatch(target);
 	});
@@ -37,7 +45,7 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	});
 	
 	function onBoneSelectionChanged(){
-		var bone=BoneUtils.getBoneList(scope.mesh)[parseInt(boneSelect.getValue())];
+		var bone=scope.getBoneList()[parseInt(boneSelect.getValue())];
 		
 		scope.selectedBone=bone;//TODO move to  local
 		
@@ -66,7 +74,7 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	
 	ap.getSignal("loadingModelFinished").add(function(mesh){
 		scope.mesh=mesh;
-		var op=BoneUtils.getBoneNameOptions(mesh);
+		var op=BoneUtils.boneListToOptions(scope.getBoneList());
 		//var options=Mbl3dUtils.convertOptionsToMbl3d(op);
 		var options=(op);
 		
@@ -81,7 +89,7 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	});
 	
 	function updateRotation(index){
-		var boneList=BoneUtils.getBoneList(scope.mesh);
+		var boneList=scope.getBoneList();
 		var name=boneList[index].name;
 		
 		
@@ -91,7 +99,7 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 		}
 	}
 	ap.getSignal("boneRotationChanged").add(function(index){
-		var boneList=BoneUtils.getBoneList(scope.mesh);
+		var boneList=scope.getBoneList();
 		if(index==undefined){//update all
 			for(var i=0;i<boneList.length;i++){
 				updateRotation(i);
@@ -161,7 +169,7 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	var p1=new UI.Row();
 	var bt=new UI.Button("Reset All Bone Rotation To 0").onClick( function () {
 		//scope.mesh.skeleton.pose();
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var boneList=scope.getBoneList();
 		for(var i=0;i<boneList.length;i++){
 			boneList[i].rotation.set(0,0,0);
 			ap.getSignal("boneRotationChanged").dispatch(i);

@@ -233,6 +233,7 @@ var Logics={
 				if(ap.boneAttachControler!=null){
 					ap.boneAttachControler.dispose();
 				}
+				
 				ap.boneAttachControler=new BoneAttachControler(mesh);
 				ap.boneAttachControler.setParentObject(ap.root);
 				

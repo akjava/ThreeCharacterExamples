@@ -12,7 +12,6 @@ Sidebar.VrmVisible=function(ap){
 		var target=ap.skinnedMesh.getObjectById(Number(value));
 		
 		checkRow.setValue(target.material.visible);
-		wireRow.setValue(target.material.wireframe);
 	});
 	
 	ap.getSignal("loadingModelFinished").add(function(model){
@@ -33,13 +32,8 @@ Sidebar.VrmVisible=function(ap){
 	
 	container.add(checkRow);
 	
-	var wireRow=new UI.CheckboxRow("Wireframe",false,function(v){
-		var value=itemList.getValue();
-		var target=ap.skinnedMesh.getObjectById(Number(value));
-		target.material.wireframe=v;
-	});
 	
-	container.add(wireRow);
+
 	
 	
 	return container;

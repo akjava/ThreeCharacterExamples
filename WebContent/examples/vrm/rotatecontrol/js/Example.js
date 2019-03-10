@@ -1,28 +1,24 @@
 Example=function(application){
 	var ap=application;
+	//ap.renderer.gammaInput=true;
 	ap.renderer.gammaOutput=true;
+	
 	//default camera
-	ap.camera.position.set( 0, 1, -2.5 );
-	ap.controls.target.set(0,1,0);
+	ap.camera.position.set( 0, 100, -250 );
+	ap.controls.target.set(0,100,0);
 	ap.controls.update();
-	
-	
-	ap.camera.near=0.01;
-	ap.camera.updateProjectionMatrix();
 	
 	var url='../../../dataset/vrm/Alicia/AliciaSolid.vrm';
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	
-	//ap.camera.position.set( 0, 1.6, - 2.2 );
-	//ap.controls.target.set( 0, 0.9, 0 );
-	//ap.controls.update();
-	
 	//light
 	ap.scene.add(new THREE.AmbientLight(0xaaaaaa));//use basic material
 	
 	
+
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	
 	//vrm
 	Logics.initializeAmmo(ap);
 	
@@ -39,7 +35,6 @@ Example=function(application){
 			}else{
 				ap.secondaryAnimationControler.dispose();
 			}
-			
 			
 			ap.secondaryAnimationControler.logging=false;
 			ap.secondaryAnimationControler.initialize(ap.ammoControler,ap.boneAttachControler);
@@ -69,14 +64,11 @@ Example=function(application){
 		if(ap.skinnedMesh){
 			ap.skinnedMesh.parent.remove(ap.skinnedMesh);
 		}
-		
 		ap.skinnedMesh=model;
 		ap.scene.add(model);
-		//
-		ap.boneAttachControler.update(true);//scale changed;
+		model.scale.set(100,100,100);
 		
-	},undefined,100);
-	
+	},undefined,101);//before bone attach
 	
 	ap.getSignal("loadingModelStarted").dispatch(url);
 

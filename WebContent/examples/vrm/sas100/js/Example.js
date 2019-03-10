@@ -1,6 +1,6 @@
 Example=function(application){
 	var ap=application;
-	
+	ap.renderer.gammaOutput=true;
 	//default camera
 	ap.camera.position.set( 0, 100, -250 );
 	ap.controls.target.set(0,100,0);

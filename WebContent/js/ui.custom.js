@@ -566,7 +566,8 @@ UI.SelectRow=function(label,options,onChange,current){
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
 	
-	
+	if(!options)
+		options={};
 	
 	var select=new UI.Select();
 	select.setOptions(options);
