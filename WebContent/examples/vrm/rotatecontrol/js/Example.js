@@ -68,6 +68,12 @@ Example=function(application){
 		ap.scene.add(model);
 		model.scale.set(100,100,100);
 		
+		var boneNameList=[];
+		ap.skinnedMesh.humanoidSkeleton.bones.forEach(function(bone){
+			boneNameList.push(bone.name);
+		});
+		ap.humanoidBoneNameList=boneNameList;
+		
 	},undefined,101);//before bone attach
 	
 	ap.getSignal("loadingModelStarted").dispatch(url);

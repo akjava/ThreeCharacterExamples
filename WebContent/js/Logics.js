@@ -125,7 +125,12 @@ var Logics={
 			
 			});
 		},
-		loadingModelFinishedForRotationControler:function(ap){
+		loadingModelFinishedForRotationControler:function(ap,boneFilter){
+			if(!boneFilter){
+				boneFilter=function(bone){
+					return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name) && !Mbl3dUtils.isRootBoneName(bone.name);
+				}
+			}
 			var rotationControlerInitialized=false;
 			ap.signals.loadingModelFinished.add(function(mesh){
 				
@@ -155,9 +160,7 @@ var Logics={
 				}
 				
 				var rotationControler=new RotationControler(ap,ap.boneAttachControler);
-				rotationControler.initialize(function(bone){
-					return !Mbl3dUtils.isFingerBoneName(bone.name) && !Mbl3dUtils.isTwistBoneName(bone.name) && !Mbl3dUtils.isRootBoneName(bone.name);
-				});
+				rotationControler.initialize(boneFilter);
 				ap.rotationControler=rotationControler;
 				
 				

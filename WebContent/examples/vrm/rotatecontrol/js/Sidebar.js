@@ -30,16 +30,25 @@ var Sidebar = function ( application ) {
 	
 	ap.ammoVisible=false;
 	
-	
 	var boneRotate=new Sidebar.BoneRotate(ap,false,false);
-	main.add(boneRotate);
+	main.add(boneRotate);	
+	main.add(new Sidebar.BoneRotateAnimationPanel(ap));
 	
-	boneRotate.setGetBoneList(function(){
+	/*boneRotate.setGetBoneList(function(){
 		return ap.skinnedMesh.humanoidSkeleton.bones;
-	});
+	});*/
+	
+	
+	
+	var boneFilter=function(bone){
+		//initialized on loadingModelFinished#101
+		return ap.humanoidBoneNameList.indexOf(bone.name)!=-1;
+	}
+	
+	Logics.loadingModelFinishedForRotationControler(ap,boneFilter);
+	
 	main.add(new Sidebar.VrmAlphaMap(ap));
-	main.add(new Sidebar.VrmTextureDownload(ap));
-	main.add(new Sidebar.VrmMorphTarget(ap));
+
 	
 	var sub=tab.addItem("Sub");
 	var panel=new UI.Panel();

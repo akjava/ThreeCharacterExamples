@@ -7,7 +7,6 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 	this.selectedBone=null;
 
 	this.getBoneList=function(){
-		console.log("hello2");
 		return BoneUtils.getBoneList(scope.mesh);
 	}
 	

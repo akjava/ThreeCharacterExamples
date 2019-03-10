@@ -1,11 +1,12 @@
 Sidebar.SecondaryAnimation=function(ap){
 	var panel=new UI.TitlePanel("Ammo SecondaryAnimation");
 	
-	var checkRow=new UI.CheckboxRow("Enabled",true,function(v){
+	var checkRow=new UI.CheckboxRow("Ammo Enabled",true,function(v){
 		ap.ammoControler.setEnabled(v);
 	});
 	panel.add(checkRow);
 var buttonRow=new UI.ButtonRow("Step",function(){
+	    ap.boneAttachControler.update(true);
 		ap.secondaryAnimationControler.update(true);
 		ap.ammoControler.update(1.0/60,true);
 	});

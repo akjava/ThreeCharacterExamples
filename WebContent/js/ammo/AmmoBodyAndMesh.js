@@ -93,12 +93,13 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 				q=this._rotation;
 			}
 			
-			
 			var transform=AmmoUtils.getSharedBtTransform();
+			if(this.rotationSync){
 			var btQuaternion=AmmoUtils.getSharedBtQuaternion(q.x,q.y,q.z,q.w);
 			transform.setRotation(btQuaternion);
-			AmmoUtils.copyFromXYZ(transform.getOrigin(),p.x,p.y,p.z);
+			}
 			
+			AmmoUtils.copyFromXYZ(transform.getOrigin(),p.x,p.y,p.z);
 			this.body.setCenterOfMassTransform(transform);
 			this.body.getMotionState().setWorldTransform(transform);
 		}
@@ -160,14 +161,25 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			var rotate=this.getMesh().rotation;
 			var order=this.getMesh().rotation.order;
 			
-			var newQ=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
+			var newQ=null;
+			if(this.syncBodyToMesh){
+				//TODO this one is slow
+				newQ=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
+			}else{
+				var transform=this._transform;
+				this.body.getMotionState().getWorldTransform(transform);
+				//TODO support default order;
+				newQ=new THREE.Quaternion().set(transform.getRotation().x(), transform.getRotation().y(), transform.getRotation().z(), transform.getRotation().w());
+				
+			}
+			
 			//var newQ=this.getMesh().quaternion.clone();
 			//printQ(newQ);
 			printQ(newQ,"ammo");
 		
 			//TODO optimize
 			
-			var wq=this.targetBone.parent.getWorldQuaternion(new THREE.Quaternion());
+			var wq=this.targetBone.parent.getWorldQuaternion(this._rotation);
 			printQ(wq,"minus-"+this.targetBone.parent.name);
 			//printQ(wq);
 			

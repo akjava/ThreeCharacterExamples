@@ -14,7 +14,8 @@
 	<script src="../../../libs102/VRMLoader.js"></script>
 	<script src="../../../libs/signals.min.js"></script>
 	<script src="../../../libs/ammo.js"></script>
-
+	<script src="../../../libs/TransformControls.js"></script>
+	
 	<!-- my jslib -->
 	<script src="../../../js/ui.custom.js"></script>
 	<script src="../../../js/AnimeUtils.js"></script>
@@ -32,14 +33,20 @@
 	<script src="../../../js/ammo/AmmoSphereBodyAndMesh.js"></script>
 	<script src="../../../js/ammo/AmmoConstraintAndLine.js"></script>
 	
+	<script src="../../../js/RotationControler.js"></script>
+	
+	
 	<script src="../../../js/application/MinApplication.js"></script>
 	<script src="../../../js/core/MinCore.js"></script>
+	<script src="../../../js/core/MinTransformCore.js"></script>
 	<script src="../../../js/SecondaryAnimationControler.js"></script>
 	<script src="js/Info.js"></script>
 	
 	<script src="js/Sidebar.js"></script>
 	
 	<!-- sidebars -->
+	
+	<script src="../../../js/sidebar/Sidebar.BoneRotateAnimationPanel.js"></script>
 	<script src="../../../js/sidebar/Sidebar.VrmMorphTarget.js"></script>
 	<script src="../../../js/sidebar/Sidebar.SecondaryAnimation.js"></script>
 	
@@ -63,7 +70,7 @@
 	
 	var application = new MinApplication();
 	
-	var core = new MinCore( application );
+	var core = new MinTransformCore( application );
 	document.body.appendChild( core.dom );
 	
 	

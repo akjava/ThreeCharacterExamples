@@ -32,8 +32,10 @@ var SecondaryAnimationControler=function(ap){
 	this.scale=100;
 	this.minSize=0.5;//or broken
 	
-	this.maxDistanceRatio=1.1;
+	this.maxDistanceRatio=2;
 	this.enableLimitDistance=true;
+	
+	this.addEndsite=false;
 	
 	this.endSiteRatio=0.5;
 }
@@ -70,19 +72,21 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 		}
 		
 		
-		var sphere=scope.createSphereBox(hitR,isRoot?0:scope.mass,position);
+		var sphere=scope.createSphereBox(hitR,isRoot?0:scope.mass,position);//no 0 style not good at skirt
 		sphere.name=boneName+"-pos";
 		spheres.push(sphere);
 		scope.allSpheres.push(sphere);
 		if(isRoot){
 			//Mesh to Body
 			rootContainer.add(sphere.getMesh());
-
+			 AmmoUtils.setLinearFactor(sphere.getBody(),0,0,0);
 			sphere.syncWorldMatrix=true;
 			sphere.syncBodyToMesh=false;
 			sphere.getMesh().updateMatrixWorld(true);
 			sphere.syncTransform(scope.ammoControler);
+			sphere.rotationSync=false;
 			sphere.isRoot=true;
+			//sphere.syncBone=true;
 		}else{
 			sphere.syncBone=true;
 			sphere.syncWorldMatrix=false;
@@ -100,31 +104,33 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,stif
 			sphere2=spheres[i+1];
 		}else{
 			//create endsite
-			var parentName=bone.parent.name;
-			var parentPos=bac.getContainerByBoneName(parentName).position.clone();
-			var bonePos=bac.getContainerByBoneName(boneName).position.clone();
-			var endSitePos=bonePos.clone().sub(parentPos).multiplyScalar(this.endSiteRatio).add(bonePos);
-			sphere2=this.createSphereBox(hitR,scope.mass,endSitePos);
-			scope.allSpheres.push(sphere2);
-			sphere2.syncBone=true;
-			sphere2.syncWorldMatrix=false;
-			sphere2.syncTransform(scope.ammoControler);
-			sphere2.getMesh().updateMatrixWorld(true);
-			isLeaf=true;
+			if(this.addEndsite){
+				var parentName=bone.parent.name;
+				var parentPos=bac.getContainerByBoneName(parentName).position.clone();
+				var bonePos=bac.getContainerByBoneName(boneName).position.clone();
+				var endSitePos=bonePos.clone().sub(parentPos).multiplyScalar(this.endSiteRatio).add(bonePos);
+				sphere2=this.createSphereBox(hitR,scope.mass,endSitePos);
+				scope.allSpheres.push(sphere2);
+				sphere2.syncBone=true;
+				sphere2.syncWorldMatrix=false;
+				sphere2.syncTransform(scope.ammoControler);
+				sphere2.getMesh().updateMatrixWorld(true);
+				isLeaf=true;
+			}
+			
 		}
-		sphere2.targetBone=bone;
-		if(!isLeaf){
+		sphere1.targetBone=bone;
+		if(!sphere1.isRoot)
 			sphere1.positionTargetBone=bone;
-		}
-		
-		
-		
-		sphere2.name=sphere2.name+":"+bone.name+"-rot";
 		
 		bone.userData.defaultPosition=bone.position.clone();
+		if(sphere2!=null){
+			sphere2.name=sphere2.name+":"+bone.name+"-rot";
+			scope.makeConstraint(sphere1,sphere2,stiffiness);
+		}
 		
 		
-		scope.makeConstraint(sphere1,sphere2,stiffiness);
+		
 	}
 }
 
