@@ -51,6 +51,8 @@ var SecondaryAnimationControler=function(ap){
 	
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
 	
+	//TODO try to stable
+	//this.ends=[];
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
@@ -217,6 +219,11 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			hcontainer.push(list);
 		}
 		list.push(sphere1);
+		
+		//some test
+		/*if(i==links.length-1 && links.length>2){
+			scope.ends.push(sphere1);
+		}*/
 	}
 }
 
@@ -365,6 +372,13 @@ SecondaryAnimationControler.prototype.update=function(force){
 	
 	var scope=this;
 	
+	/*much better limit angle 1,TODO can do some limitation.
+	 * this.ends.forEach(function(sphere){
+		console.log(sphere.name);
+		AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,-0,0));
+		AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+	});*/
+	
 	if(this.enableLimitDistance){
 		this.allSpheres.forEach(function(sphere){
 			if(sphere.parent){
@@ -447,6 +461,7 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	
 	var enabled=this.ammoControler.isEnabled();
 	this.ammoControler.setEnabled(false);
+	this.ap.skinnedMesh.rotation.set(0,0,0);
 	this.ap.skinnedMesh.skeleton.pose();
 	this.ap.boneAttachControler.update(true);
 	var scope=this;

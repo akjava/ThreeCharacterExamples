@@ -7,6 +7,13 @@ var AbsoluteRotateDiv=function(ap){
 		ap.getSignal("objectRotated").dispatch(angleX.getValue(),angleY.getValue(),angleZ.getValue(),panel);
 	}
 	
+	ap.getSignal("objectRotated").add(function(x,y,z){
+		
+		angleX.setValue(x);
+		angleY.setValue(y);
+		angleZ.setValue(z);
+	});
+	
 	var row=new UI.Row();
 	panel.add(row);
 	

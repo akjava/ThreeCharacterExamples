@@ -13,7 +13,7 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	panel.add(buttonRow);
 	
 	var buttonRow=new UI.ButtonRow("New SecondaryAnimation",function(){
-		
+		ap.getSignal("objectRotated").dispatch(0,0,0);
 		ap.secondaryAnimationControler.newSecondaryAnimation();
 		ap.ammoControler.setVisibleAll(ap.ammoVisible);
 	});
@@ -53,6 +53,13 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	});
 	connectHCheck.text.setWidth("90px");
 	panel.add(connectHCheck);
+	var autoSetUpCheck=new UI.CheckboxSpan("autoSetUp",ap.secondaryAnimationControler.autoSetUp,function(v){
+		ap.secondaryAnimationControler.autoSetUp=v;
+	});
+	autoSetUpCheck.text.setWidth("90px");
+	connectHCheck.add(autoSetUpCheck);
+	
+	
 	
 	panel.add(new UI.Subtitle("Factor Limit Rotation"));
 	var row=new UI.Row();

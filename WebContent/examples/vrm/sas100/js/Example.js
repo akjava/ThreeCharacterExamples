@@ -50,6 +50,8 @@ Example=function(application){
 		ap.signals.rendered.add(function(){
 			if(ap.secondaryAnimationControler){
 				ap.secondaryAnimationControler.update();
+				/*ap.ammoControler.substeps=8;// TODO support
+				ap.ammoControler.fixedTimeStep=1.0/240;*/
 				ap.ammoControler.update();
 				
 				
