@@ -330,6 +330,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 				var distance=sphere.getMesh().position.clone().distanceTo(parentPos);
 				
 				if(distance>sphere.maxDistance){
+					
 					//console.log("max",sphere.name);
 					var divided=distance/sphere.maxDistance;
 					var diff=sphere.getMesh().position.clone().sub(parentPos);
@@ -337,6 +338,10 @@ SecondaryAnimationControler.prototype.update=function(force){
 					
 					AmmoUtils.setPosition(sphere.getBody(),diff.x,diff.y,diff.z);
 					sphere.syncTransform(scope.ap.ammoControler);
+					
+					//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+					//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+					console.log("reset");
 				}
 			}
 		});
@@ -527,7 +532,7 @@ var BodyGroup=function(boneLinkList,raw){
 	this.defaultHitRadius=this.hitRadius;
 	this.stiffiness=raw.stiffiness;
 	this.defaultStiffiness=this.stiffiness;
-	this.dragForce=raw.dragForce;
+	this.dragForce=raw.dragForce;//drag force not used yet.
 	this.defaultDragForce=this.dragForce;
 };
 

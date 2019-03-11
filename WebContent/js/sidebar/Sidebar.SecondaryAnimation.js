@@ -200,6 +200,16 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 		boneGroupList.select.setOptions(options);
 	});
 	
+	panel.add(new UI.Subtitle("Limit Distance"));
+	var enableReset=new UI.CheckboxRow("Enable Reset",ap.secondaryAnimationControler.enableLimitDistance,function(v){
+		ap.secondaryAnimationControler.enableLimitDistance=v;
+	});
+	panel.add(enableReset);
+	
+	var distanceRatio=new UI.NumberButtons("ratio",1,10,1,ap.secondaryAnimationControler.maxDistanceRatio,function(v){
+		ap.secondaryAnimationControler.maxDistanceRatio=v;
+	},[1,1.5,2]);
+	panel.add(distanceRatio);
 	
 	return panel;
 }
