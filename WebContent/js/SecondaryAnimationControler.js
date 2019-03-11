@@ -48,7 +48,6 @@ var SecondaryAnimationControler=function(ap){
 	
 	this.autoSetUp=true;
 	//add EndSite to Alicia Ribbon 
-	
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
 	
 	//TODO try to stable
@@ -89,6 +88,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	
 	var addEndsite=this.addEndsite;
 	var targetSphere2=this.targetSphere2;
+	
 	if(this.autoSetUp){
 		if(links.length==1){
 			addEndsite=true;
