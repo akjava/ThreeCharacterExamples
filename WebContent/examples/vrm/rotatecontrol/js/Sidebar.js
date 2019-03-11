@@ -57,6 +57,13 @@ var Sidebar = function ( application ) {
 		ap.ammoVisible=v;
 		ap.ammoControler.setVisibleAll(ap.ammoVisible);
 	}));
+	
+	ap.rotationControlerVisible=true;
+	
+	panel.add(new UI.CheckboxRow("Rotate Visible",ap.rotationControlerVisible,function(v){
+		ap.rotationControlerVisible=v;
+		ap.rotationControler.setVisible(v);
+	}));
 	sub.add(new Sidebar.SecondaryAnimation(ap));
 	return container;
 }

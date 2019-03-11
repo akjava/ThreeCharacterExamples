@@ -52,6 +52,7 @@ Example=function(application){
 				ap.secondaryAnimationControler.update();
 				ap.ammoControler.update();
 				
+				
 			}
 		},undefined,-2);//call later boneAttach
 	}

@@ -39,7 +39,7 @@ Sidebar.VrmAlphaMap=function(ap){
 	
 	this.textureBase="../../../dataset/vrm/texture/";
 	
-	var fileNames=["","alphamap1.png","alphamap2.png"];
+	var fileNames=["","alphamap1.png","alphamap_small.png","alphamap_large.png"];
 	ap.defaultAlphaMapUrl=fileNames[0]==""?null:scope.textureBase+fileNames[0];
 	ap.alphaMapUrl=ap.defaultAlphaMapUrl;
 	
@@ -97,7 +97,7 @@ Sidebar.VrmAlphaMap=function(ap){
 	
 	
 	ap.getSignal("loadingAlphaMapFinished").add(function(texture){
-		console.log(texture,ap.alphaMapUrl);
+	
 		
 		var material=getMaterial();
 		if(material==null){

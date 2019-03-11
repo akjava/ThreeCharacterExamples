@@ -165,7 +165,7 @@ var Logics={
 				ap.rotationControler=rotationControler;
 				
 				
-				
+				ap.rotationControler.setVisible(ap.rotationControlerVisible);
 			});
 			
 

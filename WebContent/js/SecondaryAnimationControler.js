@@ -38,13 +38,18 @@ var SecondaryAnimationControler=function(ap){
 	this.addEndsite=false;
 	
 	
-	this.targetSphere2=true;
+	this.targetSphere2=false;
 	this.isRootStatic=true;
 	
 	this.endSiteRatio=0.5;
 	
 	this.connectHorizontal=false;
 	this.hconstraint=[];
+	
+	this.autoSetUp=true;
+	//add EndSite to Alicia Ribbon 
+	
+	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
 	
 }
 
@@ -57,64 +62,108 @@ SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAtta
 }
 
 
+SecondaryAnimationControler.prototype.validateBoneNames=function(boneNames){
+	for(var i=0;i<boneNames.length;i++){
+		var boneName=boneNames[i];
+		var bac=this.boneAttachControler;
+		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
+		if(bone==null){
+			console.error("validateBoneNames faild",boneName);
+			return false;
+		}
+	}
+	return true;
+}
+
 SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,group,hcontainer){
+	/*if(!this.validateBoneNames(links)){
+		return;
+	}*/
 	//console.log(links,hitRadius,stiffiness);
 	var scope=this;
 	var bac=this.boneAttachControler;
 	var rootContainer=null;
 	var hitR=scope.baseHitRadius*hitRadius;
 	
+	var addEndsite=this.addEndsite;
+	var targetSphere2=this.targetSphere2;
+	if(this.autoSetUp){
+		if(links.length==1){
+			addEndsite=true;
+			targetSphere2=true;
+		}
+		if(links.length==2){
+			targetSphere2=true;
+		}
+	}
+	
 	var spheres=[];
 	links.forEach(function(boneName){
 		var isRoot=false;
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
-		var position=null;
-		var bonePosition=bac.getContainerByBoneName(boneName).position.clone();
-		if(rootContainer==null){
-			
-			rootContainer=bac.getContainerByBoneName(bone.parent.name);
-			isRoot=true;
-			position=bonePosition.sub(rootContainer.position.clone());
-		}else{
-			position=bonePosition;
-		}
-		
-		var mass=scope.isRootStatic&&isRoot?0:scope.mass;
-		
-		var sphere=scope.createSphereBox(hitR,mass,position);//no 0 style not good at skirt
-		sphere.name=boneName+"-pos";
-		spheres.push(sphere);
-		scope.allSpheres.push(sphere);
-		if(isRoot){
-			//Mesh to Body
-			rootContainer.add(sphere.getMesh());
-			if(!scope.isRootStatic){
-				AmmoUtils.setLinearFactor(sphere.getBody(),1,1,1);
-				AmmoUtils.setAngularFactor(sphere.getBody(),1,1,1);
-				sphere.syncBone=true;
-				sphere.rotationSync=false;
+		if(bone==null ){
+			if(boneName.endsWith("_end")){
+				//indicate endsite?
+				//do something
+				addEndsite=true;
+			}else{
+				console.error("no bone",boneName);
 			}
-				
-			
-			sphere.syncWorldMatrix=true;
-			sphere.syncBodyToMesh=false;
-			sphere.getMesh().updateMatrixWorld(true);
-			sphere.syncTransform(scope.ammoControler);
-			
-			sphere.isRoot=true;
-			//
 		}else{
-			sphere.syncBone=true;
-			sphere.syncWorldMatrix=false;
-			sphere.syncTransform(scope.ammoControler);
-			sphere.getMesh().updateMatrixWorld(true);
+			var position=null;
+			var bonePosition=bac.getContainerByBoneName(boneName).position.clone();
+			if(rootContainer==null){
+				
+				rootContainer=bac.getContainerByBoneName(bone.parent.name);
+				isRoot=true;
+				position=bonePosition.sub(rootContainer.position.clone());
+			}else{
+				position=bonePosition;
+			}
+			
+			var mass=scope.isRootStatic&&isRoot?0:scope.mass;
+			
+			var sphere=scope.createSphereBox(hitR,mass,position);//no 0 style not good at skirt
+			sphere.name=boneName+"-pos";
+			spheres.push(sphere);
+			scope.allSpheres.push(sphere);
+			if(isRoot){
+				//Mesh to Body
+				rootContainer.add(sphere.getMesh());
+				if(!scope.isRootStatic){
+					AmmoUtils.setLinearFactor(sphere.getBody(),1,1,1);
+					AmmoUtils.setAngularFactor(sphere.getBody(),1,1,1);
+					sphere.syncBone=true;
+					sphere.rotationSync=false;
+				}
+					
+				
+				sphere.syncWorldMatrix=true;
+				sphere.syncBodyToMesh=false;
+				sphere.getMesh().updateMatrixWorld(true);
+				sphere.syncTransform(scope.ammoControler);
+				
+				sphere.isRoot=true;
+				//
+			}else{
+				sphere.syncBone=true;
+				sphere.syncWorldMatrix=false;
+				sphere.syncTransform(scope.ammoControler);
+				sphere.getMesh().updateMatrixWorld(true);
+			}
 		}
+		
+		
 	});
 	var bodyDamping=scope.bodyDamping;
 	for(var i=0;i<links.length;i++){
 		var boneName=links[i];
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
 		var sphere1=spheres[i];
+		if(!sphere1){
+			break;//maybe something _end bone
+		}
+		
 		var sphere2=null;
 		var isLeaf=false;
 		sphere1.getMesh().userData.group=group;
@@ -124,7 +173,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			sphere2=spheres[i+1];
 		}else{
 			//create endsite
-			if(this.addEndsite){
+			if(addEndsite){
 				var parentName=bone.parent.name;
 				var parentPos=bac.getContainerByBoneName(parentName).position.clone();
 				var bonePos=bac.getContainerByBoneName(boneName).position.clone();
@@ -143,7 +192,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			}
 			
 		}
-		if(this.targetSphere2){
+		if(targetSphere2){
 			if(sphere2!=null)
 				sphere2.targetBone=bone;
 		}else
@@ -232,8 +281,9 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffine
 	var frameInA=application.ammoControler.makeTemporaryTransform();
 	var frameInB=application.ammoControler.makeTemporaryTransform();
 	AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.clone().negate());//I'm not sure use negate
+	var disableCollisionsBetweenLinkedBodies=true;
 	var constraint=application.ammoControler.createGeneric6DofSpringConstraint(
-			box2,box1, frameInA,frameInB,false,true);
+			box2,box1, frameInA,frameInB,disableCollisionsBetweenLinkedBodies,true);
 	
 	var dof=constraint.constraint;
 	
@@ -486,6 +536,10 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 		var boneList=vrm.scene.skeleton.bones;//made by vrmutils
 		
 		var bone=BoneUtils.findBoneByEndsName(boneList,name);
+		if(bone==null){
+			console.error("no bone name skipped",name,nodes,boneList);
+			return null;
+		}
 		var result=[];
 		result.push(bone.name);
 		while(bone.children && bone.children.length>0){
@@ -509,7 +563,10 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 		bones.forEach(function(boneIndex){
 			var boneName=getBoneName(boneIndex);
 			var boneLinks=getBoneLinks(boneName);
-			linkList.push(boneLinks);
+			if(boneLinks!=null){//possible contain not exist bone
+				linkList.push(boneLinks);
+			}
+			
 		});
 		
 		scope.boneGroups.push(new BodyGroup(linkList,group))

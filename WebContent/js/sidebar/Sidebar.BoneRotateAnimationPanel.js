@@ -179,11 +179,11 @@ Sidebar.BoneRotateAnimationPanel = function ( application ,param) {
 		
 		var currentMatrix=null;
 		if(application.currentBoneMatrix!==undefined){
-			currentMatrix=application.currentBoneMatrix[boneName];
+			currentMatrix=application.currentBoneMatrix[boneName];//TODO handle later
 			
 		}
 		
-		var defaultRotation=defaultMatrix.rotation;
+		var defaultRotation=defaultMatrix?defaultMatrix.rotation:new THREE.Euler();
 		
 		
 		var indices=[scope.boneAnimationIndex];

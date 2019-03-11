@@ -8,7 +8,7 @@ var AmmoControler=function(object3d,world){
 	}
 	this.scene=object3d;
 	this.world=world;
-	this.fixedTimeStep=1.0/60;
+	
 	this.scaleFactor=1;//for bone sync
 	/**
 	 * if substeps not 0 need fixedTimeStep
@@ -16,6 +16,7 @@ var AmmoControler=function(object3d,world){
 	 * exp. substeps=4,fixedTimeStep=1.0/120
 	 */
 	this.substeps=0;//
+	this.fixedTimeStep=1.0/60;
 	
 	this.autoSyncingBodies=[];
 	this.autoSyncingConstraints=[];
