@@ -11,16 +11,16 @@ var SecondaryAnimationControler=function(ap){
 	this.lockY=false;
 	this.lockZ=false;
 	
-	this.allowAngleX=180;
-	this.allowAngleY=180;
-	this.allowAngleZ=180;
+	this.allowAngleX=30;
+	this.allowAngleY=30;
+	this.allowAngleZ=30;
 	
 	this.baseHitRadius=100;
 	this.baseStiffiness=250;
 	
 	this.damping=1;
 	//this.stiffness=100;
-	this.bodyDamping=0.5;//deprecated group.dragForce
+	this.bodyDamping=0.5;
 	
 	this.mass=1;
 	
@@ -110,6 +110,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			sphere.getMesh().updateMatrixWorld(true);
 		}
 	});
+	var bodyDamping=scope.bodyDamping;
 	for(var i=0;i<links.length;i++){
 		var boneName=links[i];
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
@@ -117,7 +118,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		var sphere2=null;
 		var isLeaf=false;
 		sphere1.getMesh().userData.group=group;
-		sphere1.getBody().setDamping(1.0-group.dragForce,1.0-group.dragForce);
+		sphere1.getBody().setDamping(bodyDamping,bodyDamping);
 		
 		if(i<links.length-1){
 			sphere2=spheres[i+1];
@@ -138,7 +139,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				sphere2.getMesh().userData.group=group;
 				
 				//I'm not sure
-				sphere2.getBody().setDamping(1.0-group.dragForce,1.0-group.dragForce);
+				sphere2.getBody().setDamping(bodyDamping,bodyDamping);
 			}
 			
 		}
@@ -368,11 +369,11 @@ SecondaryAnimationControler.prototype.setSpringValues=function(baseStiffiness,da
 	function change(box){
 		var dof=box.getMesh().userData.dof;
 		var stiffiness=box.getMesh().userData.group.stiffiness;
-		var bdamping=1.0-box.getMesh().userData.group.dragForce;
+		//var bdamping=1.0-box.getMesh().userData.group.dragForce;
 		if(dof){
 			AmmoUtils.seteAllStiffness(dof,baseStiffiness*stiffiness);
 			AmmoUtils.seteAllDamping(dof,damping);
-			box.getBody().setDamping(bdamping,bdamping);
+			box.getBody().setDamping(bodyDamping,bodyDamping);
 		}
 		
 	}

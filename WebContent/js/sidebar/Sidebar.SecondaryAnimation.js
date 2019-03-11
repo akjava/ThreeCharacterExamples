@@ -74,15 +74,18 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	
 	var allowAngleX=new UI.IntegerButtons("X",0,180,10,ap.secondaryAnimationControler.allowAngleX,function(v){
 		ap.secondaryAnimationControler.allowAngleX=v;
-	},[45,90,180]);
+	},[15,45,90,180]);
+	allowAngleX.text.setWidth("60px");
 	panel.add(allowAngleX);
 	var allowAngleY=new UI.IntegerButtons("Y",0,180,10,ap.secondaryAnimationControler.allowAngleY,function(v){
 		ap.secondaryAnimationControler.allowAngleY=v;
-	},[45,90,180]);
+	},[15,45,90,180]);
+	allowAngleY.text.setWidth("60px");
 	panel.add(allowAngleY);
 	var allowAngleZ=new UI.IntegerButtons("Z",0,180,10,ap.secondaryAnimationControler.allowAngleZ,function(v){
 		ap.secondaryAnimationControler.allowAngleZ=v;
-	},[45,90,180]);
+	},[15,45,90,180]);
+	allowAngleZ.text.setWidth("60px");
 	panel.add(allowAngleZ);
 	
 	var control=new UI.Div();
@@ -109,13 +112,13 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	control.add(damping);
 	
 	
-	//replaced body damping
-	/*var bodyDamping=new UI.NumberButtons("bodyDamping",0,1,1,ap.secondaryAnimationControler.bodyDamping,function(v){
+	
+	var bodyDamping=new UI.NumberButtons("bodyDamping",0,1,1,ap.secondaryAnimationControler.bodyDamping,function(v){
 		ap.secondaryAnimationControler.bodyDamping=v;
 		ap.secondaryAnimationControler.updateSpringValues();
 	},[0,.1,.5,.75,1]);
 	bodyDamping.number.setWidth("30px");
-	control.add(bodyDamping);*/
+	control.add(bodyDamping);
 	
 	function getCurrentGroup(){
 		var v=boneGroupList.getValue();
