@@ -420,8 +420,15 @@ UI.ColorRow=function(label,color,onChange){
 	return row;
 };
 
+UI.CheckboxSpan=function(label,value,onChange){
+	return new UI.CheckboxWidget(new UI.Span(),label,value,onChange);
+}
+
 UI.CheckboxRow=function(label,value,onChange){
-	var row=new UI.Row();
+	return new UI.CheckboxWidget(new UI.Row(),label,value,onChange);
+}
+
+UI.CheckboxWidget=function(row,label,value,onChange){
 	var text=new UI.Text(label).setWidth('180px');
 	row.add(text);
 	

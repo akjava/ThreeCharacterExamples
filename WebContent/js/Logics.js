@@ -9,11 +9,12 @@ var Logics={
 				}
 			});
 		},
-		initializeAmmo:function(ap){
+		initializeAmmo:function(ap,x,y,z){
 			//ammo
-			var world=AmmoUtils.initWorld();
+			var world=AmmoUtils.initWorld(x,y,z);
 			var ammoControler=new AmmoControler(ap.scene,world);
 			ap.ammoControler=ammoControler;
+			ap.getSignal("ammoInitialized").dispatch();
 		},
 		disposeSkinnedMeshMixer:function(ap){
 			if(ap.onUpdateMixer){

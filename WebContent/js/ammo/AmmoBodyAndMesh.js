@@ -95,8 +95,14 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			
 			var transform=AmmoUtils.getSharedBtTransform();
 			if(this.rotationSync){
-			var btQuaternion=AmmoUtils.getSharedBtQuaternion(q.x,q.y,q.z,q.w);
-			transform.setRotation(btQuaternion);
+				var btQuaternion=AmmoUtils.getSharedBtQuaternion(q.x,q.y,q.z,q.w);
+				transform.setRotation(btQuaternion);
+			}else{
+				//get old transform
+				var tmpt=this._transform;
+				this.body.getMotionState().getWorldTransform(tmpt);
+				
+				transform.setRotation(tmpt.getRotation());
 			}
 			
 			AmmoUtils.copyFromXYZ(transform.getOrigin(),p.x,p.y,p.z);
@@ -149,8 +155,10 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 				this._tmpQuaternion=new THREE.Quaternion();
 			}
 			
+			var logging=false;
 			function printQ(q,message){
-				return;
+				if(!logging)
+					return;
 				var tmp=new THREE.Euler();
 				tmp.setFromQuaternion(q);
 				AppUtils.printDeg(tmp,message);
@@ -183,6 +191,9 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			printQ(wq,"minus-"+this.targetBone.parent.name);
 			//printQ(wq);
 			
+			if(!this.syncBodyToMesh){
+				//logging=true;
+			}
 			newQ.multiply(wq.inverse());
 			printQ(newQ,"set "+this.targetBone.name);
 			

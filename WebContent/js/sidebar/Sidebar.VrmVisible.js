@@ -1,5 +1,5 @@
 Sidebar.VrmVisible=function(ap){
-	var container=new UI.TitlePanel("Visible");
+	var container=new UI.TitlePanel("Mesh Visible");
 	
 
 	

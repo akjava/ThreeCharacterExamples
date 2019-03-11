@@ -23,6 +23,9 @@ var AmmoControler=function(object3d,world){
 	//TODO set container
 	this._matrixWorldInv=new THREE.Matrix4();
 	
+	
+	this.gravity=AmmoUtils.getGravity(world);
+	
 	this._enabled=true;
 }
 

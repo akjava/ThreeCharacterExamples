@@ -48,6 +48,23 @@ initWorld:function(x,y,z){
 	return dynamicsWorld;
 
 },
+setGravity:function(world,x,y,z){
+	x = x !== undefined ? x : 0;
+	y = y !== undefined ? y : -9.8;//or -10?
+	z = z !== undefined ? z : 0;
+	
+
+	var gravity=new Ammo.btVector3(x, y, z);
+	world.setGravity(gravity);
+	Ammo.destroy(gravity);
+
+},
+getGravity:function(world){
+	var grav=world.getGravity();
+	var vec=new THREE.Vector3();
+	this.copyToVector3(grav,vec);
+	return vec;
+},
 
 ACTIVE_TAG :1,
 ISLAND_SLEEPING :2,

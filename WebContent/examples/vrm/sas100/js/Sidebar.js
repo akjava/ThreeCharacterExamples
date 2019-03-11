@@ -4,8 +4,13 @@ var Sidebar = function ( application ) {
 	container.setId( 'sidebar' );
 	container.add(new UI.AppName("SecondaryAnimation Example on Scale 100"));
 	
+	var tab=new UI.Tab(ap);
+	container.add(tab);
+	var main=tab.addItem("Main");
+	
+	
 	var titlePanel=new UI.TitlePanel("Credits");
-	container.add(titlePanel);
+	main.add(titlePanel);
 	var row=new UI.Row();
 	titlePanel.add(row);
 	var anchor=new UI.Anchor("https://3d.nicovideo.jp/works/td32797","Dwango");
@@ -13,10 +18,10 @@ var Sidebar = function ( application ) {
 	row.add(new UI.Text("Alicia by ").setMarginRight("6px"),anchor,license.setMarginLeft("6px"));
 	row.add(new UI.Description("uploaded models credits see,browser log"));
 	
-	container.add(new Sidebar.VrmModel(ap));
+	main.add(new Sidebar.VrmModel(ap));
 	
 	var titlePanel=new UI.TitlePanel("Model Rotation");
-	container.add(titlePanel);
+	main.add(titlePanel);
 	var absoluteRotateDiv=new AbsoluteRotateDiv(ap);
 	titlePanel.add(absoluteRotateDiv);
 	ap.getSignal("objectRotated").add(function(x,y,z){
@@ -26,7 +31,7 @@ var Sidebar = function ( application ) {
 	
 	ap.ammoVisible=false;
 	var panel=new UI.Panel();
-	container.add(panel);
+	main.add(panel);
 	panel.add(new UI.CheckboxRow("Ammo Visible",false,function(v){
 		ap.ammoVisible=v;
 		ap.ammoControler.setVisibleAll(ap.ammoVisible);
@@ -34,10 +39,13 @@ var Sidebar = function ( application ) {
 	panel.add(new UI.CheckboxRow("Bone Attach Visible",false,function(v){
 		ap.boneAttachControler.setVisible(v);
 	}));
-	container.add(new Sidebar.SecondaryAnimation(ap));
+	main.add(new Sidebar.SecondaryAnimation(ap));
 	
-	container.add(new Sidebar.BoneRotate(ap,false,false));
-	container.add(new Sidebar.VrmVisible(ap));
+	var sub=tab.addItem("Sub");
+	
+	sub.add(new Sidebar.Ammo(ap));
+	sub.add(new Sidebar.BoneRotate(ap,false,false));
+	sub.add(new Sidebar.VrmVisible(ap));
 
 	return container;
 }
