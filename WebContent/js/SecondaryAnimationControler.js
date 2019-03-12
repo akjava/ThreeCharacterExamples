@@ -89,6 +89,8 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	var addEndsite=this.addEndsite;
 	var targetSphere2=this.targetSphere2;
 	
+	var isRootStatic=this.isRootStatic;
+	
 	if(this.autoSetUp){
 		if(links.length==1){
 			addEndsite=true;
@@ -96,6 +98,10 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		}
 		if(links.length==2){
 			targetSphere2=true;
+		}
+		
+		if(links.length>2){
+			isRootStatic=false;
 		}
 	}
 	
@@ -123,7 +129,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				position=bonePosition;
 			}
 			
-			var mass=scope.isRootStatic&&isRoot?0:scope.mass;
+			var mass=isRootStatic&&isRoot?0:scope.mass;
 			
 			var sphere=scope.createSphereBox(hitR,mass,position);//no 0 style not good at skirt
 			sphere.name=boneName+"-pos";
@@ -132,7 +138,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			if(isRoot){
 				//Mesh to Body
 				rootContainer.add(sphere.getMesh());
-				if(!scope.isRootStatic){
+				if(!isRootStatic){
 					AmmoUtils.setLinearFactor(sphere.getBody(),1,1,1);
 					AmmoUtils.setAngularFactor(sphere.getBody(),1,1,1);
 					sphere.syncBone=true;
@@ -256,7 +262,7 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 	 var mask=isCollid?1:2;
 	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
-						new THREE.MeshPhongMaterial({color:color}),group,mask
+						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group,mask
 				);
 	 return sphere;
 }
@@ -545,7 +551,7 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 	
 	
 	function getBoneName(index){
-		return VrmUtils.getNodeName(scope.ap,index);
+		return VrmUtils.getNodeBoneName(vrm,index);
 	}
 	
 	function getBoneLinks(name){

@@ -80,6 +80,7 @@ var VrmUtils={
 			} );
 		},
 		humanoidToSkeleton:function(vrm){
+			var scope=this;
 			var bones=[];
 			var poses=[];
 			var rotq=[];
@@ -93,7 +94,7 @@ var VrmUtils={
 			var list=BoneUtils.getBoneList(vrm.scene); //vrm.scene is same as ap.skinnedMesh
 			
 			humanoid.humanBones.forEach(function(hb){
-				var name=getBoneName(hb.node);
+				var name=scope.getNodeBoneName(vrm,hb.node);
 				var bone=BoneUtils.findBoneByEndsName(list,name);
 				if(bone==null){
 					console.error("not found",hb.bone,name,list);
@@ -118,13 +119,14 @@ var VrmUtils={
 			},poses:poses,rotq:rotq};
 			return skeleton;
 		},
-		getNodeName:function(ap,index){
-			var nodes=ap.vrm.parser.json.nodes;
+		getNodeBoneName:function(vrm,index){
+			var nodes=vrm.parser.json.nodes;
 			var node= nodes[index];
 			if(!node){
 				return null;
 			}
 			var name=node.name.replace(".","");//seems
+			name=node.name.replace(" ","_");//seems
 			return name;
 		}
 }

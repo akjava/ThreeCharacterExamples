@@ -10,12 +10,7 @@ var HumanoidIk=function(ap){
 	var humanBones=ap.vrm.userData.gltfExtensions.VRM.humanoid.humanBones;
 	
 	function getBoneName(index){
-		var node=nodes[index];
-		if(node){
-			return node.name;
-		}else{
-			return null;
-		}
+		VrmUtils.getNodeBoneName(ap.vrm,index);
 	}
 
 	var humanBoneMap={};

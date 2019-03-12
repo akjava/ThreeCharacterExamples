@@ -81,17 +81,17 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	
 	var allowAngleX=new UI.IntegerButtons("X",0,180,10,ap.secondaryAnimationControler.allowAngleX,function(v){
 		ap.secondaryAnimationControler.allowAngleX=v;
-	},[15,45,90,180]);
+	},[1,15,45,90,180]);
 	allowAngleX.text.setWidth("60px");
 	panel.add(allowAngleX);
 	var allowAngleY=new UI.IntegerButtons("Y",0,180,10,ap.secondaryAnimationControler.allowAngleY,function(v){
 		ap.secondaryAnimationControler.allowAngleY=v;
-	},[15,45,90,180]);
+	},[1,15,45,90,180]);
 	allowAngleY.text.setWidth("60px");
 	panel.add(allowAngleY);
 	var allowAngleZ=new UI.IntegerButtons("Z",0,180,10,ap.secondaryAnimationControler.allowAngleZ,function(v){
 		ap.secondaryAnimationControler.allowAngleZ=v;
-	},[15,45,90,180]);
+	},[1,15,45,90,180]);
 	allowAngleZ.text.setWidth("60px");
 	panel.add(allowAngleZ);
 	

@@ -22,9 +22,9 @@ var Sidebar = function ( application ) {
 	
 	ap.ammoVisible=false;
 	
-	var boneRotate=new Sidebar.BoneRotate(ap,false,false);
+	var boneRotate=new Sidebar.BoneRotate(ap,true,false);
 	main.add(boneRotate);	
-	main.add(new Sidebar.BoneRotateAnimationPanel(ap));
+	
 	
 	/*boneRotate.setGetBoneList(function(){
 		return ap.skinnedMesh.humanoidSkeleton.bones;

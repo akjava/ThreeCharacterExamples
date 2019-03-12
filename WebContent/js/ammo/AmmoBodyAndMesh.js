@@ -282,6 +282,7 @@ AmmoBodyAndMesh.createSphere=function(radius,mass,x,y,z,material){
 	var body=this.makeSphereBody(radius,mass,x,y,z);
 	
 	var mesh=new THREE.Mesh(new THREE.SphereGeometry(radius, 10, 10),material);
+	mesh.renderOrder=1;
 	mesh.position.set(x, y, z);
 	var sphere= new AmmoSphereBodyAndMesh(radius,body, mesh);
 	
