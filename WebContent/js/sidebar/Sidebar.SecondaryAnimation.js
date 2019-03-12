@@ -201,8 +201,18 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 		var options={};
 		var groups=ap.secondaryAnimationControler.boneGroups;
 		for(var i=0;i<groups.length;i++){
-			var boneName=groups[i].boneLinkList[0][0];
-			options[String(i)]=boneName+" +";
+			var group=groups[i];
+			if(groups[i].boneLinkList.length>0){
+				if(groups[i].boneLinkList[0].length>0){
+					var boneName=groups[i].boneLinkList[0][0];
+					options[String(i)]=boneName+" +";
+				}else{
+					console.log("empty boneLinkList",group);
+				}
+			}else{
+				console.log("empty boneLinkList",group);
+			}
+			
 		}
 		boneGroupList.select.setOptions(options);
 	});

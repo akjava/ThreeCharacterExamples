@@ -543,8 +543,9 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 	var secondaryAnimation=vrm.userData.gltfExtensions.VRM.secondaryAnimation;
 	
 	
+	
 	function getBoneName(index){
-		return nodes[index].name;
+		return VrmUtils.getNodeName(scope.ap,index);
 	}
 	
 	function getBoneLinks(name){

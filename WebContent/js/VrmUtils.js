@@ -117,5 +117,14 @@ var VrmUtils={
 				}
 			},poses:poses,rotq:rotq};
 			return skeleton;
+		},
+		getNodeName:function(ap,index){
+			var nodes=ap.vrm.parser.json.nodes;
+			var node= nodes[index];
+			if(!node){
+				return null;
+			}
+			var name=node.name.replace(".","");//seems
+			return name;
 		}
 }
