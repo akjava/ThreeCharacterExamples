@@ -30,7 +30,7 @@ this.boneSelectedIndex=0;
 this.boneAttachControler=boneAttachControler;
 this.lastTargetMovedPosition=new THREE.Vector3();
 this._euler=new THREE.Euler();
-this.logging=false;
+this.logging=IkControler.logging;
 this.debug=false;
 
 this.ikTargets={};
@@ -158,6 +158,24 @@ IkControler.prototype.initialize=function(ikSettings){
 		}
 	});
 	this._initialized=true;
+}
+
+IkControler.prototype.logging=false;
+
+IkControler.prototype.dispose=function(){
+	if(!this.ap.objects)
+		return;
+	
+	var ap=this.ap;
+	
+	ap.getSignal("ikSelectionChanged").remove(this.onIkSelectionChanged);
+	
+	ap.objects=AppUtils.removeAllFromArray(ap.objects,Object.values(this.ikTargets));
+	Object.values(this.ikTargets).forEach(function(mesh){
+		mesh.parent.remove(mesh);
+	});
+	
+	//endsite die with bone-attach controler
 }
 
 IkControler.prototype.isInitialized=function(){

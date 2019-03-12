@@ -172,6 +172,7 @@ var Logics={
 		},
 		loadingModelFinishedForIkControler:function(ap,ikSettingClassName){
 			//Ik
+			var initialized=false;
 			ap.signals.loadingModelFinished.add(function(mesh){
 				
 				//Possible Ik initialize on Sidebar for keep value
@@ -181,47 +182,83 @@ var Logics={
 				}
 				
 				//if do dispose,remove event & ikTargets
-				
-				//on
-				if(!ap.ikControler.isInitialized()){
-					if(ikSettingClassName){
-						ap.ikControler.initialize(new window[ikSettingClassName](ap));
-					}else{
-						ap.ikControler.initialize(new Mbl3dIk(ap));
-						//default bone ratio
-						ap.ikControler.maxAngle=5;
-						ap.ikControler.setBoneRatio("clavicle_L",0.01);
-						ap.ikControler.setBoneRatio("upperarm_L",0.5);
-						ap.ikControler.setBoneRatio("lowerarm_L",1);
-						ap.ikControler.setBoneRatio("hand_L",0.1);
-						ap.ikControler.setBoneRatio("clavicle_R",0.01);
-						ap.ikControler.setBoneRatio("upperarm_R",0.5);
-						ap.ikControler.setBoneRatio("lowerarm_R",1);
-						ap.ikControler.setBoneRatio("hand_R",0.1);
-					}
+				if(ikSettingClassName){
+					if(ap.ikControler)
+						ap.ikControler.dispose();
 					
+					//recreate
+					ap.ikControler=new IkControler(undefined,ap);
+					ap.ikControler.initialize(new window[ikSettingClassName](ap));
 					
 					ap.getSignal("ikSettingChanged").dispatch();
 					
-					ap.signals.transformSelectionChanged.add(function(target){
-						ap.ikControler.onTransformSelectionChanged(target);
-					});
+					if(!initialized){
+						ap.signals.transformSelectionChanged.add(function(target){
+							ap.ikControler.onTransformSelectionChanged(target);
+						});
+						
+						ap.signals.transformStarted.add( function (target) {
+							ap.ikControler.onTransformStarted(target);
+						});
+						
+						ap.signals.transformFinished.add( function (target) {
+							ap.ikControler.onTransformFinished(target);
+						});
+						ap.signals.transformChanged.add( function (target) {
+							ap.ikControler.onTransformChanged(target);
+						});
+						
+						ap.getSignal("boneTranslateChanged").add(function(){
+							ap.ikControler.resetAllIkTargets();
+						});
+						initialized=true;
+					}
 					
-					ap.signals.transformStarted.add( function (target) {
-						ap.ikControler.onTransformStarted(target);
-					});
 					
-					ap.signals.transformFinished.add( function (target) {
-						ap.ikControler.onTransformFinished(target);
-					});
-					ap.signals.transformChanged.add( function (target) {
-						ap.ikControler.onTransformChanged(target);
-					});
-					
-					ap.getSignal("boneTranslateChanged").add(function(){
-						ap.ikControler.resetAllIkTargets();
-					});
+				}else{
+					//on
+					if(!ap.ikControler.isInitialized()){
+						if(ikSettingClassName){
+							ap.ikControler.initialize(new window[ikSettingClassName](ap));
+						}else{
+							ap.ikControler.initialize(new Mbl3dIk(ap));
+							//default bone ratio
+							ap.ikControler.maxAngle=5;
+							ap.ikControler.setBoneRatio("clavicle_L",0.01);
+							ap.ikControler.setBoneRatio("upperarm_L",0.5);
+							ap.ikControler.setBoneRatio("lowerarm_L",1);
+							ap.ikControler.setBoneRatio("hand_L",0.1);
+							ap.ikControler.setBoneRatio("clavicle_R",0.01);
+							ap.ikControler.setBoneRatio("upperarm_R",0.5);
+							ap.ikControler.setBoneRatio("lowerarm_R",1);
+							ap.ikControler.setBoneRatio("hand_R",0.1);
+						}
+						
+						
+						ap.getSignal("ikSettingChanged").dispatch();
+						
+						ap.signals.transformSelectionChanged.add(function(target){
+							ap.ikControler.onTransformSelectionChanged(target);
+						});
+						
+						ap.signals.transformStarted.add( function (target) {
+							ap.ikControler.onTransformStarted(target);
+						});
+						
+						ap.signals.transformFinished.add( function (target) {
+							ap.ikControler.onTransformFinished(target);
+						});
+						ap.signals.transformChanged.add( function (target) {
+							ap.ikControler.onTransformChanged(target);
+						});
+						
+						ap.getSignal("boneTranslateChanged").add(function(){
+							ap.ikControler.resetAllIkTargets();
+						});
+					}
 				}
+				
+				
 				
 				
 				ap.ikControler.setBoneAttachControler(ap.boneAttachControler);
