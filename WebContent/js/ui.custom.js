@@ -964,10 +964,17 @@ UI.TitleRow=function(label){
 	row.text=text;
 	return row;
 }
+
 UI.TextRow=function(label,text2){
+	return new UI.TextWidget(new UI.Row(),label,text2);
+}
+UI.TextSpan=function(label,text2){
+	return new UI.TextWidget(new UI.Span(),label,text2);
+}
+UI.TextWidget=function(row,label,text2){
 	var text=new UI.Text(label);
 	text.setWidth("90px");
-	var row=new UI.Row().add(text);
+	row.add(text);
 	row.text=text;
 	
 	if(text2!=undefined){

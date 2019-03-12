@@ -5,7 +5,7 @@ var SecondaryAnimationControler=function(ap){
 	this.ap=ap
 	this._pos=new THREE.Vector3();
 	
-	this.logging=true;
+	this.logging=false;
 	
 	this.lockX=false;
 	this.lockY=false;

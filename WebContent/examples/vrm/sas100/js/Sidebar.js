@@ -9,15 +9,7 @@ var Sidebar = function ( application ) {
 	var main=tab.addItem("Main");
 	
 	
-	var titlePanel=new UI.TitlePanel("Credits");
-	main.add(titlePanel);
-	var row=new UI.Row();
-	titlePanel.add(row);
-	var anchor=new UI.Anchor("https://3d.nicovideo.jp/works/td32797","Dwango");
-	var license=new UI.Anchor("http://3d.nicovideo.jp/alicia/rule.html","License");
-	row.add(new UI.Text("Alicia by ").setMarginRight("6px"),anchor,license.setMarginLeft("6px"));
-	row.add(new UI.Description("uploaded models credits see,browser log"));
-	
+	main.add(new Sidebar.VrmLicense(ap));
 	main.add(new Sidebar.VrmModel(ap));
 	
 	var titlePanel=new UI.TitlePanel("Model Rotation");

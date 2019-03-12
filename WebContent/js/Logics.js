@@ -170,7 +170,7 @@ var Logics={
 			
 
 		},
-		loadingModelFinishedForIkControler:function(ap){
+		loadingModelFinishedForIkControler:function(ap,ikSettingClassName){
 			//Ik
 			ap.signals.loadingModelFinished.add(function(mesh){
 				
@@ -184,18 +184,22 @@ var Logics={
 				
 				//on
 				if(!ap.ikControler.isInitialized()){
-					ap.ikControler.initialize(new Mbl3dIk(ap));
+					if(ikSettingClassName){
+						ap.ikControler.initialize(new window[ikSettingClassName](ap));
+					}else{
+						ap.ikControler.initialize(new Mbl3dIk(ap));
+						//default bone ratio
+						ap.ikControler.maxAngle=5;
+						ap.ikControler.setBoneRatio("clavicle_L",0.01);
+						ap.ikControler.setBoneRatio("upperarm_L",0.5);
+						ap.ikControler.setBoneRatio("lowerarm_L",1);
+						ap.ikControler.setBoneRatio("hand_L",0.1);
+						ap.ikControler.setBoneRatio("clavicle_R",0.01);
+						ap.ikControler.setBoneRatio("upperarm_R",0.5);
+						ap.ikControler.setBoneRatio("lowerarm_R",1);
+						ap.ikControler.setBoneRatio("hand_R",0.1);
+					}
 					
-					//
-					ap.ikControler.maxAngle=5;
-					ap.ikControler.setBoneRatio("clavicle_L",0.01);
-					ap.ikControler.setBoneRatio("upperarm_L",0.5);
-					ap.ikControler.setBoneRatio("lowerarm_L",1);
-					ap.ikControler.setBoneRatio("hand_L",0.1);
-					ap.ikControler.setBoneRatio("clavicle_R",0.01);
-					ap.ikControler.setBoneRatio("upperarm_R",0.5);
-					ap.ikControler.setBoneRatio("lowerarm_R",1);
-					ap.ikControler.setBoneRatio("hand_R",0.1);
 					
 					ap.getSignal("ikSettingChanged").dispatch();
 					
@@ -223,9 +227,12 @@ var Logics={
 				ap.ikControler.setBoneAttachControler(ap.boneAttachControler);
 				//reference boneAttachControler
 				
-				ap.ikControler.setEndSiteEnabled("Head",true);
-				ap.ikControler.setEndSiteEnabled("LeftArm",true);
-				ap.ikControler.setEndSiteEnabled("RightArm",true);
+				if(!ikSettingClassName){
+					ap.ikControler.setEndSiteEnabled("Head",true);
+					ap.ikControler.setEndSiteEnabled("LeftArm",true);
+					ap.ikControler.setEndSiteEnabled("RightArm",true);
+				}
+				
 				
 				
 				
@@ -410,6 +417,55 @@ var Logics={
 				}
 				ap.ikControler.getPresets().updateVisibleAll();
 			},undefined,-1);//after ikcontroler
+		},
+		loadingModelFinishedForSecondaryAnimationControler:function (ap){
+			ap.signals.loadingModelFinished.add(function(mesh){
+				
+				
+				if(!ap.secondaryAnimationControler){
+					ap.secondaryAnimationControler=new SecondaryAnimationControler(ap);
+				}else{
+					ap.secondaryAnimationControler.dispose();
+				}
+				
+				ap.secondaryAnimationControler.initialize(ap.ammoControler,ap.boneAttachControler);
+				
+				ap.secondaryAnimationControler.parse(ap.vrm);
+				
+				ap.secondaryAnimationControler.newSecondaryAnimation();
+				
+				//ap.ammoControler.setVisibleAll(true);
+			},undefined,-1);
+			
+			ap.signals.rendered.add(function(){
+				if(ap.secondaryAnimationControler){
+					ap.secondaryAnimationControler.update();
+					ap.ammoControler.update();
+					
+				}
+			},undefined,-2);//call later boneAttach
+		},
+		loadingModelStartedForVrm:function (ap){
+			ap.getSignal("loadingModelStarted").add(function(url){
+				VrmUtils.loadVrm(ap,url);
+			});
+			
+			ap.getSignal("loadingModelFinished").add(function(model){
+				
+				if(ap.skinnedMesh){
+					ap.skinnedMesh.parent.remove(ap.skinnedMesh);
+				}
+				ap.skinnedMesh=model;
+				ap.scene.add(model);
+				model.scale.set(100,100,100);
+				
+				var boneNameList=[];
+				ap.skinnedMesh.humanoidSkeleton.bones.forEach(function(bone){
+					boneNameList.push(bone.name);
+				});
+				ap.humanoidBoneNameList=boneNameList;
+				
+			},undefined,101);//before bone attach
 		}
 		
 		

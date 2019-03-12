@@ -8,18 +8,19 @@ Sidebar.VrmLicense=function(ap){
 	var author=new UI.TextRow("Author","");
 	container.add(author);
 
+	var usageRow=new UI.Row();
+	container.add(usageRow);
+	var commercialUssageName=new UI.TextSpan("CoU","").setMarginRight("12px");
+	commercialUssageName.text.setWidth("32px");
+	usageRow.add(commercialUssageName);
 	
-	var commercialUssageName=new UI.TextRow("Comercial Usage","");
-	commercialUssageName.text.setWidth("140px");
-	container.add(commercialUssageName);
+	var sexualUssageName=new UI.TextSpan("SeU","").setMarginRight("12px");
+	sexualUssageName.text.setWidth("32px");
+	usageRow.add(sexualUssageName);
 	
-	var sexualUssageName=new UI.TextRow("Sexual Usage","");
-	sexualUssageName.text.setWidth("140px");
-	container.add(sexualUssageName);
-	
-	var violentUssageName=new UI.TextRow("Violent Usage","");
-	violentUssageName.text.setWidth("140px");
-	container.add(violentUssageName);
+	var violentUssageName=new UI.TextSpan("ViU","").setMarginRight("12px");
+	violentUssageName.text.setWidth("32px");
+	usageRow.add(violentUssageName);
 	
 	
 	
