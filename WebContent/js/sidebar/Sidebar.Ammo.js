@@ -34,5 +34,20 @@ Sidebar.Ammo=function(ap){
 		zg.setValue(gravity.z);
 	});
 	
+	ap.ammoFps=60;
+	container.add(new UI.Subtitle("Simulate Step"));
+	var fps=new UI.NumberButtons("FPS",1,240,10,ap.ammoFps,function(v){
+		ap.ammoFps=v;
+	},[30,60,120]);
+	container.add(fps);
+	var substeps=new UI.IntegerButtons("SubSteps",0,100,10,0,function(v){
+		ap.ammoControler.substeps=v;
+	},[0,1,4,10]);
+	container.add(substeps);
+	var fixed=new UI.NumberButtons("fixedTimeStep",1,1920,10,60,function(v){
+		ap.ammoControler.fixedTimeStep=1.0/v;
+	},[120,960,1920]);
+	container.add(fixed);
+	
 	return container;
 }

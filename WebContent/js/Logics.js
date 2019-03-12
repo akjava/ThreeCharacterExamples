@@ -477,7 +477,7 @@ var Logics={
 			ap.signals.rendered.add(function(){
 				if(ap.secondaryAnimationControler){
 					ap.secondaryAnimationControler.update();
-					ap.ammoControler.update();
+					ap.ammoControler.update(1.0/(ap.ammoFps?ap.ammoFps:60));
 					
 				}
 			},undefined,-2);//call later boneAttach

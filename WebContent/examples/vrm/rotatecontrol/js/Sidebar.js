@@ -57,5 +57,6 @@ var Sidebar = function ( application ) {
 		ap.rotationControler.setVisible(v);
 	}));
 	sub.add(new Sidebar.SecondaryAnimation(ap));
+	sub.add(new Sidebar.Ammo(ap));
 	return container;
 }

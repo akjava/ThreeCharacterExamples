@@ -32,7 +32,7 @@ var SecondaryAnimationControler=function(ap){
 	this.scale=100;
 	this.minSize=0.5;//or broken
 	
-	this.maxDistanceRatio=2;
+	this.maxDistanceRatio=4;
 	this.enableLimitDistance=true;
 	
 	this.addEndsite=false;
@@ -49,6 +49,8 @@ var SecondaryAnimationControler=function(ap){
 	this.autoSetUp=true;
 	//add EndSite to Alicia Ribbon 
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
+	//Alicia Hair root bone not staic
+	//Alicia Hair become *8 heavy
 	
 	//TODO try to stable
 	//this.ends=[];
@@ -91,6 +93,8 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	
 	var isRootStatic=this.isRootStatic;
 	
+	var defaultMass=this.mass;
+	
 	if(this.autoSetUp){
 		if(links.length==1){
 			addEndsite=true;
@@ -100,9 +104,11 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			targetSphere2=true;
 		}
 		
-		if(links.length>2){
+		if(links.length>3){
 			isRootStatic=false;
+			defaultMass=this.mass*links.length+2;
 		}
+		
 	}
 	
 	var spheres=[];
@@ -129,7 +135,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				position=bonePosition;
 			}
 			
-			var mass=isRootStatic&&isRoot?0:scope.mass;
+			var mass=isRootStatic&&isRoot?0:defaultMass;
 			
 			var sphere=scope.createSphereBox(hitR,mass,position);//no 0 style not good at skirt
 			sphere.name=boneName+"-pos";
@@ -164,6 +170,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		
 	});
 	var bodyDamping=scope.bodyDamping;
+	var angleRatio=1;
 	for(var i=0;i<links.length;i++){
 		var boneName=links[i];
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
@@ -212,7 +219,13 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		bone.userData.defaultPosition=bone.position.clone();
 		if(sphere2!=null){
 			sphere2.name=sphere2.name+":"+bone.name+"-rot";
-			var constraint=scope.makeConstraint(sphere1,sphere2,group.stiffiness);
+			
+			
+			/*if(i>3){
+				angleRatio/=2;//not working than expected
+			}*/
+			
+			var constraint=scope.makeConstraint(sphere1,sphere2,group.stiffiness,angleRatio);
 			sphere2.getMesh().userData.constraint=constraint;
 			sphere2.getMesh().userData.dof=constraint.constraint;
 			
@@ -267,7 +280,7 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 	 return sphere;
 }
 
-SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffiness){
+SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffiness,angleRatio){
 	
 	 var box1Pos=new THREE.Vector3().setFromMatrixPosition(box1.getMesh().matrixWorld);
 	 var box2Pos=new THREE.Vector3().setFromMatrixPosition(box2.getMesh().matrixWorld);
@@ -313,6 +326,13 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffine
 	var angleX=THREE.Math.degToRad(this.allowAngleX);
 	var angleY=THREE.Math.degToRad(this.allowAngleY);
 	var angleZ=THREE.Math.degToRad(this.allowAngleZ);
+	
+	if(angleRatio){
+		angleX*=angleRatio;
+		angleY*=angleRatio;
+		angleZ*=angleRatio;
+	}
+	
 	
 	dof.setAngularLowerLimit(application.ammoControler.makeTemporaryVector3(-angleX, -angleY,-angleZ));
 	dof.setAngularUpperLimit(application.ammoControler.makeTemporaryVector3(angleX, angleY, angleZ));
@@ -409,8 +429,8 @@ SecondaryAnimationControler.prototype.update=function(force){
 					AmmoUtils.setPosition(sphere.getBody(),diff.x,diff.y,diff.z);
 					sphere.syncTransform(scope.ap.ammoControler);
 					
-					//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-					//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+					AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+					AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 					console.log("reset");
 				}
 			}

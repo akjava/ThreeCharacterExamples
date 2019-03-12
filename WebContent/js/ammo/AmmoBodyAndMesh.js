@@ -22,7 +22,7 @@ AmmoBodyAndMesh = function(body,mesh){
 	
 	this.syncBone=false;
 	this.targetBone=null;
-	this.defaultBoneRotation=null;
+	this.defaultBoneRotation=null;//not support yet
 	this._tmpQuaternion=null;
 	this.parentBodyAndMesh=null;//@deprecated
 	this.parentBone=null;
@@ -172,7 +172,8 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			var newQ=null;
 			if(this.syncBodyToMesh){
 				//TODO this one is slow
-				newQ=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
+				//newQ=BoneUtils.makeQuaternionFromXYZRadian(rotate.x,rotate.y,rotate.z,euler,order);
+				newQ=this.getMesh().quaternion.clone();
 			}else{
 				var transform=this._transform;
 				this.body.getMotionState().getWorldTransform(transform);

@@ -156,6 +156,7 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 		});
 		groupStiffness.setValue(group.stiffiness);
 		groupDragForce.setValue(group.dragForce);
+		groupHitRadius.setValue(group.hitRadius);
 	}
 	
 	var boneNames=new UI.Row();
@@ -178,9 +179,24 @@ var buttonRow=new UI.ButtonRow("Step",function(){
 	resetBt.setFontSize("6px");
 	groupStiffness.add(resetBt);
 	
+	var groupHitRadius=new UI.NumberButtons("hitRadius",0.001,1,0.01,0,function(v){
+		getCurrentGroup().hitRadius=v;
+	},[0.01,0.1]);
+	groupHitRadius.number.precision=3;
+	panel.add(groupHitRadius);
+	groupHitRadius.text.setWidth("70px");
+	var resetBt=new UI.Button("Rest").onClick(function(){
+		var v=getCurrentGroup().defaultHitRadius;
+		groupHitRadius.setValue(v);
+		getCurrentGroup().hitRadius=v;
+		
+	});
+	resetBt.setFontSize("6px");
+	groupHitRadius.add(resetBt);
+	
 	var groupDragForce=new UI.NumberButtons("dragForce",0,1,1,0,function(v){
 		getCurrentGroup().dragForce=v;
-		
+		//no effect
 		ap.secondaryAnimationControler.updateSpringValues();
 	},[0,0.5,1]);
 	panel.add(groupDragForce);
