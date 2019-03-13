@@ -18,6 +18,7 @@ Example=function(application){
 	
 	
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	Logics.loadingModelFinishedForTranslateControler(ap);
 	Logics.loadingModelFinishedForIkControler(ap,"HumanoidIk");
 	
 	//vrm

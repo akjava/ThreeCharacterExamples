@@ -8,11 +8,12 @@ Sidebar.VrmTimelinerBones=function(ap){
 	
 	function copyFrame(key){
 		var value;
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var boneList=ap.humanoidBoneControler.humanoidBones;
 		
 		if(key==rootPositionName){
-			value=boneList[0].position;
+			value=ap.skinnedMesh.skeleton.bones[0].position;
 		}else{
+			//console.log("copy",boneList[key].name);
 			value=boneList[key].quaternion;
 		}
 		clipboard[String(key)]=value.clone();
@@ -20,18 +21,28 @@ Sidebar.VrmTimelinerBones=function(ap){
 	function pasteFrames(){
 		ap.getSignal("transformSelectionChanged").dispatch(null);//selected ik not move
 		
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var boneList=ap.humanoidBoneControler.humanoidBones;
 		Object.keys(clipboard).forEach(function(key){
 			var value=clipboard[key];
 			if(key==rootPositionName){
-				boneList[0].position.copy(value);
+				ap.humanoidBoneControler.rootPosition.copy(value);
+				ap.humanoidBoneControler.update();
 				ap.getSignal("boneTranslateFinished").dispatch(0);
 				//ap.timeliner.context.dispatcher.fire('keyframe',key,true);
 			}else{
 				var index=Number(key);
 				boneList[index].quaternion.copy(value);
-				ap.getSignal("boneRotationChanged").dispatch(index);
-				ap.getSignal("boneRotationFinished").dispatch(index);
+				//console.log("paste",boneList[index].name);
+				ap.humanoidBoneControler.update();
+				
+				var boneName=boneList[index].name;
+				
+				var allBoneIndex=ap.humanoidBoneControler.humanoidBoneMapReverse[boneList[index].name];
+				
+				if(allBoneIndex)
+					ap.getSignal("boneRotationFinished").dispatch(allBoneIndex);
+				else
+					console.error("not exist allboneindex",allBoneIndex,boneName,ap.humanoidBoneControler.humanoidBoneMapReverse);
 				//ap.timeliner.context.dispatcher.fire('keyframe',boneList[index].name,true);
 			}
 		});
@@ -43,7 +54,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 	
 	var cutBt=new UI.Button("Cut").onClick(function(){
 		var targets=keyGroups[targetList.getValue()];
-		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var boneList=ap.humanoidBoneControler.humanoidBones;
 			clipboard={};
 			targets.forEach(function(target){
 				copyFrame(target);
@@ -109,7 +120,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 			{
 				type: THREE.VectorKeyframeTrack,
 				label:rootPositionName,
-				propertyPath: '.humanoidBones[0].position',
+				propertyPath: '.rootPosition',
 				initialValue: ap.skinnedMesh.skeleton.bones[0].position.toArray(),
 				interpolation: THREE.InterpolateLinear
 			},
@@ -143,8 +154,13 @@ Sidebar.VrmTimelinerBones=function(ap){
 		timeliner.context.timeScale=120;
 		timeliner.context.fileName="timeline_mesh_animation";
 		
-		function getBoneName(index){
-			return ap.humanoidBoneControler.getHumanoidBoneName(index);
+		function getHuamnBoneName(index){
+			var bone=ap.humanoidBoneControler.humanoidBoneMap[String(index)];
+			if(bone){
+				return bone.name;
+			}else{
+				console.error("not contain bone",index,ap.humanoidBoneControler.allBoneList);
+			}
 		}
 		
 		//listers
@@ -168,12 +184,13 @@ Sidebar.VrmTimelinerBones=function(ap){
 			if(scope.logging)
 				console.log("bone changed",index);
 			
-			var name=getBoneName(index);
+			var name=getHuamnBoneName(index);
+			console.log("debug",name,index);
 			if(name)
 			
 				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
 			else
-				console.log("ignore index "+index,name);
+				console.log("ignore index "+index);
 		});
 		
 

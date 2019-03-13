@@ -13,6 +13,8 @@ var HumanoidBoneControler=function(ap){
 	this.humanoidBoneMap={};
 	this.humanoidBoneMapReverse={};
 	
+	this.rootPosition=new THREE.Vector3();//for limited root position;
+	
 	this.humanoidBones=[];
 	this.boneNames.forEach(function(name){
 		console.log(name);
@@ -73,12 +75,19 @@ var HumanoidBoneControler=function(ap){
 			}
 		}
 	});
+	ap.getSignal("boneTranslateChanged").add(function(index){
+		if(index==0){
+			scope.rootPosition.copy(scope.allBoneList[0].position);
+		}
+	});
 	
 }
 
 	
 HumanoidBoneControler.prototype.resetBones=function(){
 	var scope=this;
+	
+	this.rootPosition.copy(this.allBoneList[0].position);
 	
 	this.humanoidBones.forEach(function(humanoidBone){
 		var index=scope.humanoidBoneMapReverse[humanoidBone.name];
@@ -109,8 +118,11 @@ HumanoidBoneControler.prototype.update=function(){
 		if(target){
 			scope.allBoneList[index].quaternion.copy(target.quaternion);
 		}
-		//TODO support position
+		
 	});	
+	
+	//TODO support other position;
+	this.allBoneList[0].position.copy(this.rootPosition);
 }
 
 
