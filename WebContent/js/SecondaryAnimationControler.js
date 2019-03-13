@@ -11,9 +11,9 @@ var SecondaryAnimationControler=function(ap){
 	this.lockY=false;
 	this.lockZ=false;
 	
-	this.allowAngleX=30;
-	this.allowAngleY=30;
-	this.allowAngleZ=30;
+	this.allowAngleX=60;
+	this.allowAngleY=60;
+	this.allowAngleZ=60;
 	
 	this.baseHitRadius=100;
 	this.baseStiffiness=250;
@@ -46,7 +46,14 @@ var SecondaryAnimationControler=function(ap){
 	this.connectHorizontal=false;
 	this.hconstraint=[];
 	
+	this.isEffectDragForceBodyDamping=true;
+	this.isEffectDragForceAngle=true;
+	
+	
 	this.autoSetUp=true;
+	
+	
+	
 	//add EndSite to Alicia Ribbon 
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
 	//Alicia Hair root bone not staic
@@ -83,6 +90,12 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		return;
 	}*/
 	//console.log(links,hitRadius,stiffiness);
+	
+	
+	if(!hitRadius){
+		console.log("0 hitRadius.min size will be set",group);
+	}
+	
 	var scope=this;
 	var bac=this.boneAttachControler;
 	var rootContainer=null;
@@ -136,8 +149,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			}
 			
 			var mass=isRootStatic&&isRoot?0:defaultMass;
-			
-			var sphere=scope.createSphereBox(hitR,mass,position);//no 0 style not good at skirt
+			var sphere=scope.createSphereBox(hitR,mass,position,group.colliderGroups);//no 0 style not good at skirt
 			sphere.name=boneName+"-pos";
 			spheres.push(sphere);
 			scope.allSpheres.push(sphere);
@@ -170,7 +182,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		
 	});
 	var bodyDamping=scope.bodyDamping;
-	var angleRatio=1;
+	
 	for(var i=0;i<links.length;i++){
 		var boneName=links[i];
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
@@ -193,7 +205,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				var parentPos=bac.getContainerByBoneName(parentName).position.clone();
 				var bonePos=bac.getContainerByBoneName(boneName).position.clone();
 				var endSitePos=bonePos.clone().sub(parentPos).multiplyScalar(this.endSiteRatio).add(bonePos);
-				sphere2=this.createSphereBox(hitR,scope.mass,endSitePos);
+				sphere2=this.createSphereBox(hitR,scope.mass,endSitePos,group.colliderGroups);
 				scope.allSpheres.push(sphere2);
 				sphere2.syncBone=true;
 				sphere2.syncWorldMatrix=false;
@@ -221,13 +233,11 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			sphere2.name=sphere2.name+":"+bone.name+"-rot";
 			
 			
-			/*if(i>3){
-				angleRatio/=2;//not working than expected
-			}*/
-			
-			var constraint=scope.makeConstraint(sphere1,sphere2,group.stiffiness,angleRatio);
+		
+			var constraint=scope.makeConstraint(sphere1,sphere2,group);
 			sphere2.getMesh().userData.constraint=constraint;
 			sphere2.getMesh().userData.dof=constraint.constraint;
+			sphere2.getMesh().userData.sphere1=sphere1;
 			
 		}
 		
@@ -257,13 +267,13 @@ SecondaryAnimationControler.prototype.findSphereByName=function(name){
 	return match;
 }
 
-SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,color,isCollid){
+SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,colliders,color){
 	
-	isCollid=isCollid==undefined?false:isCollid;
+
 	
 	color=color==undefined?0x000088:color;
 	 if(!size){
-		 console.error("need size");
+		 console.error("need size,min size will set");
 	 }
 	 if(!mass && mass!==0){
 		 console.error("need mass");
@@ -271,16 +281,53 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 	 if(size<this.minSize){
 		 size=this.minSize;
 	 }
-	 var group=isCollid?2:1;
-	 var mask=isCollid?1:2;
+	 
+	 var group=1;
+	 
+	 var mask=0;
+	 colliders.forEach(function(index){
+		var bit= 1<<(index+1);
+		mask=mask | bit;
+	 });
+	 
+	 if(this.logging)
+		 console.log("sphere mask",mask,colliders);
 	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
 						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group,mask
 				);
 	 return sphere;
 }
+SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass,position,color,index){
+	 color=color==undefined?0x000088:color;
+	 if(!size){
+		 console.error("need size,min size will set");
+	 }
+	 if(!mass && mass!==0){
+		 console.error("need mass");
+	 }
+	 
+	 if(size<this.minSize){
+		 console.log("min size used from ",size," to ",this.minsize);
+		 size=this.minSize;
+	 }
+	 
+	 var group=1<<(index+1);
+	 
+	 if(this.logging)
+		 console.log("collider",index,group);
 
-SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffiness,angleRatio){
+	 //not set mask here
+	 //var mask=group+1;
+	
+	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
+						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group
+				);
+	 return sphere;
+}
+
+SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
+	 var stiffiness=group.stiffiness;
 	
 	 var box1Pos=new THREE.Vector3().setFromMatrixPosition(box1.getMesh().matrixWorld);
 	 var box2Pos=new THREE.Vector3().setFromMatrixPosition(box2.getMesh().matrixWorld);
@@ -323,15 +370,19 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,stiffine
 	dof.setLinearLowerLimit(application.ammoControler.makeTemporaryVector3(-limit, -limit,-limit));
 	dof.setLinearUpperLimit(application.ammoControler.makeTemporaryVector3(limit, limit, limit));
 
+	//var group=
 	var angleX=THREE.Math.degToRad(this.allowAngleX);
 	var angleY=THREE.Math.degToRad(this.allowAngleY);
 	var angleZ=THREE.Math.degToRad(this.allowAngleZ);
 	
-	if(angleRatio){
-		angleX*=angleRatio;
-		angleY*=angleRatio;
-		angleZ*=angleRatio;
+	if(this.isEffectDragForceAngle){
+		angleX*=group.dragForce;
+		angleY*=group.dragForce;
+		angleZ*=group.dragForce;
 	}
+	
+	/*var tmp={x:angleX,y:angleY,z:angleZ};
+	AppUtils.printDeg(tmp,"final limit angle");*/
 	
 	
 	dof.setAngularLowerLimit(application.ammoControler.makeTemporaryVector3(-angleX, -angleY,-angleZ));
@@ -431,7 +482,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 					
 					AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 					AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-					console.log("reset");
+					console.log("reset",sphere.name);
 				}
 			}
 		});
@@ -461,14 +512,26 @@ SecondaryAnimationControler.prototype.updateSpringValues=function(){
 	this.setSpringValues(this.baseStiffiness,this.damping,this.bodyDamping);
 }
 SecondaryAnimationControler.prototype.setSpringValues=function(baseStiffiness,damping,bodyDamping){
+	var scope=this;
 	function change(box){
 		var dof=box.getMesh().userData.dof;
 		var stiffiness=box.getMesh().userData.group.stiffiness;
+		var bdamping;
+		if(scope.isEffectDragForceBodyDamping){
+			 bdamping=1.0-box.getMesh().userData.group.dragForce;
+		}else{
+			bdamping=bodyDamping;
+		}
 		//var bdamping=1.0-box.getMesh().userData.group.dragForce;
 		if(dof){
-			AmmoUtils.seteAllStiffness(dof,baseStiffiness*stiffiness);
+			var sf=baseStiffiness*stiffiness;
+			//console.log("final setSpringValues",sf,damping,bdamping,bodyDamping,scope.isEffectDragForceBodyDamping);
+			AmmoUtils.seteAllStiffness(dof,sf);
 			AmmoUtils.seteAllDamping(dof,damping);
-			box.getBody().setDamping(bodyDamping,bodyDamping);
+			
+			box.getBody().setDamping(bdamping,bdamping);
+			if(box.getMesh().userData.sphere1)
+				box.getMesh().userData.sphere1.getBody().setDamping(bdamping,bdamping);
 		}
 		
 	}
@@ -514,7 +577,7 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 					for(var i=0;i<links.length;i++){
 						var one=links[i];
 						var two=i<links.length-1?links[i+1]:first;
-						var constraint=scope.makeConstraint(one,two,group.stiffiness);
+						var constraint=scope.makeConstraint(one,two,group);
 						scope.hconstraint.push(constraint);
 					}
 				}
@@ -542,6 +605,7 @@ SecondaryAnimationControler.prototype.newColliderGroups=function(){
 
 	 
 	 
+	
 	 this.colliderGroups.forEach(function(group){
 		 var bac=scope.ap.boneAttachControler;
 		 var container=bac.getContainerByBoneName(group.boneName);
@@ -550,7 +614,7 @@ SecondaryAnimationControler.prototype.newColliderGroups=function(){
 			var pos= collider.offset.clone().multiplyScalar(scope.scale);
 			var size=collider.radius*scope.scale;
 			
-			var sphere=scope.createSphereBox(size,0,pos,0x008800,true);
+			var sphere=scope.createColliderSphereBox(size,0,pos,0x008800,group.colliderIndex);
 			sphere.syncWorldMatrix=true;
 			sphere.syncBodyToMesh=false;
 			sphere.getMesh().updateMatrixWorld(true);
@@ -616,9 +680,11 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 	
 	
 	this.colliderGroups=[];
+	 var index=0;
 	secondaryAnimation.colliderGroups.forEach(function(group){
 		var name=getBoneName(group.node);
-		scope.colliderGroups.push(new ColliderGroup(name,group))
+		scope.colliderGroups.push(new ColliderGroup(name,index,group));
+		index++;
 	});
 	
 	this.ap.getSignal("secondaryAnimationParsed").dispatch();
@@ -627,6 +693,10 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 var BodyGroup=function(boneLinkList,raw){
 	this.boneLinkList=boneLinkList;//solved raw node-index(bone)
 	this.raw=raw;
+	
+	this.colliderGroups=[];
+	this.colliderGroups=this.colliderGroups.concat(raw.colliderGroups);
+	
 	this.hitRadius=raw.hitRadius;
 	this.defaultHitRadius=this.hitRadius;
 	this.stiffiness=raw.stiffiness;
@@ -634,8 +704,16 @@ var BodyGroup=function(boneLinkList,raw){
 	this.dragForce=raw.dragForce;//drag force not used yet.
 	this.defaultDragForce=this.dragForce;
 };
+SecondaryAnimationControler.prototype.getColliderGroupName=function(index){
+	var cgroup=this.colliderGroups[index];
+	if(!cgroup){
+		return null;
+	}
+	return cgroup.boneName+"("+cgroup.colliders.length+")";
+}
 
-var ColliderGroup=function(boneName,raw){
+var ColliderGroup=function(boneName,index,raw){
+	this.colliderIndex=index;
 	this.boneName=boneName;//solved raw node-index(bone)
 	this.raw=raw;
 	this.colliders=[];

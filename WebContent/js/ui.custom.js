@@ -572,6 +572,7 @@ UI.SelectRow=function(label,options,onChange,current){
 	var row=new UI.Row();
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
+	row.text=text;
 	
 	if(!options)
 		options={};
@@ -1016,7 +1017,9 @@ UI.InputRow=function(label,defaultText,onChange){
 }
 
 UI.Subtitle=function(label){
-	return UI.SubtitleRow(label);
+	var div=new UI.Div();
+	div.add( UI.SubtitleRow(label));
+	return div;
 }
 UI.SubtitleRow=function(label){
 	return new UI.Row().add(new UI.Text(label).setClass("subtitle"));
