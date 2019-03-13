@@ -201,24 +201,24 @@ HumanoidIk.prototype.initlimitBone=function(){
 			this.limitBone(boneList,"neck",-45,-45,-10,45,45,10);
 			this.limitBone(boneList,"head",-15,-15,-20,15,15,20);
 			
-			this.limitBone(boneList,"leftShoulder",0,0,0,0,15,45);
-			this.limitBone(boneList,"leftUpperArm",-45,-75,-85,45,45,45);
+			this.limitBone(boneList,"leftShoulder",0,0,-45,0,15,0);
+			this.limitBone(boneList,"leftUpperArm",-45,-75,45,45,45,-85);
 			this.limitBone(boneList,"leftLowerArm",-0,-150,0,0,0,0);
-			this.limitBone(boneList,"leftHand",0,0,-65,0,45,45);
+			this.limitBone(boneList,"leftHand",0,0,-45,0,45,65);
 			
-			this.limitBone(boneList,"rightShoulder",0,-15,-45,0,0,0);
-			this.limitBone(boneList,"rightUpperArm",-45,-45,-45,45,75,85);
+			this.limitBone(boneList,"rightShoulder",0,-15,0,0,0,45);
+			this.limitBone(boneList,"rightUpperArm",-45,-45,-85,45,75,45);
 			this.limitBone(boneList,"rightLowerArm",0,0,0,0,150,0);
-			this.limitBone(boneList,"rightHand",0,-45,-45,0,0,65);
+			this.limitBone(boneList,"rightHand",0,-45,-65,0,0,45);
 			
 			
 			
 			
-			this.limitBone(boneList,"leftUpperLeg",-120,0,-75,60,0,75);
+			this.limitBone(boneList,"leftUpperLeg",-60,0,-75,120,0,75);
 			this.limitBone(boneList,"leftLowerLeg",-160,0,0,0,0,0);
 			this.limitBone(boneList,"leftFoot",-15,-5,-5,15,5,5);
 			
-			this.limitBone(boneList,"rightUpperLeg",-120,0,-75,60,0,75);
+			this.limitBone(boneList,"rightUpperLeg",-60,0,-75,120,0,75);
 			this.limitBone(boneList,"rightLowerLeg",-160,0,0,0,0,0);
 			this.limitBone(boneList,"rightFoot",-15,-5,-5,15,5,5);
 			

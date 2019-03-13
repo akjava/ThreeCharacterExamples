@@ -1,32 +1,121 @@
 var HumanoidBoneControler=function(ap){
-	this.boneName=[];
-	this.boneName=this.boneName.concat(HumanoidBoneControler.bodyHumanBoneNames);
-	this.boneName=this.boneName.concat(HumanoidBoneControler.leftArmBoneNames);
-	this.boneName=this.boneName.concat(HumanoidBoneControler.rightArmBoneNames);
-	this.boneName=this.boneName.concat(HumanoidBoneControler.leftLegBoneNames);
-	this.boneName=this.boneName.concat(HumanoidBoneControler.rightLegBoneNames);
-	//TODO support fingers
+	this.boneNames=[];
+	this.boneNames=this.boneNames.concat(HumanoidBoneControler.bodyHumanBoneNames);
+	this.boneNames=this.boneNames.concat(HumanoidBoneControler.leftArmBoneNames);
+	this.boneNames=this.boneNames.concat(HumanoidBoneControler.rightArmBoneNames);
+	this.boneNames=this.boneNames.concat(HumanoidBoneControler.leftLegBoneNames);
+	this.boneNames=this.boneNames.concat(HumanoidBoneControler.rightLegBoneNames);
+	//TODO support fingers or etc
 	
-	this.boneNameMap={};
+	var scope=this;
+	this.logging=true;
+	this.allBoneList=null;
+	this.humanoidBoneMap={};
+	this.humanoidBoneMapReverse={};
+	
+	this.humanoidBones=[];
+	this.boneNames.forEach(function(name){
+		console.log(name);
+		var dummyBone={name:name,quaternion:new THREE.Quaternion(),position:new THREE.Vector3()};
+		scope.humanoidBones.push(dummyBone);
+	});
+	
 	
 	ap.getSignal("loadingModelFinished").add(function(model){
-		this.boneNameMap={};
-		var bones=model.skeleton.bones;
-		for(var i=0;i<bones;i++){
+		
+		var vrm=ap.vrm;
+		var node=VrmUtils.getNodes(vrm);
+		var humanoid=VrmUtils.getHumanoid(vrm);
+		
+		
+		scope.allBoneList=model.skeleton.bones;
+		
+		scope.humanoidBoneMap={};
+		scope.humanoidBoneMapReverse={};
+		humanoid.humanBones.forEach(function(hb){
+			var name=VrmUtils.getNodeBoneName(vrm,hb.node);
+			if(name){
+				var index=BoneUtils.findBoneIndexByEndsName(scope.allBoneList,name);
+				if(index!=-1){
+					console.log(scope.humanoidBones);
+					var humanBone=BoneUtils.findBoneByEndsName(scope.humanoidBones,hb.bone);
+					if(humanBone==null){
+						console.log("HumanoidBoneControler:not found ",name);
+						
+					}else{
+						scope.humanoidBoneMap[String(index)]=humanBone;
+						console.log(humanBone);
+						scope.humanoidBoneMapReverse[humanBone.name]=String(index);
+					}
+					
+				}else{
+					console.log("HumanoidBoneControler:not found in  bone list skipped ",name);
+				}
+			}else{
+				console.log("HumanoidBoneControler:not found in node lsit skipped ",hb);
+			}
 			
+		});
+		scope.resetBones();
+		
+		if(scope.logging){
+			console.log("humanoidBoneMap",scope.humanoidBoneMap);
 		}
 		
-		
+	},1);//before timeliner
+	
+	ap.getSignal("boneRotationChanged").add(function(index){
+		if(index){
+			var target=scope.humanoidBoneMap[String(index)];
+			console.log(target);
+			if(target){
+				target.quaternion.copy(scope.allBoneList[index].quaternion);
+			}
+		}
+	});
+	
+}
+
+	
+HumanoidBoneControler.prototype.resetBones=function(){
+	var scope=this;
+	
+	this.humanoidBones.forEach(function(humanoidBone){
+		var index=scope.humanoidBoneMapReverse[humanoidBone.name];
+		var bone=scope.allBoneList[index];
+		if(bone){
+			humanoidBone.quaternion.copy(bone.quaternion);
+			humanoidBone.position.copy(bone.position);
+		}else{
+			humanoidBone.quaternion.set(0,0,0,1);
+			humanoidBone.position.set(0,0,0);
+		}
 	});
 }
 
-HumanoidBoneControler.prototype.copyTo=function(bone){
-	
+HumanoidBoneControler.prototype.getHumanoidBoneName=function(index){
+	var target=this.humanoidBoneMap[String(index)];
+	if(target){
+		return target.name;
+	}else{
+		return null;
+	}
+}
+
+HumanoidBoneControler.prototype.update=function(){
+	var scope=this;
+	Object.keys(this.humanoidBoneMap).forEach(function(index){
+		var target=scope.humanoidBoneMap[String(index)];
+		if(target){
+			scope.allBoneList[index].quaternion.copy(target.quaternion);
+		}
+		//TODO support position
+	});	
 }
 
 
-HumanoidBoneControler.prototype.bodyHumanBoneNames=["hips","spine","chest","upperChest","neck","head"];;
-HumanoidBoneControler.prototype.leftArmBoneNames=["leftShoulder","leftUpperArm","leftLowerArm","leftHand"];
-HumanoidBoneControler.prototype.rightArmBoneNames=["rightShoulder","rightUpperArm","rightLowerArm","rightHand"];
-HumanoidBoneControler.prototype.leftLegBoneNames=["leftUpperLeg","leftLowerLeg","leftFoot"];
-HumanoidBoneControler.prototype.rightLegBoneNames=["rightUpperLeg","rightLowerLeg","rightFoot"];
+HumanoidBoneControler.bodyHumanBoneNames=["hips","spine","chest","upperChest","neck","head"];;
+HumanoidBoneControler.leftArmBoneNames=["leftShoulder","leftUpperArm","leftLowerArm","leftHand"];
+HumanoidBoneControler.rightArmBoneNames=["rightShoulder","rightUpperArm","rightLowerArm","rightHand"];
+HumanoidBoneControler.leftLegBoneNames=["leftUpperLeg","leftLowerLeg","leftFoot"];
+HumanoidBoneControler.rightLegBoneNames=["rightUpperLeg","rightLowerLeg","rightFoot"];

@@ -78,16 +78,22 @@ Sidebar.VrmTimelinerBones=function(ap){
 	container.add(targetList);
 
 	
+	ap.humanoidBoneControler=new HumanoidBoneControler(ap);
+	
+	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.timeliner!==undefined){
 			//
-			ap.timeliner.context.controller.setScene(mesh);
+			//ap.timeliner.context.controller.setScene(mesh);
 			ap.timeliner.context.dispatcher.fire("time.update",0);//reset,Option not move just update
 			return;
 		}
 		
 		
 		var onUpdate=function(time){
+			//sync
+			ap.humanoidBoneControler.update();
+			
 			ap.getSignal("poseChanged").remove(onPoseChanged);
 			ap.getSignal("poseChanged").dispatch();
 			ap.getSignal("poseChanged").add(onPoseChanged);
@@ -103,7 +109,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 			{
 				type: THREE.VectorKeyframeTrack,
 				label:rootPositionName,
-				propertyPath: '.bones[0].position',
+				propertyPath: '.humanoidBones[0].position',
 				initialValue: ap.skinnedMesh.skeleton.bones[0].position.toArray(),
 				interpolation: THREE.InterpolateLinear
 			},
@@ -112,19 +118,15 @@ Sidebar.VrmTimelinerBones=function(ap){
 		var boneNames=[];
 		var boneIndices=[];
 	
-		var humanoidBones=ap.skinnedMesh.humanoidSkeleton.bones;
 		
 		
 		//for bones
-		var bones=BoneUtils.getBoneList(ap.skinnedMesh);
+		var bones=ap.humanoidBoneControler.humanoidBones;
 		for(var i=0;i<bones.length;i++){
 			var name=bones[i].name;
-			if(i!=0 && humanoidBones.indexOf(bones[i])==-1){
-				continue;
-			}
 			var info={type: THREE.QuaternionKeyframeTrack,
 					label:name,
-					propertyPath:".bones["+i+"].quaternion",
+					propertyPath:".humanoidBones["+i+"].quaternion",
 					initialValue: [ 0, 0, 0, 1 ],//TODO check
 					interpolation: THREE.InterpolateLinear
 					}
@@ -134,7 +136,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 		}
 		ap.timeliner_boneNames=boneNames;
 		
-		var timeliner=new Timeliner( new THREE.TimelinerController( ap.skinnedMesh, trackInfo, onUpdate ) );
+		var timeliner=new Timeliner( new THREE.TimelinerController( ap.humanoidBoneControler, trackInfo, onUpdate ) );
 		ap.timeliner=timeliner;
 		
 		timeliner.context.dispatcher.fire('totalTime.update',3);
@@ -142,7 +144,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 		timeliner.context.fileName="timeline_mesh_animation";
 		
 		function getBoneName(index){
-			return BoneUtils.getBoneList(ap.skinnedMesh)[index].name;
+			return ap.humanoidBoneControler.getHumanoidBoneName(index);
 		}
 		
 		//listers
@@ -161,14 +163,17 @@ Sidebar.VrmTimelinerBones=function(ap){
 		}
 		
 		ap.getSignal("poseChanged").add(onPoseChanged);
+		
 		ap.getSignal("boneRotationFinished").add(function(index){
 			if(scope.logging)
 				console.log("bone changed",index);
 			
-			if(boneIndices.indexOf(index)!=-1)
-				ap.timeliner.context.dispatcher.fire('keyframe',getBoneName(index),true);
+			var name=getBoneName(index);
+			if(name)
+			
+				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
 			else
-				console.log("ignore index "+index);
+				console.log("ignore index "+index,name);
 		});
 		
 

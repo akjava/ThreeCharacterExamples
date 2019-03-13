@@ -1,5 +1,11 @@
 var VrmUtils={
 		logging:false,
+		getNodes:function(vrm){
+			return vrm.parser.json.nodes;
+		},
+		getHumanoid:function(vrm){
+			return vrm.userData.gltfExtensions.VRM.humanoid;
+		},
 		loadVrm:function(ap,url){
 			var scope=this;
 			/*
