@@ -171,10 +171,13 @@ var Logics={
 
 		},
 		loadingModelFinishedForIkControler:function(ap,ikSettingClassName){
+			
 			//Ik
 			var initialized=false;
 			ap.signals.loadingModelFinished.add(function(mesh){
-				
+				console.error("load ap.ikControlerVisible",ap.ikControlerVisible);
+				if(ap.ikControlerVisible==undefined)
+					ap.ikControlerVisible=true;
 				//Possible Ik initialize on Sidebar for keep value
 				if(ap.ikControler==null){
 					ap.ikControler=new IkControler(undefined,ap);
@@ -191,6 +194,8 @@ var Logics={
 					ap.ikControler.initialize(new window[ikSettingClassName](ap));
 					
 					ap.getSignal("ikSettingChanged").dispatch();
+					
+					
 					
 					if(!initialized){
 						ap.signals.transformSelectionChanged.add(function(target){
@@ -262,9 +267,13 @@ var Logics={
 				
 				
 				ap.ikControler.setBoneAttachControler(ap.boneAttachControler);
+				
+				console.log("ap.ikControlerVisible",ap.ikControlerVisible);
+				ap.ikControler.setVisible(ap.ikControlerVisible);
+				
 				//reference boneAttachControler
 				
-				if(!ikSettingClassName){
+				if(!ikSettingClassName){//for mbl3d
 					ap.ikControler.setEndSiteEnabled("Head",true);
 					ap.ikControler.setEndSiteEnabled("LeftArm",true);
 					ap.ikControler.setEndSiteEnabled("RightArm",true);

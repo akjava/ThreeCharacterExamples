@@ -60,8 +60,8 @@ var Sidebar = function ( application ) {
 	}));
 	sub.add(new Sidebar.SecondaryAnimation(ap));
 	
-	ap.ikControlerVisible=true;
-	
+	if(ap.ikControlerVisible==undefined)
+		ap.ikControlerVisible=true;
 	panel.add(new UI.CheckboxRow("Ik Visible",ap.ikControlerVisible,function(v){
 		ap.ikControlerVisible=v;
 		ap.ikControler.setVisible(v);

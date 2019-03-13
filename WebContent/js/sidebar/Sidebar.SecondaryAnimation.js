@@ -196,7 +196,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		group.boneLinkList.forEach(function(links){
 			var name;
 			if(links.length>0){
-				name=links[0]+"(+"+links.length+")";
+				name=links[0]+"("+(links.length)+")";
 			}else{
 				name="EMPTY";
 			}
@@ -256,7 +256,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	groupHitRadius.add(resetBt);
 	groupHitRadius.setDisabled(true);
 	
-	var groupDragForce=new UI.NumberButtons("dragForce",0,1,1,NaN,function(v){
+	var groupDragForce=new UI.NumberButtons("dragForce",0,1,.1,NaN,function(v){
 		getCurrentGroup().dragForce=v;
 		//no effect
 		//ap.secondaryAnimationControler.updateSpringValues();
