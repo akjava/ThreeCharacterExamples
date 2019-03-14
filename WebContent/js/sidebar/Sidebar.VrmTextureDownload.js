@@ -51,7 +51,7 @@ Sidebar.VrmTextureDownload=function(ap){
 	container.add(wireRow);
 	
 	
-	var test=new UI.ButtonRow("Download Selected Texture",function(){
+	var download=new UI.ButtonRow("Download Selected Texture",function(){
 		var material=getMaterial();
 		console.log(material);
 		var image=material.map.image;
@@ -63,6 +63,16 @@ Sidebar.VrmTextureDownload=function(ap){
 		//TODO draw UV
 		var a=AppUtils.generateBase64DownloadLink(canvas.toDataURL(),"image/png","texture.png","texture.png",false);
 		a.click();
+	});
+	container.add(download);
+	
+	var test=new UI.ButtonRow("tmp",function(){
+		
+		var value=itemList.getValue();
+		var target=ap.skinnedMesh.getObjectById(Number(value));
+		console.log(target.material);
+		var map=target.material.map;
+		target.material=new THREE.MeshBasicMaterial({color:target.material.color.getHex(),map:map});
 	});
 	container.add(test);
 

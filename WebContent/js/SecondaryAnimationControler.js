@@ -53,6 +53,8 @@ var SecondaryAnimationControler=function(ap){
 	
 	this.autoSetUp=false;
 	
+	this._rootSpheres={};
+	
 	//add EndSite to Alicia Ribbon 
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
 	//Alicia Hair root bone not staic
@@ -84,7 +86,39 @@ SecondaryAnimationControler.prototype.validateBoneNames=function(boneNames){
 	return true;
 }
 
+SecondaryAnimationControler.prototype.getRootSphere=function(parentName,hitR,group){
+	var bac=this.boneAttachControler;
+	var scope=this;
+	var cache=this._rootSpheres[parentName];
+	if(cache){
+		console.log("exist in cache",parentName,cache.name);
+		return cache;
+	}
+		
+	
+	
+	var sphere=scope.createSphereBox(hitR,0,new THREE.Vector3(),null);
+	sphere.getMesh().userData.group=group;//no effect ,just compatibel
+	scope.updateBodyDamping(sphere);
+	
+	var rootContainer=bac.getContainerByBoneName(parentName);
+	rootContainer.add(sphere.getMesh());
+	sphere.name=parentName+"-pos";
+	
+	
+	scope.allSpheres.push(sphere);
+	sphere.syncWorldMatrix=true;
+	sphere.syncBodyToMesh=false;
+	sphere.getMesh().updateMatrixWorld(true);
+	sphere.syncTransform(scope.ammoControler);
+	sphere.isRoot=true;
+	
+	console.log("no cache create",sphere.name);
+	this._rootSpheres[parentName]=sphere;
+	return sphere;
+}
 SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,group,hcontainer){
+	
 	/*if(!this.validateBoneNames(links)){
 		return;
 	}*/
@@ -147,20 +181,12 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			if(rootContainer==null){
 				//create bone parent spehere
 				rootContainer=bac.getContainerByBoneName(bone.parent.name);
-				var pos=rootContainer.position.clone();
-				var sphere=scope.createSphereBox(hitR,0,new THREE.Vector3(),null);
-				sphere.getMesh().userData.group=group;
-				scope.updateBodyDamping(sphere);
 				
-				rootContainer.add(sphere.getMesh());
-				sphere.name=bone.parent+"-pos";
+				var pos=rootContainer.position.clone();
+				
+				var sphere=scope.getRootSphere(bone.parent.name,hitR,group);
+				
 				spheres.push(sphere);
-				scope.allSpheres.push(sphere);
-				sphere.syncWorldMatrix=true;
-				sphere.syncBodyToMesh=false;
-				sphere.getMesh().updateMatrixWorld(true);
-				sphere.syncTransform(scope.ammoControler);
-				sphere.isRoot=true;
 				
 				
 				isRoot=true;
@@ -469,15 +495,12 @@ SecondaryAnimationControler.prototype._destroySecondaryAnimation=function(){
 	});
 	this.hconstraint=[];
 	
-	
+	this._rootSpheres={};
 }
 
 SecondaryAnimationControler.prototype.dispose=function(){
 	 this._destroySecondaryAnimation();
-	 if(this.headBox){
-		 this.ammoControler.destroyBodyAndMesh(this.headBox);
-		 this.headBox=null;
-	 }
+	
 }
 
 /*SecondaryAnimationControler.prototype.getDistance=function(isBreastR){
@@ -612,6 +635,8 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 		console.log("SecondaryAnimationControler:parse vrm first");
 		return;
 	}
+	
+	
 	
 	var enabled=this.ammoControler.isEnabled();
 	this.ammoControler.setEnabled(false);

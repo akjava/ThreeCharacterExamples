@@ -39,5 +39,10 @@ var Sidebar = function ( application ) {
 	sub.add(new Sidebar.BoneRotate(ap,false,false));
 	sub.add(new Sidebar.VrmVisible(ap));
 
+	var debug=new UI.ButtonRow("Debug",function(){
+		console.log("child",ap.scene.children);
+	});
+	sub.add(debug);
+	
 	return container;
 }

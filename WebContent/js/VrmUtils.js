@@ -23,11 +23,14 @@ var VrmUtils={
 					if ( object.material ) {
 
 						if ( Array.isArray( object.material ) ) {
-
+							
 							for ( var i = 0, il = object.material.length; i < il; i ++ ) {
 
 								var material = new THREE.MeshBasicMaterial();
 								THREE.Material.prototype.copy.call( material, object.material[ i ] );
+								
+								material.vertexColors=0;//in my case alway faild
+								
 								material.color.copy( object.material[ i ].color );
 								material.map = object.material[ i ].map;
 								material.lights = false;
@@ -42,6 +45,9 @@ var VrmUtils={
 
 							var material = new THREE.MeshBasicMaterial();
 							THREE.Material.prototype.copy.call( material, object.material );
+							
+							material.vertexColors=0;//in my case alway faild
+							
 							material.color.copy( object.material.color );
 							material.map = object.material.map;
 							material.lights = false;

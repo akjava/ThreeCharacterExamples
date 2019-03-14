@@ -8,6 +8,8 @@ Example=function(application){
 	ap.controls.update();
 	
 	var url='../../../dataset/vrm/Alicia/AliciaSolid.vrm';
+	var url='../../../dataset/vrm/3320783645013488858.vrm';
+	
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	//light
