@@ -15,6 +15,12 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	checkRow.add(stepBt);
 	stepBt.button.setDisabled(true);
 	
+	var stepSEBt=new UI.ButtonSpan("Step SE",function(){
+	    ap.boneAttachControler.update(true);
+		ap.secondaryAnimationControler.update(true);
+	});
+	checkRow.add(stepSEBt);
+	
 	var buttonRow=new UI.ButtonRow("New SecondaryAnimation",function(){
 		ap.getSignal("objectRotated").dispatch(0,0,0);
 		ap.secondaryAnimationControler.newSecondaryAnimation();
@@ -64,9 +70,9 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	bodyDamping.number.setWidth("30px");
 	dynamics.add(bodyDamping);
 	
-	var secondaryAnimationSize=new UI.NumberButtons("baseHitRadius",0.01,500,1,ap.secondaryAnimationControler.baseHitRadius,function(v){
+	var secondaryAnimationSize=new UI.NumberButtons("baseHitRadius",0.01,500,10,ap.secondaryAnimationControler.baseHitRadius,function(v){
 		ap.secondaryAnimationControler.baseHitRadius=v;
-	},[1,10,100]);
+	},[10,50,100]);
 	settings.add(secondaryAnimationSize);
 	
 	

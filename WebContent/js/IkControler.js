@@ -131,16 +131,21 @@ IkControler.prototype.initialize=function(ikSettings){
 	//ap.objects.push(ikBox);//TODO do at init
 	//ap.scene.add(ikBox);
 	
-	ap.getSignal("boneSelectionChanged").add(function(index){
+	this._onbsc=function(index){
 		ap.ikControler.boneSelectedIndex=index;
-	});
+	};
 	
-	ap.getSignal("poseChanged").add(function(){
+	ap.getSignal("boneSelectionChanged").add(this._onbsc);
+	
+	this.onpc=function(){
 		ap.ikControler.resetAllIkTargets();
-	});
-	ap.getSignal("solveIkCalled").add(function(){
+	};
+	ap.getSignal("poseChanged").add(this.onpc);
+	
+	this._onsic=function(){
 		ap.ikControler.solveIk(true);
-	});
+	};
+	ap.getSignal("solveIkCalled").add(this._onsic);
 	
 	ap.getSignal("ikSelectionChanged").add(this.onIkSelectionChanged);
 
@@ -149,14 +154,17 @@ IkControler.prototype.initialize=function(ikSettings){
 	 ikControler call when onTransformFinished for editor
 	 rotationControler call when edited
 	 */
-	ap.getSignal("boneRotationChanged").add(function(index){
+	
+	this._onbrc=function(index){
 		var selection=ap.ikControler.getSelectedIkName();
 		ap.ikControler.resetAllIkTargets(selection);
 		
 		if(index==0){
 			ap.signals.boneTranslateChanged.dispatch();//I'm not sure this is need?
 		}
-	});
+	};
+	
+	ap.getSignal("boneRotationChanged").add(this._onbrc);
 	this._initialized=true;
 }
 
@@ -169,6 +177,11 @@ IkControler.prototype.dispose=function(){
 	var ap=this.ap;
 	
 	ap.getSignal("ikSelectionChanged").remove(this.onIkSelectionChanged);
+	ap.getSignal("boneSelectionChanged").remove(this._onbsc);
+	ap.getSignal("poseChanged").remove(this.onpc);
+	ap.getSignal("solveIkCalled").remove(this._onsic);
+	ap.getSignal("boneRotationChanged").remove(this._onbrc);
+	
 	
 	ap.objects=AppUtils.removeAllFromArray(ap.objects,Object.values(this.ikTargets));
 	Object.values(this.ikTargets).forEach(function(mesh){

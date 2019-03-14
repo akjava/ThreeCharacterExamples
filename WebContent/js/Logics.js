@@ -175,7 +175,8 @@ var Logics={
 			//Ik
 			var initialized=false;
 			ap.signals.loadingModelFinished.add(function(mesh){
-				console.error("load ap.ikControlerVisible",ap.ikControlerVisible);
+				
+				
 				if(ap.ikControlerVisible==undefined)
 					ap.ikControlerVisible=true;
 				//Possible Ik initialize on Sidebar for keep value
@@ -190,14 +191,14 @@ var Logics={
 						ap.ikControler.dispose();
 					
 					//recreate
-					ap.ikControler=new IkControler(undefined,ap);
-					ap.ikControler.initialize(new window[ikSettingClassName](ap));
 					
+					ap.ikControler.initialize(new window[ikSettingClassName](ap));
 					ap.getSignal("ikSettingChanged").dispatch();
 					
 					
 					
 					if(!initialized){
+						console.log("not initialized");
 						ap.signals.transformSelectionChanged.add(function(target){
 							ap.ikControler.onTransformSelectionChanged(target);
 						});
@@ -268,7 +269,7 @@ var Logics={
 				
 				ap.ikControler.setBoneAttachControler(ap.boneAttachControler);
 				
-				console.log("ap.ikControlerVisible",ap.ikControlerVisible);
+				
 				ap.ikControler.setVisible(ap.ikControlerVisible);
 				
 				//reference boneAttachControler
@@ -321,6 +322,7 @@ var Logics={
 					ap.getSignal("poseChanged").add(function(){
 						ap.boneAttachControler.update(true);
 					});
+					boneAttachControlerInitialized=true;
 				}
 				
 				if(ap.boneAttachControler!=null){

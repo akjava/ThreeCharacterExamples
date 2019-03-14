@@ -67,5 +67,12 @@ var Sidebar = function ( application ) {
 		ap.ikControler.setVisible(v);
 	}));
 	
+	var debug=new UI.ButtonRow("debug",function(){
+		ap.ammoControler.printCount();
+		
+		AppUtils.printTotalSignalCounts(ap);
+	});
+	sub.add(debug);
+	
 	return container;
 }

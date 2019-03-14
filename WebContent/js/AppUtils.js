@@ -14,6 +14,14 @@ var AppUtils={
 				});
 			}
 		},
+		printTotalSignalCounts:function(ap){
+			var total=0;
+			console.log(ap.signals);
+			Object.keys(ap.signals).forEach(function(key){
+				total+=ap.signals[key]._bindings.length;
+			})
+			console.log("total signal count",total);
+		},
 		decoderPath:'js/libs/draco/gltf/',
 		loadGltfMesh:function(url,callback,loader){
 			loader=loader!==undefined?loader: new THREE.GLTFLoader();

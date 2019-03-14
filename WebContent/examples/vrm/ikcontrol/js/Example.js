@@ -27,6 +27,8 @@ Example=function(application){
 	
 	Logics.loadingModelStartedForVrm(ap);
 	
+	console.log(ap.signals);
+	
 	ap.getSignal("loadingModelStarted").dispatch(url);
 
 }

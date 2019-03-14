@@ -15,7 +15,7 @@ var SecondaryAnimationControler=function(ap){
 	this.allowAngleY=60;
 	this.allowAngleZ=60;
 	
-	this.baseHitRadius=100;
+	this.baseHitRadius=75;
 	this.baseStiffiness=250;
 	
 	this.damping=1;
@@ -32,8 +32,8 @@ var SecondaryAnimationControler=function(ap){
 	this.scale=100;
 	this.minSize=0.5;//or broken
 	
-	this.maxDistanceRatio=1.5;
-	this.enableLimitDistance=true;
+	this.maxDistanceRatio=2;
+	this.enableLimitDistance=false;
 	this.clearForceWhenResetted=true;
 	
 	this.connectHorizontal=false;
@@ -42,9 +42,12 @@ var SecondaryAnimationControler=function(ap){
 	this.isEffectDragForceBodyDamping=true;
 	this.isEffectDragForceAngle=true;
 	
+	
 	this.isSyncPosition=true;
 	
 	this._rootSpheres={};
+	
+	this.enableFollowBoneAttach=true;
 	
 	//add EndSite to Alicia Ribbon 
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
@@ -104,6 +107,8 @@ SecondaryAnimationControler.prototype.getRootSphere=function(parentName,hitR,gro
 	sphere.syncTransform(scope.ammoControler);
 	sphere.isRoot=true;
 	
+	
+	
 	//console.log("no cache create",sphere.name);
 	this._rootSpheres[parentName]=sphere;
 	return sphere;
@@ -125,28 +130,28 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	var rootContainer=null;
 	var hitR=scope.baseHitRadius*hitRadius;
 	
-	var addEndsite=this.addEndsite;
+	
 	var targetSphere2=this.targetSphere2;
 	
 	var isRootStatic=this.isRootStatic;
 	
 	var mass=group.AMMO_mass>0?group.AMMO_mass:this.mass;
-	console.log(mass);
+
 	
 	var spheres=[];
 	
 	//add container
 	
 	
-	
+	var index=0;
 	links.forEach(function(boneName){
 		var isRoot=false;
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
 		if(bone==null ){
 			if(boneName.endsWith("_end")){
 				//indicate endsite?
-				//do something
-				addEndsite=true;
+				//do something?
+				
 			}else{
 				console.error("no bone",boneName);
 			}
@@ -170,9 +175,17 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				position=bonePosition;
 			}
 			
+			//TODO improve
+			var mas=mass;
+			var hr=hitR;
+			
+			/*//trying
+			if(!isRoot)
+				position=new THREE.Vector3();*/
 			
 			
-			var sphere=scope.createSphereBox(hitR,mass,position,isRoot?null:group.colliderGroups);//no 0 style not good at skirt
+			
+			var sphere=scope.createSphereBox(hr,mass,position,isRoot?null:group);//no 0 style not good at skirt
 			sphere.getMesh().userData.group=group;
 			scope.updateBodyDamping(sphere);
 			
@@ -200,12 +213,23 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			}else{
 				sphere.syncBone=true;
 				sphere.syncWorldMatrix=false;
-				sphere.syncTransform(scope.ammoControler);
 				sphere.getMesh().updateMatrixWorld(true);
+				sphere.syncTransform(scope.ammoControler);
+				
+				/*//trying fixed position
+				var c=bac.getContainerByBoneName(bone.name);
+				sphere.syncWorldMatrix=true;
+				sphere.rotationSync=false;
+				sphere.syncBodyToMesh=false;
+				
+				c.add(sphere.getMesh());
+				AmmoUtils.setLinearFactor(sphere.getBody(),0,0,0);
+				sphere.syncTransform(scope.ammoControler);
+				sphere.getMesh().updateMatrixWorld(true);*/
 			}
 		}
 		
-		
+		index++;
 	});
 	var bodyDamping=scope.bodyDamping;
 	
@@ -239,7 +263,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			
 			sphere2.targetBone=bone;
 			
-			if(!sphere2.isRoot && scope.isSyncPosition)
+			if(!sphere2.isRoot && scope.isSyncPosition) //&& false
 				sphere2.positionTargetBone=bone;
 		
 			
@@ -278,8 +302,8 @@ SecondaryAnimationControler.prototype.findSphereByName=function(name){
 	return match;
 }
 
-SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,colliders,color){
-	
+SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,position,bodyGroup,color){
+	var colliders=bodyGroup?bodyGroup.colliderGroups:null;
 
 	
 	color=color==undefined?0x000088:color;
@@ -302,18 +326,24 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 				var bit= 1<<(index+1);
 				mask=mask | bit;
 			 });
-			 
+		 
+		 mask+=1;
+		 
 			 if(this.logging)
-				 console.log("sphere mask",mask,colliders);
+				 console.log("sphere mask",bodyGroup.boneLinkList[0][0],mask,colliders);
 			
 	 }
+	 
+
 	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
 						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group,mask
 				);
 	 return sphere;
 }
-SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass,position,color,index){
+SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass,position,color,collidarGroup){
+	var index=collidarGroup.colliderIndex;
+	var boneName=collidarGroup.boneName;
 	 color=color==undefined?0x000088:color;
 	 if(!size){
 		 console.error("need size,min size will set");
@@ -330,10 +360,12 @@ SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass
 	 var group=1<<(index+1);
 	 
 	 if(this.logging)
-		 console.log("collider",index,group);
+		 console.log("collider",boneName,"index",index,"group",group);
 
+	
 	 //not set mask here
 	 //var mask=group+1;
+	
 	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
 						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group
@@ -347,6 +379,8 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	 var box1Pos=new THREE.Vector3().setFromMatrixPosition(box1.getMesh().matrixWorld);
 	 var box2Pos=new THREE.Vector3().setFromMatrixPosition(box2.getMesh().matrixWorld);
 	 var diff=box2Pos.sub(box1Pos);
+	 
+	
 	
 	 box2.parent=box1;
 	 box2.defaultDistance=new THREE.Vector3().distanceTo(diff);
@@ -368,7 +402,7 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	 //connect
 	var frameInA=application.ammoControler.makeTemporaryTransform();
 	var frameInB=application.ammoControler.makeTemporaryTransform();
-	AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.clone().negate());//I'm not sure use negate
+	AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.clone().negate());//I'm not sure use negate,but it no gravity effect than other
 	var disableCollisionsBetweenLinkedBodies=true;
 	var constraint=application.ammoControler.createGeneric6DofSpringConstraint(
 			box2,box1, frameInA,frameInB,disableCollisionsBetweenLinkedBodies,true);
@@ -468,6 +502,33 @@ SecondaryAnimationControler.prototype.update=function(force){
 		AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 	});*/
 	
+	
+	/*
+	 * not so good
+	 */
+	/*if(this.enableFollowBoneAttach){
+		this.allSpheres.forEach(function(sphere){
+				if(sphere.positionTargetBone){
+					 var bone=sphere.positionTargetBone;
+					 var bac=scope.ap.boneAttachControler;
+					 var container=bac.getContainerByBoneName(bone.name);
+					 var pos=container.position;
+					 
+					 	var transform=AmmoUtils.getSharedBtTransform();
+					 	var q=container.quaternion;
+					 	var btQuaternion=AmmoUtils.getSharedBtQuaternion(q.x,q.y,q.z,q.w);
+						transform.setRotation(btQuaternion);
+						
+						AmmoUtils.copyFromXYZ(transform.getOrigin(),pos.x,pos.y,pos.z);
+						sphere.body.setCenterOfMassTransform(transform);
+						sphere.body.getMotionState().setWorldTransform(transform);
+						sphere.syncTransform(scope.ap.ammoControler);
+						AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+						AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+				}
+			});
+	}*/
+	
 	if(this.enableLimitDistance){
 		this.allSpheres.forEach(function(sphere){
 			if(sphere.parent && !sphere.isRoot){
@@ -504,7 +565,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 					}
 					
 					if(scope.logging)
-					console.log("reset",sphere.name,max,distance);
+					console.log("reset",sphere.name,max,distance,sphere.defaultDistance,scope.maxDistanceRatio);
 				}
 			}
 		});
@@ -646,7 +707,7 @@ SecondaryAnimationControler.prototype.newColliderGroups=function(){
 			var pos= collider.offset.clone().multiplyScalar(scope.scale);
 			var size=collider.radius*scope.scale;
 			
-			var sphere=scope.createColliderSphereBox(size,0,pos,0x008800,group.colliderIndex);
+			var sphere=scope.createColliderSphereBox(size,0,pos,0x008800,group);
 			sphere.syncWorldMatrix=true;
 			sphere.syncBodyToMesh=false;
 			sphere.getMesh().updateMatrixWorld(true);

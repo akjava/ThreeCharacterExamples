@@ -92,6 +92,49 @@ Sidebar.VrmTimelinerBones=function(ap){
 	ap.humanoidBoneControler=new HumanoidBoneControler(ap);
 	
 	
+	function onPoseChanged(){
+		if(scope.logging)
+			console.log("pose changed");
+		
+		ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
+		ap.timeliner_boneNames.forEach(function(name){
+			ap.timeliner.context.dispatcher.fire('keyframe',name,true);
+		});
+	}
+	
+	ap.getSignal("poseChanged").add(onPoseChanged);
+	
+	function getHuamnBoneName(index){
+		var bone=ap.humanoidBoneControler.humanoidBoneMap[String(index)];
+		if(bone){
+			return bone.name;
+		}else{
+			console.error("not contain bone",index,ap.humanoidBoneControler.allBoneList);
+		}
+	}
+	
+	//listers
+	ap.getSignal("boneTranslateFinished").add(function(index){
+		//console.log("translated",index);
+		ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
+	});
+	
+	
+	ap.getSignal("boneRotationFinished").add(function(index){
+		if(scope.logging)
+			console.log("bone changed",index);
+		
+		var name=getHuamnBoneName(index);
+		console.log("debug",name,index);
+		if(name)
+		
+			ap.timeliner.context.dispatcher.fire('keyframe',name,true);
+		else
+			console.log("ignore index "+index);
+	});
+	
+	
+	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.timeliner!==undefined){
 			//
@@ -106,8 +149,10 @@ Sidebar.VrmTimelinerBones=function(ap){
 			ap.humanoidBoneControler.update();
 			
 			ap.getSignal("poseChanged").remove(onPoseChanged);
+			
 			ap.getSignal("poseChanged").dispatch();
 			ap.getSignal("poseChanged").add(onPoseChanged);
+			
 			ap.getSignal("timelinerSeeked").dispatch(time);
 			//ap.skinnedMesh.updateMatrixWorld(true);
 			ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
@@ -154,44 +199,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 		timeliner.context.timeScale=120;
 		timeliner.context.fileName="timeline_mesh_animation";
 		
-		function getHuamnBoneName(index){
-			var bone=ap.humanoidBoneControler.humanoidBoneMap[String(index)];
-			if(bone){
-				return bone.name;
-			}else{
-				console.error("not contain bone",index,ap.humanoidBoneControler.allBoneList);
-			}
-		}
 		
-		//listers
-		ap.getSignal("boneTranslateFinished").add(function(index){
-			//console.log("translated",index);
-			ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
-		});
-		function onPoseChanged(){
-			if(scope.logging)
-				console.log("pose changed");
-			
-			ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
-			ap.timeliner_boneNames.forEach(function(name){
-				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
-			});
-		}
-		
-		ap.getSignal("poseChanged").add(onPoseChanged);
-		
-		ap.getSignal("boneRotationFinished").add(function(index){
-			if(scope.logging)
-				console.log("bone changed",index);
-			
-			var name=getHuamnBoneName(index);
-			console.log("debug",name,index);
-			if(name)
-			
-				ap.timeliner.context.dispatcher.fire('keyframe',name,true);
-			else
-				console.log("ignore index "+index);
-		});
 		
 
 
