@@ -32,14 +32,15 @@ var SecondaryAnimationControler=function(ap){
 	this.scale=100;
 	this.minSize=0.5;//or broken
 	
-	this.maxDistanceRatio=4;
+	this.maxDistanceRatio=1.5;
 	this.enableLimitDistance=true;
+	this.clearForceWhenResetted=true;
 	
 	this.addEndsite=false;
 	
 	
 	this.targetSphere2=false;
-	this.isRootStatic=true;
+	this.isRootStatic=false;
 	
 	this.endSiteRatio=0.5;
 	
@@ -50,9 +51,7 @@ var SecondaryAnimationControler=function(ap){
 	this.isEffectDragForceAngle=true;
 	
 	
-	this.autoSetUp=true;
-	
-	
+	this.autoSetUp=false;
 	
 	//add EndSite to Alicia Ribbon 
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
@@ -109,6 +108,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	var defaultMass=this.mass;
 	
 	if(this.autoSetUp){
+		console.error("never happen");
 		if(links.length==1){
 			addEndsite=true;
 			targetSphere2=true;
@@ -125,6 +125,11 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	}
 	
 	var spheres=[];
+	
+	//add container
+	
+	
+	
 	links.forEach(function(boneName){
 		var isRoot=false;
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
@@ -140,8 +145,24 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			var position=null;
 			var bonePosition=bac.getContainerByBoneName(boneName).position.clone();
 			if(rootContainer==null){
-				
+				//create bone parent spehere
 				rootContainer=bac.getContainerByBoneName(bone.parent.name);
+				var pos=rootContainer.position.clone();
+				var sphere=scope.createSphereBox(hitR,0,new THREE.Vector3(),null);
+				sphere.getMesh().userData.group=group;
+				scope.updateBodyDamping(sphere);
+				
+				rootContainer.add(sphere.getMesh());
+				sphere.name=bone.parent+"-pos";
+				spheres.push(sphere);
+				scope.allSpheres.push(sphere);
+				sphere.syncWorldMatrix=true;
+				sphere.syncBodyToMesh=false;
+				sphere.getMesh().updateMatrixWorld(true);
+				sphere.syncTransform(scope.ammoControler);
+				sphere.isRoot=true;
+				
+				
 				isRoot=true;
 				position=bonePosition.sub(rootContainer.position.clone());
 			}else{
@@ -149,10 +170,14 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			}
 			
 			var mass=isRootStatic&&isRoot?0:defaultMass;
-			var sphere=scope.createSphereBox(hitR,mass,position,group.colliderGroups);//no 0 style not good at skirt
+			var sphere=scope.createSphereBox(hitR,mass,position,isRoot?null:group.colliderGroups);//no 0 style not good at skirt
+			sphere.getMesh().userData.group=group;
+			scope.updateBodyDamping(sphere);
+			
 			sphere.name=boneName+"-pos";
 			spheres.push(sphere);
 			scope.allSpheres.push(sphere);
+			
 			if(isRoot){
 				//Mesh to Body
 				rootContainer.add(sphere.getMesh());
@@ -161,6 +186,8 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 					AmmoUtils.setAngularFactor(sphere.getBody(),1,1,1);
 					sphere.syncBone=true;
 					sphere.rotationSync=false;
+				}else{
+					console.error("never happen");
 				}
 					
 				
@@ -183,8 +210,13 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	});
 	var bodyDamping=scope.bodyDamping;
 	
-	for(var i=0;i<links.length;i++){
+	for(var i=0;i<spheres.length-1;i++){
+	//for(var i=0;i<links.length;i++){
+		
 		var boneName=links[i];
+		if(!boneName){
+			break;
+		}
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
 		var sphere1=spheres[i];
 		if(!sphere1){
@@ -193,14 +225,15 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		
 		var sphere2=null;
 		var isLeaf=false;
-		sphere1.getMesh().userData.group=group;
-		sphere1.getBody().setDamping(bodyDamping,bodyDamping);
 		
-		if(i<links.length-1){
+		sphere1.getBody().setDamping(bodyDamping,bodyDamping);//TODO check
+		
+		if(i<spheres.length-1){
 			sphere2=spheres[i+1];
 		}else{
 			//create endsite
 			if(addEndsite){
+				console.error("never happen");
 				var parentName=bone.parent.name;
 				var parentPos=bac.getContainerByBoneName(parentName).position.clone();
 				var bonePos=bac.getContainerByBoneName(boneName).position.clone();
@@ -219,26 +252,36 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			}
 			
 		}
-		if(targetSphere2){
+		/*if(targetSphere2){
+			console.error("never happen")
 			if(sphere2!=null)
 				sphere2.targetBone=bone;
 		}else
 			sphere1.targetBone=bone;
 		
 		if(!sphere1.isRoot)
-			sphere1.positionTargetBone=bone;
+			sphere1.positionTargetBone=bone;*/
 		
-		bone.userData.defaultPosition=bone.position.clone();
+		//set 2 only
+		
+		
+		bone.userData.defaultPosition=bone.position.clone();//maybe reset problem is here
+		
 		if(sphere2!=null){
 			sphere2.name=sphere2.name+":"+bone.name+"-rot";
 			
-			
+			sphere2.targetBone=bone;
+			if(!sphere2.isRoot)
+				sphere2.positionTargetBone=bone;
 		
+			
 			var constraint=scope.makeConstraint(sphere1,sphere2,group);
 			sphere2.getMesh().userData.constraint=constraint;
 			sphere2.getMesh().userData.dof=constraint.constraint;
 			sphere2.getMesh().userData.sphere1=sphere1;
 			
+		}else{
+			console.error("no sphere2",boneName);
 		}
 		
 		
@@ -282,16 +325,20 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 		 size=this.minSize;
 	 }
 	 
-	 var group=1;
-	 
+	 var group=0;
 	 var mask=0;
-	 colliders.forEach(function(index){
-		var bit= 1<<(index+1);
-		mask=mask | bit;
-	 });
-	 
-	 if(this.logging)
-		 console.log("sphere mask",mask,colliders);
+	 if(colliders){
+		 group=1;
+		 
+		 colliders.forEach(function(index){
+				var bit= 1<<(index+1);
+				mask=mask | bit;
+			 });
+			 
+			 if(this.logging)
+				 console.log("sphere mask",mask,colliders);
+			
+	 }
 	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
 						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group,mask
@@ -334,7 +381,7 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	 var diff=box2Pos.sub(box1Pos);
 	
 	 box2.parent=box1;
-	 box2.maxDistance=new THREE.Vector3().distanceTo(diff)*this.maxDistanceRatio;
+	 box2.defaultDistance=new THREE.Vector3().distanceTo(diff);
 	
 	 
 	 var body=box2.getBody();
@@ -458,7 +505,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 	
 	if(this.enableLimitDistance){
 		this.allSpheres.forEach(function(sphere){
-			if(sphere.parent){
+			if(sphere.parent && !sphere.isRoot){
 				var parent=sphere.parent;
 				var parentPos;
 				if(parent.syncWorldMatrix){
@@ -466,23 +513,33 @@ SecondaryAnimationControler.prototype.update=function(force){
 				}else{
 					parentPos=parent.getMesh().position;
 				}
-					 
+				var childPos;
+				if(sphere.syncWorldMatrix){
+					childPos=new THREE.Vector3().setFromMatrixPosition(sphere.getMesh().matrixWorld);
+				}else{
+					childPos=sphere.getMesh().position;
+				}
 				
-				var distance=sphere.getMesh().position.clone().distanceTo(parentPos);
-				
-				if(distance>sphere.maxDistance){
+				var distance=childPos.clone().distanceTo(parentPos);
+				var max=sphere.defaultDistance*scope.maxDistanceRatio;
+				if(distance>max){
+					
 					
 					//console.log("max",sphere.name);
-					var divided=distance/sphere.maxDistance;
+					var divided=distance/max;
 					var diff=sphere.getMesh().position.clone().sub(parentPos);
 					diff.divideScalar(divided).add(parentPos);
 					
 					AmmoUtils.setPosition(sphere.getBody(),diff.x,diff.y,diff.z);
 					sphere.syncTransform(scope.ap.ammoControler);
 					
-					AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-					AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-					console.log("reset",sphere.name);
+					if(scope.clearForceWhenResetted){
+						AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+						AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+					}
+					
+					if(scope.logging)
+					console.log("reset",sphere.name,max,distance);
 				}
 			}
 		});
@@ -511,17 +568,26 @@ SecondaryAnimationControler.prototype.update=function(force){
 SecondaryAnimationControler.prototype.updateSpringValues=function(){
 	this.setSpringValues(this.baseStiffiness,this.damping,this.bodyDamping);
 }
+SecondaryAnimationControler.prototype.calculateBodyDamping=function(dragForce,bodyDamping){
+	if(this.isEffectDragForceBodyDamping){
+		return 1.0-dragForce;
+	}else{
+		return bodyDamping;
+	}
+}
+
+SecondaryAnimationControler.prototype.updateBodyDamping=function(box){
+	var value=this.calculateBodyDamping(box.getMesh().userData.group.dragForce,this.bodyDamping);
+	
+	box.getBody().setDamping(value,value);
+}
 SecondaryAnimationControler.prototype.setSpringValues=function(baseStiffiness,damping,bodyDamping){
 	var scope=this;
 	function change(box){
 		var dof=box.getMesh().userData.dof;
 		var stiffiness=box.getMesh().userData.group.stiffiness;
-		var bdamping;
-		if(scope.isEffectDragForceBodyDamping){
-			 bdamping=1.0-box.getMesh().userData.group.dragForce;
-		}else{
-			bdamping=bodyDamping;
-		}
+		
+		scope.updateBodyDamping(box);
 		//var bdamping=1.0-box.getMesh().userData.group.dragForce;
 		if(dof){
 			var sf=baseStiffiness*stiffiness;
@@ -529,9 +595,8 @@ SecondaryAnimationControler.prototype.setSpringValues=function(baseStiffiness,da
 			AmmoUtils.seteAllStiffness(dof,sf);
 			AmmoUtils.seteAllDamping(dof,damping);
 			
-			box.getBody().setDamping(bdamping,bdamping);
-			if(box.getMesh().userData.sphere1)
-				box.getMesh().userData.sphere1.getBody().setDamping(bdamping,bdamping);
+			
+			
 		}
 		
 	}

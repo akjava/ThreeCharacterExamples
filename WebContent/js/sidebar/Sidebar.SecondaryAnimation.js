@@ -318,8 +318,12 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	
 	var distanceRatio=new UI.NumberButtons("ratio",1,10,1,ap.secondaryAnimationControler.maxDistanceRatio,function(v){
 		ap.secondaryAnimationControler.maxDistanceRatio=v;
-	},[1,1.5,2]);
+	},[1,1.1,1.5,2]);
 	div.add(distanceRatio);
+	var clearForceWhenResetted=new UI.CheckboxRow("Clear Force",ap.secondaryAnimationControler.clearForceWhenResetted,function(v){
+		ap.secondaryAnimationControler.clearForceWhenResetted=v;
+	});
+	div.add(clearForceWhenResetted);
 	
 	return panel;
 }
