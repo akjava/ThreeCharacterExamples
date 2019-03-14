@@ -76,6 +76,8 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	},[0.1,1,10]);
 	settings.add(secondaryAnimationMass);
 	
+	/*
+	 * useless anymore
 	var endSiteCheck=new UI.CheckboxRow("Add Endsite",ap.secondaryAnimationControler.addEndsite,function(v){
 		ap.secondaryAnimationControler.addEndsite=v;
 	});
@@ -91,17 +93,18 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	});
 	sphere2Check.add(rootStaticCheck);
 	rootStaticCheck.text.setWidth("90px");
+	*/
 	
 	var connectHCheck=new UI.CheckboxRow("connect-h",ap.secondaryAnimationControler.connectHorizontal,function(v){
 		ap.secondaryAnimationControler.connectHorizontal=v;
 	});
 	connectHCheck.text.setWidth("90px");
 	settings.add(connectHCheck);
-	var autoSetUpCheck=new UI.CheckboxSpan("autoSetUp",ap.secondaryAnimationControler.autoSetUp,function(v){
+	/*var autoSetUpCheck=new UI.CheckboxSpan("autoSetUp",ap.secondaryAnimationControler.autoSetUp,function(v){
 		ap.secondaryAnimationControler.autoSetUp=v;
 	});
 	autoSetUpCheck.text.setWidth("90px");
-	connectHCheck.add(autoSetUpCheck);
+	connectHCheck.add(autoSetUpCheck);*/
 	
 	
 	

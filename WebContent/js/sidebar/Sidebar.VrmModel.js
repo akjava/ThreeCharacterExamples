@@ -8,7 +8,7 @@ Sidebar.VrmModel = function ( application ) {
 	this.modelBase="../../../dataset/vrm/";
 
 	//TODO arg
-	var itemList=["Alicia/AliciaSolid.vrm"];
+	var itemList=["Alicia/AliciaSolid.vrm","3207836450134888583.vrm"];
 	application.defaultModelUrl=scope.modelBase+itemList[0];
 	application.modelUrl=application.defaultModelUrl;
 	

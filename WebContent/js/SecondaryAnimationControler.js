@@ -50,6 +50,7 @@ var SecondaryAnimationControler=function(ap){
 	this.isEffectDragForceBodyDamping=true;
 	this.isEffectDragForceAngle=true;
 	
+	this.isSyncPosition=false;
 	
 	this.autoSetUp=false;
 	
@@ -91,7 +92,7 @@ SecondaryAnimationControler.prototype.getRootSphere=function(parentName,hitR,gro
 	var scope=this;
 	var cache=this._rootSpheres[parentName];
 	if(cache){
-		console.log("exist in cache",parentName,cache.name);
+	//	console.log("exist in cache",parentName,cache.name);
 		return cache;
 	}
 		
@@ -113,7 +114,7 @@ SecondaryAnimationControler.prototype.getRootSphere=function(parentName,hitR,gro
 	sphere.syncTransform(scope.ammoControler);
 	sphere.isRoot=true;
 	
-	console.log("no cache create",sphere.name);
+	//console.log("no cache create",sphere.name);
 	this._rootSpheres[parentName]=sphere;
 	return sphere;
 }
@@ -196,6 +197,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			}
 			
 			var mass=isRootStatic&&isRoot?0:defaultMass;
+			
 			var sphere=scope.createSphereBox(hitR,mass,position,isRoot?null:group.colliderGroups);//no 0 style not good at skirt
 			sphere.getMesh().userData.group=group;
 			scope.updateBodyDamping(sphere);
@@ -297,7 +299,8 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			sphere2.name=sphere2.name+":"+bone.name+"-rot";
 			
 			sphere2.targetBone=bone;
-			if(!sphere2.isRoot)
+			
+			if(!sphere2.isRoot && scope.isSyncPosition)
 				sphere2.positionTargetBone=bone;
 		
 			
@@ -717,6 +720,7 @@ SecondaryAnimationControler.prototype.newColliderGroups=function(){
 
 }
 
+
 SecondaryAnimationControler.prototype.parse=function(vrm){
 	var scope=this;
 	var nodes=vrm.parser.json.nodes;
@@ -751,8 +755,11 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 	
 	this.boneGroups=[];
 	
+	var tmp={};
 	secondaryAnimation.boneGroups.forEach(function(group){
 		var bones=group.bones;
+		
+		
 		
 		var linkList=[];
 		
@@ -765,7 +772,16 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 			
 		});
 		
-		scope.boneGroups.push(new BodyGroup(linkList,group))
+		var group=new BodyGroup(linkList,group);
+		var key=group.toBoneKey();
+		if(!tmp[key]){
+			scope.boneGroups.push(group);
+			tmp[key]=true;
+		}else{
+			console.log("SecondaryAnimationControler.parse:Bone Group exist skipped",key,group);
+		}
+		
+		
 	});
 	
 	
@@ -794,6 +810,21 @@ var BodyGroup=function(boneLinkList,raw){
 	this.dragForce=raw.dragForce;//drag force not used yet.
 	this.defaultDragForce=this.dragForce;
 };
+
+BodyGroup.prototype.toBoneKey=function(){
+	var bones=this.raw.bones;
+	var result="";
+	for(var i=0;i<bones.length;i++){
+		var index=bones[i];
+		if(i!=0){
+			result+=",";
+		}
+		result+=index;
+	}
+	return result;
+}
+
+
 SecondaryAnimationControler.prototype.getColliderGroupName=function(index){
 	var cgroup=this.colliderGroups[index];
 	if(!cgroup){
