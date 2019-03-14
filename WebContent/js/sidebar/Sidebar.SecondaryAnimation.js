@@ -76,36 +76,20 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	},[0.1,1,10]);
 	settings.add(secondaryAnimationMass);
 	
-	/*
-	 * useless anymore
-	var endSiteCheck=new UI.CheckboxRow("Add Endsite",ap.secondaryAnimationControler.addEndsite,function(v){
-		ap.secondaryAnimationControler.addEndsite=v;
+
+	var isSyncPosition=new UI.CheckboxRow("sync-pos",ap.secondaryAnimationControler.isSyncPosition,function(v){
+		ap.secondaryAnimationControler.isSyncPosition=v;
 	});
-	settings.add(endSiteCheck);
+	isSyncPosition.text.setWidth("70px");
+	isSyncPosition.checkbox.setMarginRight("20px");
+	settings.add(isSyncPosition);
 	
-	var sphere2Check=new UI.CheckboxRow("rot-sphere2",ap.secondaryAnimationControler.targetSphere2,function(v){
-		ap.secondaryAnimationControler.targetSphere2=v;
-	});
-	sphere2Check.text.setWidth("90px");
-	settings.add(sphere2Check);
-	var rootStaticCheck=new UI.CheckboxSpan("root-static",ap.secondaryAnimationControler.isRootStatic,function(v){
-		ap.secondaryAnimationControler.isRootStatic=v;
-	});
-	sphere2Check.add(rootStaticCheck);
-	rootStaticCheck.text.setWidth("90px");
-	*/
-	
-	var connectHCheck=new UI.CheckboxRow("connect-h",ap.secondaryAnimationControler.connectHorizontal,function(v){
+	var connectHCheck=new UI.CheckboxSpan("connect-h",ap.secondaryAnimationControler.connectHorizontal,function(v){
 		ap.secondaryAnimationControler.connectHorizontal=v;
 	});
-	connectHCheck.text.setWidth("90px");
-	settings.add(connectHCheck);
-	/*var autoSetUpCheck=new UI.CheckboxSpan("autoSetUp",ap.secondaryAnimationControler.autoSetUp,function(v){
-		ap.secondaryAnimationControler.autoSetUp=v;
-	});
-	autoSetUpCheck.text.setWidth("90px");
-	connectHCheck.add(autoSetUpCheck);*/
-	
+	connectHCheck.text.setWidth("70px");
+	isSyncPosition.add(connectHCheck);
+
 	
 	
 	settings.add(new UI.Subtitle("Factor Limit Rotation"));
@@ -186,10 +170,11 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 			groupStiffness.setValue(NaN);
 			groupDragForce.setValue(NaN);
 			groupHitRadius.setValue(NaN);
+			ammoMass.setValue(NaN);
 			groupStiffness.setDisabled(true);
 			groupDragForce.setDisabled(true);
 			groupHitRadius.setDisabled(true);
-			
+			ammoMass.setDisabled(true);
 			
 			
 			return;
@@ -214,9 +199,12 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		groupStiffness.setValue(group.stiffiness);
 		groupDragForce.setValue(group.dragForce);
 		groupHitRadius.setValue(group.hitRadius);
+		ammoMass.setValue(group.AMMO_mass?group.AMMO_mass:NaN);
+		
 		groupStiffness.setDisabled(false);
 		groupDragForce.setDisabled(false);
 		groupHitRadius.setDisabled(false);
+		ammoMass.setDisabled(false);
 	}
 	
 	
@@ -227,7 +215,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		ap.secondaryAnimationControler.updateSpringValues();
 	},[0,0.5,1]);
 	bodyGroup.add(groupStiffness);
-	groupStiffness.text.setWidth("70px");
+	groupStiffness.text.setWidth("75px");
 	var resetBt=new UI.Button("Rest").onClick(function(){
 		if(!getCurrentGroup())
 			return;
@@ -246,7 +234,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	},[0.01,0.1]);
 	groupHitRadius.number.precision=3;
 	bodyGroup.add(groupHitRadius);
-	groupHitRadius.text.setWidth("70px");
+	groupHitRadius.text.setWidth("75px");
 	var resetBt=new UI.Button("Rest").onClick(function(){
 		if(!getCurrentGroup())
 			return;
@@ -265,7 +253,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		//ap.secondaryAnimationControler.updateSpringValues();
 	},[0,0.5,1]);
 	bodyGroup.add(groupDragForce);
-	groupDragForce.text.setWidth("70px");
+	groupDragForce.text.setWidth("75px");
 	var resetBt=new UI.Button("Rest").onClick(function(){
 		if(!getCurrentGroup())
 			return;
@@ -278,6 +266,26 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	resetBt.setFontSize("6px");
 	groupDragForce.add(resetBt);
 	groupDragForce.setDisabled(true);
+	
+	
+	var ammoMass=new UI.NumberButtons("AmmoMass",0,10,.1,NaN,function(v){
+		getCurrentGroup().AMMO_mass=v;
+		//no effect
+		//ap.secondaryAnimationControler.updateSpringValues();
+	},[0,0.01,0.1]);
+	bodyGroup.add(ammoMass);
+	ammoMass.text.setWidth("75px");
+	var resetBt=new UI.Button("Rest").onClick(function(){
+		if(!getCurrentGroup())
+			return;
+		var v=NaN;
+		ammoMass.setValue(v);
+		getCurrentGroup().AMMO_mass=v;
+		
+	});
+	resetBt.setFontSize("6px");
+	ammoMass.add(resetBt);
+	ammoMass.setDisabled(true);
 	
 	bodyGroup.add(new UI.Subtitle("Bones"));
 	var boneNames=new UI.Row();

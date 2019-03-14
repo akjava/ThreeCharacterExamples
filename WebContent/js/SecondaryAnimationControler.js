@@ -36,23 +36,13 @@ var SecondaryAnimationControler=function(ap){
 	this.enableLimitDistance=true;
 	this.clearForceWhenResetted=true;
 	
-	this.addEndsite=false;
-	
-	
-	this.targetSphere2=false;
-	this.isRootStatic=false;
-	
-	this.endSiteRatio=0.5;
-	
 	this.connectHorizontal=false;
 	this.hconstraint=[];
 	
 	this.isEffectDragForceBodyDamping=true;
 	this.isEffectDragForceAngle=true;
 	
-	this.isSyncPosition=false;
-	
-	this.autoSetUp=false;
+	this.isSyncPosition=true;
 	
 	this._rootSpheres={};
 	
@@ -140,24 +130,8 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	
 	var isRootStatic=this.isRootStatic;
 	
-	var defaultMass=this.mass;
-	
-	if(this.autoSetUp){
-		console.error("never happen");
-		if(links.length==1){
-			addEndsite=true;
-			targetSphere2=true;
-		}
-		if(links.length==2){
-			targetSphere2=true;
-		}
-		
-		if(links.length>3){
-			isRootStatic=false;
-			defaultMass=this.mass*links.length+2;
-		}
-		
-	}
+	var mass=group.AMMO_mass>0?group.AMMO_mass:this.mass;
+	console.log(mass);
 	
 	var spheres=[];
 	
@@ -196,7 +170,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				position=bonePosition;
 			}
 			
-			var mass=isRootStatic&&isRoot?0:defaultMass;
+			
 			
 			var sphere=scope.createSphereBox(hitR,mass,position,isRoot?null:group.colliderGroups);//no 0 style not good at skirt
 			sphere.getMesh().userData.group=group;
@@ -209,14 +183,11 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			if(isRoot){
 				//Mesh to Body
 				rootContainer.add(sphere.getMesh());
-				if(!isRootStatic){
-					AmmoUtils.setLinearFactor(sphere.getBody(),1,1,1);
-					AmmoUtils.setAngularFactor(sphere.getBody(),1,1,1);
-					sphere.syncBone=true;
-					sphere.rotationSync=false;
-				}else{
-					console.error("never happen");
-				}
+				
+				AmmoUtils.setLinearFactor(sphere.getBody(),0,0,0);
+				AmmoUtils.setAngularFactor(sphere.getBody(),1,1,1);
+				sphere.syncBone=true;
+				sphere.rotationSync=false;
 					
 				
 				sphere.syncWorldMatrix=true;
@@ -258,39 +229,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		
 		if(i<spheres.length-1){
 			sphere2=spheres[i+1];
-		}else{
-			//create endsite
-			if(addEndsite){
-				console.error("never happen");
-				var parentName=bone.parent.name;
-				var parentPos=bac.getContainerByBoneName(parentName).position.clone();
-				var bonePos=bac.getContainerByBoneName(boneName).position.clone();
-				var endSitePos=bonePos.clone().sub(parentPos).multiplyScalar(this.endSiteRatio).add(bonePos);
-				sphere2=this.createSphereBox(hitR,scope.mass,endSitePos,group.colliderGroups);
-				scope.allSpheres.push(sphere2);
-				sphere2.syncBone=true;
-				sphere2.syncWorldMatrix=false;
-				sphere2.syncTransform(scope.ammoControler);
-				sphere2.getMesh().updateMatrixWorld(true);
-				isLeaf=true;
-				sphere2.getMesh().userData.group=group;
-				
-				//I'm not sure
-				sphere2.getBody().setDamping(bodyDamping,bodyDamping);
-			}
-			
 		}
-		/*if(targetSphere2){
-			console.error("never happen")
-			if(sphere2!=null)
-				sphere2.targetBone=bone;
-		}else
-			sphere1.targetBone=bone;
-		
-		if(!sphere1.isRoot)
-			sphere1.positionTargetBone=bone;*/
-		
-		//set 2 only
 		
 		
 		bone.userData.defaultPosition=bone.position.clone();//maybe reset problem is here
@@ -809,6 +748,8 @@ var BodyGroup=function(boneLinkList,raw){
 	this.defaultStiffiness=this.stiffiness;
 	this.dragForce=raw.dragForce;//drag force not used yet.
 	this.defaultDragForce=this.dragForce;
+	
+	this.AMMO_mass=undefined;
 };
 
 BodyGroup.prototype.toBoneKey=function(){
