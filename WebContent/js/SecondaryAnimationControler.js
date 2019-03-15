@@ -2,7 +2,8 @@
  * for vrm
  */
 var SecondaryAnimationControler=function(ap){
-	this.ap=ap
+	this.ap=ap;
+	var scope=this;
 	this._pos=new THREE.Vector3();
 	
 	this.logging=true;
@@ -48,7 +49,15 @@ var SecondaryAnimationControler=function(ap){
 	
 	this._rootSpheres={};
 	
-	this.enableFollowBoneAttach=true;
+	this.enableFollowBoneAttach=false;
+	
+	this.onNeedFollowBone=function(){
+		scope.enableFollowBoneAttach=true;
+		
+		//scope.update(true);
+	};
+	
+
 	
 	//add EndSite to Alicia Ribbon 
 	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
@@ -62,6 +71,10 @@ var SecondaryAnimationControler=function(ap){
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
+	this.ap.getSignal("boneRotationChanged").add(this.onNeedFollowBone);
+	this.ap.getSignal("boneTranslateChanged").add(this.onNeedFollowBone);
+	this.ap.getSignal("meshTransformChanged").add(this.onNeedFollowBone);
+	
 	var scope=this;
 	this.ammoControler=ammoControler;
 	this.boneAttachControler=boneAttachControler;
@@ -480,7 +493,11 @@ SecondaryAnimationControler.prototype._destroySecondaryAnimation=function(){
 
 SecondaryAnimationControler.prototype.dispose=function(){
 	 this._destroySecondaryAnimation();
-	
+	 this.ap.getSignal("boneRotationChanged").remove(this.onNeedFollowBone);
+	 this.ap.getSignal("boneTranslateChanged").remove(this.onNeedFollowBone);
+	 this.ap.getSignal("meshTransformChanged").remove(this.onNeedFollowBone);
+	 
+	 
 }
 
 /*SecondaryAnimationControler.prototype.getDistance=function(isBreastR){
@@ -510,7 +527,9 @@ SecondaryAnimationControler.prototype.update=function(force){
 	/*
 	 * not so good
 	 */
-	/*if(this.enableFollowBoneAttach){
+	if(this.enableFollowBoneAttach){//set true via boneRotationChanged;
+		if(this.logging)
+		console.log("enableFollowBoneAttach");
 		this.allSpheres.forEach(function(sphere){
 				if(sphere.positionTargetBone){
 					 var bone=sphere.positionTargetBone;
@@ -527,11 +546,16 @@ SecondaryAnimationControler.prototype.update=function(force){
 						sphere.body.setCenterOfMassTransform(transform);
 						sphere.body.getMotionState().setWorldTransform(transform);
 						sphere.syncTransform(scope.ap.ammoControler);
-						AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-						AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+						//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+						//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 				}
+				
+				AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+				AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 			});
-	}*/
+		
+		this.enableFollowBoneAttach=false;
+	}
 	
 	if(this.enableLimitDistance){
 		this.allSpheres.forEach(function(sphere){

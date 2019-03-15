@@ -20,6 +20,7 @@ var Sidebar = function ( application ) {
 	titlePanel.add(absoluteRotateDiv);
 	ap.getSignal("objectRotated").add(function(x,y,z){
 		ap.skinnedMesh.rotation.set(THREE.Math.degToRad(x),THREE.Math.degToRad(y),THREE.Math.degToRad(z));
+		ap.getSignal("meshTransformChanged").dispatch();
 	});
 	
 	
