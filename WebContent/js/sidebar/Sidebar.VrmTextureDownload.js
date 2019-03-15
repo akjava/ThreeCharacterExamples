@@ -25,13 +25,27 @@ Sidebar.VrmTextureDownload=function(ap){
 		itemList.setOptions(keys);
 	});
 	
-	var checkRow=new UI.CheckboxRow("Visible",false,function(v){
+	var row=new UI.Row();
+	container.add(row);
+	var checkRow=new UI.CheckboxSpan("Visible",false,function(v){
 		var value=itemList.getValue();
 		var target=ap.skinnedMesh.getObjectById(Number(value));
 		target.material.visible=v;
 	});
+	checkRow.text.setWidth("50px");
+	checkRow.checkbox.setMarginRight("16px");
+	row.add(checkRow);
 	
-	container.add(checkRow);
+
+	
+	var wireRow=new UI.CheckboxSpan("Wireframe",false,function(v){
+		var value=itemList.getValue();
+		var target=ap.skinnedMesh.getObjectById(Number(value));
+		target.material.wireframe=v;
+	});
+	wireRow.text.setWidth("70px");
+	
+	row.add(wireRow);
 	
 	function getMaterial(){
 		var value=itemList.getValue();
@@ -42,13 +56,6 @@ Sidebar.VrmTextureDownload=function(ap){
 		return target.material
 	}
 	
-	var wireRow=new UI.CheckboxRow("Wireframe",false,function(v){
-		var value=itemList.getValue();
-		var target=ap.skinnedMesh.getObjectById(Number(value));
-		target.material.wireframe=v;
-	});
-	
-	container.add(wireRow);
 	
 	
 	var download=new UI.ButtonRow("Download Selected Texture",function(){
@@ -66,15 +73,7 @@ Sidebar.VrmTextureDownload=function(ap){
 	});
 	container.add(download);
 	
-	var test=new UI.ButtonRow("tmp",function(){
-		
-		var value=itemList.getValue();
-		var target=ap.skinnedMesh.getObjectById(Number(value));
-		console.log(target.material);
-		var map=target.material.map;
-		target.material=new THREE.MeshBasicMaterial({color:target.material.color.getHex(),map:map});
-	});
-	container.add(test);
+
 
 	
 	

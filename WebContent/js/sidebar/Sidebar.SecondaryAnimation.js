@@ -15,11 +15,12 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	checkRow.add(stepBt);
 	stepBt.button.setDisabled(true);
 	
-	var stepSEBt=new UI.ButtonSpan("Step SE",function(){
+	//useless so far
+	/*var stepSEBt=new UI.ButtonSpan("Step SE",function(){
 	    ap.boneAttachControler.update(true);
 		ap.secondaryAnimationControler.update(true);
 	});
-	checkRow.add(stepSEBt);
+	checkRow.add(stepSEBt);*/
 	
 	var buttonRow=new UI.ButtonRow("New SecondaryAnimation",function(){
 		ap.getSignal("objectRotated").dispatch(0,0,0);
@@ -312,7 +313,8 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 			if(groups[i].boneLinkList.length>0){
 				if(groups[i].boneLinkList[0].length>0){
 					var boneName=groups[i].boneLinkList[0][0];
-					options[String(i)]=boneName+" +";
+					var depth=groups[i].boneLinkList[0].length;
+					options[String(i)]=boneName+" ("+depth+")";
 				}else{
 					console.log("empty boneLinkList",group);
 				}

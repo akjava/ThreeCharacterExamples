@@ -5,7 +5,7 @@ var SecondaryAnimationControler=function(ap){
 	this.ap=ap
 	this._pos=new THREE.Vector3();
 	
-	this.logging=false;
+	this.logging=true;
 	
 	this.lockX=false;
 	this.lockY=false;
@@ -16,6 +16,7 @@ var SecondaryAnimationControler=function(ap){
 	this.allowAngleZ=60;
 	
 	this.baseHitRadius=75;
+	
 	this.baseStiffiness=250;
 	
 	this.damping=1;
@@ -56,6 +57,8 @@ var SecondaryAnimationControler=function(ap){
 	
 	//TODO try to stable
 	//this.ends=[];
+	
+	this._ammoBodyDepthTest=true;
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
@@ -317,6 +320,7 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 		 size=this.minSize;
 	 }
 	 
+	
 	 var group=0;
 	 var mask=0;
 	 if(colliders){
@@ -327,17 +331,16 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 				mask=mask | bit;
 			 });
 		 
-		 mask+=1;
+		// mask+=1;
 		 
 			 if(this.logging)
 				 console.log("sphere mask",bodyGroup.boneLinkList[0][0],mask,colliders);
 			
 	 }
 	 
-
 	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
-						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group,mask
+						new THREE.MeshPhongMaterial({color:color,depthTest:this._ammoBodyDepthTest,transparent:!this._ammoBodyDepthTest,opacity:.5}),group,mask
 				);
 	 return sphere;
 }
@@ -358,7 +361,7 @@ SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass
 	 }
 	 
 	 var group=1<<(index+1);
-	 
+	 var mask=1;//very important
 	 if(this.logging)
 		 console.log("collider",boneName,"index",index,"group",group);
 
@@ -367,8 +370,9 @@ SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass
 	 //var mask=group+1;
 	
 	
+	
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
-						new THREE.MeshPhongMaterial({color:color,depthTest:false,transparent:true,opacity:.5}),group
+						new THREE.MeshPhongMaterial({color:color,depthTest:this._ammoBodyDepthTest,transparent:!this._ammoBodyDepthTest,opacity:.5}),group,mask
 				);
 	 return sphere;
 }

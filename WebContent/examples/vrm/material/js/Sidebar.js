@@ -12,6 +12,8 @@ var Sidebar = function ( application ) {
 	main.add(new Sidebar.VrmLicense(ap));
 	main.add(new Sidebar.VrmModel(ap));
 	
+	main.add(new Sidebar.VrmChangeMaterial(ap));
+	
 	var titlePanel=new UI.TitlePanel("Model Rotation");
 	main.add(titlePanel);
 	var absoluteRotateDiv=new AbsoluteRotateDiv(ap);
@@ -38,5 +40,8 @@ var Sidebar = function ( application ) {
 		ap.ammoControler.setVisibleAll(ap.ammoVisible);
 	}));
 	sub.add(new Sidebar.SecondaryAnimation(ap));
+	sub.add(new Sidebar.SimpleLight(ap));
+	
+	
 	return container;
 }

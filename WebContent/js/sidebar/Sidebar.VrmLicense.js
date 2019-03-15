@@ -28,14 +28,14 @@ Sidebar.VrmLicense=function(ap){
 	var contactInformationRow=new UI.Row();
 	contactInformationRow.add(new UI.Text("Contact Info").setWidth("150px"));
 	var contactInformation=new UI.Input("");
-	contactInformation.setWidth("120px");
+	contactInformation.setWidth("110px");
 	contactInformationRow.add(contactInformation);
 	container.add(contactInformationRow);
 	
 	var otherLicenseUrlRow=new UI.Row();
 	otherLicenseUrlRow.add(new UI.Text("Other License URL").setWidth("150px"));
 	var otherLicenseUrl=new UI.Input("");
-	otherLicenseUrl.setWidth("120px");
+	otherLicenseUrl.setWidth("110px");
 	otherLicenseUrlRow.add(otherLicenseUrl);
 	container.add(otherLicenseUrlRow);
 	
@@ -44,7 +44,7 @@ Sidebar.VrmLicense=function(ap){
 	otherPermissionUrlRow.add(new UI.Text("Other Permission URL").setWidth("150px"));
 	
 	var otherPermissionUrl=new UI.Input("");
-	otherPermissionUrl.setWidth("120px");
+	otherPermissionUrl.setWidth("110px");
 	otherPermissionUrlRow.add(otherPermissionUrl);
 	container.add(otherPermissionUrlRow);
 	
