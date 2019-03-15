@@ -28,6 +28,7 @@ var AmmoControler=function(object3d,world){
 	this.gravity=AmmoUtils.getGravity(world);
 	
 	this._enabled=true;
+	console.log(Ammo);
 }
 
 
@@ -269,6 +270,28 @@ createGeneric6DofSpringConstraint:function(body1,body2,frameIn1,frameIn2,disable
 	geo.vertices.push( new THREE.Vector3(  ));
 	
 	var material=new THREE.LineBasicMaterial({color:0x333333,linewidth:10});
+	
+	var joint = new THREE.Line( geo,material);
+	this.scene.add(joint);
+	
+	
+	var cm=new AmmoConstraintAndLine(constraint,joint,body1,body2);
+	this.autoSyncingConstraints.push(cm);
+	
+	return cm;
+},
+createConeTwistConstraint:function(body1,body2,frameIn1,frameIn2,disableCollisionsBetweenLinkedBodies){
+	
+	
+	var constraint= new Ammo.btConeTwistConstraint(body1.getBody(), body2.getBody(), frameIn1, frameIn2);
+	this.world.addConstraint(constraint, disableCollisionsBetweenLinkedBodies);
+	
+	
+	var geo = new THREE.Geometry();//var geo = new THREE.Geometry();
+	geo.vertices.push( new THREE.Vector3(  ));
+	geo.vertices.push( new THREE.Vector3(  ));
+	
+	var material=new THREE.LineBasicMaterial({color:0xaaaaaa,linewidth:10});
 	
 	var joint = new THREE.Line( geo,material);
 	this.scene.add(joint);

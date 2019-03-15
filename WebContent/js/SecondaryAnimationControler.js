@@ -51,23 +51,13 @@ var SecondaryAnimationControler=function(ap){
 	
 	this.enableFollowBoneAttach=false;
 	
+	this._needFollowBoneAttach=false;
 	this.onNeedFollowBone=function(){
-		scope.enableFollowBoneAttach=true;
-		
-		//scope.update(true);
+		if(this.enableFollowBoneAttach)
+			scope._needFollowBoneAttach=true;
 	};
 	
-
-	
-	//add EndSite to Alicia Ribbon 
-	//Alicia Ribbon or Skirt 's rotation get from second ammo-object(first one is no rotate)
-	//Alicia Hair root bone not staic
-	//Alicia Hair become *8 heavy
-	
-	//TODO try to stable
-	//this.ends=[];
-	
-	this._ammoBodyDepthTest=true;
+	this._ammoBodyDepthTest=false;
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
@@ -147,10 +137,6 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	var hitR=scope.baseHitRadius*hitRadius;
 	
 	
-	var targetSphere2=this.targetSphere2;
-	
-	var isRootStatic=this.isRootStatic;
-	
 	var mass=group.AMMO_mass>0?group.AMMO_mass:this.mass;
 
 	
@@ -160,6 +146,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 	
 	
 	var index=0;
+	var firstOne=false;
 	links.forEach(function(boneName){
 		var isRoot=false;
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
@@ -174,6 +161,9 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		}else{
 			var position=null;
 			var bonePosition=bac.getContainerByBoneName(boneName).position.clone();
+			
+			var test=true;
+			
 			if(rootContainer==null){
 				//create bone parent spehere
 				rootContainer=bac.getContainerByBoneName(bone.parent.name);
@@ -186,18 +176,17 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				
 				
 				isRoot=true;
-				position=bonePosition.sub(rootContainer.position.clone());
+				position=bonePosition.clone().sub(rootContainer.position.clone());
+				
+				if(!test)
+					position=bonePosition;
 			}else{
 				position=bonePosition;
 			}
 			
-			//TODO improve
-			var mas=mass;
-			var hr=hitR;
 			
-			/*//trying
-			if(!isRoot)
-				position=new THREE.Vector3();*/
+			
+			var hr=hitR;
 			
 			
 			
@@ -209,7 +198,8 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			spheres.push(sphere);
 			scope.allSpheres.push(sphere);
 			
-			if(isRoot){
+			
+			if(isRoot & test){
 				//Mesh to Body
 				rootContainer.add(sphere.getMesh());
 				
@@ -227,10 +217,12 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 				sphere.isRoot=true;
 				//
 			}else{
+				AmmoUtils.setLinearFactor(sphere.getBody(),0,0,0);
 				sphere.syncBone=true;
 				sphere.syncWorldMatrix=false;
-				sphere.getMesh().updateMatrixWorld(true);
 				sphere.syncTransform(scope.ammoControler);
+				sphere.getMesh().updateMatrixWorld(true);
+				
 				
 				/*//trying fixed position
 				var c=bac.getContainerByBoneName(bone.name);
@@ -263,9 +255,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		}
 		
 		var sphere2=null;
-		var isLeaf=false;
 		
-		sphere1.getBody().setDamping(bodyDamping,bodyDamping);//TODO check
 		
 		if(i<spheres.length-1){
 			sphere2=spheres[i+1];
@@ -357,6 +347,24 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 				);
 	 return sphere;
 }
+
+
+SecondaryAnimationControler.prototype.setAmmoDepthTest=function(value){
+	var scope=this;
+	this._ammoBodyDepthTest=value;
+	this.allSpheres.forEach(function(sphere){
+		sphere.getMesh().material.depthTest=scope._ammoBodyDepthTest;
+		sphere.getMesh().material.transparent=!scope._ammoBodyDepthTest;
+		sphere.getMesh().material.needsUpdate=true;
+	});
+	this.colliderSpheres.forEach(function(sphere){
+		sphere.getMesh().material.depthTest=scope._ammoBodyDepthTest;
+		sphere.getMesh().material.transparent=!scope._ammoBodyDepthTest;
+		sphere.getMesh().material.needsUpdate=true;
+	});
+	
+};
+		
 SecondaryAnimationControler.prototype.createColliderSphereBox=function(size,mass,position,color,collidarGroup){
 	var index=collidarGroup.colliderIndex;
 	var boneName=collidarGroup.boneName;
@@ -396,7 +404,8 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	 var box1Pos=new THREE.Vector3().setFromMatrixPosition(box1.getMesh().matrixWorld);
 	 var box2Pos=new THREE.Vector3().setFromMatrixPosition(box2.getMesh().matrixWorld);
 	 var diff=box2Pos.sub(box1Pos);
-	 
+	
+	 //diff.multiplyScalar(0.5); not good
 	
 	
 	 box2.parent=box1;
@@ -421,7 +430,7 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	var frameInB=application.ammoControler.makeTemporaryTransform();
 	AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.clone().negate());//I'm not sure use negate,but it no gravity effect than other
 	var disableCollisionsBetweenLinkedBodies=true;
-	var constraint=application.ammoControler.createGeneric6DofSpringConstraint(
+	var constraint=application.ammoControler.createGeneric6DofSpringConstraint( //no advantage using createGeneric6DofConstraint,createConeTwistConstraint
 			box2,box1, frameInA,frameInB,disableCollisionsBetweenLinkedBodies,true);
 	
 	var dof=constraint.constraint;
@@ -432,11 +441,11 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	AmmoUtils.seteAllStiffness(dof,sti);
 	AmmoUtils.seteAllDamping(dof,this.damping);
 	
-	var limit=0;//TODO
+	
+	var limit=0;
 	dof.setLinearLowerLimit(application.ammoControler.makeTemporaryVector3(-limit, -limit,-limit));
 	dof.setLinearUpperLimit(application.ammoControler.makeTemporaryVector3(limit, limit, limit));
 
-	//var group=
 	var angleX=THREE.Math.degToRad(this.allowAngleX);
 	var angleY=THREE.Math.degToRad(this.allowAngleY);
 	var angleZ=THREE.Math.degToRad(this.allowAngleZ);
@@ -447,8 +456,8 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 		angleZ*=group.dragForce;
 	}
 	
-	/*var tmp={x:angleX,y:angleY,z:angleZ};
-	AppUtils.printDeg(tmp,"final limit angle");*/
+	//var tmp={x:angleX,y:angleY,z:angleZ};
+	//AppUtils.printDeg(tmp,"final limit angle");*/
 	
 	
 	dof.setAngularLowerLimit(application.ammoControler.makeTemporaryVector3(-angleX, -angleY,-angleZ));
@@ -527,7 +536,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 	/*
 	 * not so good
 	 */
-	if(this.enableFollowBoneAttach){//set true via boneRotationChanged;
+	if(this._needFollowBoneAttach){//set true via boneRotationChanged; but this not care stretch
 		if(this.logging)
 		console.log("enableFollowBoneAttach");
 		this.allSpheres.forEach(function(sphere){

@@ -23,7 +23,7 @@ Example=function(application){
 			ap.mixer.update(delta);
 		}
 		
-		//keep distance
+		//keep distance not so good
 		if(ap.keepDistance){
 			var limitDistance=10;
 			var pos1=application.ball.getMesh().position;

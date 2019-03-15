@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("SecondaryAnimation Example on Scale 100"));
+	container.add(new UI.AppName("Vrm Material"));
 	
 	var tab=new UI.Tab(ap);
 	var main=tab.addItem("Main");
@@ -40,6 +40,11 @@ var Sidebar = function ( application ) {
 		ap.ammoVisible=v;
 		ap.ammoControler.setVisibleAll(ap.ammoVisible);
 	}));
+	panel.add(new UI.CheckboxRow("Ammo Depth Test",false,function(v){
+		ap.secondaryAnimationControler.setAmmoDepthTest(v);
+	}));
+	
+	
 	sub.add(new Sidebar.SecondaryAnimation(ap));
 	sub.add(new Sidebar.SimpleLight(ap));
 	
