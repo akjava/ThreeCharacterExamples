@@ -14,6 +14,14 @@ var AbsoluteRotateDiv=function(ap){
 		angleZ.setValue(z);
 	});
 	
+	ap.getSignal("loadingModelFinished").add(function(){
+		//rotate(),some how not stable
+		angleX.setValue(0);
+		angleY.setValue(0);
+		angleZ.setValue(0);
+	},undefined,-100);
+	
+	
 	var row=new UI.Row();
 	panel.add(row);
 	

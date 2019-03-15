@@ -26,6 +26,6 @@ Example=function(application){
 	
 	ap.getSignal("loadingModelStarted").dispatch(url);
 	
-	ap.ammoVisible=true;
+	//ap.ammoVisible=true;
 
 }

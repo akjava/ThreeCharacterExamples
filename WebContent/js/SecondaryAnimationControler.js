@@ -15,7 +15,7 @@ var SecondaryAnimationControler=function(ap){
 	this.allowAngleY=60;
 	this.allowAngleZ=60;
 	
-	this.baseHitRadius=75;
+	this.baseHitRadius=60;//not sure which one is better for everyone 50,75,100
 	
 	this.baseStiffiness=250;
 	
@@ -665,9 +665,9 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 			 scope.addBoneLinks(linkList,group.hitRadius,group,hlinks);
 		 });
 	 if(scope.connectHorizontal){
-		 if(hlinks.length>1){
-				//skip first line
-				var links=hlinks[1];
+		 if(hlinks.length>2){
+				//skip second line,first is bone static,second no positoin move
+				var links=hlinks[2];
 				var first=links[0];
 				
 				if(links.length>2){
