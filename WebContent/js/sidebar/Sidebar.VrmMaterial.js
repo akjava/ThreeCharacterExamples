@@ -51,6 +51,8 @@ Sidebar.VrmMaterial=function(ap){
 	container.add(wireRow);
 	
 	
+	
+	
 	var test=new UI.ButtonRow("test",function(){
 		var material=getMaterial();
 		console.log(material);

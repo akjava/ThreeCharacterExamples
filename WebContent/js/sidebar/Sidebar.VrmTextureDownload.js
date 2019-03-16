@@ -47,6 +47,15 @@ Sidebar.VrmTextureDownload=function(ap){
 	
 	row.add(wireRow);
 	
+	var transparentRow=new UI.CheckboxSpan("Transparent",false,function(v){
+		var value=itemList.getValue();
+		var target=ap.skinnedMesh.getObjectById(Number(value));
+		target.material.transparent=v;
+		target.material.opacity=0.5;
+	});
+	transparentRow.text.setWidth("80px");
+	row.add(transparentRow);
+	
 	function getMaterial(){
 		var value=itemList.getValue();
 		if(value==""){
