@@ -41,7 +41,7 @@ var SecondaryAnimationControler=function(ap){
 	this.connectHorizontal=false;
 	this.hconstraint=[];
 	
-	this.isEffectDragForceBodyDamping=true;
+	this.isEffectDragForceBodyDamping=false;//stop so fast
 	this.isEffectDragForceAngle=true;
 	
 	
@@ -53,7 +53,7 @@ var SecondaryAnimationControler=function(ap){
 	
 	this._needFollowBoneAttach=false;
 	this.onNeedFollowBone=function(){
-		if(this.enableFollowBoneAttach)
+		if(scope.enableFollowBoneAttach)
 			scope._needFollowBoneAttach=true;
 	};
 	
@@ -428,10 +428,10 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	 //connect
 	var frameInA=application.ammoControler.makeTemporaryTransform();
 	var frameInB=application.ammoControler.makeTemporaryTransform();
-	AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.clone().negate());//I'm not sure use negate,but it no gravity effect than other
+	AmmoUtils.copyFromVector3(frameInA.getOrigin(),diff.clone());//I'm not sure use negate,but it no gravity effect than other
 	var disableCollisionsBetweenLinkedBodies=true;
 	var constraint=application.ammoControler.createGeneric6DofSpringConstraint( //no advantage using createGeneric6DofConstraint,createConeTwistConstraint
-			box2,box1, frameInA,frameInB,disableCollisionsBetweenLinkedBodies,true);
+			box2,box1, frameInB,frameInA,disableCollisionsBetweenLinkedBodies,true);
 	
 	var dof=constraint.constraint;
 	
@@ -442,7 +442,7 @@ SecondaryAnimationControler.prototype.makeConstraint=function(box1,box2,group){
 	AmmoUtils.seteAllDamping(dof,this.damping);
 	
 	
-	var limit=0;
+	var limit=0;//TODO support
 	dof.setLinearLowerLimit(application.ammoControler.makeTemporaryVector3(-limit, -limit,-limit));
 	dof.setLinearUpperLimit(application.ammoControler.makeTemporaryVector3(limit, limit, limit));
 
@@ -539,6 +539,8 @@ SecondaryAnimationControler.prototype.update=function(force){
 	if(this._needFollowBoneAttach){//set true via boneRotationChanged; but this not care stretch
 		if(this.logging)
 		console.log("enableFollowBoneAttach");
+		
+		
 		this.allSpheres.forEach(function(sphere){
 				if(sphere.positionTargetBone){
 					 var bone=sphere.positionTargetBone;
@@ -559,11 +561,11 @@ SecondaryAnimationControler.prototype.update=function(force){
 						//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 				}
 				
-				AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-				AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+				//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+				//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 			});
 		
-		this.enableFollowBoneAttach=false;
+		this._needFollowBoneAttach=false;
 	}
 	
 	if(this.enableLimitDistance){
