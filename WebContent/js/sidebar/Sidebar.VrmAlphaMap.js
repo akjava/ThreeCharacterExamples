@@ -1,6 +1,8 @@
 Sidebar.VrmAlphaMap=function(ap){
 	var container=new UI.TitlePanel("Vrm AlphaMap");
-	
+	var row=new UI.Row();
+	container.add(row)
+	row.add(new UI.Description("Transparent body breast area"));
 	var scope=this;
 
 	
@@ -39,7 +41,7 @@ Sidebar.VrmAlphaMap=function(ap){
 	
 	this.textureBase="../../../dataset/vrm/texture/";
 	
-	var fileNames=["","alphamap1.png","alphamap_small.png","alphamap_large.png"];
+	var fileNames=["","alphamap_m.png","alphamap_s.png","alphamap_l.png","alphamap_ll.png"];
 	ap.defaultAlphaMapUrl=fileNames[0]==""?null:scope.textureBase+fileNames[0];
 	ap.alphaMapUrl=ap.defaultAlphaMapUrl;
 	
