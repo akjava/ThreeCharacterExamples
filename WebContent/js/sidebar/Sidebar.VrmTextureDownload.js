@@ -13,15 +13,11 @@ Sidebar.VrmTextureDownload=function(ap){
 		
 		checkRow.setValue(target.material.visible);
 		wireRow.setValue(target.material.wireframe);
+		transparentRow.setValue(target.material.transparent);
 	});
 	
 	ap.getSignal("loadingModelFinished").add(function(model){
-		var keys={};
-		model.traverse(function(model){
-			if(model.isSkinnedMesh){
-				keys[model.id]=model.name;
-			}
-		});
+		var keys=VrmUtils.sceneToSkinnedMeshOptions(model,true);
 		itemList.setOptions(keys);
 	});
 	

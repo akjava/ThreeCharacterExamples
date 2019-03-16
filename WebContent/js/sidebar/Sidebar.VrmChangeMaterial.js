@@ -23,16 +23,9 @@ Sidebar.VrmChangeMaterial=function(ap){
 	
 	var models=[];
 	ap.getSignal("loadingModelFinished").add(function(model){
-		var keys={};
-		models=[];
-		model.traverse(function(object){
-			if(object.isSkinnedMesh){
-				keys[object.id]=object.name;
-				models.push(object);
-			}
-			
-		});
+		var keys=VrmUtils.sceneToSkinnedMeshOptions(model,true);
 		itemList.setOptions(keys);
+		models=VrmUtils.getSkinnedMeshes(model);
 	});
 	
 	
@@ -105,6 +98,7 @@ Sidebar.VrmChangeMaterial=function(ap){
 		models.forEach(function(model){
 			if(model.name.startsWith("Hair")){
 				model.material=getMaterial(model);
+				console.log(model.material);
 			}
 		});
 		});

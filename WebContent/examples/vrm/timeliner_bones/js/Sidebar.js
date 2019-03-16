@@ -66,6 +66,12 @@ var Sidebar = function ( application ) {
 		ap.ikControlerVisible=v;
 		ap.ikControler.setVisible(v);
 	}));
+	if(ap.translateControlerVisible==undefined)
+		ap.translateControlerVisible=true;
+	panel.add(new UI.CheckboxRow("Translate Visible",ap.translateControlerVisible,function(v){
+		ap.translateControlerVisible=v;
+		ap.translateControler.setVisible(v);
+	}));
 	
 	var debug=new UI.ButtonRow("debug",function(){
 		ap.ammoControler.printCount();

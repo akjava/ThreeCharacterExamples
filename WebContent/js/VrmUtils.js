@@ -6,6 +6,78 @@ var VrmUtils={
 		getHumanoid:function(vrm){
 			return vrm.userData.gltfExtensions.VRM.humanoid;
 		},
+		getSkinnedMeshes:function(parent){
+			var models=[];
+			parent.traverse(function(model){
+				if(model.isSkinnedMesh){
+					models.push(model);
+				}
+			});
+			return models;
+		},
+		sceneToSkinnedMeshOptions:function(scene,isVroid){
+			var keys={};
+			var maxFace=0;
+			var maxFaceModel=null;
+			var maxBody=0;
+			var maxBodyModel=null;
+			
+			
+			
+			scene.traverse(function(model){
+				if(model.isSkinnedMesh){
+					var name=model.name
+					var count=model.geometry.index?model.geometry.index.count:0;
+					if(count>0){
+						name=name+"("+count+")";
+					}
+					keys[model.id]=name;
+					if(isVroid){
+						if(name.startsWith("Face")){
+							
+								//console.log(model.name,value);
+								if(maxFace<count){
+									
+									maxFace=count
+									maxFaceModel=model;
+								}
+							
+						}
+						else if(name.startsWith("Body")){
+							
+								if(maxBody<count){
+									
+									maxBody=count
+									maxBodyModel=model;
+								}
+							
+						}
+					}
+					
+				}
+			});
+			
+			function countedName(model){
+				var name=model.name;
+				var count=model.geometry.index?model.geometry.index.count:0;
+				if(count>0){
+					name=name+"("+count+")";
+				}
+				return name;
+			}
+			if(isVroid){//indicate large one
+				
+				
+				if(maxFaceModel){
+					keys[maxFaceModel.id]=countedName(maxFaceModel)+"*";
+				}
+					
+				if(maxBodyModel)
+					keys[maxBodyModel.id]=countedName(maxBodyModel)+"*";
+			}
+			
+			return keys;
+		},
 		loadVrm:function(ap,url){
 			var scope=this;
 			/*
