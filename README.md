@@ -8,10 +8,13 @@ Recently I'm porting from my GWT(Google Web Toolkit) Projects to Three.js style 
 ### Code Style
 As possible as can,Use similar three.js grammer,not using ES6 style.UI is Use from Three.js Editor source code.
 ## VRM Examples
-[VRM](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/vrm/) - Vrm 3d Character Example
-https://www.youtube.com/watch?v=HxU393uhuhI
+[![VRM Test video](http://img.youtube.com/vi/HxU393uhuhI/0.jpg)](http://www.youtube.com/watch?v=HxU393uhuhI "VRM three.js test1")
 
-##Not VRM Examples
+
+[VRM](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/vrm/) - Vrm 3d Character Example
+
+
+## Not VRM Examples
 
 [Ammo](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/ammo/) - Basic Simple Ammo Example for understand Character Animation
 [Bone](https://akjava.github.io/ThreeCharacterExamples/WebContent/examples/bone/) - Three.js Skeleton Bone System Examples
