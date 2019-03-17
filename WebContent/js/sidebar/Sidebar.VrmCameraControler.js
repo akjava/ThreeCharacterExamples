@@ -9,8 +9,8 @@ Sidebar.VrmCameraControler=function(ap){
 		ap.controls.update();
 	}
 	ap.cameraY=100;
-	ap.cameraZ=-250;
-	ap.targetY=100;
+	ap.cameraZ=-260;
+	ap.targetY=90;//TODO sync
 	
 	ap.getSignal("cameraControlerChanged").add(function(cpos,tpos){
 		

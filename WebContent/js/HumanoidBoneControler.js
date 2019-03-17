@@ -8,7 +8,7 @@ var HumanoidBoneControler=function(ap){
 	//TODO support fingers or etc
 	
 	var scope=this;
-	this.logging=true;
+	this.logging=false;
 	this.allBoneList=null;
 	this.humanoidBoneMap={};
 	this.humanoidBoneMapReverse={};
@@ -80,7 +80,8 @@ var HumanoidBoneControler=function(ap){
 			
 			scope.rootPosition.copy(scope.allBoneList[0].position);
 			
-			console.log("boneTranslateChanged",scope.rootPosition);
+			if(scope.logging)
+				console.log("boneTranslateChanged",scope.rootPosition);
 		}
 	});
 	
@@ -103,7 +104,8 @@ HumanoidBoneControler.prototype.resetBones=function(){
 			humanoidBone.position.set(0,0,0);
 		}
 	});
-	console.log("root pos reset",scope.rootPosition);
+	if(this.logging)
+		console.log("root pos reset",scope.rootPosition);
 }
 
 HumanoidBoneControler.prototype.getHumanoidBoneName=function(index){
@@ -126,7 +128,8 @@ HumanoidBoneControler.prototype.update=function(){
 	});	
 	
 	//TODO support other position;
-	console.log("root pos copied",scope.rootPosition);
+	if(this.logging)
+		console.log("root pos copied",scope.rootPosition);
 	this.allBoneList[0].position.copy(this.rootPosition);
 }
 

@@ -712,8 +712,16 @@ UI.NumberRow=function(label,min,max,step,value,onChange){
 	return new UI.NumberWidget(new UI.Row(),label,min,max,step,value,onChange);
 }
 
+UI.IntegerSpan=function(label,min,max,step,value,onChange){
+	return new UI.IntegerWidget(new UI.Span(),label,min,max,step,value,onChange);
+}
+
 UI.IntegerRow=function(label,min,max,step,value,onChange){
-	var row=new UI.Row();
+	return new UI.IntegerWidget(new UI.Row(),label,min,max,step,value,onChange);
+}
+
+UI.IntegerWidget=function(row,label,min,max,step,value,onChange){
+	
 	var text=new UI.Text(label).setWidth('90px');
 	row.add(text);
 	row.text=text;

@@ -126,7 +126,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 			console.log("bone changed",index);
 		
 		var name=getHuamnBoneName(index);
-		console.log("debug",name,index);
+		//console.log("debug",name,index);
 		if(name)
 		
 			ap.timeliner.context.dispatcher.fire('keyframe',name,true);

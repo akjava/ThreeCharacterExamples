@@ -23,7 +23,8 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 		
 		var number=parseInt(time*1000);
 		
-		var baseName=scope.fileNameAsSecond?number:scope.frameIndex;
+		console.log(scope.startIndex);
+		var baseName=scope.fileNameAsSecond?number:scope.frameIndex+scope.startIndex;
 		var fileName=scope.header+AppUtils.padNumber(baseName,5)+".png";
 		
 		
@@ -70,10 +71,17 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	var fps=new UI.NumberButtons("Fps",1,60,60,scope.fps,function(v){scope.fps=v;updateFrameNumber()},[1,10,30,60]);
 	titlePanel.add(fps);
 	
-	var frameRow=new UI.TextRow("Frames","0");
-	titlePanel.add(frameRow);
+	var row=new UI.Row();
+	titlePanel.add(row);
+	var frameRow=new UI.TextSpan("Frames","0");
+	row.add(frameRow);
 
-	
+	var startAt=new UI.IntegerSpan("StartAt",0,Infinity,1,0,function(v){
+		
+		scope.startIndex=v;
+	});
+	startAt.setMarginLeft("16px");
+	row.add(startAt);
 	
 	var options=[
 		"2560x1440","854x1440","426x720","1280x1440","720x406","1280x720","854x480","640x720","426x720","640x480"
@@ -120,7 +128,7 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	
 	
 	
-	var enableownload=new UI.CheckboxRow("Enable Download",false,function(v){
+	var enableownload=new UI.SwitchRow("Stop","Start Record",false,function(v){
 		scope.enableownload=v;
 	
 		var duration=getDuration();
@@ -150,7 +158,8 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 				c+=frametime;	
 				if(c>duration)
 					c-=duration;
-				setTimeout(seek, wait,c);
+				if(scope.enableownload)
+					setTimeout(seek, wait,c);
 			}
 			seek(c);
 		}

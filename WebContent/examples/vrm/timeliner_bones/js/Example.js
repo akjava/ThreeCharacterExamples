@@ -2,7 +2,7 @@ Example=function(application){
 	var ap=application;
 	ap.renderer.gammaOutput=true;
 	
-	//default camera
+	//default camera,TODO change by signal
 	ap.camera.position.set( 0, 100, -260 );//z is opposite
 	ap.controls.target.set(0,90,0);
 	ap.controls.update();
@@ -20,6 +20,13 @@ Example=function(application){
 	
 	
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
+	var boneFilter=function(bone){
+		//initialized on loadingModelFinished#101
+		return ap.humanoidBoneNameList.indexOf(bone.name)!=-1;
+	}
+	
+	Logics.loadingModelFinishedForRotationControler(ap,boneFilter);
+	
 	Logics.loadingModelFinishedForTranslateControler(ap);
 	Logics.loadingModelFinishedForIkControler(ap,"HumanoidIk");
 	
