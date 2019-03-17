@@ -30,9 +30,8 @@ Sidebar.BackgroundImage=function(ap){
 	}
 	ap.signals.windowResize.add(onResize);
 	
-	fileInput.onChange(function(fileName,blobUrl){
-		
-		if(blobUrl==null){
+	function loadTextureUrl(blobUrl){
+		if(!blobUrl || blobUrl==""){
 			scope.texture=null;
 			ap.scene.background =scope.defaultBackground//TODO modify
 			return;
@@ -52,9 +51,15 @@ Sidebar.BackgroundImage=function(ap){
 	       
 			ap.scene.background=texture;
 		});
-		
-       
-		
+	}
+	
+	fileInput.onChange(function(fileName,blobUrl){
+		loadTextureUrl(blobUrl);
+	});
+	
+	ap.getSignal("bgImageLoadingStarted").add(function(url){
+		console.log("bgImageLoadingStarted",url);
+		loadTextureUrl(url);
 	});
 	
 	return titlePanel;

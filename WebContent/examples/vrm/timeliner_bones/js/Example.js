@@ -3,11 +3,13 @@ Example=function(application){
 	ap.renderer.gammaOutput=true;
 	
 	//default camera
-	ap.camera.position.set( 0, 100, -250 );//z is opposite
-	ap.controls.target.set(0,100,0);
+	ap.camera.position.set( 0, 100, -260 );//z is opposite
+	ap.controls.target.set(0,90,0);
 	ap.controls.update();
 	
 	var url='../../../dataset/vrm/Alicia/AliciaSolid.vrm';
+	var url='../../../dataset/vrm/3207836450134888583.vrm';
+	
 	ap.modelUrl=ap.defaultModelUrl==undefined?url:ap.defaultModelUrl; //defaultModelUrl set by sidebar
 
 	//light
@@ -31,5 +33,7 @@ Example=function(application){
 	
 	
 	ap.getSignal("loadingModelStarted").dispatch(url);
+	
+	ap.getSignal("bgImageLoadingStarted").dispatch('../../../dataset/texture/bg/boxsky1.jpg')
 
 }

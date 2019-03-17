@@ -31,7 +31,9 @@ Sidebar.Ground=function(ap){
 	var normal=0x880000;
 	
 	var vec=THREE.Vector3();
-	function updateColor(){
+	function updateColor(){//TODO change signals?
+		if(!ap.rotationControler)
+			return;
 		Object.values(ap.rotationControler.rotationControls).forEach(function(object){
 			var pos=object.parent.position;
 			if(pos.y<scope.margin){
@@ -56,12 +58,17 @@ Sidebar.Ground=function(ap){
 		var box=ap.ikControler.boneAttachControler.boundingBox;
 		
 		var v=Math.abs(box.min.y);
-		v*=3;//magic number todo modifier
+		v*=1;//magic number todo modifier,vrm 1 is better
 		groundMargin.setValue(v);//modifer
 		scope.margin=v;
 	});
 	
 	var buttonRow=new UI.ButtonSpan("Land to Ground",function(){
+		if(ap.skinnedMesh.skeleton.poses){
+			ap.skinnedMesh.skeleton.bones[0].position.copy(ap.skinnedMesh.skeleton.poses[0]);//reset
+		}
+		ap.ikControler.boneAttachControler.update(true);
+			
 		ap.ikControler.boneAttachControler.computeBoundingBox();
 		var box=ap.ikControler.boneAttachControler.boundingBox;
 		var min=box.min.y;
@@ -71,8 +78,9 @@ Sidebar.Ground=function(ap){
 		
 		
 		pos.y=pos.y-change/ap.skinnedMesh.scale.x;
-		ap.getSignal("boneTranslateChanged").dispatch();//for translate-controler
-		ap.getSignal("boneTranslateFinished").dispatch();//for ik controler,timeliner
+		
+		ap.getSignal("boneTranslateChanged").dispatch(0);//for translate-controler
+		ap.getSignal("boneTranslateFinished").dispatch(0);//for ik controler,timeliner
 		
 	});
 	visibleRow.add(buttonRow);

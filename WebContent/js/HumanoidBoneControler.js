@@ -69,7 +69,7 @@ var HumanoidBoneControler=function(ap){
 	ap.getSignal("boneRotationChanged").add(function(index){
 		if(index){
 			var target=scope.humanoidBoneMap[String(index)];
-			console.log(target);
+			
 			if(target){
 				target.quaternion.copy(scope.allBoneList[index].quaternion);
 			}
@@ -77,7 +77,10 @@ var HumanoidBoneControler=function(ap){
 	});
 	ap.getSignal("boneTranslateChanged").add(function(index){
 		if(index==0){
+			
 			scope.rootPosition.copy(scope.allBoneList[0].position);
+			
+			console.log("boneTranslateChanged",scope.rootPosition);
 		}
 	});
 	
@@ -100,6 +103,7 @@ HumanoidBoneControler.prototype.resetBones=function(){
 			humanoidBone.position.set(0,0,0);
 		}
 	});
+	console.log("root pos reset",scope.rootPosition);
 }
 
 HumanoidBoneControler.prototype.getHumanoidBoneName=function(index){
@@ -122,6 +126,7 @@ HumanoidBoneControler.prototype.update=function(){
 	});	
 	
 	//TODO support other position;
+	console.log("root pos copied",scope.rootPosition);
 	this.allBoneList[0].position.copy(this.rootPosition);
 }
 

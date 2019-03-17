@@ -169,21 +169,30 @@ BoneAttachControler.prototype.setVisibleAll=function(visible){
 
 BoneAttachControler.prototype.computeBoundingBox=function(){
 	if(this.containerList.length<2){
-		console.log("computeBoundingBox need at least 1 bone");
+		console.log("computeBoundingBox need at least 2 bone");
 		return;
 	}
+	
+	var startIndex=1;
+	if(this.containerList[1].name=="bac-Global"){
+		startIndex=2;
+	}
+	if(this.containerList.length>2 && this.containerList[2].name=="bac-Position")
+		startIndex=3;
+		
+	
 	//ignore root
-	var pos=this.containerList[1].position;
+	var pos=this.containerList[3].position;
 	var minX=pos.x;
 	var minY=pos.y;
 	var minZ=pos.z;
 	var maxX=pos.x;
 	var maxY=pos.y;
 	var maxZ=pos.z;
-	for(var i=2;i<this.containerList.length;i++){
+	for(var i=startIndex+1;i<this.containerList.length;i++){
 		pos=this.containerList[i].position;
 		if(pos.x<minX)minX=pos.x;
-		if(pos.y<minY)minY=pos.y;
+		if(pos.y<minY){minY=pos.y;}
 		if(pos.z<minZ)minZ=pos.z;
 		if(pos.x>maxX)maxX=pos.x;
 		if(pos.y>maxY)maxY=pos.y;

@@ -26,7 +26,6 @@ var Sidebar = function ( application ) {
 	
 	var boneRotate=new Sidebar.BoneRotate(ap,false,false);
 	main.add(boneRotate);	
-	main.add(new Sidebar.BoneRotateAnimationPanel(ap));
 	
 	/*boneRotate.setGetBoneList(function(){
 		return ap.skinnedMesh.humanoidSkeleton.bones;
@@ -45,35 +44,25 @@ var Sidebar = function ( application ) {
 
 	
 	var sub=tab.addItem("Sub");
-	var panel=new UI.Panel();
-	sub.add(panel);
-	panel.add(new UI.CheckboxRow("Ammo Visible",false,function(v){
-		ap.ammoVisible=v;
-		ap.ammoControler.setVisibleAll(ap.ammoVisible);
-	}));
+
 	
-	ap.rotationControlerVisible=true;
+	/*ap.boneAttachControlerVisible=true;
 	
-	panel.add(new UI.CheckboxRow("Rotate Visible",ap.rotationControlerVisible,function(v){
-		ap.rotationControlerVisible=v;
-		ap.rotationControler.setVisible(v);
-	}));
+	panel.add(new UI.CheckboxRow("Bone Attach Visible",ap.boneAttachControlerVisible,function(v){
+		ap.boneAttachControlerVisible=v;
+		ap.boneAttachControler.setVisible(v);
+	}));*/
+	
+	sub.add(new Sidebar.VrmControlerCheck(ap));
+	
 	sub.add(new Sidebar.SecondaryAnimation(ap));
 	
-	if(ap.ikControlerVisible==undefined)
-		ap.ikControlerVisible=true;
-	panel.add(new UI.CheckboxRow("Ik Visible",ap.ikControlerVisible,function(v){
-		ap.ikControlerVisible=v;
-		ap.ikControler.setVisible(v);
-	}));
-	if(ap.translateControlerVisible==undefined)
-		ap.translateControlerVisible=true;
-	panel.add(new UI.CheckboxRow("Translate Visible",ap.translateControlerVisible,function(v){
-		ap.translateControlerVisible=v;
-		ap.translateControler.setVisible(v);
-	}));
+	sub.add(new Sidebar.TimelinerAnimationToImage(ap));
+	sub.add(new Sidebar.Ground(ap));
+	sub.add(new Sidebar.BackgroundImage(ap));
+	sub.add(new Sidebar.VrmCameraControler(ap));
 	
-	var debug=new UI.ButtonRow("debug",function(){
+	var debug=new UI.ButtonRow("debug signals",function(){
 		ap.ammoControler.printCount();
 		
 		AppUtils.printTotalSignalCounts(ap);

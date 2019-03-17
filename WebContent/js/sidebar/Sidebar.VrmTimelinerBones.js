@@ -6,6 +6,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 	var scope=this;
 	this.logging=false;
 	
+	
 	function copyFrame(key){
 		var value;
 		var boneList=ap.humanoidBoneControler.humanoidBones;
@@ -153,9 +154,10 @@ Sidebar.VrmTimelinerBones=function(ap){
 			ap.getSignal("poseChanged").dispatch();
 			ap.getSignal("poseChanged").add(onPoseChanged);
 			
-			ap.getSignal("timelinerSeeked").dispatch(time);
+			
 			//ap.skinnedMesh.updateMatrixWorld(true);
-			ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
+			//ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
+			ap.getSignal("timelinerSeeked").dispatch(time);
 		}
 		
 		

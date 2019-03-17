@@ -10,7 +10,7 @@ Sidebar.AnimationToImagePanel=function(ap){
 	this.resolution="720x406";
 	this.startIndex=0;
 	this.header="";
-	this.autoDownload=false;
+	this.autoDownload=true;
 	
 	function makeDataUrl(){
 		scope.started=true;

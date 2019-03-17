@@ -817,6 +817,7 @@ SecondaryAnimationControler.prototype.parse=function(vrm){
 			scope.boneGroups.push(group);
 			tmp[key]=true;
 		}else{
+			if(scope.logging)
 			console.log("SecondaryAnimationControler.parse:Bone Group exist skipped",key,group);
 		}
 		

@@ -123,6 +123,8 @@ var Logics={
 				translateControler.initialize();
 				ap.translateControler=translateControler;
 				
+				if(ap.translateControlerVisible!==undefined)
+					translateControler.setVisible(ap.translateControlerVisible);
 			
 			});
 		},
