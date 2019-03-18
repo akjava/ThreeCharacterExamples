@@ -41,7 +41,7 @@ Sidebar.TextBoard=function(ap){
 	updateCanvas("hello");
 	var x=-0;
 	var y=190;
-	var z=0;
+	var z=20;
 	mesh.position.set(x,y,z);
 	
 	var xcontrol=new UI.NumberButtons("X",-1000,1000,100,x,function(v){

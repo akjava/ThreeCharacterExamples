@@ -7,13 +7,15 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	
 	this.fps=60;
 	this.loop=3;
+	this.useJsZip=false;
 	
+	//debug
 	this.fps=1;
 	this.loop=1;
-	
+	this.useJsZip=true;
 	
 	this.maxFrame=0;
-	this.resolution="2560x1440";
+	this.resolution="854x1440";
 	this.startIndex=0;
 	this.header="";
 	this.enableownload=false;
@@ -22,10 +24,11 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 
 	this.fileNameAsSecond=false;
 	this.wait=50;
-	this.useJsZip=true;
+	
 	this.jsZip=null;
 	
 
+	this.prepareTime=1000;
 	
 	function makeDataUrl(time){
 		
@@ -132,6 +135,7 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 		ap.renderer.setSize( w, h );
 	}
 	var previewBt=new UI.ButtonSpan("Preview",function(){
+		ap.getSignal("cameraControlerUpdate").dispatch();
 		updateResolution();
 		updateFrameNumber();
 	});
@@ -213,15 +217,23 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 		ap.onRender=defaultOnRender
 		
 		ap.signals.windowResize.dispatch();
+		
 	}
 	
 	var row=new UI.Row();
 	titlePanel.add(row);
 	var recordControlBt=new UI.ButtonSpan("Start Record",function(){
-		scope.enableownload=!scope.enableownload;
 		
+		
+		ap.getSignal("cameraControlerUpdate").dispatch();
+		ap.timeliner.context.dispatcher.fire("time.update",0);
+		
+		scope.enableownload=!scope.enableownload;
 		if(scope.enableownload){
-			startRecord();
+			setTimeout(function(){
+				startRecord();
+			},scope.prepareTime);
+			
 		}
 		else{	
 			stopRecord();

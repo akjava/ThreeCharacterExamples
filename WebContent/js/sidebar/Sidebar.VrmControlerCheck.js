@@ -73,10 +73,11 @@ Sidebar.VrmControlerCheck=function(ap){
 	ammo.text.setWidth("100px");
 	ammoRow.add(ammo);
 	
-	var ammoDepthTest=new UI.CheckboxSpan("Transparent",false,function(v){
+	var ammoDepthTest=new UI.CheckboxSpan("No Transparent",false,function(v){
 		ap.secondaryAnimationControler.setAmmoDepthTest(v);
 	});
-	ammoDepthTest.text.setWidth("80px");
+	ammoDepthTest.text.setWidth("100px");
+	ammoDepthTest.text.setMarginLeft("12px");
 	ammoRow.add(ammoDepthTest);
 	
 	

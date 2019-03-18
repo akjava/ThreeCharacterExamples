@@ -58,7 +58,7 @@ var Sidebar = function ( application ) {
 	sub.add(new Sidebar.SecondaryAnimation(ap));
 	
 	sub.add(new Sidebar.TimelinerAnimationToImage(ap));
-	sub.add(new Sidebar.Ground(ap));
+
 	sub.add(new Sidebar.BackgroundImage(ap));
 	sub.add(new Sidebar.VrmCameraControler(ap));
 	
@@ -70,7 +70,9 @@ var Sidebar = function ( application ) {
 	sub.add(debug);
 	
 	var sub2=tab.addItem("Sub2");
+	sub2.add(new Sidebar.Ground(ap));
 	sub2.add(new Sidebar.TextBoard(ap));
+	sub2.add(new Sidebar.TimelinerControl(ap));
 	
 	tab.select("Sub2");
 	

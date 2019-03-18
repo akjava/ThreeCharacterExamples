@@ -64,6 +64,8 @@ Sidebar.Ground=function(ap){
 	});
 	
 	var buttonRow=new UI.ButtonSpan("Land to Ground",function(){
+		var before=new THREE.Vector3().copy(ap.skinnedMesh.skeleton.bones[0].position);
+		
 		if(ap.skinnedMesh.skeleton.poses){
 			ap.skinnedMesh.skeleton.bones[0].position.copy(ap.skinnedMesh.skeleton.poses[0]);//reset
 		}
@@ -75,6 +77,8 @@ Sidebar.Ground=function(ap){
 		var change=min-scope.margin;
 		var pos=ap.skinnedMesh.skeleton.bones[0].position;
 		
+		pos.x=before.x;
+		pos.z=before.z;
 		
 		
 		pos.y=pos.y-change/ap.skinnedMesh.scale.x;

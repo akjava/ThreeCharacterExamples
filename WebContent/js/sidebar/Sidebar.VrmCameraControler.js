@@ -20,6 +20,9 @@ Sidebar.VrmCameraControler=function(ap){
 		targetY.setValue(tpos.y);
 		update();
 	})
+	ap.getSignal("cameraControlerUpdate").add(function(){
+		update();
+	})
 	var cameraX=new UI.NumberButtons("Camera X",-500,500,100,ap.cameraX,function(){
 		update();
 	},[0]);
@@ -32,7 +35,7 @@ Sidebar.VrmCameraControler=function(ap){
 	
 	titlePanel.add(cameraY);
 	
-	var cameraZ=new UI.NumberButtons("Camera Z",-500,0,100,ap.cameraZ,function(){
+	var cameraZ=new UI.NumberButtons("Camera Z",-500,500,100,ap.cameraZ,function(){
 		update();
 	},[-225,-260,-280]);
 	titlePanel.add(cameraZ);
