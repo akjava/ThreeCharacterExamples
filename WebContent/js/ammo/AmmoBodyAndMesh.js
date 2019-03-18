@@ -28,7 +28,7 @@ AmmoBodyAndMesh = function(body,mesh){
 	this._tmpQuaternion=null;
 	
 
-	this.syncBoneRatio=undefined;
+	this.syncBoneRatio=undefined;//for soften bone moving
 }
 
 Object.assign( AmmoBodyAndMesh.prototype, {
@@ -179,9 +179,11 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			
 			
 			
-			if(this.syncBoneRatio){
+			if(this.syncBoneRatio!=undefined){
+				
+				var ratio=this.syncBoneRatio;
 				var rot=this.targetBone.rotation;
-				rot.set(rot.x*syncRatio,rot.y*syncRatio,rot.z*syncRatio);
+				rot.set(rot.x*ratio,rot.y*ratio,rot.z*ratio);
 			}
 			
 			
@@ -190,9 +192,10 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 				var pos=this._position.copy(this.getMesh().position);
 				pos.applyMatrix4( new THREE.Matrix4().getInverse( matrixWorld) );
 				pos.add(this.targetBone.position);
-				if(this.syncBoneRatio){
+				if(this.syncBoneRatio!=undefined){
+					var ratio=this.syncBoneRatio;
 					var diff=pos.sub(this.targetBone.position);
-					diff.multiplyScalar(syncRatio).add(this.targetBone.position);
+					diff.multiplyScalar(ratio).add(this.targetBone.position);
 					this.targetBone.position.copy(diff);
 				}else{
 					this.targetBone.position.copy(pos);

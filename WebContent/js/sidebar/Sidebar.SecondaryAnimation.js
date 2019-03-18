@@ -124,17 +124,17 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	
 	var allowAngleX=new UI.IntegerButtons("X",0,180,10,ap.secondaryAnimationControler.allowAngleX,function(v){
 		ap.secondaryAnimationControler.allowAngleX=v;
-	},[1,15,45,90,180]);
+	},[1,15,60,90,180]);
 	allowAngleX.text.setWidth("30px");
 	settings.add(allowAngleX);
 	var allowAngleY=new UI.IntegerButtons("Y",0,180,10,ap.secondaryAnimationControler.allowAngleY,function(v){
 		ap.secondaryAnimationControler.allowAngleY=v;
-	},[1,15,45,90,180]);
+	},[1,15,60,90,180]);
 	allowAngleY.text.setWidth("30px");
 	settings.add(allowAngleY);
 	var allowAngleZ=new UI.IntegerButtons("Z",0,180,10,ap.secondaryAnimationControler.allowAngleZ,function(v){
 		ap.secondaryAnimationControler.allowAngleZ=v;
-	},[1,15,45,90,180]);
+	},[1,15,60,90,180]);
 	allowAngleZ.text.setWidth("30px");
 	settings.add(allowAngleZ);
 	
@@ -178,10 +178,12 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 			groupDragForce.setValue(NaN);
 			groupHitRadius.setValue(NaN);
 			ammoMass.setValue(NaN);
+			syncBoneRatio.setValue(NaN);
 			groupStiffness.setDisabled(true);
 			groupDragForce.setDisabled(true);
 			groupHitRadius.setDisabled(true);
 			ammoMass.setDisabled(true);
+			syncBoneRatio.setDisabled(true);
 			
 			
 			return;
@@ -207,11 +209,13 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		groupDragForce.setValue(group.dragForce);
 		groupHitRadius.setValue(group.hitRadius);
 		ammoMass.setValue(group.AMMO_mass?group.AMMO_mass:NaN);
+		syncBoneRatio.setValue(group.AMMO_syncBoneRatio?group.AMMO_syncBoneRatio:NaN);
 		
 		groupStiffness.setDisabled(false);
 		groupDragForce.setDisabled(false);
 		groupHitRadius.setDisabled(false);
 		ammoMass.setDisabled(false);
+		syncBoneRatio.setDisabled(false);
 	}
 	
 	
@@ -223,7 +227,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	},[0,0.5,1]);
 	bodyGroup.add(groupStiffness);
 	groupStiffness.text.setWidth("75px");
-	var resetBt=new UI.Button("Rest").onClick(function(){
+	var resetBt=new UI.Button("Reset").onClick(function(){
 		if(!getCurrentGroup())
 			return;
 		var v=getCurrentGroup().defaultStiffiness;
@@ -242,7 +246,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	groupHitRadius.number.precision=3;
 	bodyGroup.add(groupHitRadius);
 	groupHitRadius.text.setWidth("75px");
-	var resetBt=new UI.Button("Rest").onClick(function(){
+	var resetBt=new UI.Button("Reset").onClick(function(){
 		if(!getCurrentGroup())
 			return;
 		var v=getCurrentGroup().defaultHitRadius;
@@ -261,7 +265,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	},[0,0.5,1]);
 	bodyGroup.add(groupDragForce);
 	groupDragForce.text.setWidth("75px");
-	var resetBt=new UI.Button("Rest").onClick(function(){
+	var resetBt=new UI.Button("Reset").onClick(function(){
 		if(!getCurrentGroup())
 			return;
 		var v=getCurrentGroup().defaultDragForce;
@@ -274,25 +278,71 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	groupDragForce.add(resetBt);
 	groupDragForce.setDisabled(true);
 	
+	bodyGroup.add(new UI.Text("Ammo Specific Setting"));
 	
 	var ammoMass=new UI.NumberButtons("AmmoMass",0,10,.1,NaN,function(v){
 		getCurrentGroup().AMMO_mass=v;
 		//no effect
 		//ap.secondaryAnimationControler.updateSpringValues();
-	},[0,0.01,0.1]);
+	},[0.1,10]);
 	bodyGroup.add(ammoMass);
 	ammoMass.text.setWidth("75px");
-	var resetBt=new UI.Button("Rest").onClick(function(){
+	var resetBt=new UI.Button("Reset").onClick(function(){
 		if(!getCurrentGroup())
 			return;
 		var v=NaN;
 		ammoMass.setValue(v);
-		getCurrentGroup().AMMO_mass=v;
+		getCurrentGroup().AMMO_mass=undefined;
 		
 	});
 	resetBt.setFontSize("6px");
 	ammoMass.add(resetBt);
 	ammoMass.setDisabled(true);
+	
+	var syncBoneRatio=new UI.NumberButtons("SyncBoneRatio",0,1,.01,NaN,function(v){
+		getCurrentGroup().AMMO_syncBoneRatio=v;
+	},[0.1,1]);
+	bodyGroup.add(syncBoneRatio);
+	syncBoneRatio.text.setWidth("110px");
+	syncBoneRatio.number.setWidth("40px");
+	var resetBt=new UI.Button("Reset").onClick(function(){
+		if(!getCurrentGroup())
+			return;
+		var v=NaN;
+		syncBoneRatio.setValue(v);
+		getCurrentGroup().AMMO_syncBoneRatio=undefined;
+		
+	});
+	resetBt.setFontSize("6px");
+	syncBoneRatio.add(resetBt);
+	syncBoneRatio.setDisabled(true);
+	
+	var row=new UI.Row();
+	bodyGroup.add(row);
+	var setSyncAll=new UI.ButtonSpan("Copy SyncBoneRatio to All Hair",function(){
+		if(!getCurrentGroup())
+			return;
+		var v=getCurrentGroup().AMMO_syncBoneRatio;
+		ap.secondaryAnimationControler.boneGroups.forEach(function(group){
+			var boneName=group.boneLinkList[0][0];
+			if(boneName.startsWith("HairJoint")){
+				group.AMMO_syncBoneRatio=v;
+			}
+		});
+	});
+	row.add(setSyncAll);
+	var clearSyncAll=new UI.ButtonSpan("Clear Hair All",function(){
+		
+		ap.secondaryAnimationControler.boneGroups.forEach(function(group){
+			var boneName=group.boneLinkList[0][0];
+			if(boneName.startsWith("HairJoint")){
+				group.AMMO_syncBoneRatio=undefined;
+			}
+		});
+	});
+	//row.add(clearSyncAll);
+	
+	
 	
 	bodyGroup.add(new UI.Subtitle("Bones"));
 	var boneNames=new UI.Row();

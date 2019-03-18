@@ -245,9 +245,10 @@ createGeneric6DofConstraint:function(body1,body2,frameIn1,frameIn2,disableCollis
 	geo.vertices.push( new THREE.Vector3(  ));
 	geo.vertices.push( new THREE.Vector3(  ));
 	
-	var material=new THREE.LineBasicMaterial({color:0xaaaaaa,linewidth:10});
+	var material=new THREE.LineBasicMaterial({color:0x888888,linewidth:10});//linewidth not working on some platform
 	
 	var joint = new THREE.Line( geo,material);
+
 	this.scene.add(joint);
 	
 	

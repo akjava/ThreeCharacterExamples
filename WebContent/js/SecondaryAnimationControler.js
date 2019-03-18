@@ -194,8 +194,12 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			
 			
 			var sphere=scope.createSphereBox(hr,mass,position,isRoot?null:group);//no 0 style not good at skirt
+			 if(group){
+				 sphere.syncBoneRatio=group.AMMO_syncBoneRatio;
+			 }
 			sphere.getMesh().userData.group=group;
 			scope.updateBodyDamping(sphere);
+			
 			
 			sphere.name=boneName+"-pos";
 			spheres.push(sphere);
@@ -348,6 +352,10 @@ SecondaryAnimationControler.prototype.createSphereBox=function(size,mass,positio
 	 var sphere=this.ammoControler.createSphere(size, mass, position.x,position.y,position.z, 
 						new THREE.MeshPhongMaterial({color:color,depthTest:this._ammoBodyDepthTest,transparent:!this._ammoBodyDepthTest,opacity:.5}),group,mask
 				);
+	 
+	
+	 
+	 
 	 return sphere;
 }
 
@@ -727,11 +735,15 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	 });
 	 
 	 //debug bone linking
-	 this.allSpheres.forEach(function(sphere){
-		    var targetName=sphere.targetBone?sphere.targetBone.name:"";
-		    
-			console.log(sphere.getMesh().name,targetName,sphere.syncBone,sphere.syncBonePosition);
-		});
+	 if(this.logging){
+		 this.allSpheres.forEach(function(sphere){
+			    var targetName=sphere.targetBone?sphere.targetBone.name:"";
+			    
+			   
+				console.log(sphere.getMesh().name,targetName,sphere.syncBone,sphere.syncBonePosition);
+			});
+	 }
+	
 		
 
 		
@@ -865,6 +877,7 @@ var BodyGroup=function(boneLinkList,raw){
 	this.defaultDragForce=this.dragForce;
 	
 	this.AMMO_mass=undefined;
+	this.AMMO_syncBoneRatio=undefined;
 };
 
 BodyGroup.prototype.toBoneKey=function(){

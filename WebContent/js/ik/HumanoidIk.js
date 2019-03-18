@@ -202,7 +202,7 @@ HumanoidIk.prototype.initlimitBone=function(){
 			this.limitBone(boneList,"head",-15,-15,-20,15,15,20);
 			
 			this.limitBone(boneList,"leftShoulder",0,0,-45,0,15,0);
-			this.limitBone(boneList,"leftUpperArm",-45,-75,45,45,45,-85);
+			this.limitBone(boneList,"leftUpperArm",-45,-75,-45,45,45,85);
 			this.limitBone(boneList,"leftLowerArm",-0,-150,0,0,0,0);
 			this.limitBone(boneList,"leftHand",0,0,-45,0,45,65);
 			

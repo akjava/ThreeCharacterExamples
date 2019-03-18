@@ -69,7 +69,12 @@ var Sidebar = function ( application ) {
 	});
 	sub.add(debug);
 	
-	tab.select("Sub");
+	var sub2=tab.addItem("Sub2");
+	sub2.add(new Sidebar.TextBoard(ap));
+	
+	tab.select("Sub2");
+	
+	
 	
 	return container;
 }
