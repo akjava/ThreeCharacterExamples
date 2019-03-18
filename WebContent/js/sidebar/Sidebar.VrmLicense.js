@@ -1,7 +1,7 @@
 Sidebar.VrmLicense=function(ap){
 	var container=new UI.TitlePanel("Vrm Character License");
 	
-	
+	var vroidcom="https://hub.vroid.com/";
 	
 	var title=new UI.TextRow("Title","");
 	container.add(title);
@@ -48,11 +48,16 @@ Sidebar.VrmLicense=function(ap){
 	otherPermissionUrlRow.add(otherPermissionUrl);
 	container.add(otherPermissionUrlRow);
 	
-	
+	var permissionBt=new UI.Button("hub.vroid.com").onClick(function(){
+		window.open(otherPermissionUrl.getValue());
+	});
+	otherPermissionUrlRow.add(permissionBt);
+	permissionBt.setDisplay("none");
 	
 	
 	
 	ap.getSignal("loadingModelFinished").add(function(model){
+		
 		var meta=ap.vrm.userData.gltfExtensions.VRM.meta;
 		title.setValue(meta.title);
 		author.setValue(meta.author);
@@ -62,6 +67,13 @@ Sidebar.VrmLicense=function(ap){
 		commercialUssageName.setValue(meta.commercialUssageName);
 		otherLicenseUrl.setValue(meta.otherLicenseUrl);
 		otherPermissionUrl.setValue(meta.otherPermissionUrl);
+		if(meta.otherPermissionUrl.startsWith(vroidcom)){//easy to check
+			permissionBt.setDisplay("");
+			otherPermissionUrl.setDisplay("none");
+		}else{
+			permissionBt.setDisplay("none");
+			otherPermissionUrl.setDisplay("");
+		}
 	});
 	
 	return container;
