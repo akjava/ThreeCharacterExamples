@@ -116,35 +116,6 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 		
 		//limited working,maybe scalling
 		if(this.syncBone && this.targetBone!=null){
-			/*
-			 * why separated here.
-			 * Case:sphere1 - sphere2 -sphere3  from bone1-bone2
-			 * sphere1(static)
-			 * sphere2(dynamic containe bone1-rot,bone2-position)
-			 * sphere3(dynamic contain bone2-rot)
-			 */
-			
-			/*if(this.positionTargetBone){
-				//trying 
-				var matrixWorld=null;
-				var beforePos=this.positionTargetBone.position.clone();
-				var beforeRotq=this.positionTargetBone.quaternion.clone();
-				this.positionTargetBone.position.copy(this.positionTargetBone.userData.defaultPosition);
-				this.positionTargetBone.rotation.set(0,0,0);
-				this.positionTargetBone.updateMatrixWorld(true);
-				matrixWorld=this.positionTargetBone.matrixWorld;
-				
-				var pos=new THREE.Vector3().copy(this.getMesh().position);
-				//console.log("mesh",pos);
-				pos.applyMatrix4( new THREE.Matrix4().getInverse( matrixWorld) );
-			//	console.log("inverted",pos);
-				pos.add(this.positionTargetBone.userData.defaultPosition);
-				this.positionTargetBone.userData.needUpdatePosition=pos;
-				this.positionTargetBone.position.copy(beforePos);
-				this.positionTargetBone.quaternion.copy(beforeRotq);
-				this.positionTargetBone.updateMatrixWorld(true);
-			}*/
-			
 			
 			this.targetBone.rotation.set(0,0,0);//for vrm TODO
 			this.targetBone.position.copy(this.targetBone.userData.defaultPosition);//when made?

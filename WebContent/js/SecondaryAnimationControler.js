@@ -273,7 +273,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 			sphere2.targetBone=bone;
 			
 			if(!sphere2.isRoot && scope.isSyncPosition) //&& false
-				sphere2.positionTargetBone=bone;
+				sphere2.syncBonePosition=true;
 		
 			
 			var constraint=scope.makeConstraint(sphere1,sphere2,group);
@@ -546,8 +546,8 @@ SecondaryAnimationControler.prototype.update=function(force){
 		
 		
 		this.allSpheres.forEach(function(sphere){
-				if(sphere.positionTargetBone){
-					 var bone=sphere.positionTargetBone;
+				if(sphere.targetBone){
+					 var bone=sphere.targetBone;
 					 var bac=scope.ap.boneAttachControler;
 					 var container=bac.getContainerByBoneName(bone.name);
 					 var pos=container.position;
@@ -728,9 +728,9 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	 
 	 //debug bone linking
 	 this.allSpheres.forEach(function(sphere){
-		    var targetName=sphere.getBody().targetBone?sphere.getBody().targetBone.name:"";
-		    var posName=sphere.getBody().positionTargetBone?sphere.getBody().positionTargetBone.name:"";
-			console.log(sphere.name,targetName,posName);
+		    var targetName=sphere.targetBone?sphere.targetBone.name:"";
+		    
+			console.log(sphere.getMesh().name,targetName,sphere.syncBone,sphere.syncBonePosition);
 		});
 		
 
