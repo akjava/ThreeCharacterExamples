@@ -22,10 +22,13 @@ AmmoBodyAndMesh = function(body,mesh){
 	
 	this.syncBone=false;
 	this.targetBone=null;
+	this.syncBonePosition=false;
 	this.defaultBoneRotation=null;//not support yet
+	
 	this._tmpQuaternion=null;
-	this.parentBodyAndMesh=null;//@deprecated
-	this.parentBone=null;
+	
+
+	this.syncBoneRatio=undefined;
 }
 
 Object.assign( AmmoBodyAndMesh.prototype, {
@@ -121,7 +124,8 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			 * sphere3(dynamic contain bone2-rot)
 			 */
 			
-			if(this.positionTargetBone){
+			/*if(this.positionTargetBone){
+				//trying 
 				var matrixWorld=null;
 				var beforePos=this.positionTargetBone.position.clone();
 				var beforeRotq=this.positionTargetBone.quaternion.clone();
@@ -139,13 +143,13 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 				this.positionTargetBone.position.copy(beforePos);
 				this.positionTargetBone.quaternion.copy(beforeRotq);
 				this.positionTargetBone.updateMatrixWorld(true);
-			}
+			}*/
 			
 			
-			
-			
+			this.targetBone.rotation.set(0,0,0);//for vrm TODO
+			this.targetBone.position.copy(this.targetBone.userData.defaultPosition);//when made?
 			this.targetBone.updateMatrixWorld(true);
-			
+			var matrixWorld=this.targetBone.matrixWorld;
 			
 			
 			if(this.defaultBoneRotation==null){
@@ -178,7 +182,7 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 				var transform=this._transform;
 				this.body.getMotionState().getWorldTransform(transform);
 				//TODO support default order;
-				newQ=new THREE.Quaternion().set(transform.getRotation().x(), transform.getRotation().y(), transform.getRotation().z(), transform.getRotation().w());
+				newQ=this._tmpQuaternion.set(transform.getRotation().x(), transform.getRotation().y(), transform.getRotation().z(), transform.getRotation().w());
 				
 			}
 			
@@ -200,11 +204,33 @@ Object.assign( AmmoBodyAndMesh.prototype, {
 			
 			this.targetBone.quaternion.copy(newQ);
 			
+			//testlimit
 			
-			if(this.targetBone.userData.needUpdatePosition){
-				this.targetBone.position.copy(this.targetBone.userData.needUpdatePosition);
-				this.targetBone.userData.needUpdatePosition=null;
+			
+			
+			if(this.syncBoneRatio){
+				var rot=this.targetBone.rotation;
+				rot.set(rot.x*syncRatio,rot.y*syncRatio,rot.z*syncRatio);
 			}
+			
+			
+			
+			if(this.syncBonePosition){
+				var pos=this._position.copy(this.getMesh().position);
+				pos.applyMatrix4( new THREE.Matrix4().getInverse( matrixWorld) );
+				pos.add(this.targetBone.position);
+				if(this.syncBoneRatio){
+					var diff=pos.sub(this.targetBone.position);
+					diff.multiplyScalar(syncRatio).add(this.targetBone.position);
+					this.targetBone.position.copy(diff);
+				}else{
+					this.targetBone.position.copy(pos);
+				}
+			}
+			
+			
+		
+			
 			
 			this.targetBone.updateMatrixWorld(true);
 		}

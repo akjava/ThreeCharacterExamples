@@ -995,6 +995,9 @@ UI.TextWidget=function(row,label,text2){
 	row.setValue=function(v){
 		row.text2.setValue(v);
 	}
+	row.getValue=function(){
+		return row.text2.getValue();
+	}
 	
 	return row;
 }

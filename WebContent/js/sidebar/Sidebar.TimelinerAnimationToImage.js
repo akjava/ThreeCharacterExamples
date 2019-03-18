@@ -3,43 +3,54 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	this.frameIndex=0;
 	this.started=false;
 	this.dataUrl;
+	
+	
 	this.fps=60;
-	this.stepTime=1.0/scope.fps;
 	this.loop=3;
+	
+	this.fps=1;
+	this.loop=1;
+	
+	
 	this.maxFrame=0;
 	this.resolution="2560x1440";
 	this.startIndex=0;
 	this.header="";
 	this.enableownload=false;
-	
+
+	this.logging=false;
 
 	this.fileNameAsSecond=false;
+	this.wait=50;
+	this.useJsZip=true;
+	this.jsZip=null;
 	
+
 	
 	function makeDataUrl(time){
-		console.log("makeDataUrl",time);
+		
 		defaultOnRender();
 		var dataUrl=AppUtils.toPngDataUrl(ap.renderer);
 		
 		var number=parseInt(time*1000);
 		
-		console.log(scope.startIndex);
+		if(scope.logging)
+			console.log("makeDataUrl",time,"startIndex",scope.startIndex);
+		
 		var baseName=scope.fileNameAsSecond?number:scope.frameIndex+scope.startIndex;
 		var fileName=scope.header+AppUtils.padNumber(baseName,5)+".png";
 		
 		
-		var link=AppUtils.generateBase64DownloadLink(dataUrl,"image/png",fileName,fileName,false);
+		if(scope.useJsZip){
+			AppUtils.dataUrlToJsZip(jsZip,fileName,dataUrl);
+		}else{
+			var link=AppUtils.generateBase64DownloadLink(dataUrl,"image/png",fileName,fileName,false);
+			link.click();
+		}
 		
-		
-		
-		
-		//switch max frame
-		link.addEventListener( 'click', function ( event ) {
-			
-		} );
 		scope.frameIndex++;
 		
-		link.click();
+		
 	}
 	
 	ap.getSignal("timelinerSeeked").add(function(time){
@@ -75,11 +86,29 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	titlePanel.add(row);
 	var frameRow=new UI.TextSpan("Frames","0");
 	row.add(frameRow);
+	frameRow.text2.setWidth("40px");
 
+	var minusBt=new UI.ButtonSpan("-",function(){
+		var v=startAt.getValue();
+		v-=parseInt(frameRow.getValue());
+		v=Math.max(0,v);
+		startAt.setValue(v);
+	});
+	row.add(minusBt);
+	
+	var plusBt=new UI.ButtonSpan("+",function(){
+		var v=startAt.getValue();
+		v+=parseInt(frameRow.getValue());
+		startAt.setValue(v);
+	});
+	row.add(plusBt);
+	
 	var startAt=new UI.IntegerSpan("StartAt",0,Infinity,1,0,function(v){
 		
 		scope.startIndex=v;
 	});
+	startAt.text.setWidth("50px");
+	startAt.number.setWidth("40px");
 	startAt.setMarginLeft("16px");
 	row.add(startAt);
 	
@@ -126,53 +155,86 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	var defaultOnRender=null;
 	
 	
-	
-	
-	var enableownload=new UI.SwitchRow("Stop","Start Record",false,function(v){
-		scope.enableownload=v;
-	
-		var duration=getDuration();
-		scope.frameIndex=0;
-		if(v){
-			updateResolution();
-			updateFrameNumber();
-			
-			defaultOnRender=ap.onRender;
-			ap.onRender=function(){};
-			
-			var frametime=1.0/fps.getValue();
-			var c=0;
-			
-			var wait=50;
-			
-			
-			function seek(second){
-				
-				if(scope.frameIndex>=scope.maxFrame){
-					console.log("finished");
-					return;
-				}
-				//console.log("call seek",second);
-				ap.timeliner.context.dispatcher.fire("time.update",second);
-				
-				c+=frametime;	
-				if(c>duration)
-					c-=duration;
-				if(scope.enableownload)
-					setTimeout(seek, wait,c);
-			}
-			seek(c);
+	function startRecord(){
+		if(scope.useJsZip){
+			jsZip= new JSZip();
+			scope.wait=0;
+		}else{
+			scope.wait=50;
 		}
+		scope.frameIndex=0;
+		recordControlBt.button.setLabel("Stop");
+		var duration=getDuration();
 		
-		else{
+		
+		updateResolution();
+		updateFrameNumber();
+		
+		defaultOnRender=ap.onRender;
+		ap.onRender=function(){};
+		
+		var frametime=1.0/fps.getValue();
+		var c=0;
+		
+		//sometime browser skip download
+		
+		
+		function seek(second){
 			
-			ap.onRender=defaultOnRender
+			if(scope.frameIndex>=scope.maxFrame){
+				console.log("Finished.maybe generation Zip");
+				if(scope.useJsZip){
+					var anchor=AppUtils.jsZipToAnchor(jsZip,"images.zip","download");
+					anchor.click();
+					console.log(anchor);
+					URL.revokeObjectURL(anchor.href);
+				}
+				
+				stopRecord();
+				return;
+			}
+			//console.log("call seek",second);
+			ap.timeliner.context.dispatcher.fire("time.update",second);
 			
-			ap.signals.windowResize.dispatch();
+			c+=frametime;	
+			if(c>duration)
+				c-=duration;
+			if(scope.enableownload)
+				setTimeout(seek, scope.wait,c);
+		}
+		seek(c);
+	}
+	
+	function stopRecord(){
+		scope.jszip=null;
+		scope.enableownload=false;
+		scope.frameIndex=0;
+		recordControlBt.button.setLabel("Start Record");
+		ap.onRender=defaultOnRender
+		
+		ap.signals.windowResize.dispatch();
+	}
+	
+	var row=new UI.Row();
+	titlePanel.add(row);
+	var recordControlBt=new UI.ButtonSpan("Start Record",function(){
+		scope.enableownload=!scope.enableownload;
+		
+		if(scope.enableownload){
+			startRecord();
+		}
+		else{	
+			stopRecord();
 		}
 	});
+	recordControlBt.setWidth("120px");
+	row.add(recordControlBt);
 	
-	titlePanel.add(enableownload);
+	var jsZipCheck=new UI.CheckboxSpan("Use JsZip(slow)",this.useJsZip,function(v){scope.useJsZip=v});
+	jsZipCheck.text.setMarginLeft("12px");
+	jsZipCheck.text.setWidth("120px");
+	row.add(jsZipCheck);
+	
 	
 	
 	return titlePanel;

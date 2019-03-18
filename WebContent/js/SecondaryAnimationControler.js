@@ -36,7 +36,7 @@ var SecondaryAnimationControler=function(ap){
 	
 	this.maxDistanceRatio=2;
 	this.enableLimitDistance=false;
-	this.clearForceWhenResetted=true;
+	this.clearForceWhenResetted=false;
 	
 	this.connectHorizontal=false;
 	this.hconstraint=[];
@@ -52,6 +52,8 @@ var SecondaryAnimationControler=function(ap){
 	this.enableFollowBoneAttach=false;
 	
 	this._needFollowBoneAttach=false;
+	this.isClearFollowBoneAttach=false;
+	
 	this.onNeedFollowBone=function(){
 		if(scope.enableFollowBoneAttach)
 			scope._needFollowBoneAttach=true;
@@ -64,6 +66,7 @@ SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAtta
 	this.ap.getSignal("boneRotationChanged").add(this.onNeedFollowBone);
 	this.ap.getSignal("boneTranslateChanged").add(this.onNeedFollowBone);
 	this.ap.getSignal("meshTransformChanged").add(this.onNeedFollowBone);
+	this.ap.getSignal("poseChanged").add(this.onNeedFollowBone);
 	
 	var scope=this;
 	this.ammoControler=ammoControler;
@@ -505,7 +508,7 @@ SecondaryAnimationControler.prototype.dispose=function(){
 	 this.ap.getSignal("boneRotationChanged").remove(this.onNeedFollowBone);
 	 this.ap.getSignal("boneTranslateChanged").remove(this.onNeedFollowBone);
 	 this.ap.getSignal("meshTransformChanged").remove(this.onNeedFollowBone);
-	 
+	 this.ap.getSignal("poseChanged").remove(this.onNeedFollowBone);
 	 
 }
 
@@ -541,6 +544,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 		console.log("enableFollowBoneAttach");
 		
 		
+		
 		this.allSpheres.forEach(function(sphere){
 				if(sphere.positionTargetBone){
 					 var bone=sphere.positionTargetBone;
@@ -560,9 +564,12 @@ SecondaryAnimationControler.prototype.update=function(force){
 						//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 						//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 				}
+				if(scope.isClearFollowBoneAttach){
+					
+					AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+					AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+				}
 				
-				//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-				//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 			});
 		
 		this._needFollowBoneAttach=false;
@@ -718,6 +725,13 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	 }
 		
 	 });
+	 
+	 //debug bone linking
+	 this.allSpheres.forEach(function(sphere){
+		    var targetName=sphere.getBody().targetBone?sphere.getBody().targetBone.name:"";
+		    var posName=sphere.getBody().positionTargetBone?sphere.getBody().positionTargetBone.name:"";
+			console.log(sphere.name,targetName,posName);
+		});
 		
 
 		

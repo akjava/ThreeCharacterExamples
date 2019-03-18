@@ -63,11 +63,21 @@ Sidebar.VrmControlerCheck=function(ap){
 	
 	if(ap.ammoVisible==undefined)
 		ap.ammoVisible=false;
-	var ammo=new UI.CheckboxRow("Ammo Visible",ap.ammoVisible,function(v){
+	
+	var ammoRow=new UI.Row();
+	titlePanel.add(ammoRow);
+	var ammo=new UI.CheckboxSpan("Ammo Visible",ap.ammoVisible,function(v){
 		ap.ammoVisible=v;
 		ap.ammoControler.setVisibleAll(v);
 	});
-	titlePanel.add(ammo);
+	ammo.text.setWidth("100px");
+	ammoRow.add(ammo);
+	
+	var ammoDepthTest=new UI.CheckboxSpan("Transparent",false,function(v){
+		ap.secondaryAnimationControler.setAmmoDepthTest(v);
+	});
+	ammoDepthTest.text.setWidth("80px");
+	ammoRow.add(ammoDepthTest);
 	
 	
 	return titlePanel;

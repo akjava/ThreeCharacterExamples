@@ -6,6 +6,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 	var scope=this;
 	this.logging=false;
 	
+	this.forceFollow=false;
 	
 	function copyFrame(key){
 		var value;
@@ -154,6 +155,10 @@ Sidebar.VrmTimelinerBones=function(ap){
 			ap.getSignal("poseChanged").dispatch();
 			ap.getSignal("poseChanged").add(onPoseChanged);
 			
+			
+			if(	scope.forceFollow){
+				ap.secondaryAnimationControler._needFollowBoneAttach=true;
+			}
 			
 			//ap.skinnedMesh.updateMatrixWorld(true);
 			//ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.

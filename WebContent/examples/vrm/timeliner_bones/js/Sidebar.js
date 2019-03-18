@@ -69,5 +69,7 @@ var Sidebar = function ( application ) {
 	});
 	sub.add(debug);
 	
+	tab.select("Sub");
+	
 	return container;
 }

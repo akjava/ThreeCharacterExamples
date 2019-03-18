@@ -14,6 +14,22 @@ var AppUtils={
 				});
 			}
 		},
+		//var zip=new JSZip();
+		dataUrlToJsZip:function(zip,fileName,dataUrl){
+			
+			var index=dataUrl.indexOf("base64,");
+			var imgData;
+			if(index==-1){
+				imgData=url;
+			}else{
+				imgData=dataUrl.substring(index+"base64,".length);
+			}
+			zip.file(fileName,imgData,{base64:true});
+		},
+		jsZipToAnchor:function(zip,fileName,anchorText){
+			var blob=zip.generate({type:"blob"});
+			return AppUtils.generateBlobDownloadLink(blob,"application/zip",fileName,anchorText);
+		},
 		printTotalSignalCounts:function(ap){
 			var total=0;
 			console.log(ap.signals);
@@ -122,6 +138,23 @@ var AppUtils={
 		  }
 	    return new Blob([uInt8Array],{type:type});
 	  	},
+	  	generateBlobDownloadLink:function(blob,mimeType,fileName,anchorText,autoRemove){
+			var link=document.createElement( 'a' );
+			link.textContent=anchorText;
+			
+			var url=window.URL.createObjectURL(blob);
+			
+			link.href=url;
+			link.download=fileName;
+			link.dataset.downloadurl="mimeType"+":"+fileName+":"+url;
+			if(autoRemove){
+				link.addEventListener( 'click', function ( event ) {
+					link.parentNode.removeChild(link);
+
+				} );
+			}
+			return link;
+		},
 		generateBase64DownloadLink:function(urlData,mimeType,fileName,anchorText,autoRemove){
 			var link=document.createElement( 'a' );
 			link.textContent=anchorText;
