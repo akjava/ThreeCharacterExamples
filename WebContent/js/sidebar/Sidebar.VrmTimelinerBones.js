@@ -21,6 +21,12 @@ Sidebar.VrmTimelinerBones=function(ap){
 		clipboard[String(key)]=value.clone();
 	}
 	function pasteFrames(){
+		
+		if(ap.timeliner.context.playing){
+			console.log("can't add frame when playing");
+			return;
+		}
+		
 		ap.getSignal("transformSelectionChanged").dispatch(null);//selected ik not move
 		
 		var boneList=ap.humanoidBoneControler.humanoidBones;
@@ -95,6 +101,10 @@ Sidebar.VrmTimelinerBones=function(ap){
 	
 	
 	function onPoseChanged(){
+		if(ap.timeliner.context.playing){
+			console.log("can't add frame when playing");
+			return;
+		}
 		if(scope.logging)
 			console.log("pose changed");
 		
@@ -117,12 +127,22 @@ Sidebar.VrmTimelinerBones=function(ap){
 	
 	//listers
 	ap.getSignal("boneTranslateFinished").add(function(index){
+		if(ap.timeliner.context.playing){
+			console.log("can't add frame when playing");
+			return;
+		}
+		
 		//console.log("translated",index);
 		ap.timeliner.context.dispatcher.fire('keyframe',rootPositionName,true);
 	});
 	
 	
 	ap.getSignal("boneRotationFinished").add(function(index){
+		if(ap.timeliner.context.playing){
+			console.log("can't add frame when playing");
+			return;
+		}
+		
 		if(scope.logging)
 			console.log("bone changed",index);
 		

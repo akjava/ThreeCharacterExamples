@@ -1260,7 +1260,8 @@ function Timeliner( controller ) {
 		dispatcher: dispatcher,
 
 		controller: controller,
-		fileName:"animation"
+		fileName:"animation",
+		playing:false
 
 	};
 	this.context=context;//allow access
@@ -1349,6 +1350,7 @@ function Timeliner( controller ) {
 	dispatcher.on('controls.pause', pausePlaying);
 
 	function startPlaying() {
+		context.playing=true;
 		// played_from = timeline.current_frame;
 		start_play = performance.now() - context.currentTime * 1000;
 		layer_panel.setControlStatus(true);
@@ -1356,6 +1358,7 @@ function Timeliner( controller ) {
 	}
 
 	function pausePlaying() {
+		context.playing=false;
 		start_play = null;
 		layer_panel.setControlStatus(false);
 		// dispatcher.fire('controls.status', false);
