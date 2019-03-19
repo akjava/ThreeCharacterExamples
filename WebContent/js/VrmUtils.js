@@ -304,7 +304,8 @@ var VrmUtils={
 			for(var i=0;i<bones.length;i++){
 				var name=bones[i].name;
 				if(this.isFingerBoneNameByGeneralBoneName(name,generalBoneMap)){
-					bones[i].rotation.order="XYZ";
+					
+					bones[i].rotation.order="ZYX";
 				}else{
 					bones[i].rotation.order="XZY";
 				}
