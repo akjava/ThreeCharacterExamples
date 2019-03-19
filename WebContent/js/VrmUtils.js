@@ -266,7 +266,7 @@ var VrmUtils={
 			})
 			return generalBoneMap;
 		},
-		isFingerBoneName:function(name,generalMap){
+		isFingerBoneNameByHumanBoneName:function(humanBoneName){
 			if(!this.humanoidFingerBoneNames){
 				this.humanoidFingerBoneNames=[];
 				var scope=this;
@@ -282,12 +282,17 @@ var VrmUtils={
 					});
 				});
 			}
-			var humanBoneName=generalMap[name];
+			
 			if(this.humanoidFingerBoneNames.indexOf(humanBoneName)!=-1){
 				return true;
 			}
 			
 			return false;
+		},isFingerBoneNameByGeneralBoneName:function(name,generalMap){
+			
+			var humanBoneName=generalMap[name];
+			return this.isFingerBoneNameByHumanBoneName(humanBoneName);
+			
 		}
 		,changeBoneEulerOrders:function(ap,skinnedMesh){
 			
@@ -298,7 +303,7 @@ var VrmUtils={
 			//TODO
 			for(var i=0;i<bones.length;i++){
 				var name=bones[i].name;
-				if(this.isFingerBoneName(name,generalBoneMap)){
+				if(this.isFingerBoneNameByGeneralBoneName(name,generalBoneMap)){
 					bones[i].rotation.order="XYZ";
 				}else{
 					bones[i].rotation.order="XZY";

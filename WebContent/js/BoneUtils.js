@@ -339,6 +339,10 @@ var BoneUtils={
 				});
 		return defaultBoneMatrix;
 		},
+		findBoneIndexByBoneName:function(boneList,name){
+			console.log("call findBoneIndexByEndsName");
+			return this.findBoneIndexByEndsName(boneList,name);
+		},
 		findBoneIndexByEndsName:function(boneList,name){
 			
 			var index=-1;
@@ -349,6 +353,10 @@ var BoneUtils={
 			}
 
 			return index;
+		},
+		findBoneByBoneName:function(boneList,name){
+			console.log("call findBoneByEndsName");
+			return this.findBoneByEndsName(boneList,name);
 		},
 		findBoneByEndsName:function(boneList,name){
 			

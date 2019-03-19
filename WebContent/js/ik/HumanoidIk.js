@@ -195,11 +195,11 @@ HumanoidIk.prototype.initlimitBone=function(){
 			//body
 			this.limitBone(boneList,"root",-180,-180,-180,180,180,180);
 			this.limitBone(boneList,"hips",-180,-180,-180,180,180,180);
-			this.limitBone(boneList,"spine",-15,-45,-30,15,45,30);
-			this.limitBone(boneList,"chest",-45,-45,-30,45,45,30);
-			this.limitBone(boneList,"upperChest",-45,-45,-30,45,45,30);
+			this.limitBone(boneList,"spine",-15,-30,-20,15,30,20);
+			this.limitBone(boneList,"chest",-45,-30,-20,45,30,20);
+			this.limitBone(boneList,"upperChest",-45,-30,-20,45,30,20);
 			this.limitBone(boneList,"neck",-45,-45,-10,45,45,10);
-			this.limitBone(boneList,"head",-15,-15,-20,15,15,20);
+			this.limitBone(boneList,"head",-15,-30,-20,15,30,20);
 			
 			this.limitBone(boneList,"leftShoulder",0,0,-45,0,15,0);
 			this.limitBone(boneList,"leftUpperArm",-45,-75,-45,45,45,85);
