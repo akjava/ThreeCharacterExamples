@@ -200,7 +200,7 @@ var Logics={
 					
 					
 					if(!initialized){
-						console.log("not initialized");
+						
 						ap.signals.transformSelectionChanged.add(function(target){
 							ap.ikControler.onTransformSelectionChanged(target);
 						});
@@ -220,6 +220,8 @@ var Logics={
 							ap.ikControler.resetAllIkTargets();
 						});
 						initialized=true;
+						if(ap.ikControler.logging)
+							console.log("Ik initialized");
 					}
 					
 					

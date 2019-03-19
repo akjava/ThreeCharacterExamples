@@ -26,7 +26,6 @@ Sidebar.IkLock=function(ap){
 
 	var selectedOnlyCheck=new UI.SwitchRow("Only Selected Bone","Any Bone",ap.ikControler.ikBoneSelectedOnly,function(v){
 		ap.ikControler.ikBoneSelectedOnly=v;
-		ap.ikControler.logging=true;
 	});
 	container.add(selectedOnlyCheck);
 	

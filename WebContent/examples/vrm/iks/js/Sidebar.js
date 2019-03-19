@@ -13,9 +13,36 @@ var Sidebar = function ( application ) {
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));
 	
+	var limitInfo=new IkBoneLimitInfoDiv(ap);
+	main.add(limitInfo);
+	
+	main.add(new Sidebar.IkBoneList(ap));
+	main.add(new IkRotateRow(ap));
+	main.add(new Sidebar.IkLock(ap));
+	
+
 	
 	
 	
+	
+	
+	/*//TODO later
+	 * 
+	var ikset=tab.addItem("IkSet");
+	var ikratio=new UI.TitlePanel("Ik Ratio");
+	ikset.add(ikratio);
+	ikratio.add(new IkRatioRow(ap));
+	ikset.add(new Sidebar.IkRatioIO(ap));
+	
+	
+	ikset.add(new Sidebar.IkBoneLimit(ap));
+	ikset.add(new Sidebar.IkLimitImport(ap));
+	ikset.add(new Sidebar.IkLimitExport(ap));
+	
+	ikset.add(new Sidebar.IkPresetIO(ap,true));
+	Logics.transformSelectionChangedForIkPresets(ap);
+	ikset.add(new Sidebar.IkPreset(ap));
+	*/
 
 	
 	var sub=tab.addItem("Sub");
@@ -39,7 +66,7 @@ var Sidebar = function ( application ) {
 		ap.skinnedMesh.rotation.set(THREE.Math.degToRad(x),THREE.Math.degToRad(y),THREE.Math.degToRad(z));
 	});
 	
-	var boneRotate=new Sidebar.BoneRotate(ap,false,false);
+	var boneRotate=new Sidebar.BoneRotate(ap,true,true);
 	sub.add(boneRotate);	
 	
 

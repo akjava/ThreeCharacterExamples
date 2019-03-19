@@ -4,10 +4,17 @@ Sidebar.IkPreset=function(ap){
 		console.error("initialize ap.ikControler first");
 	}
 	
-	var ikPresets=new IkPresets(ap.ikControler);
-	ap.ikControler.setPresets(ikPresets);
+	var ikPresets=null;
 	
 	ap.signals.loadingModelFinished.add(function(mesh){
+		if(!ap.ikControler.ikPresets){
+			//mbl3d not recreate ikcontroler,but vrm recreate ikcontroler.
+			if(ikPresets){
+				ikPresets.dispose();
+			}
+			ikPresets=new IkPresets(ap.ikControler);
+			ap.ikControler.setPresets(ikPresets);
+		}
 		ap.ikControler.ikPresets.updateAll();
 	});
 	
