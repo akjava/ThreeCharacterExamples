@@ -40,6 +40,11 @@ var MinTransformCore = function ( ap ) {
 					}
 				}
 				
+				if(visibles.length==0){
+					ap.signals.transformSelectionChanged.dispatch(null);
+					return;
+				}
+				
 				var index=0;
 				if(visibles.length==1){
 					lastSelection=null;
