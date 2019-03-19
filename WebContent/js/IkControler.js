@@ -115,7 +115,8 @@ IkControler.prototype.resetIkSettings=function(){
 		
 		
 		var diff=list[index].position.clone().sub(list[parentIndex].position);
-		diff.setLength(10);
+		var length=endsite.userData.length?endsite.userData.length:10;
+		
 		endsite.position.copy(diff);
 		endsite.userData.joint.geometry.vertices[0].copy(diff);
 		endsite.userData.joint.geometry.verticesNeedUpdate = true;

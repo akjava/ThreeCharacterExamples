@@ -28,8 +28,15 @@ Example=function(application){
 	Logics.loadingModelFinishedForRotationControler(ap,boneFilter);
 	
 	Logics.loadingModelFinishedForTranslateControler(ap);
-	Logics.loadingModelFinishedForIkControler(ap,"HumanoidIk");
+	Logics.loadingModelFinishedForIkControler(ap,"HumanoidFingerIk");
 	
+	ap.signals.loadingModelFinished.add(function(mesh){
+		var parts=["Thumb","Index","Middle","Ring","Little"];
+		parts.forEach(function(part){
+			ap.ikControler.setEndSiteEnabled(part,true);
+		});
+		
+	});
 	//vrm
 	ap.ammoVisible=false;
 	Logics.initializeAmmo(ap);
@@ -40,6 +47,8 @@ Example=function(application){
 	
 	ap.fingerPresetsControler=new VrmFingerPresetsControler(ap,new VrmFingerPresets());
 	
+	
+	ap.getSignal("cameraControlerChanged").dispatch(new THREE.Vector3(-100,140,-4),new THREE.Vector3(0,100,0))
 	
 	ap.getSignal("loadingModelStarted").dispatch(url);
 	

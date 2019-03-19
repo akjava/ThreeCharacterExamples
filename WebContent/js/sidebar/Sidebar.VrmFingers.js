@@ -128,6 +128,8 @@ Sidebar.VrmFingers=function(ap){
 		angleZ.setValue(dz);
 	}
 	
+	var groups={};
+	
 	function updateFingerButtons(mesh){
 		var boneList=BoneUtils.getBoneList(mesh);
 		buttonContainer.clear();
@@ -142,14 +144,16 @@ Sidebar.VrmFingers=function(ap){
 				var text=new UI.Text(name);
 				text.setWidth("50px");
 				row.add(text);
+				var groupIndices=[];
 				for(var i=0;i<3;i++){
 					var humanBoneName=lr+name+levels[i];
 					var boneName=ap.fingerPresetsControler.getGeneralBoneNameByHumanBoneName(humanBoneName);
-					
+					groups[boneName]=groupIndices;
 					var boneIndex=BoneUtils.findBoneIndexByEndsName(boneList,boneName);
 					if(boneIndex==-1){
 						console.error("invalid bone name",boneName);
 					}
+					groupIndices.push(boneIndex);
 					
 					function select(name,index){
 						return function(){
@@ -197,23 +201,50 @@ Sidebar.VrmFingers=function(ap){
 	//
 	var controlRow=new UI.Row();
 	container.add(controlRow);
-	var cutBt=new UI.Button("Cut").onClick(function(){
-		var rotation=getRotation(scope.selectedIndex);
-		scope.clipboard=rotation.clone();
-		rotation.set(0,0,0);
+	var cutBt=new UI.Button("Cut All").onClick(function(){
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var bone=boneList[scope.selectedIndex];
+		
+		var groupIndices=groups[bone.name];
+		
+		var clipboard=[];
+		groupIndices.forEach(function(index){
+			
+			clipboard.push(boneList[index].rotation.clone());
+			boneList[index].rotation.set(0,0,0);
+		});
+		
+		scope.clipboard=clipboard;
+		
 		reselect();
 	});
 	controlRow.add(cutBt);
 	
 	var copyBt=new UI.Button("Copy").onClick(function(){
-		var rotation=getRotation(scope.selectedIndex);
-		scope.clipboard=rotation.clone();
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var bone=boneList[scope.selectedIndex];
+		
+		var groupIndices=groups[bone.name];
+		
+		var clipboard=[];
+		groupIndices.forEach(function(index){
+			clipboard.push(boneList[index].rotation.clone());
+		});
+		
+		scope.clipboard=clipboard;
 	});
 	controlRow.add(copyBt);
 	var pasteBt=new UI.Button("Paste").onClick(function(){
-		var rotation=getRotation(scope.selectedIndex);
+		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
+		var bone=boneList[scope.selectedIndex];
+		
+		var groupIndices=groups[bone.name];
+		
 		if(scope.clipboard){
-			rotation.copy(scope.clipboard);
+			for(var i=0;i<scope.clipboard.length;i++){
+				var rot=scope.clipboard[i];
+				boneList[groupIndices[i]].rotation.copy(rot);
+			}
 			reselect();
 		}
 		
