@@ -435,7 +435,7 @@ var BoneUtils={
 			bone.matrix.decompose( bone.position, bone.quaternion, bone.scale );
 			bone.updateMatrixWorld(true);
 		},
-		getOpositeLRName:function(name){
+		getOppositeLRName:function(name){
 			//TODO support more
 			if(name.endsWith("_L")){
 				return name.substring(0,name.length-2)+"_R";

@@ -78,7 +78,7 @@ ap.getSignal("ikSelectionChanged").add(onIkSelectionChanged);
 
 function getOppositedBone(bone){
 	var boneList=ap.ikControler.getBoneList();
-	var oppositeName=BoneUtils.getOpositeLRName(bone.name);
+	var oppositeName=BoneUtils.getOppositeLRName(bone.name);
 	if(oppositeName==null){
 		return;
 	}

@@ -10,7 +10,7 @@ LRBoneRow=function(ap){
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		var selectedBone=getSelectedBone(index);
 		
-		var oppositeName=BoneUtils.getOpositeLRName(selectedBone.name);
+		var oppositeName=BoneUtils.getOppositeLRName(selectedBone.name);
 		if(oppositeName==null){
 			return;
 		}
