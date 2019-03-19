@@ -226,4 +226,86 @@ var VrmUtils={
 			name=node.name.replace(" ","_");//seems
 			return name;
 		}
+		,createHumanBoneNameToGeneralBoneNameMap:function(ap){
+			var nodes=ap.vrm.parser.json.nodes;
+			var humanBones=ap.vrm.userData.gltfExtensions.VRM.humanoid.humanBones;
+			
+			function getBoneName(index){
+				return VrmUtils.getNodeBoneName(ap.vrm,index);
+			}
+
+			var humanBoneMap={};
+			humanBones.forEach(function(humanBone){
+				//TODO check
+				humanBoneMap[humanBone.bone]=getBoneName(humanBone.node);
+			});
+			return humanBoneMap;
+		},createGeneralBoneNameToHumanBoneNameMap:function(ap){
+			var generalBoneMap={};
+			var humanBoneMap=this.createHumanBoneNameToGeneralBoneNameMap(ap);
+			Object.keys(humanBoneMap).forEach(function(key){
+				generalBoneMap[humanBoneMap[key]]=key;
+			})
+			return generalBoneMap;
+		},
+		isFingerBoneName:function(name,generalMap){
+			if(!this.humanoidFingerBoneNames){
+				this.humanoidFingerBoneNames=[];
+				var scope=this;
+				
+				var lrs=["left","right"];
+				var parts=["Thumb","Index","Middle","Ring","Little"];
+				var levels=["Proximal","Intermediate","Distal"];
+				lrs.forEach(function(lr){
+					parts.forEach(function(part){
+						levels.forEach(function(level){
+							scope.humanoidFingerBoneNames.push(lr+part+level);
+						});
+					});
+				});
+			}
+			var humanBoneName=generalMap[name];
+			if(this.humanoidFingerBoneNames.indexOf(humanBoneName)!=-1){
+				return true;
+			}
+			
+			return false;
+		}
+		,changeBoneEulerOrders:function(ap,skinnedMesh){
+			
+			var bones=BoneUtils.getBoneList(skinnedMesh);
+			var arms=["Shoulder","UpperArm","LowerArm","Hand"];
+
+			var generalBoneMap=this.createGeneralBoneNameToHumanBoneNameMap(ap);
+			//TODO
+			for(var i=0;i<bones.length;i++){
+				var name=bones[i].name;
+				if(this.isFingerBoneName(name,generalBoneMap)){
+					bones[i].rotation.order="XYZ";
+				}else{
+					bones[i].rotation.order="XZY";
+				}
+			}
+			
+			var humanBoneMap=this.createHumanBoneNameToGeneralBoneNameMap(ap);
+			
+			
+			arms.forEach(function(name){
+				var lrs=["left","right"];
+				lrs.forEach(function(lr){
+					var humanBoneName=lr+name;
+					var boneName=humanBoneMap[humanBoneName];
+					
+					var index=BoneUtils.findBoneIndexByEndsName(bones,boneName);
+						if(index!=-1){
+							console.log("set order ZYX",humanBoneName,boneName);
+							bones[index].rotation.order="ZYX";//better arm close body
+							//bones[index].rotation.order="YZX";//zyx is littlebit better.
+						}else{
+							console.log("changeBoneEulerOrders not found",humanBoneName,boneName);
+						}
+					
+				});
+			});
+		}
 }
