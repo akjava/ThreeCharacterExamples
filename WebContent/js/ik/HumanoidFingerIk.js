@@ -108,7 +108,7 @@ HumanoidFingerIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	diff.setLength(10);*/
 	//diff.add(list[indices[indices.length-1]].position);
 	
-	var endsite=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5),new THREE.MeshBasicMaterial({color:0x008800,depthTest:false,transparent:true,opacity:.5}));
+	var endsite=new THREE.Mesh(new THREE.BoxGeometry(.3,.3,.3),new THREE.MeshBasicMaterial({color:0x008800,depthTest:false,transparent:true,opacity:.5}));
 	endsite.renderOrder = 2;
 	list[indices[indices.length-1]].add(endsite);
 	list[indices[indices.length-1]].userData.endsite=endsite;
@@ -127,7 +127,7 @@ HumanoidFingerIk.prototype.registIk=function(ikTargets,ikName,jointNames){
 	
 	scope.endSites.push(endsite);
 	
-	var ikBox=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
+	var ikBox=new THREE.Mesh(new THREE.BoxGeometry(.6,.6,.6),new THREE.MeshBasicMaterial({color:0x880000,depthTest:false,transparent:true,opacity:.5}));
 	ikBox.name="ik-c-"+ikName;
 	ikBox.renderOrder = 1;
 	var index=indices.length-1;

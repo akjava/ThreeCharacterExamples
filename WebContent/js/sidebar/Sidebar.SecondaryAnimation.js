@@ -299,7 +299,7 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	ammoMass.add(resetBt);
 	ammoMass.setDisabled(true);
 	
-	var syncBoneRatio=new UI.NumberButtons("SyncBoneRatio",0,1,.01,NaN,function(v){
+	var syncBoneRatio=new UI.NumberButtons("SyncBoneRatio",0,1,.1,NaN,function(v){
 		getCurrentGroup().AMMO_syncBoneRatio=v;
 	},[0.1,1]);
 	bodyGroup.add(syncBoneRatio);
