@@ -8,7 +8,21 @@ var Sidebar = function ( application ) {
 	var main=tab.addItem("Ik");
 	container.add(tab);
 	
-	main.add(new Sidebar.IkControl(ap,VrmUtils.getOppositeLRName));
+	
+	var humanBoneMap;
+	var generalBoneMap;
+	ap.signals.loadingModelFinished.add(function(mesh){
+		//overwrite map
+		humanBoneMap=VrmUtils.createHumanBoneNameToGeneralBoneNameMap(ap);
+		generalBoneMap=VrmUtils.createGeneralBoneNameToHumanBoneNameMap(ap);
+	});
+	
+	main.add(new Sidebar.IkControl(ap,function(name){
+		var opposite=VrmUtils.getGeneralOppositeLRName(humanBoneMap,generalBoneMap,name);
+		
+		return opposite;
+	}));
+	
 	main.add(new Sidebar.IkBasic(ap));
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));

@@ -15,13 +15,31 @@ var VrmUtils={
 			});
 			return models;
 		},
-		getOppositeLRName:function(name){
+		getHumanoidOppositeLRName:function(humanoidBoneName){
 			
-			if(name.indexOf("_L_")!=-1){
-				return name.replace("_L_","_R_");
+			if(humanoidBoneName.indexOf("left")!=-1){
+				return humanoidBoneName.replace("left","right");
 			}
-			if(name.indexOf("_R_")!=-1){
-				return name.replace("_R_","_L_");
+			if(humanoidBoneName.indexOf("right")!=-1){
+				return humanoidBoneName.replace("right","left");
+			}
+			return null;
+		},
+		getGeneralOppositeLRName:function(humanBoneMap,
+				generalBoneMap,generalBoneName){
+			var humanBoneName=generalBoneMap[generalBoneName];
+		
+			if(humanBoneName){
+				var humanOpposite=this.getHumanoidOppositeLRName(humanBoneName);
+				
+				if(humanOpposite){
+					var opposite=humanBoneMap[humanOpposite];
+					if(opposite){
+						return opposite;
+					}else{
+						return null;
+					}
+				}
 			}
 			return null;
 		},
@@ -286,9 +304,7 @@ var VrmUtils={
 					bones[i].rotation.order="XZY";
 				}
 			}
-			
 			var humanBoneMap=this.createHumanBoneNameToGeneralBoneNameMap(ap);
-			
 			
 			arms.forEach(function(name){
 				var lrs=["left","right"];
