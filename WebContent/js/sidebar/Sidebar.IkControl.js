@@ -1,4 +1,6 @@
-Sidebar.IkControl=function(ap){
+Sidebar.IkControl=function(ap,getOppositeNameFunction){
+getOppositeNameFunction=getOppositeNameFunction==undefined?BoneUtils.getOppositeLRName:getOppositeNameFunction;
+	
 var scope=this;
 this.selectedIkName=null;
 
@@ -78,7 +80,7 @@ ap.getSignal("ikSelectionChanged").add(onIkSelectionChanged);
 
 function getOppositedBone(bone){
 	var boneList=ap.ikControler.getBoneList();
-	var oppositeName=BoneUtils.getOppositeLRName(bone.name);
+	var oppositeName=getOppositeNameFunction(bone.name);
 	if(oppositeName==null){
 		return;
 	}

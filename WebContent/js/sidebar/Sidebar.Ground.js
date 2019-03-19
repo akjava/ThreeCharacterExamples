@@ -64,18 +64,24 @@ Sidebar.Ground=function(ap){
 	});
 	
 	var buttonRow=new UI.ButtonSpan("Land to Ground",function(){
-		var before=new THREE.Vector3().copy(ap.skinnedMesh.skeleton.bones[0].position);
+		var rootBone=ap.skinnedMesh.skeleton.bones[0];
+		var before=new THREE.Vector3().copy(rootBone.position);
 		
-		if(ap.skinnedMesh.skeleton.poses){
-			ap.skinnedMesh.skeleton.bones[0].position.copy(ap.skinnedMesh.skeleton.poses[0]);//reset
-		}
+		
+		var q=rootBone.quaternion.clone();
+		var scale=rootBone.scale.clone();
+		
+		BoneUtils.resetBone(ap.skinnedMesh,0);
+		rootBone.quaternion.copy(q);
+		rootBone.scale.copy(scale);
+		
 		ap.ikControler.boneAttachControler.update(true);
 			
 		ap.ikControler.boneAttachControler.computeBoundingBox();
 		var box=ap.ikControler.boneAttachControler.boundingBox;
 		var min=box.min.y;
 		var change=min-scope.margin;
-		var pos=ap.skinnedMesh.skeleton.bones[0].position;
+		var pos=rootBone.position;
 		
 		pos.x=before.x;
 		pos.z=before.z;

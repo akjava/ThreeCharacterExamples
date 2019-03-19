@@ -15,6 +15,16 @@ var VrmUtils={
 			});
 			return models;
 		},
+		getOppositeLRName:function(name){
+			
+			if(name.indexOf("_L_")!=-1){
+				return name.replace("_L_","_R_");
+			}
+			if(name.indexOf("_R_")!=-1){
+				return name.replace("_R_","_L_");
+			}
+			return null;
+		},
 		sceneToSkinnedMeshOptions:function(scene,isVroid){
 			var keys={};
 			var maxFace=0;
@@ -136,7 +146,8 @@ var VrmUtils={
 				
 				vrm.scene.updateMatrixWorld(true);
 				var bones=BoneUtils.makeBoneList(vrm.scene);
-				var poses=[];
+				
+				/*var poses=[];
 				var rotq=[];
 				bones.forEach(function(bone){
 					poses.push(bone.position.clone());
@@ -147,7 +158,9 @@ var VrmUtils={
 						bones[i].position.copy(poses[i]);
 						bones[i].quaternion.copy(rotq[i]);
 					}
-				},poses:poses,rotq:rotq};
+				},poses:poses,rotq:rotq};*/
+				
+				skeleton=new THREE.Skeleton(bones);
 				
 				vrm.scene.skeleton=skeleton;//
 				vrm.scene.humanoidSkeleton=VrmUtils.humanoidToSkeleton(vrm);

@@ -8,7 +8,7 @@ var Sidebar = function ( application ) {
 	var main=tab.addItem("Ik");
 	container.add(tab);
 	
-	main.add(new Sidebar.IkControl(ap));
+	main.add(new Sidebar.IkControl(ap,VrmUtils.getOppositeLRName));
 	main.add(new Sidebar.IkBasic(ap));
 	main.add(new IkSolveRow(ap));
 	main.add(new Sidebar.IkReset(ap));
