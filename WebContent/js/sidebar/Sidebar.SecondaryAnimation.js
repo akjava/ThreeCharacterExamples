@@ -32,8 +32,8 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 	var tab=new UI.Tab(ap);
 	panel.add(tab);
 	var bodyGroup=tab.addItem("BodyGroup");
-	var dynamics=tab.addItem("Dynaics");
-	var settings=tab.addItem("Settings");
+	var dynamics=tab.addItem("Dynaic");
+	var settings=tab.addItem("Setting");
 	
 	
 	if(!ap.secondaryAnimationControler){
@@ -378,8 +378,10 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		updateBoneGroupEditor(null);
 	});
 	
+	var misc=tab.addItem("Misc");
+	
 	var div=new UI.Subtitle("Limit Distance");
-	settings.add(div);
+	misc.add(div);
 	var enableReset=new UI.CheckboxRow("Enable Reset",ap.secondaryAnimationControler.enableLimitDistance,function(v){
 		ap.secondaryAnimationControler.enableLimitDistance=v;
 	});
@@ -393,6 +395,28 @@ var stepBt=new UI.ButtonSpan("Step",function(){
 		ap.secondaryAnimationControler.clearForceWhenResetted=v;
 	});
 	div.add(clearForceWhenResetted);
+	
+	
+	var div=new UI.Subtitle("Follow Bones");
+	misc.add(div);
+	var enableFollowBoneAttach=new UI.CheckboxRow("Enable Follow",ap.secondaryAnimationControler.enableFollowBoneAttach,function(v){
+		ap.secondaryAnimationControler.enableFollowBoneAttach=v;
+	});
+	div.add(enableFollowBoneAttach);
+	
+	var followBoneRatio=new UI.NumberButtons("follow ratio",0,1,1,ap.secondaryAnimationControler.followBoneRatio,function(v){
+		ap.secondaryAnimationControler.followBoneRatio=v;
+	},[0,0.5,1]);
+	followBoneRatio.text.setWidth("120px");
+	div.add(followBoneRatio);
+	
+	var followClearForceRatio=new UI.NumberButtons("Keep Force Ratio",0,1,1,ap.secondaryAnimationControler.followBoneClearForceRatio,function(v){
+		ap.secondaryAnimationControler.followBoneClearForceRatio=v;
+	},[0,0.5,1]);
+	followClearForceRatio.text.setWidth("120px");
+	div.add(followClearForceRatio);
+	
+	
 	
 	return panel;
 }

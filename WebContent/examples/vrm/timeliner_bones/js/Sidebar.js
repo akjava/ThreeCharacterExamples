@@ -19,6 +19,7 @@ var Sidebar = function ( application ) {
 	titlePanel.add(absoluteRotateDiv);
 	ap.getSignal("objectRotated").add(function(x,y,z){
 		ap.skinnedMesh.rotation.set(THREE.Math.degToRad(x),THREE.Math.degToRad(y),THREE.Math.degToRad(z));
+		ap.getSignal("meshTransformChanged").dispatch();
 	});
 	
 	
@@ -73,6 +74,7 @@ var Sidebar = function ( application ) {
 	sub2.add(new Sidebar.Ground(ap));
 	sub2.add(new Sidebar.TextBoard(ap));
 	sub2.add(new Sidebar.TimelinerControl(ap));
+	sub2.add(new Sidebar.Ammo(ap));
 	
 	tab.select("Sub2");
 	

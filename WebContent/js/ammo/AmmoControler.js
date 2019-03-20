@@ -28,7 +28,7 @@ var AmmoControler=function(object3d,world){
 	this.gravity=AmmoUtils.getGravity(world);
 	
 	this._enabled=true;
-	console.log(Ammo);
+	//console.log(Ammo);
 }
 
 

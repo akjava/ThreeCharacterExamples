@@ -474,7 +474,7 @@ var Logics={
 			ap.signals.loadingModelFinished.add(function(mesh){
 				
 				//set order
-				VrmUtils.changeBoneEulerOrders(ap,mesh);
+				//VrmUtils.changeBoneEulerOrders(ap,mesh);
 				
 				
 				if(!ap.secondaryAnimationControler){

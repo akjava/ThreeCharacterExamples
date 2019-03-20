@@ -163,6 +163,17 @@ var VrmUtils={
 				} );
 				
 				vrm.scene.updateMatrixWorld(true);
+				
+				//somewhere's bug 
+				if(vrm.userData.gltfExtensions.VRM.meta.title=="Alicia Solid"){
+					//version: "0.27"
+					var waist=vrm.scene.getObjectByName("waist");
+					if(waist){
+						waist.isBone=true;
+					}
+				}
+				
+				
 				var bones=BoneUtils.makeBoneList(vrm.scene);
 				
 				/*var poses=[];
@@ -206,6 +217,10 @@ var VrmUtils={
 				return nodes[index].name;
 			}
 			
+			//fix
+			
+			
+			
 			var list=BoneUtils.getBoneList(vrm.scene); //vrm.scene is same as ap.skinnedMesh
 			
 			humanoid.humanBones.forEach(function(hb){
@@ -215,7 +230,7 @@ var VrmUtils={
 					console.error("not found",hb.bone,name,list);
 					if(name=="waist"){
 						var bone=BoneUtils.findBoneByEndsName(list,"upperbody01");
-						bones.push(bone);
+						//bones.push(bone);
 					}
 				}else{
 					bones.push(bone);
@@ -320,7 +335,7 @@ var VrmUtils={
 					
 					var index=BoneUtils.findBoneIndexByEndsName(bones,boneName);
 						if(index!=-1){
-							console.log("set order ZYX",humanBoneName,boneName);
+							console.log("ZXY",boneName);
 							bones[index].rotation.order="ZYX";//better arm close body
 							//bones[index].rotation.order="YZX";//zyx is littlebit better.
 						}else{

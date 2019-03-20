@@ -50,6 +50,8 @@ var SecondaryAnimationControler=function(ap){
 	this._rootSpheres={};
 	
 	this.enableFollowBoneAttach=false;
+	this.followBoneRatio=0.5;
+	this.followBoneClearForceRatio=0.5;
 	
 	this._needFollowBoneAttach=false;
 	this.isClearFollowBoneAttach=false;
@@ -57,9 +59,12 @@ var SecondaryAnimationControler=function(ap){
 	this.onNeedFollowBone=function(){
 		if(scope.enableFollowBoneAttach)
 			scope._needFollowBoneAttach=true;
+		
+	
 	};
 	
 	this._ammoBodyDepthTest=false;
+	
 }
 
 SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAttachControler){
@@ -72,7 +77,6 @@ SecondaryAnimationControler.prototype.initialize=function(ammoControler,boneAtta
 	this.ammoControler=ammoControler;
 	this.boneAttachControler=boneAttachControler;
 	
-	//TODO parse
 }
 
 
@@ -154,13 +158,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		var isRoot=false;
 		var bone=BoneUtils.findBoneByEndsName(bac.boneList,boneName);
 		if(bone==null ){
-			if(boneName.endsWith("_end")){
-				//indicate endsite?
-				//do something?
-				
-			}else{
-				console.error("no bone",boneName);
-			}
+			console.error("no bone",boneName);
 		}else{
 			var position=null;
 			var bonePosition=bac.getContainerByBoneName(boneName).position.clone();
@@ -269,7 +267,7 @@ SecondaryAnimationControler.prototype.addBoneLinks=function(links,hitRadius,grou
 		}
 		
 		
-		bone.userData.defaultPosition=bone.position.clone();//maybe reset problem is here
+		bone.userData.defaultPosition=bone.position.clone();//maybe reset's problem is here
 		
 		if(sphere2!=null){
 			sphere2.name=sphere2.name+":"+bone.name+"-rot";
@@ -554,11 +552,20 @@ SecondaryAnimationControler.prototype.update=function(force){
 		
 		
 		this.allSpheres.forEach(function(sphere){
-				if(sphere.targetBone){
+				if(sphere.targetBone ){
 					 var bone=sphere.targetBone;
 					 var bac=scope.ap.boneAttachControler;
 					 var container=bac.getContainerByBoneName(bone.name);
 					 var pos=container.position;
+					 if(scope.followBoneRatio!=1){
+						 var current=sphere.getMesh().position;
+						 var diff=pos.clone().sub(current);
+						 diff.multiplyScalar(scope.followBoneRatio);
+						 pos=diff.add(current);
+					 }
+					
+					 
+					 
 					 
 					 	var transform=AmmoUtils.getSharedBtTransform();
 					 	var q=container.quaternion;
@@ -569,13 +576,19 @@ SecondaryAnimationControler.prototype.update=function(force){
 						sphere.body.setCenterOfMassTransform(transform);
 						sphere.body.getMotionState().setWorldTransform(transform);
 						sphere.syncTransform(scope.ap.ammoControler);
-						//AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
-						//AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 				}
-				if(scope.isClearFollowBoneAttach){
+				if(scope.followBoneClearForceRatio==0){
 					
 					AmmoUtils.setLinearVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
 					AmmoUtils.setAngularVelocity(sphere.getBody(),new THREE.Vector3(0,0,0));
+				}else if (scope.followBoneClearForceRatio!=1){
+					var linear=AmmoUtils.getLinearVelocity(sphere.getBody());
+					var angular=AmmoUtils.getAngularVelocity(sphere.getBody());
+					linear.multiplyScalar(scope.followBoneClearForceRatio);
+					angular.multiplyScalar(scope.followBoneClearForceRatio);
+					AmmoUtils.setLinearVelocity(sphere.getBody(),linear);
+					AmmoUtils.setAngularVelocity(sphere.getBody(),angular);
+					
 				}
 				
 			});
@@ -698,6 +711,7 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	var enabled=this.ammoControler.isEnabled();
 	this.ammoControler.setEnabled(false);
 	this.ap.skinnedMesh.rotation.set(0,0,0);
+	
 	this.ap.skinnedMesh.skeleton.pose();
 	this.ap.boneAttachControler.update(true);
 	var scope=this;
@@ -707,7 +721,6 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	
 	
 	scope.newColliderGroups();
-	 
 	 
 	 this.boneGroups.forEach(function(group){
 		 var hlinks=[];
@@ -733,7 +746,7 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 	 }
 		
 	 });
-	 
+	
 	 //debug bone linking
 	 if(this.logging){
 		 this.allSpheres.forEach(function(sphere){
@@ -751,6 +764,7 @@ SecondaryAnimationControler.prototype.newSecondaryAnimation=function(){
 		this.ammoControler.setEnabled(enabled);
 		
 		this.ammoControler.setVisibleAll(this.ap.ammoVisible);
+	
 }
 SecondaryAnimationControler.prototype.newColliderGroups=function(){
 	
