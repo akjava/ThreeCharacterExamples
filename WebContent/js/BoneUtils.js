@@ -2,16 +2,41 @@ var BoneUtils={
 		logging:false,
 		orders:["XYZ","XZY","YXZ","YZX","ZXY","ZYX"],
 		d180:THREE.Math.degToRad(180),
-		fixRotation:function(rotation){
+		d160:THREE.Math.degToRad(160),
+		isD180:function(r){
+			return r==this.d180 || r==-this.d180;
+		},
+		/*
+		 * i'm not sure
+		 */
+		convertToIkSafeRoatation:function(rotation){
 			if(rotation.x==this.d180 && rotation.z==this.d180){
+				var before=rotation.clone();
 				var r=THREE.Math.radToDeg(rotation.y);
 				if(r>0){
 					r=180-r;
 				}else{
 					r=-180-r;
 				}
-				//TODO other?
 				rotation.set(0,THREE.Math.degToRad(r),0);
+				//AppUtils.printDeg(before,"from");
+				//AppUtils.printDeg(rotation,"converted a");
+			}else if(rotation.z>this.d160){
+				var before=rotation.clone();
+				var x=rotation.x>0?-this.d180+rotation.x:this.d180+rotation.x;
+				var y=rotation.y>0?this.d180-rotation.y:-this.d180-rotation.y;
+				var z=rotation.z-this.d180;
+				rotation.set(x,y,z);
+				//AppUtils.printDeg(before,"from");
+				//AppUtils.printDeg(rotation,"converted b");
+			}else if(rotation.z<-this.d160){
+				var before=rotation.clone();
+				var x=rotation.x>0?rotation.x-this.d180:rotation.x+this.d180;
+				var y=rotation.y>0?this.d180-rotation.y:-this.d180-rotation.y;
+				var z=rotation.z+this.d180;
+				rotation.set(x,y,z);
+				//AppUtils.printDeg(before,"from");
+				//AppUtils.printDeg(rotation,"converted c");
 			}
 		},
 		/*

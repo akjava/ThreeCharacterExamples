@@ -81,7 +81,7 @@ Sidebar.ImportPose=function(ap){
 		
 		var boneList=BoneUtils.getBoneList(ap.skinnedMesh);
 		boneList.forEach(function(bone){
-			BoneUtils.fixRotation(bone.rotation);
+			BoneUtils.convertToIkSafeRoatation(bone.rotation);
 		});
 		
 		callUpdate();

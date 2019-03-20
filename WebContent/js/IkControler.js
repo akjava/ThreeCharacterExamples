@@ -638,10 +638,16 @@ IkControler.prototype.solveIk=function(forceUpdate){
 		var euler=this._euler.setFromQuaternion(newQ,order);
 		
 		var r=bone.rotation;
+		BoneUtils.convertToIkSafeRoatation(r);
 		
 		var x=r.x;
 		var y=r.y;
 		var z=r.z;
+		
+		if(BoneUtils.isD180(x) || BoneUtils.isD180(y) || BoneUtils.isD180(z)){
+			AppUtils.printDeg(r,"not safe ik angles");
+			continue;
+		}
 		
 		if(this.ikLimitkRotationEnabled){
 			function toDegree(v1,v2){

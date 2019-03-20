@@ -22,7 +22,13 @@ Example=function(application){
 	Logics.loadingModelFinishedForBoneAttachControler(ap);
 	var boneFilter=function(bone){
 		//initialized on loadingModelFinished#101
-		return ap.humanoidBoneNameList.indexOf(bone.name)!=-1;
+		var humanoidBone=ap.humanoidBoneNameList.indexOf(bone.name);
+		if(humanoidBone!=-1){
+			var generalMap=VrmUtils.createGeneralBoneNameToHumanBoneNameMap(ap);
+			return !VrmUtils.isFingerBoneNameByGeneralBoneName(bone.name,generalMap);
+		}else{
+			return false;
+		}
 	}
 	
 	Logics.loadingModelFinishedForRotationControler(ap,boneFilter);
