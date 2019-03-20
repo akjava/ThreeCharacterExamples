@@ -226,7 +226,6 @@ Sidebar.VrmTimelinerBones=function(ap){
 		var bones=ap.humanoidBoneControler.humanoidBones;
 		for(var i=0;i<bones.length;i++){
 			var name=bones[i].name;
-			console.log(name);
 			var info={type: THREE.QuaternionKeyframeTrack,
 					label:name,
 					propertyPath:".humanoidBones["+i+"].quaternion",
