@@ -76,8 +76,10 @@ var Sidebar = function ( application ) {
 	sub2.add(new Sidebar.TimelinerControl(ap));
 	sub2.add(new Sidebar.Ammo(ap));
 	
-	tab.select("Sub2");
+	var finger=tab.addItem("Finger");
+	tab.select("Finger");
 	
+	finger.add(new Sidebar.VrmFingers(ap));
 	
 	
 	return container;

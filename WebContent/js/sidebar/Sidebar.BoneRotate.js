@@ -51,6 +51,8 @@ Sidebar.BoneRotate = function ( application ,enableSelectButton,enableOrder) {
 		var name=bone.name;
 		var euler=bone.rotation;
 		
+		BoneUtils.fixRotation(euler);
+		
 		orderList.setValue(euler.order);
 		
 		var x=THREE.Math.radToDeg(euler.x).toFixed(2);

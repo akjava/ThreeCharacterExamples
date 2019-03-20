@@ -6,7 +6,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 	var scope=this;
 	this.logging=false;
 	
-	this.forceFollow=false;
+	
 	
 	function copyFrame(key){
 		var value;
@@ -156,6 +156,27 @@ Sidebar.VrmTimelinerBones=function(ap){
 	});
 	
 	
+	ap.getSignal("fingerPresetChanged").add(function(isL,fireEvent){
+		fireEvent=fireEvent==undefined?true:fireEvent;
+		
+		if(!fireEvent){
+			return;
+		}
+		
+		if(isL){
+			var indices=ap.fingerPresetsControler.fingerBoneIndicesL;
+			indices.forEach(function(index){
+				ap.getSignal("boneRotationChanged").dispatch(index);
+				ap.getSignal("boneRotationFinished").dispatch(index);
+			});
+		}else{
+			var indices=ap.fingerPresetsControler.fingerBoneIndicesR;
+			indices.forEach(function(index){
+				ap.getSignal("boneRotationChanged").dispatch(index);
+				ap.getSignal("boneRotationFinished").dispatch(index);
+			});
+		}
+	});
 	
 	ap.signals.loadingModelFinished.add(function(mesh){
 		if(ap.timeliner!==undefined){
@@ -176,9 +197,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 			ap.getSignal("poseChanged").add(onPoseChanged);
 			
 			
-			if(	scope.forceFollow){
-				ap.secondaryAnimationControler._needFollowBoneAttach=true;
-			}
+			
 			
 			//ap.skinnedMesh.updateMatrixWorld(true);
 			//ap.signals.rendered.dispatch();//Timeliner mixer and default mixer conflicted and it make fps slow.
@@ -207,6 +226,7 @@ Sidebar.VrmTimelinerBones=function(ap){
 		var bones=ap.humanoidBoneControler.humanoidBones;
 		for(var i=0;i<bones.length;i++){
 			var name=bones[i].name;
+			console.log(name);
 			var info={type: THREE.QuaternionKeyframeTrack,
 					label:name,
 					propertyPath:".humanoidBones["+i+"].quaternion",

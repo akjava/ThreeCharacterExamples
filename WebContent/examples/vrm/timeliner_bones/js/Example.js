@@ -43,6 +43,9 @@ Example=function(application){
 		ap.getSignal("timelinerVisible").dispatch(true,true);
 	},undefined,-100);
 	
+	ap.fingerPresetsControler=new VrmFingerPresetsControler(ap,new VrmFingerPresets());
+	
+	
 	ap.getSignal("loadingModelStarted").dispatch(url);
 	
 	ap.getSignal("bgImageLoadingStarted").dispatch('../../../dataset/texture/bg/boxsky1.jpg')

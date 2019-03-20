@@ -281,7 +281,7 @@ var VrmUtils={
 			})
 			return generalBoneMap;
 		},
-		isFingerBoneNameByHumanBoneName:function(humanBoneName){
+		getHumanoidFingerBoneNames:function(){
 			if(!this.humanoidFingerBoneNames){
 				this.humanoidFingerBoneNames=[];
 				var scope=this;
@@ -297,8 +297,13 @@ var VrmUtils={
 					});
 				});
 			}
+			return this.humanoidFingerBoneNames;
+		}
+		,
+		isFingerBoneNameByHumanBoneName:function(humanBoneName){
 			
-			if(this.humanoidFingerBoneNames.indexOf(humanBoneName)!=-1){
+			
+			if(this.getHumanoidFingerBoneNames().indexOf(humanBoneName)!=-1){
 				return true;
 			}
 			
@@ -335,7 +340,7 @@ var VrmUtils={
 					
 					var index=BoneUtils.findBoneIndexByEndsName(bones,boneName);
 						if(index!=-1){
-							console.log("ZXY",boneName);
+							
 							bones[index].rotation.order="ZYX";//better arm close body
 							//bones[index].rotation.order="YZX";//zyx is littlebit better.
 						}else{

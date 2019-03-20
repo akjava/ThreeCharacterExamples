@@ -5,6 +5,8 @@ var HumanoidBoneControler=function(ap){
 	this.boneNames=this.boneNames.concat(HumanoidBoneControler.rightArmBoneNames);
 	this.boneNames=this.boneNames.concat(HumanoidBoneControler.leftLegBoneNames);
 	this.boneNames=this.boneNames.concat(HumanoidBoneControler.rightLegBoneNames);
+	
+	this.boneNames=this.boneNames.concat(VrmUtils.getHumanoidFingerBoneNames());
 	//TODO support fingers or etc
 	
 	var scope=this;

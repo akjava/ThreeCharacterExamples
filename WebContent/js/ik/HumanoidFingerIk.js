@@ -186,7 +186,7 @@ HumanoidFingerIk.prototype.initlimitBone=function(){
 							scope.limitBone(boneList,name,-90,-30,-90,90,30,90);
 						}else{
 							if(level=="Proximal"){
-								scope.limitBone(boneList,name,0,-30,-30,0,30,90);
+								scope.limitBone(boneList,name,0,0,-30,0,0,90);
 							}else{
 								scope.limitBone(boneList,name,0,0,0,0,0,90);
 							}

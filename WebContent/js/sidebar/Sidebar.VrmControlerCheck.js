@@ -18,7 +18,7 @@ Sidebar.VrmControlerCheck=function(ap){
 		ap.translateControler.setEnabled(v);
 		ap.translateControlerVisible=v;
 		
-		console.log(ap.translateControlerVisible);
+		
 		
 		if(!v){
 			ap.signals.transformSelectionChanged.dispatch(null);
