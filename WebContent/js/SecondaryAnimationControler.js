@@ -552,7 +552,7 @@ SecondaryAnimationControler.prototype.update=function(force){
 		
 		
 		this.allSpheres.forEach(function(sphere){
-				if(sphere.targetBone ){
+				if(sphere.targetBone && !sphere.isRoot){
 					 var bone=sphere.targetBone;
 					 var bac=scope.ap.boneAttachControler;
 					 var container=bac.getContainerByBoneName(bone.name);
