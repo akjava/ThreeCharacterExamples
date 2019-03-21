@@ -2,7 +2,7 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Vrm Fingers Example"));
+	container.add(new UI.AppName("Vrm Morph Example"));
 	
 	var tab=new UI.Tab(ap);
 	var main=tab.addItem("Main");
@@ -32,12 +32,6 @@ var Sidebar = function ( application ) {
 	sub.add(new Sidebar.BackgroundImage(ap));
 	sub.add(new Sidebar.VrmCameraControler(ap));
 	sub.add(new Sidebar.VrmAlphaMap(ap));
-	
-	var sub2=tab.addItem("Sub2");
-	
-	sub2.add(new Sidebar.Ground(ap));
-	
-	tab.select("Sub2");
 	
 	var vrm=tab.addItem("Vrm");
 	vrm.add(new Sidebar.SecondaryAnimation(ap));

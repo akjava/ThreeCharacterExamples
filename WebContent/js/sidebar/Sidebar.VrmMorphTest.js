@@ -43,6 +43,7 @@ Sidebar.VrmMorphTest=function(ap){
 		});
 		
 		blendShapes=VrmUtils.parseBlendShapes(ap.vrm);
+		console.log(blendShapes);
 		
 		blendShapeDiv.clear();
 		blendShapeChecks=[];

@@ -50,7 +50,7 @@ var VrmUtils={
 						index:bind.index,
 						weight:bind.weight
 					};
-					console.log(bind,vrm);
+					
 					bd.name=scope.getNodeName(vrm,bind.mesh);
 					blenShapeGroup.binds.push(bd);
 				});
