@@ -1,5 +1,5 @@
-Sidebar.VrmBlendShapeNames=function(ap){
-	var container=new UI.TitlePanel("BlendShape Names");
+Sidebar.VrmSimpleBlendShape=function(ap){
+	var container=new UI.TitlePanel("Simple BlendShape");
 	
 	var names=[""];
 	names=names.concat(VrmUtils.blendShapeNames);

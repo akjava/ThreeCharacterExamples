@@ -1,6 +1,19 @@
 var VrmUtils={
 		logging:false,
 		blendShapeNames:["A","I","U","E","O","Blink","Blink_L","Blink_R","Angry","Fun","Joy","Sorrow","Surprised"],
+		getHasMorphTargets:function(mesh){
+			var hasMorphTargets=[];
+			mesh.traverse(function(obj){
+				if(obj.isSkinnedMesh){
+					if(obj.morphTargetInfluences){
+						hasMorphTargets.push(obj);
+					}
+				}
+			});
+			return hasMorphTargets;
+		}
+		,
+		
 		getBlendShapeByName:function(blendShapes,name){
 			for(var i=0;i<blendShapes.length;i++){
 				var bs=blendShapes[i];

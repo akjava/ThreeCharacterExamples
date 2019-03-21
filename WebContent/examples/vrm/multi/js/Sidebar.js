@@ -2,15 +2,14 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Vrm Morph Example"));
+	container.add(new UI.AppName("Vrm Multi Character Example(not working)"));
 	
 	var tab=new UI.Tab(ap);
 	var main=tab.addItem("Main");
 	container.add(tab);
-	main.add(new Sidebar.VrmFaceCamera(ap));
-	main.add(new Sidebar.VrmMorphTest(ap));
+	main.add(new Sidebar.TimelinerAnimationToImage(ap));
+	main.add(new Sidebar.VrmCameraControler(ap));
 	main.add(new Sidebar.VrmSimpleBlendShape(ap));
-	
 	
 	
 	var sub=tab.addItem("Sub");
@@ -35,9 +34,10 @@ var Sidebar = function ( application ) {
 	sub.add(new Sidebar.VrmCameraControler(ap));
 	sub.add(new Sidebar.VrmAlphaMap(ap));
 	
+	
 	var vrm=tab.addItem("Vrm");
 	vrm.add(new Sidebar.SecondaryAnimation(ap));
 	vrm.add(new Sidebar.VrmLicense(ap));
-	
+	vrm.add(new Sidebar.SimpleLight(ap));
 	return container;
 }
