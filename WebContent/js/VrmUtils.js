@@ -1,7 +1,74 @@
 var VrmUtils={
 		logging:false,
+		applyBlendShape:function(rootMesh,blendShape,intensity){
+			
+			function set(target,bind,intensity){
+				intensity=intensity==undefined?1:intensity;
+				if(target.morphTargetInfluences){
+					
+					target.morphTargetInfluences[bind.index]=bind.weight/100*intensity;
+				}
+					
+			}
+			blendShape.binds.forEach(function(bind){
+				
+				var target=rootMesh.getObjectByName(bind.name);
+				if(!target){
+					console.error("bind not resolved",bind.name,rootMesh,bind);
+				}else{
+					//TODO cache
+					target.traverse(function(model){
+						if(model.morphTargetInfluences){
+							set(model,bind,intensity);
+						}
+					});
+					
+					
+				}
+				
+				
+			});
+		},
+		clearMorphs:function(meshs){
+			meshs.forEach(function(mesh){
+				if(mesh.morphTargetInfluences){
+					for(var i=0;i<mesh.morphTargetInfluences.length;i++){
+						mesh.morphTargetInfluences[i]=0;
+					}
+				}
+			});
+		},
+		parseBlendShapes:function(vrm){
+			var scope=this;
+			var groups=[];
+			var blendShapeMaster=vrm.userData.gltfExtensions.VRM.blendShapeMaster;
+			blendShapeMaster.blendShapeGroups.forEach(function(group){
+				var blenShapeGroup={raw:group,binds:[]};
+				blenShapeGroup.name=group.name;
+				group.binds.forEach(function(bind){
+					var bd={
+						index:bind.index,
+						weight:bind.weight
+					};
+					console.log(bind,vrm);
+					bd.name=scope.getNodeName(vrm,bind.mesh);
+					blenShapeGroup.binds.push(bd);
+				});
+				//TODO materialValues
+				groups.push(blenShapeGroup);
+			});
+			return groups;
+		},
 		getNodes:function(vrm){
 			return vrm.parser.json.nodes;
+		},
+		 getNodeName:function(vrm,index){
+			var nodes=vrm.parser.json.nodes;
+			var node= nodes[index];
+			if(!node){
+				return null;
+			}
+			return node.name;
 		},
 		getHumanoid:function(vrm){
 			return vrm.userData.gltfExtensions.VRM.humanoid;
@@ -213,9 +280,6 @@ var VrmUtils={
 			var humanoid=vrm.userData.gltfExtensions.VRM.humanoid;
 			var nodes=vrm.parser.json.nodes;
 			
-			function getBoneName(index){
-				return nodes[index].name;
-			}
 			
 			//fix
 			
