@@ -1,5 +1,15 @@
 var VrmUtils={
 		logging:false,
+		blendShapeNames:["A","I","U","E","O","Blink","Blink_L","Blink_R","Angry","Fun","Joy","Sorrow","Surprised"],
+		getBlendShapeByName:function(blendShapes,name){
+			for(var i=0;i<blendShapes.length;i++){
+				var bs=blendShapes[i];
+				if(bs.name==name){
+					return bs;
+				}
+			}
+			return null;
+		},
 		applyBlendShape:function(rootMesh,blendShape,intensity){
 			
 			function set(target,bind,intensity){

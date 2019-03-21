@@ -69,7 +69,10 @@ Sidebar.TimelinerAnimationToImage=function(ap){
 	
 	
 	function getDuration(){
-		return ap.timeliner.context.totalTime;
+		if(ap.timeliner)
+			return ap.timeliner.context.totalTime;
+		else
+			return 0;
 	}
 	
 	function updateFrameNumber(){

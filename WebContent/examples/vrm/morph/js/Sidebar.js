@@ -9,6 +9,8 @@ var Sidebar = function ( application ) {
 	container.add(tab);
 	main.add(new Sidebar.VrmFaceCamera(ap));
 	main.add(new Sidebar.VrmMorphTest(ap));
+	main.add(new Sidebar.VrmBlendShapeNames(ap));
+	
 	
 	
 	var sub=tab.addItem("Sub");

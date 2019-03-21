@@ -380,7 +380,6 @@ var BoneUtils={
 			return index;
 		},
 		findBoneByBoneName:function(boneList,name){
-			console.log("call findBoneByEndsName");
 			return this.findBoneByEndsName(boneList,name);
 		},
 		findBoneByEndsName:function(boneList,name){

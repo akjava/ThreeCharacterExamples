@@ -19,7 +19,8 @@ var HumanoidBoneControler=function(ap){
 	
 	this.humanoidBones=[];
 	this.boneNames.forEach(function(name){
-		console.log(name);
+		if(scope.logging)
+			console.log(name);
 		var dummyBone={name:name,quaternion:new THREE.Quaternion(),position:new THREE.Vector3()};
 		scope.humanoidBones.push(dummyBone);
 	});
@@ -41,6 +42,7 @@ var HumanoidBoneControler=function(ap){
 			if(name){
 				var index=BoneUtils.findBoneIndexByEndsName(scope.allBoneList,name);
 				if(index!=-1){
+					if(scope.logging)
 					console.log(scope.humanoidBones);
 					var humanBone=BoneUtils.findBoneByEndsName(scope.humanoidBones,hb.bone);
 					if(humanBone==null){
@@ -48,7 +50,8 @@ var HumanoidBoneControler=function(ap){
 						
 					}else{
 						scope.humanoidBoneMap[String(index)]=humanBone;
-						console.log(humanBone);
+						if(scope.logging)
+							console.log(humanBone);
 						scope.humanoidBoneMapReverse[humanBone.name]=String(index);
 					}
 					
