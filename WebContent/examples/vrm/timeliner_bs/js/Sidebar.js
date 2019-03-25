@@ -2,13 +2,14 @@ var Sidebar = function ( application ) {
 	var ap=application;
 	var container = new UI.Panel();
 	container.setId( 'sidebar' );
-	container.add(new UI.AppName("Vrm Morph Example"));
+	container.add(new UI.AppName("Vrm Timeliner BlendShape Example"));
 	
 	var tab=new UI.Tab(ap);
 	var main=tab.addItem("Main");
 	container.add(tab);
 	main.add(new Sidebar.VrmFaceCamera(ap));
-	main.add(new Sidebar.VrmMorphTest(ap));
+	
+	main.add(new Sidebar.VrmTimelinerBlendShape(ap));
 	main.add(new Sidebar.VrmSimpleBlendShape(ap));
 	main.add(new Sidebar.VrmSliderBlendShape(ap));
 	
